@@ -22,12 +22,29 @@ create table if not exists tasks (
   position int not null default 0,
   done boolean not null default false,
   done_month text,
+  done_by uuid references auth.users,
   deleted boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 create index if not exists tasks_household_idx on tasks (household_id);
+-- Ajout rétro-compatible si la table existait déjà sans la colonne.
+alter table tasks add column if not exists done_by uuid references auth.users;
+
+-- Gages (gamification) : offerts d'un membre à l'autre.
+create table if not exists gages (
+  id uuid primary key default gen_random_uuid(),
+  household_id uuid not null references households on delete cascade,
+  from_user uuid not null references auth.users on delete cascade,
+  to_user uuid not null references auth.users on delete cascade,
+  text text not null,
+  done boolean not null default false,
+  deleted boolean not null default false,
+  created_at timestamptz not null default now(),
+  done_at timestamptz
+);
+create index if not exists gages_household_idx on gages (household_id);
 
 -- 2. Fonction d'appartenance (SECURITY DEFINER pour éviter la récursion RLS)
 
@@ -129,5 +146,34 @@ begin
     where pubname = 'supabase_realtime' and tablename = 'tasks'
   ) then
     alter publication supabase_realtime add table tasks;
+  end if;
+end $$;
+
+-- 6. RLS + temps réel des gages ------------------------------------------
+
+alter table gages enable row level security;
+
+drop policy if exists gages_select on gages;
+create policy gages_select on gages
+  for select using (public.is_member(household_id));
+
+drop policy if exists gages_insert on gages;
+create policy gages_insert on gages
+  for insert with check (public.is_member(household_id) and from_user = auth.uid());
+
+drop policy if exists gages_update on gages;
+create policy gages_update on gages
+  for update using (public.is_member(household_id))
+  with check (public.is_member(household_id));
+
+alter table gages replica identity full;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'gages'
+  ) then
+    alter publication supabase_realtime add table gages;
   end if;
 end $$;

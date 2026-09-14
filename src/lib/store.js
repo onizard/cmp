@@ -12,6 +12,7 @@ const fromRow = (r) => ({
   position: r.position,
   done: r.done,
   doneMonth: r.done_month,
+  doneBy: r.done_by,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -25,6 +26,7 @@ const toInsertRow = (t) => ({
   position: t.position,
   done: t.done,
   done_month: t.doneMonth,
+  done_by: t.doneBy ?? null,
   deleted: t.deleted,
 });
 
@@ -35,6 +37,7 @@ const patchToRow = (patch) => {
   if ('position' in patch) row.position = patch.position;
   if ('done' in patch) row.done = patch.done;
   if ('doneMonth' in patch) row.done_month = patch.doneMonth;
+  if ('doneBy' in patch) row.done_by = patch.doneBy;
   if ('deleted' in patch) row.deleted = patch.deleted;
   return row;
 };
@@ -71,7 +74,7 @@ const nowIso = () => new Date().toISOString();
  * Hook principal : tâches d'un foyer, avec cache hors ligne, file d'attente
  * d'écritures et synchronisation temps réel.
  */
-export function useTasks(householdId) {
+export function useTasks(householdId, userId) {
   const [tasks, setTasks] = useState(() =>
     householdId ? readLS(cacheKey(householdId), []) : [],
   );
@@ -253,6 +256,7 @@ export function useTasks(householdId) {
         position,
         done: false,
         doneMonth: null,
+        doneBy: null,
         deleted: false,
         createdAt: nowIso(),
         updatedAt: nowIso(),
@@ -274,11 +278,11 @@ export function useTasks(householdId) {
   const toggleDone = useCallback(
     (task, currentMonth) => {
       const patch = task.done
-        ? { done: false, doneMonth: null }
-        : { done: true, doneMonth: currentMonth };
+        ? { done: false, doneMonth: null, doneBy: null }
+        : { done: true, doneMonth: currentMonth, doneBy: userId ?? null };
       updateTask(task.id, patch);
     },
-    [updateTask],
+    [updateTask, userId],
   );
 
   const removeTask = useCallback(

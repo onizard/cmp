@@ -24,7 +24,7 @@ services:
       - ./db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:ro
       - ./db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:ro
       - ./db/cmp.sql:/docker-entrypoint-initdb.d/migrations/99-zcmp.sql:ro
-      - pgdata:/var/lib/postgresql/data
+      - pgdata2:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD', 'pg_isready', '-U', 'postgres', '-h', 'localhost']
       interval: 5s
@@ -125,15 +125,14 @@ services:
       - ./app:/usr/share/nginx/html:ro
 
   # Tunnel Cloudflare : rend la passerelle accessible en HTTPS depuis l'extérieur,
-  # sans ouvrir de port. Démarré uniquement avec le profil "tunnel".
+  # sans ouvrir de port.
   cloudflared:
     container_name: cmp-tunnel
     image: cloudflare/cloudflared:2024.10.0
     restart: unless-stopped
-    profiles: ['tunnel']
     depends_on:
       - gateway
     command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
 
 volumes:
-  pgdata:
+  pgdata2:

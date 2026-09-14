@@ -1,12 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
+import { useGages } from './lib/gages.js';
 import { monthKey, tasksVisibleIn, headline } from './lib/visibility.js';
+import { gagesToHonour } from './lib/gamify.js';
 import Header from './components/Header.jsx';
 import Auth from './components/Auth.jsx';
 import Onboarding from './components/Onboarding.jsx';
 import TaskList from './components/TaskList.jsx';
 import Household from './components/Household.jsx';
+import TabBar from './components/TabBar.jsx';
+import BrainView from './components/BrainView.jsx';
 
 function NotConfigured() {
   return (
@@ -43,7 +47,10 @@ export default function App() {
 }
 
 function Home({ account, currentMonth }) {
-  const store = useTasks(account.household.id);
+  const userId = account.session.user.id;
+  const store = useTasks(account.household.id, userId);
+  const gages = useGages(account.household.id, userId);
+  const [tab, setTab] = useState('liste');
 
   const todoThisMonth = useMemo(
     () =>
@@ -53,19 +60,30 @@ function Home({ account, currentMonth }) {
     [store.tasks, currentMonth],
   );
 
+  const honourCount = gagesToHonour(gages.gages, userId).length;
+
   return (
-    <div className="screen">
+    <div className="screen has-tabbar">
       <Header
-        accroche={headline(todoThisMonth)}
+        accroche={tab === 'liste' ? headline(todoThisMonth) : null}
         online={store.online}
         pending={store.pending}
       />
-      {store.loading && store.tasks.length === 0 ? (
-        <p className="notice">Chargement…</p>
+
+      {tab === 'liste' ? (
+        <>
+          {store.loading && store.tasks.length === 0 ? (
+            <p className="notice">Chargement…</p>
+          ) : (
+            <TaskList store={store} currentMonth={currentMonth} />
+          )}
+          <Household account={account} />
+        </>
       ) : (
-        <TaskList store={store} currentMonth={currentMonth} />
+        <BrainView tasks={store.tasks} userId={userId} gages={gages} />
       )}
-      <Household account={account} />
+
+      <TabBar tab={tab} onChange={setTab} honourCount={honourCount} />
     </div>
   );
 }

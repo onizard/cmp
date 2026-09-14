@@ -56,14 +56,8 @@ Dans **Container Manager → Projet → Créer** :
 - **Source** : « docker-compose.yml existant »
 - Termine l'assistant. Le NAS télécharge les images et démarre tout.
 
-Puis, pour activer le tunnel, il faut inclure le profil `tunnel`. Le plus simple
-dans Container Manager : **Action → Arrêter**, puis dans les réglages du projet
-active le service `cloudflared`, ou relance depuis SSH avec :
-
-```bash
-cd /volume1/docker/cmp
-docker compose --profile tunnel up -d
-```
+Le conteneur du tunnel (`cmp-tunnel`) démarre automatiquement avec le projet ;
+il n'y a rien de plus à activer.
 
 ### 5. Vérifier
 Ouvre `https://cmp.break-pharma.fr` sur le téléphone : l'écran de connexion CMP

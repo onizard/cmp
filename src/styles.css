@@ -437,6 +437,169 @@ body {
   margin-top: 8px;
 }
 
+/* --- Barre d'onglets --- */
+
+.has-tabbar {
+  padding-bottom: 88px;
+}
+
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  background: var(--card);
+  border-top: 1px solid var(--rule);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+.tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  min-height: 56px;
+  cursor: pointer;
+  color: var(--soft);
+  font-family: var(--sans);
+  font-size: 12px;
+}
+
+.tab.active {
+  color: var(--accent);
+}
+
+.tab-icon {
+  position: relative;
+  display: flex;
+}
+
+.tab-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--card);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* --- Écran cerveau --- */
+
+.brain-view {
+  padding-top: 8px;
+}
+
+.brain-wrap {
+  max-width: 280px;
+  margin: 8px auto 0;
+}
+
+.brain-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.brain-liquid {
+  transition: y 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+}
+
+.brain-charge {
+  font-family: var(--serif);
+  font-size: 20px;
+  text-align: center;
+  color: var(--ink);
+  margin: 6px 0 20px;
+}
+
+.points-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  padding: 18px;
+}
+
+.points-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.points-num {
+  font-family: var(--serif);
+  font-size: 30px;
+  color: var(--accent);
+}
+
+.points-label {
+  font-size: 15px;
+  color: var(--soft);
+}
+
+.gauge {
+  height: 8px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  margin: 12px 0 10px;
+  overflow: hidden;
+}
+
+.gauge span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+.gage-form {
+  margin-top: 12px;
+}
+
+.gage-section {
+  margin-top: 22px;
+}
+
+.gage-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.gage-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gage-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.gage-item.soft {
+  color: var(--soft);
+}
+
+.gage-item:last-child {
+  border-bottom: none;
+}
+
 /* --- Accessibilité : mouvement réduit --- */
 
 @media (prefers-reduced-motion: reduce) {
