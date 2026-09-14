@@ -20,10 +20,12 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXP: ${JWT_EXPIRY}
     volumes:
-      - ./db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:ro
-      - ./db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:ro
-      - ./db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:ro
-      - ./db/cmp.sql:/docker-entrypoint-initdb.d/migrations/99-zcmp.sql:ro
+      # Scripts d'init au NIVEAU RACINE de initdb.d (préfixe « z » → exécutés
+      # APRÈS le migrate.sh de l'image, une fois les rôles créés).
+      - ./db/roles.sql:/docker-entrypoint-initdb.d/z1-roles.sql:ro
+      - ./db/jwt.sql:/docker-entrypoint-initdb.d/z2-jwt.sql:ro
+      - ./db/realtime.sql:/docker-entrypoint-initdb.d/z3-realtime.sql:ro
+      - ./db/cmp.sql:/docker-entrypoint-initdb.d/z4-cmp.sql:ro
       # Données Postgres dans un dossier du projet (réinit = supprimer ./pgdata).
       - ./pgdata:/var/lib/postgresql/data
     healthcheck:
