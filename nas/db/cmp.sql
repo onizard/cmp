@@ -119,8 +119,12 @@ create policy tasks_delete on tasks
 
 alter table tasks replica identity full;
 
+-- Crée la publication si l'image ne l'a pas déjà fait, puis y ajoute tasks.
 do $$
 begin
+  if not exists (select 1 from pg_publication where pubname = 'supabase_realtime') then
+    create publication supabase_realtime;
+  end if;
   if not exists (
     select 1 from pg_publication_tables
     where pubname = 'supabase_realtime' and tablename = 'tasks'
