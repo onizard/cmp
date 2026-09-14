@@ -7,3 +7,8 @@ dist-ssr
 !.env.example
 .DS_Store
 .vite
+
+# Stack NAS : secrets, données et app compilée (fournis hors dépôt)
+nas/.env
+nas/data
+nas/app

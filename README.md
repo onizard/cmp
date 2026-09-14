@@ -15,9 +15,10 @@ téléphones, et l'application reste lisible hors ligne.
 ## Stack
 
 - **React + Vite** (JavaScript), build statique.
-- **Supabase** : Postgres, Realtime et Auth par lien magique.
+- **Supabase auto-hébergé** sur le NAS : Postgres, PostgREST, Realtime et Auth
+  (GoTrue) par lien magique.
 - **PWA** via `vite-plugin-pwa` (installable Android / iOS).
-- **GitHub Pages** pour l'hébergement, déployé par GitHub Actions.
+- **Tout sur le NAS Synology** (Container Manager), exposé par un tunnel Cloudflare.
 
 ## Développement local
 
@@ -34,23 +35,26 @@ npm run dev
 ## Base de données
 
 Le schéma complet (tables, RLS, trigger, temps réel) est dans
-[`supabase/schema.sql`](supabase/schema.sql). À coller dans l'éditeur SQL de
-Supabase.
+[`supabase/schema.sql`](supabase/schema.sql). Sur le NAS il est appliqué
+automatiquement au premier démarrage (`nas/db/cmp.sql`).
 
-## Configuration
+## Hébergement sur le NAS
 
-Deux variables d'environnement, injectées à la compilation :
+Tout le back-end **et** l'app tournent sur le NAS Synology via Docker
+(Container Manager), derrière un tunnel Cloudflare. Le mode d'emploi complet,
+pensé pour être suivi depuis un téléphone, est dans
+[`nas/README.md`](nas/README.md).
 
-| Variable                 | Où la trouver dans Supabase              |
-| ------------------------ | ---------------------------------------- |
-| `VITE_SUPABASE_URL`      | Project Settings → Data API → Project URL |
-| `VITE_SUPABASE_ANON_KEY` | Project Settings → API Keys → `anon` `public` |
+En bref :
 
-En production, la clé `anon` (publique par nature — la sécurité repose sur les
-policies RLS) est lue depuis `.env.production`, versionné dans le dépôt.
+```bash
+cd nas
+node gen-keys.mjs          # génère les secrets dans .env
+# renseigner PUBLIC_URL, SMTP_PASS, CF_TUNNEL_TOKEN dans .env
+npm run build              # (à la racine) compile l'app
+docker compose --profile tunnel up -d
+```
 
-## Déploiement
-
-Chaque `push` sur `main` déclenche le workflow GitHub Actions : tests,
-compilation, puis publication sur GitHub Pages. Le workflow active Pages
-lui-même (`enablement`), il n'y a aucun réglage à faire à la main.
+L'app parle à sa propre origine (même domaine que l'API servie par la
+passerelle), donc aucune URL n'est codée en dur à la compilation ; seule la clé
+`anon` (publique) est intégrée.

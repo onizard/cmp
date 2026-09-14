@@ -1,13 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 
-const url = import.meta.env.VITE_SUPABASE_URL;
+// URL de l'API : soit fournie au build (VITE_SUPABASE_URL), soit l'origine
+// courante — car sur le NAS l'app et l'API sont servies par la même passerelle.
+const url =
+  import.meta.env.VITE_SUPABASE_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : '');
+
+// La clé anon est publique par nature (la sécurité repose sur les policies RLS).
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-/** Vrai si les clés Supabase sont configurées à la compilation. */
+/** Vrai si la clé anon est configurée. */
 export const isConfigured = Boolean(url && anonKey);
 
-// Un seul client, avec session persistante (pas de reconnexion à chaque ouverture)
-// et prise en charge du lien magique reçu dans l'URL.
+// Un seul client, session persistante, prise en charge du lien magique dans l'URL.
 export const supabase = isConfigured
   ? createClient(url, anonKey, {
       auth: {

@@ -204,12 +204,19 @@ export function useTasks(householdId) {
       if (document.visibilityState === 'visible') refresh();
     };
 
+    // Filet de sécurité : rafraîchissement périodique tant que l'app est visible,
+    // au cas où le temps réel serait momentanément indisponible (auto-hébergement).
+    const poll = setInterval(() => {
+      if (document.visibilityState === 'visible' && navigator.onLine) refresh();
+    }, 25000);
+
     window.addEventListener('online', onOnline);
     window.addEventListener('offline', onOffline);
     document.addEventListener('visibilitychange', onVisible);
 
     return () => {
       if (channel && supabase) supabase.removeChannel(channel);
+      clearInterval(poll);
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
       document.removeEventListener('visibilitychange', onVisible);

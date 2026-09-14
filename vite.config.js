@@ -2,8 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// Le dépôt est publié sur GitHub Pages sous /cmp/.
-const base = '/cmp/';
+// L'app est servie à la racine du domaine du tunnel (ex. https://cmp.exemple.fr/).
+// Surchargeable au build via VITE_BASE si besoin.
+const base = process.env.VITE_BASE || '/';
 
 export default defineConfig({
   base,
@@ -38,13 +39,15 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: `${base}index.html`,
+        navigateFallbackDenylist: [/^\/(rest|auth|realtime)\/v1/],
         runtimeCaching: [
           {
-            // Lecture hors ligne : on sert la dernière réponse Supabase connue.
-            urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co'),
+            // Lecture hors ligne : on garde la dernière réponse REST connue.
+            urlPattern: ({ url, sameOrigin }) =>
+              sameOrigin && url.pathname.startsWith('/rest/v1'),
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'supabase',
+              cacheName: 'cmp-rest',
               networkTimeoutSeconds: 5,
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
