@@ -2,30 +2,34 @@ import { useState } from 'react';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
 
+// Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
+// faire renvoyer un lien quand le mot de passe est perdu.
 export default function Auth({ account }) {
-  const [mode, setMode] = useState('connexion'); // connexion | creation | lien
+  const [mode, setMode] = useState('connexion');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
 
+  const creation = mode === 'creation';
+  const oubli = mode === 'oubli';
+
+  const go = (next) => {
+    setMode(next);
+    setSent(false);
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
-    if (mode === 'lien') {
-      const ok = await account.sendMagicLink(email);
-      if (ok) setSent(true);
-    } else if (mode === 'creation') {
+    if (oubli) {
+      if (await account.sendMagicLink(email)) setSent(true);
+    } else if (creation) {
       await account.signUp(email, password);
     } else {
       await account.signIn(email, password);
     }
     setBusy(false);
-  };
-
-  const go = (next) => {
-    setMode(next);
-    setSent(false);
   };
 
   if (sent) {
@@ -35,11 +39,10 @@ export default function Auth({ account }) {
         <div className="panel">
           <p className="lede">Regarde tes mails.</p>
           <p className="soft-text">
-            On t'a envoyé un lien de connexion à <strong>{email}</strong>.
-            Ouvre-le, puis pose-toi un mot de passe dans « Mon compte » : tu
-            n'auras plus jamais à passer par ta boîte mail.
+            On t'a envoyé un lien à <strong>{email}</strong>. Ouvre-le pour
+            entrer, puis choisis un nouveau mot de passe dans « Mon compte ».
           </p>
-          <button className="btn" type="button" onClick={() => go('connexion')}>
+          <button className="btn btn-block" type="button" onClick={() => go('connexion')}>
             Revenir
           </button>
         </div>
@@ -48,21 +51,18 @@ export default function Auth({ account }) {
     );
   }
 
-  const creation = mode === 'creation';
-  const lien = mode === 'lien';
-
   return (
     <div className="screen">
       <Header />
       <form className="panel" onSubmit={submit}>
         <p className="lede">
-          {creation ? 'Créer ton compte.' : lien ? 'Recevoir un lien.' : 'Se connecter.'}
+          {creation ? 'Créer ton compte.' : oubli ? 'Mot de passe oublié.' : 'Se connecter.'}
         </p>
         <p className="soft-text">
           {creation
-            ? 'Deux champs, et tu entres. Pas de mail à aller chercher.'
-            : lien
-              ? "Pour qui n'a pas encore de mot de passe."
+            ? 'Deux champs, et tu entres. Aucun mail à aller chercher.'
+            : oubli
+              ? 'On t’envoie un lien pour rentrer et en choisir un nouveau.'
               : 'Ton e-mail et ton mot de passe.'}
         </p>
 
@@ -79,7 +79,7 @@ export default function Auth({ account }) {
           placeholder="prenom@exemple.fr"
         />
 
-        {!lien && (
+        {!oubli && (
           <>
             <label className="field-label" htmlFor="pass">Ton mot de passe</label>
             <input
@@ -103,43 +103,28 @@ export default function Auth({ account }) {
             ? 'Un instant…'
             : creation
               ? 'Créer mon compte'
-              : lien
+              : oubli
                 ? 'Recevoir le lien'
                 : 'Se connecter'}
         </button>
 
-        <p className="authswitch">
-          {creation ? (
+        <p className="authlinks">
+          {mode === 'connexion' ? (
             <>
-              Déjà un compte ?{' '}
-              <button type="button" onClick={() => go('connexion')}>
-                Se connecter
+              <button type="button" onClick={() => go('oubli')}>
+                Mot de passe oublié ?
               </button>
-            </>
-          ) : (
-            <>
-              Première fois ?{' '}
+              <span aria-hidden="true"> · </span>
               <button type="button" onClick={() => go('creation')}>
                 Créer un compte
               </button>
             </>
+          ) : (
+            <button type="button" onClick={() => go('connexion')}>
+              Revenir à la connexion
+            </button>
           )}
         </p>
-
-        {!lien && (
-          <p className="authswitch">
-            <button type="button" onClick={() => go('lien')}>
-              Pas encore de mot de passe ? Recevoir un lien
-            </button>
-          </p>
-        )}
-        {lien && (
-          <p className="authswitch">
-            <button type="button" onClick={() => go('connexion')}>
-              Revenir au mot de passe
-            </button>
-          </p>
-        )}
       </form>
       <InstallHint />
     </div>
