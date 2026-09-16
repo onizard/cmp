@@ -212,8 +212,8 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           ) : (
             <>
               <p className="wish-text">
-                À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux — sans
-                prix à fixer, obtenu sur-le-champ.
+                À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux,
+                obtenu sur-le-champ.
               </p>
               <div className="gauge" aria-hidden="true">
                 <span style={{ width: `${Math.round((myPts / REWARD_CUSTOM) * 100)}%` }} />
