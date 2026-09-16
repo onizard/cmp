@@ -53,6 +53,14 @@ export const pushSupported = () =>
   'PushManager' in window &&
   'Notification' in window;
 
+const stored = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch {
+    return null;
+  }
+};
+
 /** Ce que l'utilisateur a demandé la dernière fois, connu tout de suite. */
 export const wantsPush = () => read(WANT, false);
 export const wantsEvening = () => read(SOIR, true);
@@ -161,7 +169,20 @@ export async function disablePush() {
  * empêche l'option de retomber sur « off » après une mise à jour.
  * Renvoie l'état réel { on, evening }.
  */
+// Première ouverture d'une version qui mémorise le choix : si le navigateur
+// est déjà abonné, c'est que l'utilisateur avait dit oui. On le reprend.
+async function adopt() {
+  if (stored(WANT) !== null) return;
+  if (!pushSupported() || Notification.permission !== 'granted') return;
+  const sub = await currentSubscription();
+  if (sub) {
+    write(WANT, true);
+    writeEndpoint(sub.endpoint);
+  }
+}
+
 export async function syncPush(userId, householdId) {
+  await adopt();
   const evening = wantsEvening();
   if (!pushSupported() || !wantsPush() || !VAPID || !userId || !householdId) {
     return { on: false, evening };
