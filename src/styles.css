@@ -923,6 +923,47 @@ body {
   font-size: 13.5px;
 }
 
+
+/* --- Cœur-cerveau qui se remplit (dessin du logo) --- */
+
+.brainmark {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.brainmark-hollow,
+.brainmark-liquid {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: url("/heart-mask.png");
+  mask-image: url("/heart-mask.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.brainmark-hollow {
+  background: var(--paper-deep);
+}
+
+.brainmark-liquid {
+  background: var(--grad);
+  transition: clip-path 0.5s ease;
+}
+
+.brainmark-line {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* --- Accessibilité : mouvement réduit --- */
 
 @media (prefers-reduced-motion: reduce) {
