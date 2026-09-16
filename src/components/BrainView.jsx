@@ -9,7 +9,6 @@ import {
   formatPoints,
   canClaimCustom,
   customMissing,
-  REWARD_MIN,
   REWARD_CUSTOM,
   POINT_ADD,
   POINT_OWN,
@@ -17,10 +16,6 @@ import {
 } from '../lib/gamify.js';
 
 export default function BrainView({ tasks, userId, rewards: store }) {
-  const [openAdd, setOpenAdd] = useState(false);
-  const [label, setLabel] = useState('');
-  const [cost, setCost] = useState('');
-  const [rewardError, setRewardError] = useState(null);
   const [openWish, setOpenWish] = useState(false);
   const [wish, setWish] = useState('');
   const [wishError, setWishError] = useState(null);
@@ -57,19 +52,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     setWishError(null);
     setWish('');
     setOpenWish(false);
-  };
-
-  const submitReward = async (e) => {
-    e.preventDefault();
-    const err = await store.addReward(label, cost.replace(',', '.'));
-    if (err) {
-      setRewardError(err);
-      return;
-    }
-    setRewardError(null);
-    setLabel('');
-    setCost('');
-    setOpenAdd(false);
   };
 
   return (
@@ -211,8 +193,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         <h2 className="gage-title">Les récompenses</h2>
         {catalogue.length === 0 ? (
           <p className="setnote">
-            Le catalogue est vide. Ajoutez vos envies à deux : un massage, une
-            grasse matinée, un resto…
+            Le catalogue est vide pour l’instant.
           </p>
         ) : (
           <ul className="gage-list">
@@ -244,54 +225,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </ul>
         )}
 
-        {openAdd ? (
-          <form className="setcard reward-form" onSubmit={submitReward}>
-            <label className="field-label" htmlFor="rlabel">La récompense</label>
-            <input
-              id="rlabel"
-              className="field"
-              value={label}
-              autoFocus
-              placeholder="Petit-déjeuner au lit"
-              onChange={(e) => setLabel(e.target.value)}
-            />
-            <label className="field-label" htmlFor="rcost">
-              Son prix en points ({REWARD_MIN} au minimum)
-            </label>
-            <input
-              id="rcost"
-              className="field"
-              inputMode="decimal"
-              value={cost}
-              placeholder={String(REWARD_MIN)}
-              onChange={(e) => {
-                setRewardError(null);
-                setCost(e.target.value);
-              }}
-            />
-            {rewardError && <p className="error">{rewardError}</p>}
-            <div className="add-actions">
-              <button className="btn btn-small btn-accent" type="submit">
-                Ajouter
-              </button>
-              <button
-                className="btn btn-small"
-                type="button"
-                onClick={() => setOpenAdd(false)}
-              >
-                Annuler
-              </button>
-            </div>
-          </form>
-        ) : (
-          <button
-            className="btn btn-block"
-            type="button"
-            onClick={() => setOpenAdd(true)}
-          >
-            Ajouter une récompense
-          </button>
-        )}
       </section>
 
       {mesClaims.length > 0 && (

@@ -924,10 +924,6 @@ body,
   border-radius: 8px;
 }
 
-.reward-form {
-  margin-top: 12px;
-}
-
 .claim-who {
   color: var(--ink-3);
   font-weight: 400;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
-import { REWARD_MIN, REWARD_CUSTOM } from './gamify.js';
+import { REWARD_CUSTOM } from './gamify.js';
 
 const rewardFrom = (r) => ({
   id: r.id,
@@ -102,36 +102,6 @@ export function useRewards(householdId, userId) {
     return () => clearInterval(t);
   }, [householdId, refresh]);
 
-  /** Ajoute une récompense au catalogue commun. */
-  const addReward = useCallback(
-    async (label, cost) => {
-      const text = label.trim();
-      const price = Number(cost);
-      if (!text) return 'Il manque le nom de la récompense.';
-      if (!Number.isFinite(price)) return 'Le prix doit être un nombre.';
-      if (price < REWARD_MIN) {
-        return `Une récompense coûte au moins ${REWARD_MIN} points.`;
-      }
-      // Un même libellé deux fois dans le catalogue, c'est un doublon : la base
-      // le refuse aussi, autant le dire ici plutôt que d'échouer en silence.
-      const already = rRef.current.some(
-        (r) => !r.deleted && r.label.trim().toLowerCase() === text.toLowerCase(),
-      );
-      if (already) return 'Cette récompense est déjà dans le catalogue.';
-      const row = {
-        id: uuid(),
-        household_id: householdId,
-        label: text,
-        cost: price,
-        deleted: false,
-      };
-      saveRewards([...rRef.current, rewardFrom(row)]);
-      if (supabase) await supabase.from('rewards').insert(row);
-      return null;
-    },
-    [householdId, saveRewards],
-  );
-
   /** Retire une récompense du catalogue (suppression logique). */
   const removeReward = useCallback(
     async (id) => {
@@ -204,7 +174,6 @@ export function useRewards(householdId, userId) {
     names,
     otherUser,
     refresh,
-    addReward,
     removeReward,
     claimReward,
     claimCustom,
