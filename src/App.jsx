@@ -31,7 +31,9 @@ export default function App() {
 
   if (!account.isConfigured) return <NotConfigured />;
 
-  if (account.loading && !account.session) {
+  // Tant que la session ET le foyer ne sont pas connus, on patiente :
+  // sinon l'écran « rejoindre un foyer » clignote au rafraîchissement.
+  if (account.loading) {
     return (
       <div className="screen">
         <Header />

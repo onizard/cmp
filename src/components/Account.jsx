@@ -186,7 +186,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.2</p>
+      <p className="ver">charge mentale partagée · v1.3</p>
     </main>
   );
 }
