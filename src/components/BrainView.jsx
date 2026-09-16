@@ -170,7 +170,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               className="field"
               value={label}
               autoFocus
-              placeholder="Petit-déjeuner au lit…"
+              placeholder="Petit-déjeuner au lit"
               onChange={(e) => setLabel(e.target.value)}
             />
             <label className="field-label" htmlFor="rcost">Son prix en points</label>

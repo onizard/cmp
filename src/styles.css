@@ -44,6 +44,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Aucun texte ne doit être tronqué ni déborder : un mot trop long pour la
+   largeur de l'écran passe à la ligne plutôt que de sortir de sa carte. */
+body,
+.task-text,
+.reward-label,
+.month-name,
+.field,
+.btn {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 .screen {
   max-width: 460px;
   margin: 0 auto;
@@ -480,6 +492,7 @@ body {
 .add-form .btn {
   flex: none;
   padding: 0 16px;
+  white-space: nowrap;
 }
 
 /* --- Barre d'onglets --- */
@@ -590,9 +603,7 @@ body {
   font-size: 16px;
   margin: 0 0 12px;
   color: var(--ink);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
 }
 
 .vase {

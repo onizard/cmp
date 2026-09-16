@@ -16,7 +16,7 @@ export default function AddTask({ onAdd }) {
       <input
         className="field"
         value={text}
-        placeholder="ajouter une chose à porter…"
+        placeholder="ajoute une tâche"
         onChange={(e) => setText(e.target.value)}
       />
       <button className="btn btn-accent" type="submit">
