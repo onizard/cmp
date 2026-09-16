@@ -11,7 +11,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
+      injectRegister: false,
       includeAssets: ['favicon-32.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Charge mentale partagée',

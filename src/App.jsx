@@ -11,6 +11,7 @@ import TaskList from './components/TaskList.jsx';
 import TabBar from './components/TabBar.jsx';
 import BrainView from './components/BrainView.jsx';
 import Account from './components/Account.jsx';
+import UpdateBanner from './components/UpdateBanner.jsx';
 
 function NotConfigured() {
   return (
@@ -45,7 +46,12 @@ export default function App() {
   if (!account.session) return <Auth account={account} />;
   if (!account.household) return <Onboarding account={account} />;
 
-  return <Home account={account} currentMonth={currentMonth} />;
+  return (
+    <>
+      <UpdateBanner />
+      <Home account={account} currentMonth={currentMonth} />
+    </>
+  );
 }
 
 function Home({ account, currentMonth }) {

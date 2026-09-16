@@ -964,6 +964,46 @@ body {
   object-fit: contain;
 }
 
+
+/* --- Bandeau de mise à jour --- */
+
+.update-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(8px + env(safe-area-inset-top, 0px));
+  z-index: 40;
+  width: calc(100% - 24px);
+  max-width: 436px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--grad);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.update-bar span {
+  flex: 1;
+}
+
+.update-bar button {
+  flex: none;
+  border: none;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
 /* --- Accessibilité : mouvement réduit --- */
 
 @media (prefers-reduced-motion: reduce) {
