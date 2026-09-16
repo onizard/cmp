@@ -9,7 +9,8 @@ APP=/volume1/docker/cmp/app
 
 TGZ="$1"
 if [ -z "$TGZ" ]; then
-  TGZ=$(find /volume1/docker/cmp -maxdepth 2 -name 'cmp-app.tar.gz' -printf '%T@ %p\n' 2>/dev/null \
+  # accepte aussi « cmp-app (1).tar.gz » etc., prend la plus récente
+  TGZ=$(find /volume1/docker/cmp -maxdepth 2 -name 'cmp-app*.tar.gz' -printf '%T@ %p\n' 2>/dev/null \
         | sort -rn | head -1 | cut -d' ' -f2-)
 fi
 
@@ -33,7 +34,8 @@ if [ ! -f "$TMP/index.html" ]; then
   rm -rf "$TMP"; exit 1
 fi
 
-echo "Version  : $(grep -ho 'v[0-9]\.[0-9]' "$TMP"/assets/*.js 2>/dev/null | head -1)"
+ver() { grep -o 'content="v[0-9][0-9.]*"' "$1/index.html" 2>/dev/null | head -1 | cut -d'"' -f2; }
+echo "Version  : $(ver "$TMP")"
 
 # À partir d'ici seulement, on remplace.
 mkdir -p "$APP"
@@ -42,5 +44,5 @@ cp -a "$TMP"/. "$APP"/
 chmod -R a+rX "$APP"
 rm -rf "$TMP"
 
-echo "Déployé  : $(grep -ho 'v[0-9]\.[0-9]' "$APP"/assets/*.js 2>/dev/null | head -1)"
+echo "Déployé  : $(ver "$APP")"
 curl -s -o /dev/null -w "Test local : HTTP %{http_code}\n" http://localhost:8000/
