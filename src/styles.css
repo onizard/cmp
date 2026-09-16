@@ -191,6 +191,11 @@ body {
   color: #fff;
 }
 
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 .btn-small {
   font-size: 14px;
   padding: 9px 15px;

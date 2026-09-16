@@ -11,6 +11,7 @@ import {
 export default function Account({ account }) {
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
+  const dirty = name.trim() !== (account.displayName || '').trim();
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
@@ -92,11 +93,17 @@ export default function Account({ account }) {
             value={name}
             placeholder="Ton prénom"
             onChange={(e) => setName(e.target.value)}
-            onBlur={saveName}
           />
           <label className="field-label" htmlFor="mail">Email</label>
           <input id="mail" className="field" value={email} disabled />
-          {saved && <p className="setnote">Prénom enregistré.</p>}
+          <button
+            className="btn btn-accent btn-block"
+            type="button"
+            disabled={!dirty}
+            onClick={saveName}
+          >
+            {saved ? 'Enregistré ✓' : 'Enregistrer'}
+          </button>
         </div>
       </section>
 
@@ -179,7 +186,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.1</p>
+      <p className="ver">charge mentale partagée · v1.2</p>
     </main>
   );
 }
