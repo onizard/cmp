@@ -12705,7 +12705,7 @@ async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (!household) return;
   const who = await actorName(household, actor);
-  const title = kind === "add" ? `${who} a ajout\xE9 une chose` : `${who} a coch\xE9 une chose`;
+  const title = kind === "add" ? `${who} a ajout\xE9 une t\xE2che` : `${who} a coch\xE9 une t\xE2che`;
   await sendToHousehold(household, actor, {
     title,
     body: text || "",
@@ -12728,7 +12728,7 @@ async function eveningReminder() {
       null,
       {
         title: "Le point du soir",
-        body: r.n === 1 ? "Il reste 1 chose \xE0 porter." : `Il reste ${r.n} choses \xE0 porter.`,
+        body: r.n === 1 ? "Il reste 1 t\xE2che \xE0 faire." : `Il reste ${r.n} t\xE2ches \xE0 faire.`,
         url: APP_URL,
         tag: "cmp-soir"
       },
