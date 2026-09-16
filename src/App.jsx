@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
-import { useGages } from './lib/gages.js';
+import { useRewards } from './lib/rewards.js';
 import { monthKey, tasksVisibleIn, headline } from './lib/visibility.js';
-import { gagesToHonour } from './lib/gamify.js';
+import { pointsAvailable, affordable } from './lib/gamify.js';
 import Header from './components/Header.jsx';
 import Auth from './components/Auth.jsx';
 import Onboarding from './components/Onboarding.jsx';
@@ -51,7 +51,7 @@ export default function App() {
 function Home({ account, currentMonth }) {
   const userId = account.session.user.id;
   const store = useTasks(account.household.id, userId);
-  const gages = useGages(account.household.id, userId);
+  const rewards = useRewards(account.household.id, userId);
   const [tab, setTab] = useState('liste');
 
   const todoThisMonth = useMemo(
@@ -62,7 +62,9 @@ function Home({ account, currentMonth }) {
     [store.tasks, currentMonth],
   );
 
-  const honourCount = gagesToHonour(gages.gages, userId).length;
+  // Pastille sur l'onglet Cerveau : combien de récompenses sont à portée.
+  const myPoints = pointsAvailable(store.tasks, rewards.claims, userId);
+  const readyCount = affordable(rewards.rewards, myPoints).length;
 
   return (
     <div className="screen has-tabbar">
@@ -79,11 +81,11 @@ function Home({ account, currentMonth }) {
           <TaskList store={store} currentMonth={currentMonth} />
         ))}
       {tab === 'cerveau' && (
-        <BrainView tasks={store.tasks} userId={userId} gages={gages} />
+        <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
       )}
       {tab === 'compte' && <Account account={account} />}
 
-      <TabBar tab={tab} onChange={setTab} honourCount={honourCount} />
+      <TabBar tab={tab} onChange={setTab} honourCount={readyCount} />
     </div>
   );
 }

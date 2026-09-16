@@ -1,0 +1,55 @@
+-- Récompenses : catalogue commun au foyer + dépenses de points.
+-- Barème (côté application) : +1 ajouter, +1 cocher sa tâche, +1,5 celle de l'autre.
+-- Les points se cumulent sans plafond.
+
+create table if not exists rewards (
+  id uuid primary key default gen_random_uuid(),
+  household_id uuid not null references households(id) on delete cascade,
+  label text not null,
+  cost numeric(6,1) not null check (cost > 0),
+  deleted boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists claims (
+  id uuid primary key default gen_random_uuid(),
+  household_id uuid not null references households(id) on delete cascade,
+  reward_id uuid,
+  user_id uuid not null,
+  label text not null,            -- figé : l'historique survit aux modifications
+  cost numeric(6,1) not null,
+  deleted boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table rewards enable row level security;
+alter table claims  enable row level security;
+
+drop policy if exists rw_all on rewards;
+create policy rw_all on rewards for all to authenticated
+  using (is_member(household_id)) with check (is_member(household_id));
+
+drop policy if exists cl_all on claims;
+create policy cl_all on claims for all to authenticated
+  using (is_member(household_id)) with check (is_member(household_id));
+
+grant all on rewards to anon, authenticated, service_role;
+grant all on claims  to anon, authenticated, service_role;
+
+-- Catalogue de départ, uniquement pour les foyers qui n'en ont pas encore.
+insert into rewards (household_id, label, cost)
+select h.id, v.label, v.cost
+from households h
+cross join (values
+  ('Un café servi au lit', 5),
+  ('Choisir le film de la soirée', 8),
+  ('Une grasse matinée pendant que l''autre gère', 12),
+  ('Un massage de 20 minutes', 15),
+  ('Une soirée entièrement libre', 25),
+  ('Un resto en amoureux, organisé par l''autre', 40),
+  ('Une journée rien que pour soi', 60)
+) as v(label, cost)
+where not exists (select 1 from rewards r where r.household_id = h.id);
+
+notify pgrst, 'reload schema';
+select label, cost from rewards where not deleted order by cost;

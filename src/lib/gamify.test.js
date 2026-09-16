@@ -2,76 +2,123 @@ import { describe, it, expect } from 'vitest';
 import {
   brainFill,
   pendingCount,
+  pointsBreakdown,
   pointsEarned,
   pointsSpent,
   pointsAvailable,
-  canGift,
-  gageProgress,
-  gagesToHonour,
-  BRAIN_CAP,
-  GAGE_COST,
+  sortRewards,
+  affordable,
+  nextReward,
+  formatPoints,
+  POINT_ADD,
+  POINT_OWN,
+  POINT_OTHER,
 } from './gamify.js';
 
-const task = (o = {}) => ({ deleted: false, done: false, doneBy: null, ...o });
-const gage = (o = {}) => ({ deleted: false, fromUser: 'a', toUser: 'b', done: false, ...o });
+const task = (o = {}) => ({
+  deleted: false,
+  done: false,
+  doneBy: null,
+  createdBy: null,
+  ...o,
+});
+const claim = (o = {}) => ({ deleted: false, userId: 'a', cost: 10, ...o });
+const reward = (label, cost) => ({ id: label, label, cost, deleted: false });
 
-describe('brainFill', () => {
+describe('cerveau du foyer', () => {
   it('vide sans tâche', () => expect(brainFill([])).toBe(0));
   it('se remplit avec les tâches en attente', () =>
     expect(brainFill([task(), task(), task()], 6)).toBeCloseTo(0.5));
   it('plafonne à 1', () =>
     expect(brainFill(Array.from({ length: 30 }, () => task()))).toBe(1));
-  it('ignore les tâches cochées et supprimées', () => {
-    const list = [task({ done: true }), task({ deleted: true }), task()];
-    expect(pendingCount(list)).toBe(1);
-  });
+  it('ignore les tâches cochées et supprimées', () =>
+    expect(
+      pendingCount([task({ done: true }), task({ deleted: true }), task()]),
+    ).toBe(1));
 });
 
-describe('points par personne', () => {
-  const tasks = [
-    task({ done: true, doneBy: 'a' }),
-    task({ done: true, doneBy: 'a' }),
-    task({ done: true, doneBy: 'b' }),
-    task({ done: false, doneBy: null }),
-  ];
-  it('compte les tâches cochées par la personne', () => {
-    expect(pointsEarned(tasks, 'a')).toBe(2);
-    expect(pointsEarned(tasks, 'b')).toBe(1);
+describe('barème', () => {
+  it('1 point pour avoir ajouté une tâche', () => {
+    expect(pointsEarned([task({ createdBy: 'a' })], 'a')).toBe(POINT_ADD);
   });
-  it('dépense 10 points par gage offert', () => {
-    expect(pointsSpent([gage({ fromUser: 'a' })], 'a')).toBe(GAGE_COST);
-    expect(pointsSpent([gage({ fromUser: 'a' })], 'b')).toBe(0);
-  });
-  it('disponible = gagné - dépensé, jamais négatif', () => {
-    const many = Array.from({ length: 12 }, () => task({ done: true, doneBy: 'a' }));
-    expect(pointsAvailable(many, [gage({ fromUser: 'a' })], 'a')).toBe(2);
-    expect(pointsAvailable([], [gage({ fromUser: 'a' })], 'a')).toBe(0);
-  });
-});
 
-describe('gages', () => {
-  it('canGift à partir de 10 points', () => {
-    const ten = Array.from({ length: 10 }, () => task({ done: true, doneBy: 'a' }));
-    expect(canGift(ten, [], 'a')).toBe(true);
-    expect(canGift(ten.slice(0, 9), [], 'a')).toBe(false);
+  it('1 point de plus si on coche sa propre tâche', () => {
+    const t = task({ createdBy: 'a', done: true, doneBy: 'a' });
+    expect(pointsEarned([t], 'a')).toBe(POINT_ADD + POINT_OWN);
   });
-  it('progression vers le prochain gage', () => {
-    const seven = Array.from({ length: 7 }, () => task({ done: true, doneBy: 'a' }));
-    expect(gageProgress(seven, [], 'a')).toEqual({ done: 7, total: 10, remaining: 3 });
+
+  it('1,5 point si on coche la tâche de l’autre', () => {
+    const t = task({ createdBy: 'b', done: true, doneBy: 'a' });
+    expect(pointsEarned([t], 'a')).toBe(POINT_OTHER);
+    // et l'autre garde son point d'ajout
+    expect(pointsEarned([t], 'b')).toBe(POINT_ADD);
   });
-  it('liste les gages reçus non honorés', () => {
-    const gages = [
-      gage({ toUser: 'a', done: false }),
-      gage({ toUser: 'a', done: true }),
-      gage({ toUser: 'b', done: false }),
+
+  it('détaille les trois sources', () => {
+    const tasks = [
+      task({ createdBy: 'a' }),
+      task({ createdBy: 'a', done: true, doneBy: 'a' }),
+      task({ createdBy: 'b', done: true, doneBy: 'a' }),
     ];
-    expect(gagesToHonour(gages, 'a')).toHaveLength(1);
+    expect(pointsBreakdown(tasks, 'a')).toEqual({
+      added: 2,
+      own: 1,
+      other: 1,
+      total: 2 + 1 + 1.5,
+    });
+  });
+
+  it('ignore les tâches supprimées', () => {
+    const t = task({ createdBy: 'a', done: true, doneBy: 'a', deleted: true });
+    expect(pointsEarned([t], 'a')).toBe(0);
+  });
+
+  it('compte au taux simple si l’auteur est inconnu', () => {
+    const t = task({ createdBy: null, done: true, doneBy: 'a' });
+    expect(pointsEarned([t], 'a')).toBe(POINT_OWN);
   });
 });
 
-describe('constantes', () => {
-  it('valeurs par défaut', () => {
-    expect(GAGE_COST).toBe(10);
-    expect(BRAIN_CAP).toBeGreaterThan(0);
+describe('dépenses', () => {
+  it('additionne le coût des récompenses prises', () => {
+    expect(pointsSpent([claim({ cost: 10 }), claim({ cost: 2.5 })], 'a')).toBe(12.5);
+  });
+  it('ne compte que les siennes', () => {
+    expect(pointsSpent([claim({ userId: 'b', cost: 10 })], 'a')).toBe(0);
+  });
+  it('disponible = gagné − dépensé, jamais négatif', () => {
+    const tasks = [task({ createdBy: 'a', done: true, doneBy: 'a' })]; // 2 pts
+    expect(pointsAvailable(tasks, [], 'a')).toBe(2);
+    expect(pointsAvailable(tasks, [claim({ cost: 10 })], 'a')).toBe(0);
+  });
+});
+
+describe('récompenses', () => {
+  const list = [reward('grosse', 30), reward('petite', 5), reward('moyenne', 15)];
+
+  it('classées du moins cher au plus cher', () => {
+    expect(sortRewards(list).map((r) => r.label)).toEqual([
+      'petite',
+      'moyenne',
+      'grosse',
+    ]);
+  });
+
+  it('celles qu’on peut s’offrir', () => {
+    expect(affordable(list, 15).map((r) => r.label)).toEqual(['petite', 'moyenne']);
+    expect(affordable(list, 2)).toHaveLength(0);
+  });
+
+  it('indique ce qu’il manque pour la suivante', () => {
+    expect(nextReward(list, 5)).toEqual({ reward: list[2], missing: 10 });
+  });
+
+  it('rien à viser quand tout est accessible', () => {
+    expect(nextReward(list, 100)).toBeNull();
+  });
+
+  it('écrit les demi-points à la française', () => {
+    expect(formatPoints(12.5)).toBe('12,5');
+    expect(formatPoints(12)).toBe('12');
   });
 });
