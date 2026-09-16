@@ -4,6 +4,23 @@ import { supabase, isConfigured } from '../supabaseClient.js';
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+const LAST_HH = 'cmp.household';
+const readLastHousehold = () => {
+  try {
+    return localStorage.getItem(LAST_HH);
+  } catch {
+    return null;
+  }
+};
+const writeLastHousehold = (id) => {
+  try {
+    if (id) localStorage.setItem(LAST_HH, id);
+    else localStorage.removeItem(LAST_HH);
+  } catch {
+    /* ignore */
+  }
+};
+
 /** URL de redirection du lien magique (base incluse). */
 const redirectTo = () =>
   `${window.location.origin}${import.meta.env.BASE_URL}`;
@@ -47,15 +64,24 @@ export function useAccount() {
   const loadHousehold = useCallback(async () => {
     if (!supabase || !session) return;
     setLoading(true);
+    // Filtrer sur SON user_id est indispensable : la politique de sécurité
+    // laisse voir tous les membres du foyer (c'est ainsi qu'on affiche le
+    // prénom de l'autre), donc sans ce filtre on lisait la première ligne
+    // venue — et chacun héritait du prénom de l'autre.
     const { data, error: err } = await supabase
       .from('members')
       .select('household_id, display_name, households(id, name)')
-      .limit(1);
+      .eq('user_id', session.user.id)
+      .order('household_id');
     if (!err && data && data.length > 0) {
-      const row = data[0];
+      // Quelqu'un peut appartenir à plusieurs foyers : on garde celui qu'il
+      // utilisait déjà, sinon le premier, pour ne pas changer d'un coup.
+      const last = readLastHousehold();
+      const row = data.find((r) => r.household_id === last) || data[0];
       setHousehold(
         row.households || { id: row.household_id, name: 'Maison' },
       );
+      writeLastHousehold(row.household_id);
       setDisplayName(row.display_name || '');
     } else {
       setHousehold(null);
@@ -145,6 +171,7 @@ export function useAccount() {
   }, []);
 
   const signOut = useCallback(async () => {
+    writeLastHousehold(null);
     await supabase?.auth.signOut();
   }, []);
 
@@ -166,6 +193,7 @@ export function useAccount() {
       setError(e2.message);
       return;
     }
+    writeLastHousehold(h.id);
     setHousehold(h);
   }, [session]);
 
@@ -188,6 +216,7 @@ export function useAccount() {
         );
         return;
       }
+      writeLastHousehold(clean);
       await loadHousehold();
     },
     [session, loadHousehold],
@@ -219,6 +248,7 @@ export function useAccount() {
       .delete()
       .eq('user_id', session.user.id)
       .eq('household_id', household.id);
+    writeLastHousehold(null);
     setHousehold(null);
     setDisplayName('');
   }, [session, household]);
