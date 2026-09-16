@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
-import { REWARD_MIN } from './gamify.js';
+import { REWARD_MIN, REWARD_CUSTOM } from './gamify.js';
 
 const rewardFrom = (r) => ({
   id: r.id,
@@ -162,6 +162,30 @@ export function useRewards(householdId, userId) {
     [householdId, userId, saveClaims],
   );
 
+  /**
+   * Récompense sur mesure : on décrit ce qu'on veut et on l'obtient aussitôt.
+   * Elle n'entre pas au catalogue — c'est un souhait unique, à prix fixe.
+   */
+  const claimCustom = useCallback(
+    async (label) => {
+      const text = label.trim();
+      if (!text) return 'Dis ce que tu demandes.';
+      const row = {
+        id: uuid(),
+        household_id: householdId,
+        reward_id: null,
+        user_id: userId,
+        label: text,
+        cost: REWARD_CUSTOM,
+        deleted: false,
+      };
+      saveClaims([...cRef.current, claimFrom(row)]);
+      if (supabase) await supabase.from('claims').insert(row);
+      return null;
+    },
+    [householdId, userId, saveClaims],
+  );
+
   /** Annule une dépense (récupère les points). */
   const cancelClaim = useCallback(
     async (id) => {
@@ -183,6 +207,7 @@ export function useRewards(householdId, userId) {
     addReward,
     removeReward,
     claimReward,
+    claimCustom,
     cancelClaim,
   };
 }

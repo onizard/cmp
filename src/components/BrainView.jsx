@@ -7,7 +7,10 @@ import {
   nextReward,
   rewardFill,
   formatPoints,
+  canClaimCustom,
+  customMissing,
   REWARD_MIN,
+  REWARD_CUSTOM,
   POINT_ADD,
   POINT_OWN,
   POINT_OTHER,
@@ -18,6 +21,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const [label, setLabel] = useState('');
   const [cost, setCost] = useState('');
   const [rewardError, setRewardError] = useState(null);
+  const [openWish, setOpenWish] = useState(false);
+  const [wish, setWish] = useState('');
+  const [wishError, setWishError] = useState(null);
   const [showBareme, setShowBareme] = useState(false);
 
   const other = store.otherUser;
@@ -40,6 +46,18 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     .slice()
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
     .slice(0, 6);
+
+  const submitWish = async (e) => {
+    e.preventDefault();
+    const err = await store.claimCustom(wish);
+    if (err) {
+      setWishError(err);
+      return;
+    }
+    setWishError(null);
+    setWish('');
+    setOpenWish(false);
+  };
 
   const submitReward = async (e) => {
     e.preventDefault();
@@ -123,6 +141,71 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </p>
         </section>
       )}
+
+      <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
+        <h3 className="wish-title">Récompense sur mesure</h3>
+        {canClaimCustom(myPts) ? (
+          openWish ? (
+            <form onSubmit={submitWish}>
+              <p className="wish-text">
+                Dis ce que tu veux. Tu l’obtiens tout de suite.
+              </p>
+              <label className="field-label" htmlFor="wish">Ta demande</label>
+              <input
+                id="wish"
+                className="field"
+                value={wish}
+                autoFocus
+                placeholder="Un week-end à deux…"
+                onChange={(e) => {
+                  setWishError(null);
+                  setWish(e.target.value);
+                }}
+              />
+              {wishError && <p className="error">{wishError}</p>}
+              <div className="add-actions">
+                <button className="btn btn-small btn-accent" type="submit">
+                  Obtenir ({REWARD_CUSTOM} pts)
+                </button>
+                <button
+                  className="btn btn-small"
+                  type="button"
+                  onClick={() => setOpenWish(false)}
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <p className="wish-text">
+                Tu as tes {REWARD_CUSTOM} points. Demande ce que tu veux, sans
+                passer par le catalogue.
+              </p>
+              <button
+                className="btn btn-accent btn-block"
+                type="button"
+                onClick={() => setOpenWish(true)}
+              >
+                Demander ma récompense
+              </button>
+            </>
+          )
+        ) : (
+          <>
+            <p className="wish-text">
+              À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux — sans
+              prix à fixer, obtenu sur-le-champ.
+            </p>
+            <div className="gauge" aria-hidden="true">
+              <span style={{ width: `${Math.round((myPts / REWARD_CUSTOM) * 100)}%` }} />
+            </div>
+            <p className="wish-text">
+              Encore <b>{formatPoints(customMissing(myPts))}</b> points.
+            </p>
+          </>
+        )}
+      </section>
 
       <section className="gage-section">
         <h2 className="gage-title">Les récompenses</h2>
@@ -218,6 +301,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             {mesClaims.map((c) => (
               <li key={c.id} className="gage-item">
                 <span>
+                  {!c.rewardId && <span className="claim-wish">sur mesure</span>}
                   {c.label}
                   <span className="claim-who">
                     {' '}

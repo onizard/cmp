@@ -8,7 +8,10 @@ import {
   pointsAvailable,
   sortRewards,
   rewardFill,
+  canClaimCustom,
+  customMissing,
   REWARD_MIN,
+  REWARD_CUSTOM,
   affordable,
   nextReward,
   formatPoints,
@@ -146,6 +149,20 @@ describe('récompenses', () => {
 
   it('le catalogue commence à 10 points', () => {
     expect(REWARD_MIN).toBe(10);
+  });
+
+  it('la récompense sur mesure s’ouvre à 100 points', () => {
+    expect(REWARD_CUSTOM).toBe(100);
+    expect(canClaimCustom(99.5)).toBe(false);
+    expect(canClaimCustom(100)).toBe(true);
+    expect(canClaimCustom(250)).toBe(true);
+  });
+
+  it('dit ce qu’il manque pour la sur-mesure', () => {
+    expect(customMissing(0)).toBe(100);
+    expect(customMissing(87.5)).toBe(12.5);
+    expect(customMissing(100)).toBe(0);
+    expect(customMissing(140)).toBe(0);
   });
 
   it('écrit les demi-points à la française', () => {

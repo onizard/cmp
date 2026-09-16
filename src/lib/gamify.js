@@ -18,6 +18,10 @@ export const BRAIN_CAP = 15;
 // d'être mis au catalogue.
 export const REWARD_MIN = 10;
 
+// La récompense sur mesure : au-delà de ce seuil, on demande ce qu'on veut,
+// sans passer par le catalogue et sans en fixer le prix.
+export const REWARD_CUSTOM = 100;
+
 /** Arrondi au demi-point (évite les 1.4999999 du calcul flottant). */
 const half = (n) => Math.round(n * 2) / 2;
 
@@ -105,6 +109,13 @@ export const rewardFill = (rewards, points) => {
   if (catalogue.length > 0) return 1;
   return Math.min(1, pts / REWARD_MIN);
 };
+
+/** Peut-on demander une récompense sur mesure ? */
+export const canClaimCustom = (points) => (Number(points) || 0) >= REWARD_CUSTOM;
+
+/** Ce qu'il manque pour y avoir droit (0 si c'est déjà le cas). */
+export const customMissing = (points) =>
+  Math.max(0, half(REWARD_CUSTOM - (Number(points) || 0)));
 
 /** Écriture française des points : 12,5 */
 export const formatPoints = (n) => String(half(n)).replace('.', ',');
