@@ -124,71 +124,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </section>
       )}
 
-      <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
-        <h3 className="wish-title">Récompense sur mesure</h3>
-        {canClaimCustom(myPts) ? (
-          openWish ? (
-            <form onSubmit={submitWish}>
-              <p className="wish-text">
-                Dis ce que tu veux. Tu l’obtiens tout de suite.
-              </p>
-              <label className="field-label" htmlFor="wish">Ta demande</label>
-              <input
-                id="wish"
-                className="field"
-                value={wish}
-                autoFocus
-                placeholder="Un week-end à deux…"
-                onChange={(e) => {
-                  setWishError(null);
-                  setWish(e.target.value);
-                }}
-              />
-              {wishError && <p className="error">{wishError}</p>}
-              <div className="add-actions">
-                <button className="btn btn-small btn-accent" type="submit">
-                  Obtenir ({REWARD_CUSTOM} pts)
-                </button>
-                <button
-                  className="btn btn-small"
-                  type="button"
-                  onClick={() => setOpenWish(false)}
-                >
-                  Annuler
-                </button>
-              </div>
-            </form>
-          ) : (
-            <>
-              <p className="wish-text">
-                Tu as tes {REWARD_CUSTOM} points. Demande ce que tu veux, sans
-                passer par le catalogue.
-              </p>
-              <button
-                className="btn btn-accent btn-block"
-                type="button"
-                onClick={() => setOpenWish(true)}
-              >
-                Demander ma récompense
-              </button>
-            </>
-          )
-        ) : (
-          <>
-            <p className="wish-text">
-              À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux — sans
-              prix à fixer, obtenu sur-le-champ.
-            </p>
-            <div className="gauge" aria-hidden="true">
-              <span style={{ width: `${Math.round((myPts / REWARD_CUSTOM) * 100)}%` }} />
-            </div>
-            <p className="wish-text">
-              Encore <b>{formatPoints(customMissing(myPts))}</b> points.
-            </p>
-          </>
-        )}
-      </section>
-
       <section className="gage-section">
         <h2 className="gage-title">Les récompenses</h2>
         {catalogue.length === 0 ? (
@@ -224,6 +159,71 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             })}
           </ul>
         )}
+
+        <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
+          <h3 className="wish-title">Récompense sur mesure</h3>
+          {canClaimCustom(myPts) ? (
+            openWish ? (
+              <form onSubmit={submitWish}>
+                <p className="wish-text">
+                  Dis ce que tu veux. Tu l’obtiens tout de suite.
+                </p>
+                <label className="field-label" htmlFor="wish">Ta demande</label>
+                <input
+                  id="wish"
+                  className="field"
+                  value={wish}
+                  autoFocus
+                  placeholder="Un week-end à deux…"
+                  onChange={(e) => {
+                    setWishError(null);
+                    setWish(e.target.value);
+                  }}
+                />
+                {wishError && <p className="error">{wishError}</p>}
+                <div className="add-actions">
+                  <button className="btn btn-small btn-accent" type="submit">
+                    Obtenir ({REWARD_CUSTOM} pts)
+                  </button>
+                  <button
+                    className="btn btn-small"
+                    type="button"
+                    onClick={() => setOpenWish(false)}
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <p className="wish-text">
+                  Tu as tes {REWARD_CUSTOM} points. Demande ce que tu veux, sans
+                  passer par le catalogue.
+                </p>
+                <button
+                  className="btn btn-accent btn-block"
+                  type="button"
+                  onClick={() => setOpenWish(true)}
+                >
+                  Demander ma récompense
+                </button>
+              </>
+            )
+          ) : (
+            <>
+              <p className="wish-text">
+                À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux — sans
+                prix à fixer, obtenu sur-le-champ.
+              </p>
+              <div className="gauge" aria-hidden="true">
+                <span style={{ width: `${Math.round((myPts / REWARD_CUSTOM) * 100)}%` }} />
+              </div>
+              <p className="wish-text">
+                Encore <b>{formatPoints(customMissing(myPts))}</b> points.
+              </p>
+            </>
+          )}
+        </section>
 
       </section>
 
