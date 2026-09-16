@@ -112,6 +112,12 @@ export function useRewards(householdId, userId) {
       if (price < REWARD_MIN) {
         return `Une récompense coûte au moins ${REWARD_MIN} points.`;
       }
+      // Un même libellé deux fois dans le catalogue, c'est un doublon : la base
+      // le refuse aussi, autant le dire ici plutôt que d'échouer en silence.
+      const already = rRef.current.some(
+        (r) => !r.deleted && r.label.trim().toLowerCase() === text.toLowerCase(),
+      );
+      if (already) return 'Cette récompense est déjà dans le catalogue.';
       const row = {
         id: uuid(),
         household_id: householdId,

@@ -52,8 +52,27 @@ cross join (values
 ) as v(label, cost)
 where not exists (select 1 from rewards r where r.household_id = h.id);
 
--- Les catalogues déjà en place : rien ne descend sous 10 points.
+-- Les catalogues déjà en place : on ré-étale l'échelle d'origine au lieu de
+-- tout ramener à 10 — sinon le café (5) et le film (8) finissent au même prix
+-- et se lisent comme un doublon.
+update rewards r set cost = v.cost
+from (values
+  ('Un café servi au lit', 10),
+  ('Choisir le film de la soirée', 12),
+  ('Une grasse matinée pendant que l''autre gère', 18),
+  ('Un massage de 20 minutes', 25),
+  ('Une soirée entièrement libre', 35),
+  ('Un resto en amoureux, organisé par l''autre', 50),
+  ('Une journée rien que pour soi', 75)
+) as v(label, cost)
+where r.label = v.label and not r.deleted and r.cost <> v.cost;
+
+-- Ce qui resterait sous le plancher (récompenses ajoutées à la main).
 update rewards set cost = 10 where not deleted and cost < 10;
+
+-- Un même libellé ne peut pas exister deux fois dans un foyer.
+create unique index if not exists rewards_uniq_label
+  on rewards (household_id, lower(label)) where not deleted;
 
 notify pgrst, 'reload schema';
 select label, cost from rewards where not deleted order by cost;
