@@ -7,6 +7,7 @@ import {
   pointsSpent,
   pointsAvailable,
   sortRewards,
+  REWARD_MIN,
   affordable,
   nextReward,
   formatPoints,
@@ -115,6 +116,10 @@ describe('récompenses', () => {
 
   it('rien à viser quand tout est accessible', () => {
     expect(nextReward(list, 100)).toBeNull();
+  });
+
+  it('le catalogue commence à 10 points', () => {
+    expect(REWARD_MIN).toBe(10);
   });
 
   it('écrit les demi-points à la française', () => {

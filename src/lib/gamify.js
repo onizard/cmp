@@ -14,6 +14,10 @@ export const POINT_OTHER = 1.5;
 /** Nombre de tâches au-delà duquel le cerveau du foyer est « plein ». */
 export const BRAIN_CAP = 15;
 
+// Prix plancher d'une récompense : en dessous, ça ne vaut pas la peine
+// d'être mis au catalogue.
+export const REWARD_MIN = 10;
+
 /** Arrondi au demi-point (évite les 1.4999999 du calcul flottant). */
 const half = (n) => Math.round(n * 2) / 2;
 

@@ -6,6 +6,7 @@ import {
   sortRewards,
   nextReward,
   formatPoints,
+  REWARD_MIN,
   POINT_ADD,
   POINT_OWN,
   POINT_OTHER,
@@ -15,6 +16,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const [openAdd, setOpenAdd] = useState(false);
   const [label, setLabel] = useState('');
   const [cost, setCost] = useState('');
+  const [rewardError, setRewardError] = useState(null);
   const [showBareme, setShowBareme] = useState(false);
 
   const other = store.otherUser;
@@ -47,9 +49,14 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
     .slice(0, 6);
 
-  const submitReward = (e) => {
+  const submitReward = async (e) => {
     e.preventDefault();
-    store.addReward(label, cost.replace(',', '.'));
+    const err = await store.addReward(label, cost.replace(',', '.'));
+    if (err) {
+      setRewardError(err);
+      return;
+    }
+    setRewardError(null);
     setLabel('');
     setCost('');
     setOpenAdd(false);
@@ -173,15 +180,21 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               placeholder="Petit-déjeuner au lit"
               onChange={(e) => setLabel(e.target.value)}
             />
-            <label className="field-label" htmlFor="rcost">Son prix en points</label>
+            <label className="field-label" htmlFor="rcost">
+              Son prix en points ({REWARD_MIN} au minimum)
+            </label>
             <input
               id="rcost"
               className="field"
               inputMode="decimal"
               value={cost}
-              placeholder="15"
-              onChange={(e) => setCost(e.target.value)}
+              placeholder={String(REWARD_MIN)}
+              onChange={(e) => {
+                setRewardError(null);
+                setCost(e.target.value);
+              }}
             />
+            {rewardError && <p className="error">{rewardError}</p>}
             <div className="add-actions">
               <button className="btn btn-small btn-accent" type="submit">
                 Ajouter

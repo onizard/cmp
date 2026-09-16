@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
+import { REWARD_MIN } from './gamify.js';
 
 const rewardFrom = (r) => ({
   id: r.id,
@@ -106,7 +107,11 @@ export function useRewards(householdId, userId) {
     async (label, cost) => {
       const text = label.trim();
       const price = Number(cost);
-      if (!text || !Number.isFinite(price) || price <= 0) return;
+      if (!text) return 'Il manque le nom de la récompense.';
+      if (!Number.isFinite(price)) return 'Le prix doit être un nombre.';
+      if (price < REWARD_MIN) {
+        return `Une récompense coûte au moins ${REWARD_MIN} points.`;
+      }
       const row = {
         id: uuid(),
         household_id: householdId,
@@ -116,6 +121,7 @@ export function useRewards(householdId, userId) {
       };
       saveRewards([...rRef.current, rewardFrom(row)]);
       if (supabase) await supabase.from('rewards').insert(row);
+      return null;
     },
     [householdId, saveRewards],
   );
