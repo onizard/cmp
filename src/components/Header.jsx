@@ -1,10 +1,12 @@
 export default function Header({ accroche, online = true, pending = 0 }) {
   return (
     <header className="header">
-      <div className="brand">
-        <span className="sigle">CMP</span>
-        <span className="baseline">charge mentale partagée</span>
-      </div>
+      <h1 className="brand-title">
+        Charge mentale
+        <br />
+        partagée
+      </h1>
+      <div className="tag">plus léger·e·s ensemble</div>
       {accroche && <p className="accroche">{accroche}</p>}
       {(!online || pending > 0) && (
         <p className="sync" role="status">

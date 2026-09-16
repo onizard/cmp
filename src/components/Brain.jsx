@@ -1,124 +1,52 @@
-// Cerveau qui se remplit comme un vase. `fill` ∈ [0,1].
-// Vide → quasi transparent ; plein → dégradé bleu (bas) vers rouge (haut), opaque.
+// Cœur-cerveau qui se remplit comme un vase. `fill` ∈ [0,1].
+// Dégradé corail → violet → bleu, contour bleu nuit.
 
-const W = 200;
-const H = 184;
+const HEART =
+  'M50,80 C50,80 10,53 10,29 C10,15 22,8 32,13 C41,17 46,24 50,31 ' +
+  'C54,24 59,17 68,13 C78,8 90,15 90,29 C90,53 50,80 50,80 Z';
 
-// Contour du cerveau, calculé une fois : bosses arrondies (circonvolutions),
-// creux au sommet (les deux hémisphères), base un peu plus étroite.
-function brainOutline() {
-  const cx = 100;
-  const cy = 98;
-  const rx = 80;
-  const ry = 66;
-  const bumps = 8;
-  const steps = 220;
-  const pts = [];
-  for (let i = 0; i < steps; i += 1) {
-    const t = (i / steps) * Math.PI * 2; // 0 = sommet, sens horaire
-    // circonvolutions : deux fréquences pour un rendu organique
-    let wob = 8 * Math.sin(bumps * t) + 3 * Math.sin(3 * t + 1.2);
-    // creux central au sommet → séparation des hémisphères
-    const dTop = Math.min(t, Math.PI * 2 - t);
-    wob -= 17 * Math.exp(-(dTop * dTop) / 0.05);
-    // petite encoche en bas (cervelet)
-    const dBot = Math.abs(t - Math.PI);
-    wob -= 7 * Math.exp(-(dBot * dBot) / 0.06);
-    // base légèrement plus étroite
-    const xScale = 1 - 0.12 * ((1 - Math.cos(t)) / 2);
-    const x = cx + Math.sin(t) * (rx + wob) * xScale;
-    const y = cy - Math.cos(t) * (ry + wob);
-    pts.push([x, y]);
-  }
-  // lissage : courbe quadratique passant par les milieux de segments
-  const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-  const f = (p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`;
-  let d = `M${f(mid(pts[pts.length - 1], pts[0]))}`;
-  for (let i = 0; i < pts.length; i += 1) {
-    const next = pts[(i + 1) % pts.length];
-    d += ` Q${f(pts[i])} ${f(mid(pts[i], next))}`;
-  }
-  return `${d} Z`;
-}
-
-const OUTLINE = brainOutline();
-
-// Quelques plis internes (traits décoratifs).
-const FOLDS = [
-  'M100,26 C96,60 104,90 100,158',
-  'M100,60 C78,64 70,82 84,96',
-  'M100,60 C122,64 130,82 116,96',
-  'M100,110 C80,112 72,128 88,140',
-  'M100,110 C120,112 128,128 112,140',
-  'M62,58 C50,70 52,86 64,92',
-  'M138,58 C150,70 148,86 136,92',
-];
-
-export default function Brain({ fill = 0 }) {
+export default function Brain({ fill = 0, id = 'b' }) {
   const clamped = Math.max(0, Math.min(1, fill));
-  const top = H * (1 - clamped); // le liquid monte depuis le bas
-  const opacity = clamped === 0 ? 0 : 0.25 + 0.75 * clamped;
+  const y = 80 - 70 * clamped; // le liquide monte depuis le bas
 
   return (
     <svg
       className="brain-svg"
-      viewBox={`0 0 ${W} ${H}`}
+      viewBox="0 0 100 92"
       role="img"
-      aria-label={`Cerveau rempli à ${Math.round(clamped * 100)} %`}
+      aria-label={`Rempli à ${Math.round(clamped * 100)} %`}
     >
       <defs>
-        <linearGradient
-          id="brainGrad"
-          gradientUnits="userSpaceOnUse"
-          x1="0"
-          y1={H}
-          x2="0"
-          y2="0"
-        >
-          <stop offset="0" stopColor="#2f6db0" />
-          <stop offset="0.35" stopColor="#3fae8f" />
-          <stop offset="0.6" stopColor="#e6b73e" />
-          <stop offset="0.8" stopColor="#e07b39" />
-          <stop offset="1" stopColor="#c23b30" />
+        <linearGradient id={`grad-${id}`} x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stopColor="#f0919c" />
+          <stop offset="0.5" stopColor="#b486cc" />
+          <stop offset="1" stopColor="#8b9de6" />
         </linearGradient>
-        <clipPath id="brainClip">
-          <path d={OUTLINE} />
+        <clipPath id={`clip-${id}`}>
+          <path d={HEART} />
         </clipPath>
       </defs>
 
-      {/* Remplissage, borné à la forme du cerveau */}
-      <g clipPath="url(#brainClip)">
-        <rect x="0" y="0" width={W} height={H} fill="var(--card)" />
+      <path d={HEART} fill="#f4eadd" />
+      <g clipPath={`url(#clip-${id})`}>
         <rect
           className="brain-liquid"
           x="0"
-          y={top}
-          width={W}
-          height={H}
-          fill="url(#brainGrad)"
-          opacity={opacity}
+          y={y}
+          width="100"
+          height="92"
+          fill={`url(#grad-${id})`}
         />
       </g>
-
-      {/* Plis + contour par-dessus */}
-      <g
-        fill="none"
-        stroke="var(--ink)"
-        strokeOpacity="0.28"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      >
-        {FOLDS.map((d) => (
-          <path key={d} d={d} />
-        ))}
-      </g>
       <path
-        d={OUTLINE}
+        d="M50,31 C50,45 50,60 50,78"
         fill="none"
-        stroke="var(--ink)"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
+        stroke="#17284c"
+        strokeOpacity="0.35"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
+      <path d={HEART} fill="none" stroke="#17284c" strokeWidth="3" strokeLinejoin="round" />
     </svg>
   );
 }

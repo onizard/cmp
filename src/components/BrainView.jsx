@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import Brain from './Brain.jsx';
 import {
-  brainFill,
-  pendingCount,
   pointsAvailable,
   gageProgress,
   canGift,
@@ -14,13 +12,19 @@ export default function BrainView({ tasks, userId, gages }) {
   const [draft, setDraft] = useState('');
   const [open, setOpen] = useState(false);
 
-  const fill = brainFill(tasks);
-  const pending = pendingCount(tasks);
-  const available = pointsAvailable(tasks, gages.gages, userId);
+  const other = gages.otherUser;
+  const myName = gages.names[userId] || 'Toi';
+  const otherName = (other && gages.names[other]) || 'Ton binôme';
+
+  const myPts = pointsAvailable(tasks, gages.gages, userId);
+  const otherPts = other ? pointsAvailable(tasks, gages.gages, other) : 0;
+
   const prog = gageProgress(tasks, gages.gages, userId);
   const giftable = canGift(tasks, gages.gages, userId);
   const toHonour = gagesToHonour(gages.gages, userId);
-  const given = gages.gages.filter((g) => !g.deleted && g.fromUser === userId && !g.done);
+  const given = gages.gages.filter(
+    (g) => !g.deleted && g.fromUser === userId && !g.done,
+  );
 
   const submit = (e) => {
     e.preventDefault();
@@ -30,33 +34,42 @@ export default function BrainView({ tasks, userId, gages }) {
     setOpen(false);
   };
 
-  const charge =
-    pending === 0
-      ? 'La tête est légère.'
-      : pending === 1
-        ? '1 chose en tête.'
-        : `${pending} choses en tête.`;
-
   return (
     <main className="brain-view">
-      <div className="brain-wrap">
-        <Brain fill={fill} />
-      </div>
-      <p className="brain-charge">{charge}</p>
+      <p className="brain-lede">La charge que chacun·e a portée. 💛</p>
 
-      <section className="points-card">
-        <div className="points-line">
-          <span className="points-num">{available}</span>
-          <span className="points-label">
-            {available <= 1 ? 'point à toi' : 'points à toi'}
-          </span>
+      <div className="brains">
+        <div className="person">
+          <div className="vase">
+            <Brain fill={Math.min(1, myPts / GAGE_COST)} id="me" />
+          </div>
+          <h3>{myName}</h3>
+          <div className="pts">
+            <b>{myPts}</b> / {GAGE_COST} pts
+          </div>
         </div>
+        <div className="person">
+          <div className="vase">
+            <Brain fill={Math.min(1, otherPts / GAGE_COST)} id="other" />
+          </div>
+          <h3>{otherName}</h3>
+          <div className="pts">
+            <b>{otherPts}</b> / {GAGE_COST} pts
+          </div>
+        </div>
+      </div>
+
+      <section className="gage-card">
+        <h4>Le prochain gage</h4>
+        <p className="soft-text" style={{ margin: '0 0 4px' }}>
+          À {GAGE_COST} points, tu offres un petit gage tout doux à l'autre.
+        </p>
         <div className="gauge" aria-hidden="true">
           <span style={{ width: `${(prog.done / prog.total) * 100}%` }} />
         </div>
-        <p className="soft-text">
+        <p className="soft-text" style={{ margin: 0 }}>
           {giftable
-            ? 'Tu peux offrir un gage à l’autre.'
+            ? 'Tu peux offrir un gage à l’autre. 🎁'
             : `Encore ${prog.remaining} tâche${prog.remaining > 1 ? 's' : ''} cochée${
                 prog.remaining > 1 ? 's' : ''
               } pour débloquer un gage.`}
@@ -66,7 +79,7 @@ export default function BrainView({ tasks, userId, gages }) {
           (open ? (
             <form className="gage-form" onSubmit={submit}>
               <label className="field-label" htmlFor="gage">
-                Le gage à imposer
+                Le gage à offrir
               </label>
               <input
                 id="gage"
@@ -77,19 +90,33 @@ export default function BrainView({ tasks, userId, gages }) {
                 onChange={(e) => setDraft(e.target.value)}
               />
               <div className="add-actions">
-                <button className="btn btn-small btn-accent" type="submit" disabled={!gages.otherUser}>
+                <button
+                  className="btn btn-small btn-accent"
+                  type="submit"
+                  disabled={!other}
+                >
                   Offrir (−{GAGE_COST})
                 </button>
-                <button className="btn btn-small" type="button" onClick={() => setOpen(false)}>
+                <button
+                  className="btn btn-small"
+                  type="button"
+                  onClick={() => setOpen(false)}
+                >
                   Annuler
                 </button>
               </div>
-              {!gages.otherUser && (
-                <p className="soft-text">Invite d’abord l’autre personne (bouton « Foyer »).</p>
+              {!other && (
+                <p className="soft-text">
+                  Invite d’abord l’autre personne (onglet « Mon compte »).
+                </p>
               )}
             </form>
           ) : (
-            <button className="btn btn-accent" type="button" onClick={() => setOpen(true)}>
+            <button
+              className="btn btn-accent btn-block"
+              type="button"
+              onClick={() => setOpen(true)}
+            >
               Offrir un gage
             </button>
           ))}
@@ -102,7 +129,11 @@ export default function BrainView({ tasks, userId, gages }) {
             {toHonour.map((g) => (
               <li key={g.id} className="gage-item">
                 <span>{g.text}</span>
-                <button className="btn btn-small" type="button" onClick={() => gages.honourGage(g.id)}>
+                <button
+                  className="btn btn-small"
+                  type="button"
+                  onClick={() => gages.honourGage(g.id)}
+                >
                   C’est fait
                 </button>
               </li>

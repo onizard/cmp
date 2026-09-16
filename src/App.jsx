@@ -8,9 +8,9 @@ import Header from './components/Header.jsx';
 import Auth from './components/Auth.jsx';
 import Onboarding from './components/Onboarding.jsx';
 import TaskList from './components/TaskList.jsx';
-import Household from './components/Household.jsx';
 import TabBar from './components/TabBar.jsx';
 import BrainView from './components/BrainView.jsx';
+import Account from './components/Account.jsx';
 
 function NotConfigured() {
   return (
@@ -70,18 +70,16 @@ function Home({ account, currentMonth }) {
         pending={store.pending}
       />
 
-      {tab === 'liste' ? (
-        <>
-          {store.loading && store.tasks.length === 0 ? (
-            <p className="notice">Chargement…</p>
-          ) : (
-            <TaskList store={store} currentMonth={currentMonth} />
-          )}
-          <Household account={account} />
-        </>
-      ) : (
+      {tab === 'liste' &&
+        (store.loading && store.tasks.length === 0 ? (
+          <p className="notice">Chargement…</p>
+        ) : (
+          <TaskList store={store} currentMonth={currentMonth} />
+        ))}
+      {tab === 'cerveau' && (
         <BrainView tasks={store.tasks} userId={userId} gages={gages} />
       )}
+      {tab === 'compte' && <Account account={account} />}
 
       <TabBar tab={tab} onChange={setTab} honourCount={honourCount} />
     </div>

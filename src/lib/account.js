@@ -15,6 +15,7 @@ const redirectTo = () =>
 export function useAccount() {
   const [session, setSession] = useState(null);
   const [household, setHousehold] = useState(null);
+  const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -43,13 +44,14 @@ export function useAccount() {
     setLoading(true);
     const { data, error: err } = await supabase
       .from('members')
-      .select('household_id, households(id, name)')
+      .select('household_id, display_name, households(id, name)')
       .limit(1);
     if (!err && data && data.length > 0) {
       const row = data[0];
       setHousehold(
         row.households || { id: row.household_id, name: 'Maison' },
       );
+      setDisplayName(row.display_name || '');
     } else {
       setHousehold(null);
     }
@@ -122,15 +124,43 @@ export function useAccount() {
     [session, loadHousehold],
   );
 
+  const updateDisplayName = useCallback(
+    async (name) => {
+      const clean = name.trim();
+      setDisplayName(clean);
+      if (!supabase || !session || !household) return;
+      await supabase
+        .from('members')
+        .update({ display_name: clean })
+        .eq('user_id', session.user.id)
+        .eq('household_id', household.id);
+    },
+    [session, household],
+  );
+
+  const leaveHousehold = useCallback(async () => {
+    if (!supabase || !session || !household) return;
+    await supabase
+      .from('members')
+      .delete()
+      .eq('user_id', session.user.id)
+      .eq('household_id', household.id);
+    setHousehold(null);
+    setDisplayName('');
+  }, [session, household]);
+
   return {
     isConfigured,
     session,
     household,
+    displayName,
     loading,
     error,
     signInWithEmail,
     signOut,
     createHousehold,
     joinHousehold,
+    updateDisplayName,
+    leaveHousehold,
   };
 }

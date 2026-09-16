@@ -37,6 +37,7 @@ export function useGages(householdId, userId) {
     householdId ? readLS(cacheKey(householdId), []) : [],
   );
   const [otherUser, setOtherUser] = useState(null);
+  const [names, setNames] = useState({});
   const ref = useRef(gages);
 
   const persist = useCallback(
@@ -57,11 +58,16 @@ export function useGages(householdId, userId) {
     if (data) persist(data.map(fromRow));
     const { data: mem } = await supabase
       .from('members')
-      .select('user_id')
+      .select('user_id, display_name')
       .eq('household_id', householdId);
     if (mem) {
       const other = mem.map((m) => m.user_id).find((id) => id !== userId);
       setOtherUser(other ?? null);
+      const map = {};
+      mem.forEach((m) => {
+        map[m.user_id] = m.display_name || '';
+      });
+      setNames(map);
     }
   }, [householdId, userId, persist]);
 
@@ -132,5 +138,5 @@ export function useGages(householdId, userId) {
     [persist],
   );
 
-  return { gages, otherUser, createGage, honourGage, refresh };
+  return { gages, otherUser, names, createGage, honourGage, refresh };
 }
