@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   pushSupported,
   currentSubscription,
@@ -11,6 +11,10 @@ import {
 export default function Account({ account }) {
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
+  const [nameError, setNameError] = useState(null);
+  // Tant que l'utilisateur n'a pas tapé, le champ suit la valeur du serveur ;
+  // dès qu'il tape, on ne l'écrase plus sous ses doigts.
+  const touched = useRef(false);
   const dirty = name.trim() !== (account.displayName || '').trim();
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
@@ -23,6 +27,10 @@ export default function Account({ account }) {
   const email = account.session?.user?.email || '';
   const userId = account.session?.user?.id;
   const code = account.household?.id || '';
+
+  useEffect(() => {
+    if (!touched.current) setName(account.displayName || '');
+  }, [account.displayName]);
 
   useEffect(() => {
     let alive = true;
@@ -38,7 +46,13 @@ export default function Account({ account }) {
   }, []);
 
   const saveName = async () => {
-    await account.updateDisplayName(name);
+    setNameError(null);
+    const ok = await account.updateDisplayName(name);
+    if (!ok) {
+      setNameError("Le prénom n'a pas pu être enregistré.");
+      return;
+    }
+    touched.current = false;
     setSaved(true);
     setTimeout(() => setSaved(false), 1800);
   };
@@ -92,7 +106,10 @@ export default function Account({ account }) {
             className="field"
             value={name}
             placeholder="Ton prénom"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              touched.current = true;
+              setName(e.target.value);
+            }}
           />
           <label className="field-label" htmlFor="mail">Email</label>
           <input id="mail" className="field" value={email} disabled />
@@ -104,6 +121,7 @@ export default function Account({ account }) {
           >
             {saved ? 'Enregistré ✓' : 'Enregistrer'}
           </button>
+          {nameError && <p className="error">{nameError}</p>}
         </div>
       </section>
 
@@ -186,7 +204,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.3</p>
+      <p className="ver">charge mentale partagée · v1.4</p>
     </main>
   );
 }

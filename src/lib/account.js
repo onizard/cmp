@@ -17,6 +17,7 @@ export function useAccount() {
   const [household, setHousehold] = useState(null);
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
   const [error, setError] = useState(null);
 
   // Session
@@ -27,13 +28,17 @@ export function useAccount() {
     }
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (!data.session) setLoading(false);
+      if (!data.session) {
+        setLoading(false);
+        setReady(true);
+      }
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
       if (!s) {
         setHousehold(null);
         setLoading(false);
+        setReady(true);
       }
     });
     return () => sub.subscription.unsubscribe();
@@ -56,6 +61,7 @@ export function useAccount() {
       setHousehold(null);
     }
     setLoading(false);
+    setReady(true);
   }, [session]);
 
   useEffect(() => {
@@ -127,13 +133,18 @@ export function useAccount() {
   const updateDisplayName = useCallback(
     async (name) => {
       const clean = name.trim();
-      setDisplayName(clean);
-      if (!supabase || !session || !household) return;
-      await supabase
+      if (!supabase || !session || !household) return false;
+      const { error: err } = await supabase
         .from('members')
         .update({ display_name: clean })
         .eq('user_id', session.user.id)
         .eq('household_id', household.id);
+      if (err) {
+        setError(err.message);
+        return false;
+      }
+      setDisplayName(clean);
+      return true;
     },
     [session, household],
   );
@@ -155,6 +166,7 @@ export function useAccount() {
     household,
     displayName,
     loading,
+    ready,
     error,
     signInWithEmail,
     signOut,

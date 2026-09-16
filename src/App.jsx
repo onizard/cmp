@@ -31,9 +31,9 @@ export default function App() {
 
   if (!account.isConfigured) return <NotConfigured />;
 
-  // Tant que la session ET le foyer ne sont pas connus, on patiente :
-  // sinon l'écran « rejoindre un foyer » clignote au rafraîchissement.
-  if (account.loading) {
+  // On patiente uniquement au tout premier chargement : ensuite, un
+  // rafraîchissement en arrière-plan ne doit plus vider l'écran.
+  if (!account.ready) {
     return (
       <div className="screen">
         <Header />
