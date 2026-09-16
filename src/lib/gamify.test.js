@@ -7,6 +7,7 @@ import {
   pointsSpent,
   pointsAvailable,
   sortRewards,
+  rewardFill,
   REWARD_MIN,
   affordable,
   nextReward,
@@ -116,6 +117,31 @@ describe('récompenses', () => {
 
   it('rien à viser quand tout est accessible', () => {
     expect(nextReward(list, 100)).toBeNull();
+  });
+
+  it('le dessin se remplit vers la prochaine récompense', () => {
+    const cat = [reward('petite', 10), reward('moyenne', 20)];
+    expect(rewardFill(cat, 0)).toBe(0);
+    expect(rewardFill(cat, 5)).toBe(0.5);
+    expect(rewardFill(cat, 9)).toBe(0.9);
+  });
+
+  it('franchir un palier ne vide pas le dessin', () => {
+    const cat = [reward('petite', 10), reward('moyenne', 20)];
+    // Juste après le palier à 10, on vise 20 : la moitié, pas zéro.
+    expect(rewardFill(cat, 10)).toBe(0.5);
+    expect(rewardFill(cat, 15)).toBe(0.75);
+  });
+
+  it('tout est à portée : le dessin est plein', () => {
+    const cat = [reward('petite', 10), reward('moyenne', 20)];
+    expect(rewardFill(cat, 20)).toBe(1);
+    expect(rewardFill(cat, 500)).toBe(1);
+  });
+
+  it('sans catalogue, le dessin vise le prix plancher', () => {
+    expect(rewardFill([], 5)).toBe(0.5);
+    expect(rewardFill([], 40)).toBe(1);
   });
 
   it('le catalogue commence à 10 points', () => {

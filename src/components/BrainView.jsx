@@ -5,6 +5,7 @@ import {
   pointsBreakdown,
   sortRewards,
   nextReward,
+  rewardFill,
   formatPoints,
   REWARD_MIN,
   POINT_ADD,
@@ -32,16 +33,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
   // Le dessin se remplit vers la prochaine récompense ; le compteur, lui,
   // n'a aucune limite.
-  const fillFor = (pts) => {
-    const n = nextReward(store.rewards, pts);
-    if (!n) return 1;
-    const prev = sortRewards(store.rewards)
-      .filter((r) => r.cost <= pts)
-      .pop();
-    const floor = prev ? prev.cost : 0;
-    const span = n.reward.cost - floor;
-    return span <= 0 ? 1 : Math.max(0.04, (pts - floor) / span);
-  };
+  const fillFor = (pts) => rewardFill(store.rewards, pts);
 
   const mesClaims = store.claims
     .filter((c) => !c.deleted)

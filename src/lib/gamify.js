@@ -85,5 +85,26 @@ export const nextReward = (rewards, points) => {
   return next ? { reward: next, missing: half(next.cost - points) } : null;
 };
 
+/**
+ * Remplissage du dessin, entre 0 et 1.
+ *
+ * On mesure la progression vers la prochaine récompense **depuis zéro**, et
+ * non depuis le palier précédent : sinon le cœur se viderait d'un coup chaque
+ * fois qu'un palier est franchi, ce qui donne l'impression d'avoir tout perdu
+ * alors que les points, eux, ne bougent pas.
+ *
+ * Sans catalogue, on vise le prix plancher d'une récompense, pour que le
+ * dessin réagisse quand même aux premiers points.
+ */
+export const rewardFill = (rewards, points) => {
+  const pts = Math.max(0, Number(points) || 0);
+  const next = nextReward(rewards, pts);
+  if (next) return Math.min(1, pts / next.reward.cost);
+  // Plus rien au-dessus : soit tout est à portée, soit le catalogue est vide.
+  const catalogue = sortRewards(rewards);
+  if (catalogue.length > 0) return 1;
+  return Math.min(1, pts / REWARD_MIN);
+};
+
 /** Écriture française des points : 12,5 */
 export const formatPoints = (n) => String(half(n)).replace('.', ',');
