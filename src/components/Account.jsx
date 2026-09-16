@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   pushSupported,
-  currentSubscription,
   enablePush,
   disablePush,
   setEvening,
   eveningEnabled,
+  syncPush,
+  wantsPush,
+  wantsEvening,
 } from '../lib/push.js';
 
 export default function Account({ account }) {
@@ -19,8 +21,10 @@ export default function Account({ account }) {
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
-  const [notifOn, setNotifOn] = useState(false);
-  const [soirOn, setSoirOn] = useState(false);
+  // On part du choix mémorisé : l'interrupteur affiche tout de suite le bon
+  // état, même si le navigateur met un instant à retrouver son abonnement.
+  const [notifOn, setNotifOn] = useState(wantsPush);
+  const [soirOn, setSoirOn] = useState(wantsEvening);
   const [notifBusy, setNotifBusy] = useState(false);
   const [notifError, setNotifError] = useState(null);
 
@@ -35,15 +39,20 @@ export default function Account({ account }) {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const sub = await currentSubscription();
+      // Recrée l'abonnement si la mise à jour l'a emporté, sans rien demander.
+      const state = await syncPush(userId, code);
       if (!alive) return;
-      setNotifOn(Boolean(sub));
-      if (sub) setSoirOn(await eveningEnabled());
+      setNotifOn(state.on);
+      setSoirOn(state.evening);
+      if (state.on) {
+        const soir = await eveningEnabled();
+        if (alive) setSoirOn(soir);
+      }
     })();
     return () => {
       alive = false;
     };
-  }, []);
+  }, [userId, code]);
 
   const saveName = async () => {
     setNameError(null);
@@ -204,7 +213,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.7</p>
+      <p className="ver">charge mentale partagée · v1.8</p>
     </main>
   );
 }

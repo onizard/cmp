@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
@@ -12,6 +12,7 @@ import TabBar from './components/TabBar.jsx';
 import BrainView from './components/BrainView.jsx';
 import Account from './components/Account.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
+import { syncPush } from './lib/push.js';
 
 function NotConfigured() {
   return (
@@ -59,6 +60,22 @@ function Home({ account, currentMonth }) {
   const store = useTasks(account.household.id, userId);
   const rewards = useRewards(account.household.id, userId);
   const [tab, setTab] = useState('liste');
+  const householdId = account.household.id;
+
+  // Une mise à jour, un cache vidé ou une réinstallation peuvent emporter
+  // l'abonnement aux notifications. On le rétablit en silence au démarrage et
+  // à chaque retour sur l'application, pour que l'option reste sur « on ».
+  useEffect(() => {
+    const heal = () => {
+      syncPush(userId, householdId).catch(() => {});
+    };
+    heal();
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') heal();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [userId, householdId]);
 
   const todoThisMonth = useMemo(
     () =>

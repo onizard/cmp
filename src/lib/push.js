@@ -1,7 +1,50 @@
 // Abonnement aux notifications push (côté navigateur).
+//
+// Règle de fond : le choix de l'utilisateur vit en local et fait autorité.
+// L'abonnement du navigateur, lui, peut disparaître (mise à jour, cache vidé,
+// réinstallation, rotation d'endpoint par le navigateur). On le recrée alors
+// en silence au lieu de repasser l'option sur « off ».
 import { supabase } from '../supabaseClient.js';
 
 const VAPID = import.meta.env.VITE_VAPID_PUBLIC || '';
+
+const WANT = 'cmp.push.want';
+const SOIR = 'cmp.push.soir';
+const LAST = 'cmp.push.endpoint';
+
+const read = (k, def) => {
+  try {
+    const v = localStorage.getItem(k);
+    return v === null ? def : v === '1';
+  } catch {
+    return def;
+  }
+};
+const write = (k, v) => {
+  try {
+    localStorage.setItem(k, v ? '1' : '0');
+  } catch {
+    /* navigation privée : on continue sans mémoire locale */
+  }
+};
+
+// Le dernier endpoint connu de CET appareil, pour effacer sa ligne périmée
+// quand le navigateur en change — sans toucher aux autres appareils.
+const readEndpoint = () => {
+  try {
+    return localStorage.getItem(LAST);
+  } catch {
+    return null;
+  }
+};
+const writeEndpoint = (v) => {
+  try {
+    if (v) localStorage.setItem(LAST, v);
+    else localStorage.removeItem(LAST);
+  } catch {
+    /* ignore */
+  }
+};
 
 /** Le navigateur sait-il faire des notifications push ? */
 export const pushSupported = () =>
@@ -9,6 +52,10 @@ export const pushSupported = () =>
   'serviceWorker' in navigator &&
   'PushManager' in window &&
   'Notification' in window;
+
+/** Ce que l'utilisateur a demandé la dernière fois, connu tout de suite. */
+export const wantsPush = () => read(WANT, false);
+export const wantsEvening = () => read(SOIR, true);
 
 const toUint8 = (base64) => {
   const pad = '='.repeat((4 - (base64.length % 4)) % 4);
@@ -18,15 +65,60 @@ const toUint8 = (base64) => {
   return arr;
 };
 
-/** L'abonnement actuel de ce navigateur, s'il existe. */
-export async function currentSubscription() {
+// `navigator.serviceWorker.ready` peut rester en attente juste après une mise
+// à jour ; on lui laisse un délai puis on se rabat sur l'enregistrement connu.
+async function registration() {
   if (!pushSupported()) return null;
   try {
-    const reg = await navigator.serviceWorker.ready;
+    const timeout = new Promise((r) => setTimeout(() => r(null), 4000));
+    const reg = await Promise.race([navigator.serviceWorker.ready, timeout]);
+    return reg || (await navigator.serviceWorker.getRegistration()) || null;
+  } catch {
+    return null;
+  }
+}
+
+/** L'abonnement actuel de ce navigateur, s'il existe. */
+export async function currentSubscription() {
+  const reg = await registration();
+  if (!reg) return null;
+  try {
     return await reg.pushManager.getSubscription();
   } catch {
     return null;
   }
+}
+
+// Enregistre l'abonnement côté serveur et nettoie l'ancien endpoint si le
+// navigateur en a changé (sinon le service d'envoi parle dans le vide).
+async function store(sub, userId, householdId, evening, previous) {
+  const json = sub.toJSON();
+  const { error } = await supabase.from('push_subscriptions').upsert(
+    {
+      user_id: userId,
+      household_id: householdId,
+      endpoint: sub.endpoint,
+      p256dh: json.keys.p256dh,
+      auth: json.keys.auth,
+      evening,
+    },
+    { onConflict: 'endpoint' },
+  );
+  if (error) throw new Error(error.message);
+  const stale = previous || readEndpoint();
+  if (stale && stale !== sub.endpoint) {
+    await supabase.from('push_subscriptions').delete().eq('endpoint', stale);
+  }
+  writeEndpoint(sub.endpoint);
+}
+
+async function subscribe(reg) {
+  const existing = await reg.pushManager.getSubscription();
+  if (existing) return existing;
+  return reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: toUint8(VAPID),
+  });
 }
 
 /** Demande l'autorisation, s'abonne, et enregistre côté serveur. */
@@ -41,34 +133,21 @@ export async function enablePush(userId, householdId) {
   if (perm !== 'granted') {
     throw new Error('Notifications refusées. Autorise-les dans les réglages du téléphone.');
   }
-  const reg = await navigator.serviceWorker.ready;
-  let sub = await reg.pushManager.getSubscription();
-  if (!sub) {
-    sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: toUint8(VAPID),
-    });
-  }
-  const json = sub.toJSON();
-  const { error } = await supabase.from('push_subscriptions').upsert(
-    {
-      user_id: userId,
-      household_id: householdId,
-      endpoint: sub.endpoint,
-      p256dh: json.keys.p256dh,
-      auth: json.keys.auth,
-    },
-    { onConflict: 'endpoint' },
-  );
-  if (error) throw new Error(error.message);
+  const reg = await registration();
+  if (!reg) throw new Error("L’application n’est pas encore prête, réessaie dans un instant.");
+  const sub = await subscribe(reg);
+  await store(sub, userId, householdId, wantsEvening());
+  write(WANT, true);
   return true;
 }
 
 /** Se désabonne et retire l'enregistrement serveur. */
 export async function disablePush() {
+  write(WANT, false);
   const sub = await currentSubscription();
   if (!sub) return;
   await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);
+  writeEndpoint(null);
   try {
     await sub.unsubscribe();
   } catch {
@@ -76,8 +155,40 @@ export async function disablePush() {
   }
 }
 
+/**
+ * Remet l'abonnement d'aplomb sans rien demander à l'utilisateur.
+ * Appelée au démarrage et à chaque retour sur l'application : c'est elle qui
+ * empêche l'option de retomber sur « off » après une mise à jour.
+ * Renvoie l'état réel { on, evening }.
+ */
+export async function syncPush(userId, householdId) {
+  const evening = wantsEvening();
+  if (!pushSupported() || !wantsPush() || !VAPID || !userId || !householdId) {
+    return { on: false, evening };
+  }
+  // Autorisation retirée depuis les réglages du téléphone : là, c'est un vrai
+  // « non », on oublie le choix précédent.
+  if (Notification.permission !== 'granted') {
+    write(WANT, false);
+    return { on: false, evening };
+  }
+  const reg = await registration();
+  if (!reg) return { on: true, evening }; // pas prêt : on garde l'affichage
+  try {
+    const before = await reg.pushManager.getSubscription();
+    const sub = await subscribe(reg);
+    await store(sub, userId, householdId, evening, before ? before.endpoint : null);
+    return { on: true, evening };
+  } catch {
+    // Réseau ou abonnement momentanément indisponible : on n'efface pas le
+    // choix de l'utilisateur pour autant.
+    return { on: true, evening };
+  }
+}
+
 /** Active ou coupe le rappel du soir pour cet appareil. */
 export async function setEvening(on) {
+  write(SOIR, on);
   const sub = await currentSubscription();
   if (!sub) return;
   await supabase
@@ -89,11 +200,13 @@ export async function setEvening(on) {
 /** Le rappel du soir est-il actif pour cet appareil ? */
 export async function eveningEnabled() {
   const sub = await currentSubscription();
-  if (!sub) return false;
-  const { data } = await supabase
+  if (!sub) return wantsEvening();
+  const { data, error } = await supabase
     .from('push_subscriptions')
     .select('evening')
     .eq('endpoint', sub.endpoint)
     .maybeSingle();
-  return Boolean(data && data.evening);
+  if (error || !data) return wantsEvening();
+  write(SOIR, data.evening);
+  return Boolean(data.evening);
 }
