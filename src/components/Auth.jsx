@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Header from './Header.jsx';
+import InstallHint from './InstallHint.jsx';
 
 export default function Auth({ account }) {
   const [email, setEmail] = useState('');
@@ -51,6 +52,7 @@ export default function Auth({ account }) {
           </button>
         </form>
       )}
+      <InstallHint />
     </div>
   );
 }

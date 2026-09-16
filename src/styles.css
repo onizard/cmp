@@ -1023,3 +1023,50 @@ body,
     transition-duration: 0.001ms !important;
   }
 }
+
+
+/* --- Poser l'application sur l'écran d'accueil --- */
+
+.install {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.install-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.install-text {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.install-text:last-child {
+  margin-bottom: 0;
+}
+
+.install-steps {
+  margin: 0 0 10px;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.install-steps li {
+  margin-bottom: 6px;
+}
+
+.install-steps b {
+  color: var(--ink);
+}

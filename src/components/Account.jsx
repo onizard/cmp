@@ -9,6 +9,7 @@ import {
   wantsPush,
   wantsEvening,
 } from '../lib/push.js';
+import InstallHint from './InstallHint.jsx';
 
 export default function Account({ account }) {
   const [name, setName] = useState(account.displayName || '');
@@ -134,6 +135,8 @@ export default function Account({ account }) {
         </div>
       </section>
 
+      <InstallHint />
+
       <section className="setgroup">
         <h2 className="setlabel">Notifications</h2>
         <div className="setcard">
@@ -213,7 +216,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.9</p>
+      <p className="ver">charge mentale partagée · v2.0</p>
     </main>
   );
 }
