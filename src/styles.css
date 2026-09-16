@@ -756,7 +756,13 @@ body {
   position: relative;
   flex: none;
   cursor: pointer;
+  padding: 0;
   transition: 0.2s;
+}
+
+.switch:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .switch::after {

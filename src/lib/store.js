@@ -13,6 +13,7 @@ const fromRow = (r) => ({
   done: r.done,
   doneMonth: r.done_month,
   doneBy: r.done_by,
+  createdBy: r.created_by,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -27,6 +28,7 @@ const toInsertRow = (t) => ({
   done: t.done,
   done_month: t.doneMonth,
   done_by: t.doneBy ?? null,
+  created_by: t.createdBy ?? null,
   deleted: t.deleted,
 });
 
@@ -257,6 +259,7 @@ export function useTasks(householdId, userId) {
         done: false,
         doneMonth: null,
         doneBy: null,
+        createdBy: userId ?? null,
         deleted: false,
         createdAt: nowIso(),
         updatedAt: nowIso(),
@@ -264,7 +267,7 @@ export function useTasks(householdId, userId) {
       persist([...tasksRef.current, task]);
       enqueue({ type: 'insert', row: toInsertRow(task) });
     },
-    [householdId, persist, enqueue],
+    [householdId, userId, persist, enqueue],
   );
 
   const updateTask = useCallback(

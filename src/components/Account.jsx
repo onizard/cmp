@@ -1,4 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  pushSupported,
+  currentSubscription,
+  enablePush,
+  disablePush,
+  setEvening,
+  eveningEnabled,
+} from '../lib/push.js';
 
 export default function Account({ account }) {
   const [name, setName] = useState(account.displayName || '');
@@ -6,8 +14,27 @@ export default function Account({ account }) {
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
+  const [notifOn, setNotifOn] = useState(false);
+  const [soirOn, setSoirOn] = useState(false);
+  const [notifBusy, setNotifBusy] = useState(false);
+  const [notifError, setNotifError] = useState(null);
+
   const email = account.session?.user?.email || '';
+  const userId = account.session?.user?.id;
   const code = account.household?.id || '';
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const sub = await currentSubscription();
+      if (!alive) return;
+      setNotifOn(Boolean(sub));
+      if (sub) setSoirOn(await eveningEnabled());
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const saveName = async () => {
     await account.updateDisplayName(name);
@@ -25,6 +52,32 @@ export default function Account({ account }) {
     }
   };
 
+  const toggleNotif = async () => {
+    setNotifError(null);
+    setNotifBusy(true);
+    try {
+      if (notifOn) {
+        await disablePush();
+        setNotifOn(false);
+        setSoirOn(false);
+      } else {
+        await enablePush(userId, code);
+        setNotifOn(true);
+        setSoirOn(true);
+      }
+    } catch (e) {
+      setNotifError(e.message);
+    }
+    setNotifBusy(false);
+  };
+
+  const toggleSoir = async () => {
+    if (!notifOn) return;
+    const next = !soirOn;
+    setSoirOn(next);
+    await setEvening(next);
+  };
+
   return (
     <main className="account">
       <p className="brain-lede">Mon compte</p>
@@ -32,9 +85,7 @@ export default function Account({ account }) {
       <section className="setgroup">
         <h2 className="setlabel">Profil</h2>
         <div className="setcard">
-          <label className="field-label" htmlFor="prenom">
-            Prénom
-          </label>
+          <label className="field-label" htmlFor="prenom">Prénom</label>
           <input
             id="prenom"
             className="field"
@@ -43,11 +94,55 @@ export default function Account({ account }) {
             onChange={(e) => setName(e.target.value)}
             onBlur={saveName}
           />
-          <label className="field-label" htmlFor="mail">
-            Email
-          </label>
+          <label className="field-label" htmlFor="mail">Email</label>
           <input id="mail" className="field" value={email} disabled />
-          {saved && <p className="soft-text" style={{ margin: 0 }}>Prénom enregistré.</p>}
+          {saved && <p className="setnote">Prénom enregistré.</p>}
+        </div>
+      </section>
+
+      <section className="setgroup">
+        <h2 className="setlabel">Notifications</h2>
+        <div className="setcard">
+          {pushSupported() ? (
+            <>
+              <div className="rowline">
+                <span>Quand l’autre agit</span>
+                <button
+                  type="button"
+                  className="switch"
+                  role="switch"
+                  aria-checked={notifOn}
+                  aria-label="Notifications"
+                  disabled={notifBusy}
+                  onClick={toggleNotif}
+                />
+              </div>
+              <p className="setnote">
+                Une notification quand ta moitié ajoute ou coche une chose.
+              </p>
+              <div className="rowline">
+                <span>Petit rappel du soir</span>
+                <button
+                  type="button"
+                  className="switch"
+                  role="switch"
+                  aria-checked={soirOn}
+                  aria-label="Rappel du soir"
+                  disabled={!notifOn}
+                  onClick={toggleSoir}
+                />
+              </div>
+              <p className="setnote">
+                Vers 20 h, s’il reste des choses à porter.
+              </p>
+              {notifError && <p className="error">{notifError}</p>}
+            </>
+          ) : (
+            <p className="setnote">
+              Ce navigateur ne gère pas les notifications. Installe
+              l’application sur l’écran d’accueil pour en profiter.
+            </p>
+          )}
         </div>
       </section>
 
@@ -55,8 +150,8 @@ export default function Account({ account }) {
         <h2 className="setlabel">Le foyer</h2>
         <div className="setcard">
           <p className="setnote">
-            Transmets ce code à ta moitié pour qu'elle rejoigne le même foyer.
-            Elle le colle une seule fois à l'ouverture de l'appli.
+            Transmets ce code à ta moitié pour qu’elle rejoigne le même foyer.
+            Elle le colle une seule fois à l’ouverture de l’appli.
           </p>
           <div className="codebox">{code}</div>
           <button className="btn btn-accent" type="button" onClick={copy}>
@@ -73,13 +168,9 @@ export default function Account({ account }) {
         {confirmLeave ? (
           <>
             Quitter vraiment le foyer ?{' '}
-            <button type="button" onClick={account.leaveHousehold}>
-              oui, quitter
-            </button>{' '}
+            <button type="button" onClick={account.leaveHousehold}>oui, quitter</button>{' '}
             ·{' '}
-            <button type="button" onClick={() => setConfirmLeave(false)}>
-              annuler
-            </button>
+            <button type="button" onClick={() => setConfirmLeave(false)}>annuler</button>
           </>
         ) : (
           <button type="button" onClick={() => setConfirmLeave(true)}>
@@ -88,7 +179,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v1.0</p>
+      <p className="ver">charge mentale partagée · v1.1</p>
     </main>
   );
 }

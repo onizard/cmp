@@ -37,6 +37,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: `${base}index.html`,
         navigateFallbackDenylist: [/^\/(rest|auth|realtime)\/v1/],
