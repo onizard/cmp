@@ -23,3 +23,19 @@ create policy mb_del on members for delete to authenticated
 
 notify pgrst, 'reload schema';
 select 'v2 ok' as etat;
+
+-- 3) members : colonne display_name + lien vers households
+--    (indispensable à la requête de lecture du foyer côté appli)
+alter table members add column if not exists display_name text;
+do $$ begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid='members'::regclass and contype='f'
+  ) then
+    alter table members
+      add constraint members_household_fk
+      foreign key (household_id) references households(id) on delete cascade;
+  end if;
+end $$;
+
+notify pgrst, 'reload schema';
