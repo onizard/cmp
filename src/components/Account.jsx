@@ -24,6 +24,10 @@ export default function Account({ account }) {
 
   // On part du choix mémorisé : l'interrupteur affiche tout de suite le bon
   // état, même si le navigateur met un instant à retrouver son abonnement.
+  const [pass, setPass] = useState('');
+  const [passSaved, setPassSaved] = useState(false);
+  const [passError, setPassError] = useState(null);
+
   const [notifOn, setNotifOn] = useState(wantsPush);
   const [soirOn, setSoirOn] = useState(wantsEvening);
   const [notifBusy, setNotifBusy] = useState(false);
@@ -65,6 +69,20 @@ export default function Account({ account }) {
     touched.current = false;
     setSaved(true);
     setTimeout(() => setSaved(false), 1800);
+  };
+
+  const savePassword = async () => {
+    setPassError(null);
+    const ok = await account.setPassword(pass);
+    if (!ok) {
+      setPassError(
+        account.error || "Le mot de passe n'a pas pu être enregistré.",
+      );
+      return;
+    }
+    setPass('');
+    setPassSaved(true);
+    setTimeout(() => setPassSaved(false), 2200);
   };
 
   const copy = async () => {
@@ -132,6 +150,39 @@ export default function Account({ account }) {
             {saved ? 'Enregistré ✓' : 'Enregistrer'}
           </button>
           {nameError && <p className="error">{nameError}</p>}
+        </div>
+      </section>
+
+      <section className="setgroup">
+        <h2 className="setlabel">Mot de passe</h2>
+        <div className="setcard">
+          <p className="setnote">
+            Pose-toi un mot de passe : tu te reconnecteras sans passer par ta
+            boîte mail, même après une réinstallation.
+          </p>
+          <label className="field-label" htmlFor="pass">Nouveau mot de passe</label>
+          <input
+            id="pass"
+            className="field"
+            type="password"
+            autoComplete="new-password"
+            minLength={8}
+            value={pass}
+            placeholder="8 caractères au minimum"
+            onChange={(e) => {
+              setPassError(null);
+              setPass(e.target.value);
+            }}
+          />
+          <button
+            className="btn btn-accent btn-block"
+            type="button"
+            disabled={pass.length < 8}
+            onClick={savePassword}
+          >
+            {passSaved ? 'Enregistré ✓' : 'Enregistrer le mot de passe'}
+          </button>
+          {passError && <p className="error">{passError}</p>}
         </div>
       </section>
 
@@ -216,7 +267,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v2.2</p>
+      <p className="ver">charge mentale partagée · v2.3</p>
     </main>
   );
 }

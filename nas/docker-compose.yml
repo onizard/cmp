@@ -57,7 +57,10 @@ services:
       GOTRUE_JWT_SECRET: ${JWT_SECRET}
       GOTRUE_JWT_ISSUER: supabase
       GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
-      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      # Connexion par mot de passe : le compte est utilisable tout de suite,
+      # sans aller chercher un mail de confirmation. Le SMTP reste configuré
+      # pour le lien de secours et la récupération de mot de passe.
+      GOTRUE_MAILER_AUTOCONFIRM: 'true'
       GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
       GOTRUE_SMTP_HOST: ${SMTP_HOST}
       GOTRUE_SMTP_PORT: ${SMTP_PORT}

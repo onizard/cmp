@@ -68,12 +68,75 @@ export function useAccount() {
     if (session) loadHousehold();
   }, [session, loadHousehold]);
 
-  const signInWithEmail = useCallback(async (email) => {
+  /** Connexion classique : e-mail + mot de passe, vérifiée sur place. */
+  const signIn = useCallback(async (email, password) => {
+    setError(null);
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (err) {
+      setError(
+        /invalid login/i.test(err.message)
+          ? 'E-mail ou mot de passe incorrect.'
+          : err.message,
+      );
+      return false;
+    }
+    return true;
+  }, []);
+
+  /** Création d'un compte. Sans confirmation par mail : on entre aussitôt. */
+  const signUp = useCallback(async (email, password) => {
+    setError(null);
+    if (password.length < 8) {
+      setError('Le mot de passe doit faire au moins 8 caractères.');
+      return false;
+    }
+    const { data, error: err } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+    });
+    if (err) {
+      setError(
+        /already registered/i.test(err.message)
+          ? 'Un compte existe déjà avec cet e-mail. Connecte-toi.'
+          : err.message,
+      );
+      return false;
+    }
+    // Si le serveur exige encore une confirmation, aucune session n'est ouverte.
+    if (!data.session) {
+      setError(
+        'Compte créé. Vérifie tes mails pour confirmer, puis connecte-toi.',
+      );
+      return false;
+    }
+    return true;
+  }, []);
+
+  /** Issue de secours : le lien par mail, pour qui n'a pas encore de mot de passe. */
+  const sendMagicLink = useCallback(async (email) => {
     setError(null);
     const { error: err } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: redirectTo() },
     });
+    if (err) {
+      setError(err.message);
+      return false;
+    }
+    return true;
+  }, []);
+
+  /** Pose ou change le mot de passe du compte déjà connecté. */
+  const setPassword = useCallback(async (password) => {
+    setError(null);
+    if (password.length < 8) {
+      setError('Le mot de passe doit faire au moins 8 caractères.');
+      return false;
+    }
+    const { error: err } = await supabase.auth.updateUser({ password });
     if (err) {
       setError(err.message);
       return false;
@@ -168,7 +231,10 @@ export function useAccount() {
     loading,
     ready,
     error,
-    signInWithEmail,
+    signIn,
+    signUp,
+    sendMagicLink,
+    setPassword,
     signOut,
     createHousehold,
     joinHousehold,
