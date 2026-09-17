@@ -30,6 +30,13 @@ if [ -z "$DST" ]; then
   exit 1
 fi
 
+if ! { touch "$DST.essai" 2>/dev/null && rm -f "$DST.essai"; }; then
+  echo "ERREUR : pas les droits d'écriture sur $(dirname "$DST")."
+  echo "         Relance avec :  sudo sh $0"
+  echo "         RIEN n'a été modifié."
+  exit 1
+fi
+
 echo "Source      : $SRC"
 echo "Destination : $DST"
 
