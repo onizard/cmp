@@ -81,15 +81,3 @@ export function splitDue(dueAt, hasTime = true) {
   const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   return { date, time: hasTime ? `${pad(d.getHours())}:${pad(d.getMinutes())}` : '' };
 }
-
-/** Les tâches à échéance d'abord, la plus proche en tête. */
-export function sortByDue(tasks, now = Date.now()) {
-  return tasks.slice().sort((a, b) => {
-    const ta = at(a.dueAt);
-    const tb = at(b.dueAt);
-    if (ta === null && tb === null) return 0;
-    if (ta === null) return 1;
-    if (tb === null) return -1;
-    return ta - tb;
-  });
-}

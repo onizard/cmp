@@ -59,14 +59,36 @@ export const tasksVisibleIn = (tasks, m, currentMonth) =>
   tasks.filter((t) => visibleIn(t, m, currentMonth));
 
 /**
- * Tri d'affichage dans un mois : non cochées d'abord (par position croissante),
- * cochées ensuite. `created_at` départage à position égale, pour un ordre stable.
+ * Tri d'affichage dans un mois, sans réglage ni manipulation :
+ *   1. les cochées descendent en bas ;
+ *   2. ce qui a une échéance passe devant, de la plus proche à la plus lointaine ;
+ *   3. puis l'ordre chronologique d'ajout ;
+ *   4. l'alphabétique départage, pour que l'ordre ne bouge jamais tout seul.
  */
+const quand = (v) => {
+  const t = new Date(v || '').getTime();
+  return Number.isNaN(t) ? null : t;
+};
+
 export const sortForMonth = (tasks) =>
   [...tasks].sort((a, b) => {
     if (a.done !== b.done) return a.done ? 1 : -1;
-    if (a.position !== b.position) return a.position - b.position;
-    return String(a.createdAt || '').localeCompare(String(b.createdAt || ''));
+
+    const da = a.done ? null : quand(a.dueAt);
+    const db = b.done ? null : quand(b.dueAt);
+    if (da !== null && db !== null && da !== db) return da - db;
+    if (da !== null && db === null) return -1;
+    if (da === null && db !== null) return 1;
+
+    const ca = quand(a.createdAt);
+    const cb = quand(b.createdAt);
+    if (ca !== null && cb !== null && ca !== cb) return ca - cb;
+    if (ca !== null && cb === null) return -1;
+    if (ca === null && cb !== null) return 1;
+
+    return String(a.text || '').localeCompare(String(b.text || ''), 'fr', {
+      sensitivity: 'base',
+    });
   });
 
 /**

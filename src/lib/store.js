@@ -314,23 +314,6 @@ export function useTasks(householdId, userId) {
     [updateTask],
   );
 
-  // Monter / descendre parmi les tâches non cochées d'un mois.
-  const moveTask = useCallback(
-    (task, month, currentMonth, direction) => {
-      const ordered = sortForMonth(
-        tasksVisibleIn(tasksRef.current, month, currentMonth),
-      ).filter((t) => !t.done);
-      const idx = ordered.findIndex((t) => t.id === task.id);
-      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-      if (idx < 0 || swapIdx < 0 || swapIdx >= ordered.length) return;
-      const a = ordered[idx];
-      const b = ordered[swapIdx];
-      updateTask(a.id, { position: b.position });
-      updateTask(b.id, { position: a.position });
-    },
-    [updateTask],
-  );
-
   return {
     tasks,
     loading,
@@ -342,6 +325,5 @@ export function useTasks(householdId, userId) {
     setDue,
     toggleDone,
     removeTask,
-    moveTask,
   };
 }

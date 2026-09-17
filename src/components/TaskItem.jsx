@@ -148,22 +148,6 @@ export default function TaskItem({ task, month, currentMonth, store }) {
           <button
             className="action"
             type="button"
-            onClick={() => store.moveTask(task, month, currentMonth, 'up')}
-            disabled={task.done}
-          >
-            Monter
-          </button>
-          <button
-            className="action"
-            type="button"
-            onClick={() => store.moveTask(task, month, currentMonth, 'down')}
-            disabled={task.done}
-          >
-            Descendre
-          </button>
-          <button
-            className="action"
-            type="button"
             onClick={() => {
               setEditing(true);
               setOpen(false);

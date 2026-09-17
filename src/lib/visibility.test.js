@@ -106,13 +106,50 @@ describe('visibleIn — tâche supprimée', () => {
 });
 
 describe('sortForMonth', () => {
-  it('place les non cochées d\'abord (par position), les cochées en bas', () => {
+  it('les cochées descendent en bas', () => {
     const list = [
-      task({ id: 'a', position: 2, done: false }),
-      task({ id: 'b', position: 0, done: true, doneMonth: '2026-03' }),
-      task({ id: 'c', position: 1, done: false }),
+      task({ id: 'a', done: true, doneMonth: '2026-03' }),
+      task({ id: 'b', done: false }),
     ];
-    expect(sortForMonth(list).map((t) => t.id)).toEqual(['c', 'a', 'b']);
+    expect(sortForMonth(list).map((t) => t.id)).toEqual(['b', 'a']);
+  });
+
+  it('ce qui a une échéance passe devant, la plus proche en tête', () => {
+    const list = [
+      task({ id: 'sans' }),
+      task({ id: 'loin', dueAt: '2026-03-20T10:00:00Z' }),
+      task({ id: 'proche', dueAt: '2026-03-02T10:00:00Z' }),
+    ];
+    expect(sortForMonth(list).map((t) => t.id)).toEqual([
+      'proche',
+      'loin',
+      'sans',
+    ]);
+  });
+
+  it('sans échéance, l’ordre est chronologique', () => {
+    const list = [
+      task({ id: 'tard', createdAt: '2026-03-09T00:00:00Z' }),
+      task({ id: 'tot', createdAt: '2026-03-02T00:00:00Z' }),
+    ];
+    expect(sortForMonth(list).map((t) => t.id)).toEqual(['tot', 'tard']);
+  });
+
+  it('l’alphabétique départage à date égale', () => {
+    const list = [
+      task({ id: 'z', text: 'Zéro', createdAt: '2026-03-02T00:00:00Z' }),
+      task({ id: 'a', text: 'Arroser', createdAt: '2026-03-02T00:00:00Z' }),
+      task({ id: 'm', text: 'manger', createdAt: '2026-03-02T00:00:00Z' }),
+    ];
+    expect(sortForMonth(list).map((t) => t.id)).toEqual(['a', 'm', 'z']);
+  });
+
+  it('une échéance sur une tâche cochée ne la fait pas remonter', () => {
+    const list = [
+      task({ id: 'faite', done: true, doneMonth: '2026-03', dueAt: '2026-03-01T08:00:00Z' }),
+      task({ id: 'restante' }),
+    ];
+    expect(sortForMonth(list).map((t) => t.id)).toEqual(['restante', 'faite']);
   });
 });
 

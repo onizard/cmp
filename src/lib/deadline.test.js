@@ -5,7 +5,6 @@ import {
   dueFull,
   buildDue,
   splitDue,
-  sortByDue,
 } from './deadline.js';
 
 const H = 3600000;
@@ -94,20 +93,5 @@ describe('saisie de l’échéance', () => {
     const due = buildDue('2026-09-21', '18:30');
     expect(dueFull(due.iso, true)).toBe('21/09/2026 à 18 h 30');
     expect(dueFull(due.iso, false)).toBe('21/09/2026');
-  });
-});
-
-describe('tri par échéance', () => {
-  it('la plus proche en tête, celles sans échéance à la fin', () => {
-    const list = [
-      { id: 'sans' },
-      { id: 'loin', dueAt: inMs(3 * J) },
-      { id: 'proche', dueAt: inMs(2 * H) },
-    ];
-    expect(sortByDue(list, NOW).map((t) => t.id)).toEqual([
-      'proche',
-      'loin',
-      'sans',
-    ]);
   });
 });
