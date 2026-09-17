@@ -1527,14 +1527,15 @@ body,
   text-transform: none;
 }
 
-[dir='rtl'] .month-head::after,
-[dir='rtl'] .year-head::after {
-  transform: rotate(-45deg);
+/* Seul le chevron des mois pivote. Surtout pas .year-head::after, qui n'est
+   pas un chevron mais le trait decoratif a cote de l'annee : le faire pivoter
+   le transformait en balafre en travers de l'ecran. */
+[dir='rtl'] .month-head::after {
+  transform: rotate(135deg);
 }
 
-[dir='rtl'] .month.open .month-head::after,
-[dir='rtl'] .year.open .year-head::after {
-  transform: rotate(135deg);
+[dir='rtl'] .month.open .month-head::after {
+  transform: rotate(-135deg);
 }
 
 [dir='rtl'] .codebox,
