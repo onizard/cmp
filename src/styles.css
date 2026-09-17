@@ -14,7 +14,15 @@
   --line: #ebdfcf;
   --danger: #c0607a;
 
+  /* Échéances : le violet vire au rouge à mesure que l'heure approche. */
+  --due-calme: #8b7fb0;
+  --due-proche: #a85a9e;
+  --due-urgent: #b4407c;
+  --due-depasse: #c02f55;
+  --due-wash: #fdeef2;
+
   --grad: linear-gradient(105deg, #f0919c 0%, #b486cc 52%, #8b9de6 100%);
+  --grad-urgent: linear-gradient(105deg, #b4407c 0%, #c02f55 100%);
   --grad-soft: linear-gradient(105deg, #f9d3d8 0%, #e3d0ef 52%, #d3daf8 100%);
   --shadow: 0 10px 30px -14px rgba(23, 40, 76, 0.28);
   --shadow-sm: 0 4px 14px -8px rgba(23, 40, 76, 0.3);
@@ -1130,4 +1138,127 @@ body,
   padding: 2px 9px;
   margin-right: 8px;
   vertical-align: 1px;
+}
+
+
+/* --- Échéances --- */
+
+.chrono {
+  flex: none;
+  vertical-align: -2px;
+  margin-right: 5px;
+}
+
+.due {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  margin-top: 7px;
+  white-space: nowrap;
+}
+
+.due-calme {
+  color: var(--due-calme);
+  background: var(--paper-deep);
+}
+
+.due-proche {
+  color: #fff;
+  background: var(--due-proche);
+}
+
+.due-urgent {
+  color: #fff;
+  background: var(--grad-urgent);
+}
+
+/* Passée l'heure, la pastille bat doucement — on ne peut plus l'ignorer. */
+.due-depasse {
+  color: #fff;
+  background: var(--due-depasse);
+  animation: due-pulse 1.9s ease-in-out infinite;
+}
+
+.due-fait {
+  color: var(--ink-3);
+  background: var(--paper-deep);
+}
+
+@keyframes due-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 47, 85, 0.45); }
+  55%      { box-shadow: 0 0 0 7px rgba(192, 47, 85, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .due-depasse { animation: none; }
+}
+
+/* Un liseré sur le bord gauche de la tâche, discret mais lisible d'un coup d'œil. */
+.task.has-due .task-row {
+  border-left: 3px solid transparent;
+  padding-left: 5px;
+  margin-left: -8px;
+}
+
+.task.due-lvl-proche .task-row { border-left-color: var(--due-proche); }
+.task.due-lvl-urgent .task-row { border-left-color: var(--due-urgent); }
+.task.due-lvl-depasse .task-row { border-left-color: var(--due-depasse); }
+
+.action-due {
+  display: inline-flex;
+  align-items: center;
+  color: var(--due-urgent);
+}
+
+.btn-urgent {
+  background: var(--grad-urgent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.due-form {
+  background: var(--due-wash);
+  border-radius: 16px;
+  padding: 14px;
+  margin: 4px 0 12px;
+}
+
+.due-form-title {
+  display: flex;
+  align-items: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--due-urgent);
+  margin: 0 0 10px;
+}
+
+.due-fields {
+  display: flex;
+  gap: 10px;
+}
+
+.due-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.due-note {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.45;
+  margin: 10px 0;
+}
+
+.due-recap {
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--due-urgent);
+  font-weight: 600;
+  margin: 6px 0 0;
 }

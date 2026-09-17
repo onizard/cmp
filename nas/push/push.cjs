@@ -12670,7 +12670,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v3.0";
+var VERSION = "v3.2";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -12760,6 +12760,59 @@ async function oldestReminder(moment) {
     );
   }
 }
+var PALIERS = [48, 24, 6, 2, 1, 0];
+var RETARD_H = 6;
+function stagePour(heuresRestantes) {
+  if (heuresRestantes > 0) {
+    return PALIERS.filter((p) => heuresRestantes <= p).length;
+  }
+  return PALIERS.length + Math.floor(-heuresRestantes / RETARD_H);
+}
+function texteEcheance(heuresRestantes) {
+  if (heuresRestantes <= 0) {
+    const h = -heuresRestantes;
+    if (h < 1) return "C\u2019est l\u2019heure.";
+    if (h < 24) return `En retard de ${Math.floor(h)} h.`;
+    return `En retard de ${Math.floor(h / 24)} jour(s).`;
+  }
+  if (heuresRestantes < 1) return `Dans ${Math.round(heuresRestantes * 60)} minutes.`;
+  if (heuresRestantes < 24) return `Dans ${Math.floor(heuresRestantes)} h.`;
+  return `Dans ${Math.floor(heuresRestantes / 24)} jour(s).`;
+}
+function titreEcheance(heuresRestantes) {
+  if (heuresRestantes <= 0) return "\u23F1 \xC9ch\xE9ance d\xE9pass\xE9e";
+  if (heuresRestantes <= 2) return "\u23F1 C\u2019est maintenant";
+  if (heuresRestantes <= 6) return "\u23F1 \xC7a approche";
+  return "\u23F1 \xC9ch\xE9ance";
+}
+async function dueReminders() {
+  const { rows } = await client.query(
+    `select id, household_id, text, due_stage,
+            extract(epoch from (due_at - now())) / 3600 as heures
+       from tasks
+      where due_at is not null and not deleted and not done`
+  );
+  for (const r of rows) {
+    const h = Number(r.heures);
+    const cible = stagePour(h);
+    if (cible <= r.due_stage) continue;
+    await client.query("update tasks set due_stage = $1 where id = $2", [cible, r.id]);
+    const presse = h <= 2;
+    await sendToHousehold(
+      r.household_id,
+      null,
+      {
+        title: titreEcheance(h),
+        body: `${r.text} \u2014 ${texteEcheance(h)}`,
+        url: APP_URL,
+        tag: `cmp-due-${r.id}`,
+        urgent: presse
+      },
+      false
+    );
+    log(`\xE9ch\xE9ance palier ${cible} \u2192`, r.text.slice(0, 40));
+  }
+}
 var lastSent = { matin: "", soir: "" };
 setInterval(async () => {
   if (!client) return;
@@ -12773,6 +12826,10 @@ setInterval(async () => {
   } catch (e) {
     log(`rappel du ${moment} : \xE9chec`, e.message);
   }
+}, 6e4);
+setInterval(() => {
+  if (!client) return;
+  dueReminders().catch((e) => log("\xE9ch\xE9ances : \xE9chec", e.message));
 }, 6e4);
 var retryTimer = null;
 function scheduleRetry(why) {

@@ -37,7 +37,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v3.0';
+const VERSION = 'v3.2';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -149,6 +149,69 @@ async function oldestReminder(moment) {
   }
 }
 
+// --- Échéances : des rappels qui se resserrent ---
+//
+// Paliers exprimés en heures restantes. Le palier atteint est mémorisé dans
+// tasks.due_stage, ce qui évite de renvoyer deux fois le même rappel, et la
+// colonne repart à 0 dès que l'échéance change.
+const PALIERS = [48, 24, 6, 2, 1, 0];
+const RETARD_H = 6; // puis un rappel toutes les 6 heures
+
+function stagePour(heuresRestantes) {
+  if (heuresRestantes > 0) {
+    return PALIERS.filter((p) => heuresRestantes <= p).length;
+  }
+  return PALIERS.length + Math.floor(-heuresRestantes / RETARD_H);
+}
+
+function texteEcheance(heuresRestantes) {
+  if (heuresRestantes <= 0) {
+    const h = -heuresRestantes;
+    if (h < 1) return 'C’est l’heure.';
+    if (h < 24) return `En retard de ${Math.floor(h)} h.`;
+    return `En retard de ${Math.floor(h / 24)} jour(s).`;
+  }
+  if (heuresRestantes < 1) return `Dans ${Math.round(heuresRestantes * 60)} minutes.`;
+  if (heuresRestantes < 24) return `Dans ${Math.floor(heuresRestantes)} h.`;
+  return `Dans ${Math.floor(heuresRestantes / 24)} jour(s).`;
+}
+
+function titreEcheance(heuresRestantes) {
+  if (heuresRestantes <= 0) return '⏱ Échéance dépassée';
+  if (heuresRestantes <= 2) return '⏱ C’est maintenant';
+  if (heuresRestantes <= 6) return '⏱ Ça approche';
+  return '⏱ Échéance';
+}
+
+async function dueReminders() {
+  const { rows } = await client.query(
+    `select id, household_id, text, due_stage,
+            extract(epoch from (due_at - now())) / 3600 as heures
+       from tasks
+      where due_at is not null and not deleted and not done`,
+  );
+  for (const r of rows) {
+    const h = Number(r.heures);
+    const cible = stagePour(h);
+    if (cible <= r.due_stage) continue;
+    await client.query('update tasks set due_stage = $1 where id = $2', [cible, r.id]);
+    const presse = h <= 2;
+    await sendToHousehold(
+      r.household_id,
+      null,
+      {
+        title: titreEcheance(h),
+        body: `${r.text} — ${texteEcheance(h)}`,
+        url: APP_URL,
+        tag: `cmp-due-${r.id}`,
+        urgent: presse,
+      },
+      false,
+    );
+    log(`échéance palier ${cible} →`, r.text.slice(0, 40));
+  }
+}
+
 const lastSent = { matin: '', soir: '' };
 setInterval(async () => {
   if (!client) return;
@@ -163,6 +226,13 @@ setInterval(async () => {
   } catch (e) {
     log(`rappel du ${moment} : échec`, e.message);
   }
+}, 60_000);
+
+// Les échéances, elles, se vérifient chaque minute : un rappel « dans 1 h »
+// n'a de valeur que s'il part à l'heure.
+setInterval(() => {
+  if (!client) return;
+  dueReminders().catch((e) => log('échéances : échec', e.message));
 }, 60_000);
 
 // Une seule connexion à la fois. Sans ce garde-fou, chaque erreur programmait

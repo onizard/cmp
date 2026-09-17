@@ -14,6 +14,8 @@ const fromRow = (r) => ({
   doneMonth: r.done_month,
   doneBy: r.done_by,
   createdBy: r.created_by,
+  dueAt: r.due_at,
+  dueHasTime: r.due_has_time !== false,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -29,6 +31,8 @@ const toInsertRow = (t) => ({
   done_month: t.doneMonth,
   done_by: t.doneBy ?? null,
   created_by: t.createdBy ?? null,
+  due_at: t.dueAt ?? null,
+  due_has_time: t.dueHasTime !== false,
   deleted: t.deleted,
 });
 
@@ -40,6 +44,11 @@ const patchToRow = (patch) => {
   if ('done' in patch) row.done = patch.done;
   if ('doneMonth' in patch) row.done_month = patch.doneMonth;
   if ('doneBy' in patch) row.done_by = patch.doneBy;
+  if ('dueAt' in patch) row.due_at = patch.dueAt;
+  if ('dueHasTime' in patch) row.due_has_time = patch.dueHasTime;
+  // Changer l'échéance remet les rappels à zéro : les paliers déjà franchis
+  // ne valent plus rien pour une nouvelle date.
+  if ('dueAt' in patch) row.due_stage = 0;
   if ('deleted' in patch) row.deleted = patch.deleted;
   return row;
 };
@@ -260,6 +269,8 @@ export function useTasks(householdId, userId) {
         doneMonth: null,
         doneBy: null,
         createdBy: userId ?? null,
+        dueAt: null,
+        dueHasTime: true,
         deleted: false,
         createdAt: nowIso(),
         updatedAt: nowIso(),
@@ -286,6 +297,16 @@ export function useTasks(householdId, userId) {
       updateTask(task.id, patch);
     },
     [updateTask, userId],
+  );
+
+  /** Pose ou retire l'échéance d'une tâche. */
+  const setDue = useCallback(
+    (id, due) =>
+      updateTask(id, {
+        dueAt: due ? due.iso : null,
+        dueHasTime: due ? due.hasTime : true,
+      }),
+    [updateTask],
   );
 
   const removeTask = useCallback(
@@ -318,6 +339,7 @@ export function useTasks(householdId, userId) {
     refresh,
     addTask,
     updateTask,
+    setDue,
     toggleDone,
     removeTask,
     moveTask,

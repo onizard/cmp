@@ -8,6 +8,8 @@ self.addEventListener('push', (event) => {
     data = { body: event.data ? event.data.text() : '' };
   }
   const title = data.title || 'Charge mentale partagée';
+  // Une échéance proche vibre et reste affichée tant qu'on ne l'a pas vue.
+  const urgent = data.urgent === true;
   event.waitUntil(
     self.registration.showNotification(title, {
       body: data.body || '',
@@ -15,6 +17,8 @@ self.addEventListener('push', (event) => {
       badge: 'icon-192.png',
       tag: data.tag || 'cmp',
       renotify: true,
+      requireInteraction: urgent,
+      vibrate: urgent ? [90, 60, 90, 60, 180] : [60],
       data: { url: data.url || '/' },
     }),
   );
