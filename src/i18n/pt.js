@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'O teu pedido', surMesurePlaceholder: 'Um fim de semana a dois…',
     surMesureObtenir: 'Obter ({n} pts)', surMesureVide: 'Diz o que estás a pedir.',
   },
+  inventaire: {
+    titre: 'Os meus vales',
+    vide: 'Nenhum vale por agora. Leva uma recompensa e aparecerá aqui.',
+    utiliser: 'Usar',
+    rendre: 'Devolver',
+    poinconne: 'USADO',
+    obtenuLe: 'obtido a {quand}',
+    utiliseLe: 'usado a {quand}',
+  },
+
   compte: {
     titre: 'Conta', profil: 'Perfil', prenom: 'Nome', prenomPlaceholder: 'O teu nome',
     email: 'E-mail', prenomErreur: 'Não foi possível guardar o nome.',

@@ -301,7 +301,7 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">{t('app.titre')} · v4.7</p>
+      <p className="ver">{t('app.titre')} · v4.8</p>
     </main>
   );
 }

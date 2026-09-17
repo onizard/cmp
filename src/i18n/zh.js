@@ -59,6 +59,16 @@ export default {
     surMesureChamp: '你的请求', surMesurePlaceholder: '两个人的周末…',
     surMesureObtenir: '兑换（{n} 分）', surMesureVide: '说出你想要什么。',
   },
+  inventaire: {
+    titre: '我的券',
+    vide: '还没有券。兑换一个奖励，它就会出现在这里。',
+    utiliser: '使用',
+    rendre: '退回',
+    poinconne: '已使用',
+    obtenuLe: '{quand} 获得',
+    utiliseLe: '{quand} 使用',
+  },
+
   compte: {
     titre: '我的账户', profil: '资料', prenom: '名字', prenomPlaceholder: '你的名字',
     email: '邮箱', prenomErreur: '名字未能保存。',

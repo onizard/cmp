@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'La tua richiesta', surMesurePlaceholder: 'Un fine settimana per noi due…',
     surMesureObtenir: 'Ottieni ({n} pt)', surMesureVide: 'Di’ cosa stai chiedendo.',
   },
+  inventaire: {
+    titre: 'I miei buoni',
+    vide: 'Nessun buono per ora. Prendi una ricompensa e finirà qui.',
+    utiliser: 'Usare',
+    rendre: 'Restituire',
+    poinconne: 'USATO',
+    obtenuLe: 'ottenuto il {quand}',
+    utiliseLe: 'usato il {quand}',
+  },
+
   compte: {
     titre: 'Account', profil: 'Profilo', prenom: 'Nome', prenomPlaceholder: 'Il tuo nome',
     email: 'Email', prenomErreur: 'Non è stato possibile salvare il nome.',

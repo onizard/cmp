@@ -60,6 +60,16 @@ export default {
     surMesureChamp: 'خواستهٔ تو', surMesurePlaceholder: 'یک آخر هفته برای دو نفرمان…',
     surMesureObtenir: 'گرفتن ({n} امتیاز)', surMesureVide: 'بگو چه می‌خواهی.',
   },
+  inventaire: {
+    titre: 'کوپن‌های من',
+    vide: 'هنوز کوپنی نیست. پاداشی بگیر تا اینجا بیاید.',
+    utiliser: 'استفاده',
+    rendre: 'بازگرداندن',
+    poinconne: 'استفاده‌شده',
+    obtenuLe: 'گرفته‌شده در {quand}',
+    utiliseLe: 'استفاده‌شده در {quand}',
+  },
+
   compte: {
     titre: 'حساب من', profil: 'نمایه', prenom: 'نام', prenomPlaceholder: 'نامت',
     email: 'ایمیل', prenomErreur: 'نام ذخیره نشد.',

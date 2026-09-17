@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'Dein Wunsch', surMesurePlaceholder: 'Ein Wochenende zu zweit…',
     surMesureObtenir: 'Einlösen ({n} Pkt.)', surMesureVide: 'Sag, was du dir wünschst.',
   },
+  inventaire: {
+    titre: 'Meine Gutscheine',
+    vide: 'Noch keine Gutscheine. Nimm eine Belohnung, dann landet sie hier.',
+    utiliser: 'Einlösen',
+    rendre: 'Zurückgeben',
+    poinconne: 'EINGELÖST',
+    obtenuLe: 'erhalten am {quand}',
+    utiliseLe: 'eingelöst am {quand}',
+  },
+
   compte: {
     titre: 'Konto', profil: 'Profil', prenom: 'Vorname', prenomPlaceholder: 'Dein Vorname',
     email: 'E-Mail', prenomErreur: 'Der Vorname konnte nicht gespeichert werden.',

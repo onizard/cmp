@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'طلبك', surMesurePlaceholder: 'عطلة نهاية أسبوع لنا وحدنا…',
     surMesureObtenir: 'الحصول عليها ({n} نقطة)', surMesureVide: 'قل ما الذي تطلبه.',
   },
+  inventaire: {
+    titre: 'قسائمي',
+    vide: 'لا قسائم بعد. خذ مكافأة وستظهر هنا.',
+    utiliser: 'استخدام',
+    rendre: 'إرجاع',
+    poinconne: 'مستخدمة',
+    obtenuLe: 'حُصل عليها في {quand}',
+    utiliseLe: 'استُخدمت في {quand}',
+  },
+
   compte: {
     titre: 'حسابي', profil: 'الملف', prenom: 'الاسم', prenomPlaceholder: 'اسمك',
     email: 'البريد', prenomErreur: 'تعذّر حفظ الاسم.',

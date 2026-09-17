@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'הבקשה שלך', surMesurePlaceholder: 'סוף שבוע לשנינו…',
     surMesureObtenir: 'לקבל ({n} נק׳)', surMesureVide: 'אמור מה אתה מבקש.',
   },
+  inventaire: {
+    titre: 'השוברים שלי',
+    vide: 'עדיין אין שוברים. קח פרס והוא יגיע לכאן.',
+    utiliser: 'לממש',
+    rendre: 'להחזיר',
+    poinconne: 'מומש',
+    obtenuLe: 'התקבל ב־{quand}',
+    utiliseLe: 'מומש ב־{quand}',
+  },
+
   compte: {
     titre: 'החשבון שלי', profil: 'פרופיל', prenom: 'שם פרטי', prenomPlaceholder: 'השם שלך',
     email: 'דוא״ל', prenomErreur: 'לא ניתן היה לשמור את השם.',

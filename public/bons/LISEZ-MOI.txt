@@ -1,0 +1,14 @@
+Les visuels des bons vont ici.
+
+Un fichier par récompense, par exemple : cafe-au-lit.png
+Puis, en base, on relie la récompense à son dessin :
+
+  update rewards set visuel = 'cafe-au-lit.png'
+   where label = 'Un café servi au lit';
+
+Format conseillé : 500 x 700 pixels (rapport 5/7), PNG ou JPEG.
+Le texte de la récompense et la date sont écrits PAR-DESSUS le dessin, en bas
+de la carte, sur un voile crème. Prévoir donc un dessin qui supporte d'être
+recouvert sur son tiers inférieur.
+
+Sans visuel, l'application dessine elle-même la carte : rien ne casse.

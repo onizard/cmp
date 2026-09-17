@@ -1668,3 +1668,120 @@ body,
   color: var(--ink-3);
   overflow-wrap: anywhere;
 }
+
+
+/* --- Inventaire des bons ---
+   Les cartes sont dessinees par l'application tant qu'aucun visuel n'est
+   fourni. Des qu'un fichier arrive dans /bons/, il prend la place du fond
+   sans rien deplacer : meme cadre, meme mise en page du texte. */
+
+.bons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 12px;
+}
+
+.bon-carte {
+  position: relative;
+  aspect-ratio: 5 / 7;
+  border-radius: 16px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: flex-end;
+}
+
+.bon-fond {
+  position: absolute;
+  inset: 0;
+  background: var(--grad-soft);
+}
+
+.bon-fond::after {
+  /* Un liseré intérieur, façon carte à collectionner. */
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-radius: 11px;
+}
+
+.bon-corps {
+  position: relative;
+  width: 100%;
+  padding: 12px 11px 11px;
+  background: linear-gradient(to top, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0));
+}
+
+.bon-cout {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--violet);
+  margin: 0 0 3px;
+}
+
+.bon-texte {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.bon-date {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin: 5px 0 0;
+}
+
+/* --- Le poincon --- */
+
+.bon-utilise .bon-carte {
+  filter: saturate(0.4);
+}
+
+.bon-poincon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.bon-poincon span {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--due-depasse);
+  border: 3px solid var(--due-depasse);
+  border-radius: 8px;
+  padding: 5px 12px;
+  transform: rotate(-14deg);
+  opacity: 0.72;
+  background: rgba(255, 253, 249, 0.55);
+  white-space: nowrap;
+}
+
+[dir='rtl'] .bon-poincon span {
+  transform: rotate(14deg);
+}
+
+.bon-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.bon-actions .btn {
+  flex: 1;
+  padding: 8px 6px;
+  min-height: 38px;
+  font-size: 12.5px;
+}

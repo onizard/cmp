@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useT } from '../i18n/index.js';
+import { useT, langue } from '../i18n/index.js';
 import Brain from './Brain.jsx';
+import Bon from './Bon.jsx';
 import {
   pointsAvailable,
   pointsBreakdown,
@@ -38,11 +39,22 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // Le compteur, lui, n'a toujours aucune limite.
   const jaugeDe = (pts) => jauge(pts);
 
+  // L'inventaire : les bons de tout le foyer, les non utilisés d'abord, du
+  // plus récent au plus ancien. Aucune limite — c'est une collection.
   const mesClaims = store.claims
     .filter((c) => !c.deleted)
     .slice()
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-    .slice(0, 6);
+    .sort((a, b) => {
+      if (Boolean(a.usedAt) !== Boolean(b.usedAt)) return a.usedAt ? 1 : -1;
+      return (b.createdAt || '').localeCompare(a.createdAt || '');
+    });
+
+  // Le dessin d'un bon suit sa récompense : on le retrouve par reward_id.
+  const visuelDe = (c) => {
+    if (!c.rewardId) return null;
+    const r = store.rewards.find((x) => x.id === c.rewardId);
+    return (r && r.visuel) || null;
+  };
 
   const submitWish = async (e) => {
     e.preventDefault();
@@ -225,34 +237,26 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
       </section>
 
-      {mesClaims.length > 0 && (
-        <section className="gage-section">
-          <h2 className="gage-title">{t('recompenses.dejaOffert')}</h2>
-          <ul className="gage-list">
+      <section className="setgroup">
+        <h2 className="setlabel">{t('inventaire.titre')}</h2>
+        {mesClaims.length === 0 ? (
+          <p className="setnote">{t('inventaire.vide')}</p>
+        ) : (
+          <div className="bons">
             {mesClaims.map((c) => (
-              <li key={c.id} className="gage-item">
-                <span>
-                  {!c.rewardId && <span className="claim-wish">{t('recompenses.surMesureBadge')}</span>}
-                  {c.label}
-                  <span className="claim-who">
-                    {' '}
-                    — {store.names[c.userId] || (c.userId === userId ? myName : otherName)}
-                  </span>
-                </span>
-                {c.userId === userId && (
-                  <button
-                    className="btn btn-small"
-                    type="button"
-                    onClick={() => store.cancelClaim(c.id)}
-                  >
-                    {t('app.annuler')}
-                  </button>
-                )}
-              </li>
+              <Bon
+                key={c.id}
+                bon={c}
+                visuel={visuelDe(c)}
+                lang={langue()}
+                onUtiliser={() => store.useClaim(c.id)}
+                onRendre={() => store.cancelClaim(c.id)}
+              />
             ))}
-          </ul>
-        </section>
-      )}
+          </div>
+        )}
+      </section>
+
     </main>
   );
 }

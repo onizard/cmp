@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'Tu petición', surMesurePlaceholder: 'Un fin de semana los dos…',
     surMesureObtenir: 'Obtener ({n} pts)', surMesureVide: 'Di lo que pides.',
   },
+  inventaire: {
+    titre: 'Mis vales',
+    vide: 'Ningún vale por ahora. Toma una recompensa y aparecerá aquí.',
+    utiliser: 'Usar',
+    rendre: 'Devolver',
+    poinconne: 'USADO',
+    obtenuLe: 'obtenido el {quand}',
+    utiliseLe: 'usado el {quand}',
+  },
+
   compte: {
     titre: 'Mi cuenta', profil: 'Perfil', prenom: 'Nombre', prenomPlaceholder: 'Tu nombre',
     email: 'Correo', prenomErreur: 'No se ha podido guardar el nombre.',

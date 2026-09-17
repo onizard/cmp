@@ -146,6 +146,16 @@ export default {
     surMesureVide: 'Dis ce que tu demandes.',
   },
 
+  inventaire: {
+    titre: 'Mes bons',
+    vide: 'Aucun bon pour l’instant. Prends une récompense et elle arrivera ici.',
+    utiliser: 'Utiliser',
+    rendre: 'Rendre',
+    poinconne: 'UTILISÉ',
+    obtenuLe: 'obtenu le {quand}',
+    utiliseLe: 'utilisé le {quand}',
+  },
+
   compte: {
     titre: 'Mon compte',
     profil: 'Profil',

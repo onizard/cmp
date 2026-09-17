@@ -7,6 +7,7 @@ const rewardFrom = (r) => ({
   householdId: r.household_id,
   label: r.label,
   cost: Number(r.cost),
+  visuel: r.visuel || null,
   deleted: r.deleted,
   createdAt: r.created_at,
 });
@@ -16,6 +17,8 @@ const claimFrom = (r) => ({
   householdId: r.household_id,
   rewardId: r.reward_id,
   userId: r.user_id,
+  // Poinçonné quand il a servi. Un bon utilisé reste dans l'inventaire.
+  usedAt: r.used_at || null,
   label: r.label,
   cost: Number(r.cost),
   deleted: r.deleted,
@@ -114,10 +117,26 @@ export function useRewards(householdId, userId) {
         cost: reward.cost,
         deleted: false,
       };
+      // Le visuel n'est pas copié sur le bon : on le retrouve par reward_id au
+      // moment de l'affichage, pour qu'un nouveau dessin s'applique aussi aux
+      // bons déjà obtenus.
       saveClaims([...cRef.current, claimFrom(row)]);
       if (supabase) await supabase.from('claims').insert(row);
     },
     [householdId, userId, saveClaims],
+  );
+
+  /** Poinçonne un bon : il a servi, il ne sert plus qu'au souvenir. */
+  const useClaim = useCallback(
+    async (id) => {
+      const quand = new Date().toISOString();
+      saveClaims(
+        cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand } : c)),
+      );
+      if (supabase)
+        await supabase.from('claims').update({ used_at: quand }).eq('id', id);
+    },
+    [saveClaims],
   );
 
   /**
@@ -147,6 +166,9 @@ export function useRewards(householdId, userId) {
   /** Annule une dépense (récupère les points). */
   const cancelClaim = useCallback(
     async (id) => {
+      // Un bon poinçonné a été consommé : il n'est plus rendable.
+      const bon = cRef.current.find((c) => c.id === id);
+      if (bon && bon.usedAt) return;
       saveClaims(
         cRef.current.map((c) => (c.id === id ? { ...c, deleted: true } : c)),
       );
@@ -164,6 +186,7 @@ export function useRewards(householdId, userId) {
     refresh,
     claimReward,
     claimCustom,
+    useClaim,
     cancelClaim,
   };
 }

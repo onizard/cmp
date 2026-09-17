@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'Ваша просьба', surMesurePlaceholder: 'Выходные вдвоём…',
     surMesureObtenir: 'Получить ({n} очк.)', surMesureVide: 'Скажите, о чём просите.',
   },
+  inventaire: {
+    titre: 'Мои купоны',
+    vide: 'Купонов пока нет. Возьмите награду — она появится здесь.',
+    utiliser: 'Использовать',
+    rendre: 'Вернуть',
+    poinconne: 'ИСПОЛЬЗОВАН',
+    obtenuLe: 'получен {quand}',
+    utiliseLe: 'использован {quand}',
+  },
+
   compte: {
     titre: 'Аккаунт', profil: 'Профиль', prenom: 'Имя', prenomPlaceholder: 'Ваше имя',
     email: 'Почта', prenomErreur: 'Имя не удалось сохранить.',

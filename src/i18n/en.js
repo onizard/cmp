@@ -59,6 +59,16 @@ export default {
     surMesureChamp: 'Your request', surMesurePlaceholder: 'A weekend away, just us…',
     surMesureObtenir: 'Claim ({n} pts)', surMesureVide: 'Say what you are asking for.',
   },
+  inventaire: {
+    titre: 'My vouchers',
+    vide: 'No vouchers yet. Take a reward and it will land here.',
+    utiliser: 'Use',
+    rendre: 'Give back',
+    poinconne: 'USED',
+    obtenuLe: 'earned {quand}',
+    utiliseLe: 'used {quand}',
+  },
+
   compte: {
     titre: 'Account', profil: 'Profile', prenom: 'First name', prenomPlaceholder: 'Your first name',
     email: 'Email', prenomErreur: 'The first name could not be saved.',
