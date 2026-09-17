@@ -11,11 +11,14 @@ import {
 } from '../lib/push.js';
 import InstallHint from './InstallHint.jsx';
 import ShareInvite from './ShareInvite.jsx';
+import LangPicker from './LangPicker.jsx';
+import { useT } from '../i18n/index.js';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
 
 export default function Account({ account }) {
+  const t = useT();
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
   const [nameError, setNameError] = useState(null);
@@ -66,7 +69,7 @@ export default function Account({ account }) {
     setNameError(null);
     const ok = await account.updateDisplayName(name);
     if (!ok) {
-      setNameError("Le prénom n'a pas pu être enregistré.");
+      setNameError(t('compte.prenomErreur'));
       return;
     }
     touched.current = false;
@@ -78,9 +81,7 @@ export default function Account({ account }) {
     setPassError(null);
     const ok = await account.setPassword(pass);
     if (!ok) {
-      setPassError(
-        account.error || "Le mot de passe n'a pas pu être enregistré.",
-      );
+      setPassError(account.error || t('compte.motDePasseErreur'));
       return;
     }
     setPass('');
@@ -116,23 +117,23 @@ export default function Account({ account }) {
 
   return (
     <main className="account">
-      <p className="brain-lede">Mon compte</p>
+      <p className="brain-lede">{t('compte.titre')}</p>
 
       <section className="setgroup">
-        <h2 className="setlabel">Profil</h2>
+        <h2 className="setlabel">{t('compte.profil')}</h2>
         <div className="setcard">
-          <label className="field-label" htmlFor="prenom">Prénom</label>
+          <label className="field-label" htmlFor="prenom">{t('compte.prenom')}</label>
           <input
             id="prenom"
             className="field"
             value={name}
-            placeholder="Ton prénom"
+            placeholder={t('compte.prenomPlaceholder')}
             onChange={(e) => {
               touched.current = true;
               setName(e.target.value);
             }}
           />
-          <label className="field-label" htmlFor="mail">Email</label>
+          <label className="field-label" htmlFor="mail">{t('compte.email')}</label>
           <input id="mail" className="field" value={email} disabled />
           <button
             className="btn btn-accent btn-block"
@@ -140,20 +141,19 @@ export default function Account({ account }) {
             disabled={!dirty}
             onClick={saveName}
           >
-            {saved ? 'Enregistré ✓' : 'Enregistrer'}
+            {saved ? t('app.enregistre') : t('app.enregistrer')}
           </button>
           {nameError && <p className="error">{nameError}</p>}
         </div>
       </section>
 
+      <LangPicker />
+
       <section className="setgroup">
-        <h2 className="setlabel">Mot de passe</h2>
+        <h2 className="setlabel">{t('compte.motDePasse')}</h2>
         <div className="setcard">
-          <p className="setnote">
-            Pose-toi un mot de passe : tu te reconnecteras sans passer par ta
-            boîte mail, même après une réinstallation.
-          </p>
-          <label className="field-label" htmlFor="pass">Nouveau mot de passe</label>
+          <p className="setnote">{t('compte.motDePasseAide')}</p>
+          <label className="field-label" htmlFor="pass">{t('compte.nouveauMotDePasse')}</label>
           <input
             id="pass"
             className="field"
@@ -161,7 +161,7 @@ export default function Account({ account }) {
             autoComplete="new-password"
             minLength={8}
             value={pass}
-            placeholder="8 caractères au minimum"
+            placeholder={t('auth.motDePassePlaceholder')}
             onChange={(e) => {
               setPassError(null);
               setPass(e.target.value);
@@ -173,7 +173,7 @@ export default function Account({ account }) {
             disabled={pass.length < 8}
             onClick={savePassword}
           >
-            {passSaved ? 'Enregistré ✓' : 'Enregistrer le mot de passe'}
+            {passSaved ? t('app.enregistre') : t('compte.enregistrerMotDePasse')}
           </button>
           {passError && <p className="error">{passError}</p>}
         </div>
@@ -182,120 +182,95 @@ export default function Account({ account }) {
       <InstallHint />
 
       <section className="setgroup">
-        <h2 className="setlabel">Notifications</h2>
+        <h2 className="setlabel">{t('notifications.titre')}</h2>
         <div className="setcard">
           {pushSupported() ? (
             <>
               <div className="rowline">
-                <span>Quand l’autre agit</span>
+                <span>{t('notifications.quandLautreAgit')}</span>
                 <button
                   type="button"
                   className="switch"
                   role="switch"
                   aria-checked={notifOn}
-                  aria-label="Notifications"
+                  aria-label={t('notifications.titre')}
                   disabled={notifBusy}
                   onClick={toggleNotif}
                 />
               </div>
-              <p className="setnote">
-                Une notification quand ta moitié ajoute ou coche une chose.
-              </p>
+              <p className="setnote">{t('notifications.quandLautreAide')}</p>
               <div className="rowline">
-                <span>Rappel matin et soir</span>
+                <span>{t('notifications.rappel')}</span>
                 <button
                   type="button"
                   className="switch"
                   role="switch"
                   aria-checked={soirOn}
-                  aria-label="Rappel matin et soir"
+                  aria-label={t('notifications.rappel')}
                   disabled={!notifOn}
                   onClick={toggleSoir}
                 />
               </div>
-              <p className="setnote">
-                Vers 8 h et 20 h, la tâche qui attend depuis le plus longtemps.
-              </p>
+              <p className="setnote">{t('notifications.rappelAide')}</p>
               {notifError && <p className="error">{notifError}</p>}
             </>
           ) : (
-            <p className="setnote">
-              Ce navigateur ne gère pas les notifications. Installe
-              l’application sur l’écran d’accueil pour en profiter.
-            </p>
+            <p className="setnote">{t('notifications.nonGere')}</p>
           )}
         </div>
       </section>
 
       <section className="setgroup">
-        <h2 className="setlabel">Partager</h2>
+        <h2 className="setlabel">{t('partage.titre')}</h2>
         <div className="setcard">
           <ShareInvite code={code} prenom={account.displayName} />
         </div>
       </section>
 
       <section className="setgroup">
-        <h2 className="setlabel">Tes données</h2>
+        <h2 className="setlabel">{t('donnees.titre')}</h2>
         <div className="setcard">
           <ul className="privacy">
-            <li>
-              <b>Personne d’autre que ton foyer</b> ne voit tes tâches. La base
-              de données le refuse, ce n’est pas qu’une question d’affichage.
-            </li>
-            <li>
-              <b>Rien n’est vendu, rien n’est transmis.</b> Aucune publicité,
-              aucun traçage, aucun outil de mesure extérieur.
-            </li>
-            <li>
-              Tout est hébergé sur <b>un serveur privé, en France</b>, pas chez
-              un géant du nuage.
-            </li>
-            <li>
-              Le texte des notifications est <b>chiffré</b> avant de partir :
-              ni Google ni Apple ne peuvent le lire au passage.
-            </li>
-            <li>
-              Tu veux que tout disparaisse ? Écris-nous, ton compte et tes
-              données sont effacés.
-            </li>
+            <li>{t('donnees.foyerSeul')}</li>
+            <li>{t('donnees.rienVendu')}</li>
+            <li>{t('donnees.heberge')}</li>
+            <li>{t('donnees.chiffre')}</li>
+            <li>{t('donnees.effacer')}</li>
           </ul>
         </div>
       </section>
 
       <button className="btn btn-block" type="button" onClick={account.signOut}>
-        Se déconnecter
+        {t('auth.deconnexion')}
       </button>
 
       <p className="miniquit">
         {confirmLeave ? (
           <>
-            Quitter vraiment le foyer ?{' '}
-            <button type="button" onClick={account.leaveHousehold}>oui, quitter</button>{' '}
+            {t('foyer.quitterSur')}{' '}
+            <button type="button" onClick={account.leaveHousehold}>{t('foyer.quitterOui')}</button>{' '}
             ·{' '}
-            <button type="button" onClick={() => setConfirmLeave(false)}>annuler</button>
+            <button type="button" onClick={() => setConfirmLeave(false)}>{t('app.annuler')}</button>
           </>
         ) : (
           <button type="button" onClick={() => setConfirmLeave(true)}>
-            Quitter le foyer
+            {t('foyer.quitter')}
           </button>
         )}
       </p>
 
       {CONTACT && (
         <p className="contact">
-          Une idée, une question, quelque chose qui cloche ?{' '}
+          
           <a
-            href={`mailto:${CONTACT}?subject=${encodeURIComponent(
-              'Charge mentale partagée',
-            )}`}
+            href={`mailto:${CONTACT}?subject=${encodeURIComponent(t('app.titre'))}`}
           >
-            Écris-nous
+            {t('compte.contactLien')}
           </a>
-          .
         </p>
       )}
 
-      <p className="ver">charge mentale partagée · v3.7</p>
+      <p className="ver">{t('app.titre')} · v3.8</p>
     </main>
   );
 }

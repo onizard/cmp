@@ -1,11 +1,9 @@
+import { t, nomDuMois } from '../i18n/index.js';
 // Logique de visibilité mensuelle — le cœur du produit.
 // Les clés de mois sont au format "YYYY-MM" et se comparent directement
 // comme des chaînes (l'ordre lexicographique coïncide avec l'ordre chronologique).
 
-const MONTHS_FR = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
-];
+
 
 /** Clé "YYYY-MM" pour une date donnée (mois en cours par défaut). */
 export const monthKey = (date = new Date()) => {
@@ -33,7 +31,10 @@ export const monthRange = (start, end) => {
 };
 
 /** Nom du mois en minuscules, ex. "septembre". */
-export const monthName = (key) => MONTHS_FR[Number(key.split('-')[1]) - 1];
+export const monthName = (key) => {
+  const [a, m] = String(key).split('-');
+  return nomDuMois(a, m);
+};
 
 /** Année d'une clé de mois, ex. "2026". */
 export const yearOf = (key) => key.split('-')[0];
@@ -131,23 +132,20 @@ export const groupByYear = (months) => {
 // --- Textes calculés ---
 
 /** Phrase d'accroche selon le nombre de choses à faire ce mois-ci. */
-export const headline = (count) => {
-  if (count <= 0) return 'Rien en tête ce mois-ci.';
-  if (count === 1) return '1 chose en tête ce mois-ci.';
-  return `${count} choses en tête ce mois-ci.`;
-};
+export const headline = (count) =>
+  count <= 0 ? t('taches.accrocheVide') : t('taches.accroche', { n: count });
 
 /** Compteur d'un mois : « 3 à faire », « terminé » ou « rien ». */
 export const monthSummary = (tasksInMonth) => {
-  const todo = tasksInMonth.filter((t) => !t.done).length;
-  if (todo > 0) return `${todo} à faire`;
-  if (tasksInMonth.length > 0) return 'terminé';
-  return 'rien';
+  const todo = tasksInMonth.filter((x) => !x.done).length;
+  if (todo > 0) return t('taches.aFaire', { n: todo });
+  if (tasksInMonth.length > 0) return t('taches.termine');
+  return t('taches.rien');
 };
 
 /** Mention discrète « depuis mars » pour une tâche non cochée reportée. */
-export const carriedFromLabel = (t, m) => {
-  if (t.done) return null;
-  if (m > t.month) return `depuis ${monthName(t.month)}`;
+export const carriedFromLabel = (tache, m) => {
+  if (tache.done) return null;
+  if (m > tache.month) return t('taches.depuis', { mois: monthName(tache.month) });
   return null;
 };

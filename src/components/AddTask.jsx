@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useT } from '../i18n/index.js';
 
 export default function AddTask({ onAdd }) {
   const [text, setText] = useState('');
+  const t = useT();
 
   const submit = (e) => {
     e.preventDefault();
-    const t = text.trim();
-    if (!t) return;
-    onAdd(t);
+    const v = text.trim();
+    if (!v) return;
+    onAdd(v);
     setText('');
   };
 
@@ -16,11 +18,11 @@ export default function AddTask({ onAdd }) {
       <input
         className="field"
         value={text}
-        placeholder="ajoute une tâche"
+        placeholder={t('taches.ajouter')}
         onChange={(e) => setText(e.target.value)}
       />
       <button className="btn btn-accent" type="submit">
-        Ajouter
+        {t('taches.boutonAjouter')}
       </button>
     </form>
   );

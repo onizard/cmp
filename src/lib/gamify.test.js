@@ -8,6 +8,7 @@ import {
   pointsAvailable,
   sortRewards,
   rewardFill,
+  jauge,
   canClaimCustom,
   customMissing,
   REWARD_MIN,
@@ -145,6 +146,31 @@ describe('récompenses', () => {
   it('sans catalogue, le dessin vise le prix plancher', () => {
     expect(rewardFill([], 5)).toBe(0.5);
     expect(rewardFill([], 40)).toBe(1);
+  });
+
+  it('la jauge se lit sur 100 points', () => {
+    expect(jauge(0).fill).toBe(0);
+    expect(jauge(50).fill).toBe(0.5);
+    expect(jauge(100).fill).toBe(1);
+  });
+
+  it('au-delà de 100, elle repart du bas', () => {
+    expect(jauge(101).fill).toBeCloseTo(0.01);
+    expect(jauge(150).fill).toBe(0.5);
+    expect(jauge(200).fill).toBe(1);
+  });
+
+  it('chaque centaine change de teinte', () => {
+    expect(jauge(100).teinte).toBe(0);
+    expect(jauge(101).teinte).toBe(1);
+    expect(jauge(250).teinte).toBe(2);
+  });
+
+  it('la dixième teinte ramène à la première', () => {
+    expect(jauge(1000).teinte).toBe(9);
+    expect(jauge(1001).teinte).toBe(0);
+    expect(jauge(1100).teinte).toBe(0);
+    expect(jauge(1101).teinte).toBe(1);
   });
 
   it('le catalogue commence à 10 points', () => {

@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useT } from '../i18n/index.js';
 import Brain from './Brain.jsx';
 import {
   pointsAvailable,
   pointsBreakdown,
   sortRewards,
   nextReward,
-  rewardFill,
+  jauge,
   formatPoints,
   canClaimCustom,
   customMissing,
@@ -16,14 +17,15 @@ import {
 } from '../lib/gamify.js';
 
 export default function BrainView({ tasks, userId, rewards: store }) {
+  const t = useT();
   const [openWish, setOpenWish] = useState(false);
   const [wish, setWish] = useState('');
   const [wishError, setWishError] = useState(null);
   const [showBareme, setShowBareme] = useState(false);
 
   const other = store.otherUser;
-  const myName = store.names[userId] || 'Toi';
-  const otherName = (other && store.names[other]) || 'Ton binôme';
+  const myName = store.names[userId] || t('cerveau.toi');
+  const otherName = (other && store.names[other]) || t('cerveau.binome');
 
   const myPts = pointsAvailable(tasks, store.claims, userId);
   const otherPts = other ? pointsAvailable(tasks, store.claims, other) : 0;
@@ -32,9 +34,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const catalogue = sortRewards(store.rewards);
   const next = nextReward(store.rewards, myPts);
 
-  // Le dessin se remplit vers la prochaine récompense ; le compteur, lui,
-  // n'a aucune limite.
-  const fillFor = (pts) => rewardFill(store.rewards, pts);
+  // Le dessin se lit sur 100 points, puis repart du bas dans une autre teinte.
+  // Le compteur, lui, n'a toujours aucune limite.
+  const jaugeDe = (pts) => jauge(pts);
 
   const mesClaims = store.claims
     .filter((c) => !c.deleted)
@@ -56,79 +58,85 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
   return (
     <main className="brain-view">
-      <p className="brain-lede">Ce que chacun·e a porté. 💛</p>
+      <p className="brain-lede">{t('cerveau.lede')}</p>
 
       <div className="brains">
         <div className="person">
           <div className="vase">
-            <Brain fill={fillFor(myPts)} id="me" />
+            <Brain {...jaugeDe(myPts)} />
           </div>
           <h3>{myName}</h3>
           <div className="pts">
-            <b>{formatPoints(myPts)}</b> pts
+            <b>{formatPoints(myPts)}</b> {t('cerveau.pts')}
           </div>
         </div>
         <div className="person">
           <div className="vase">
-            <Brain fill={fillFor(otherPts)} id="other" />
+            <Brain {...jaugeDe(otherPts)} />
           </div>
           <h3>{otherName}</h3>
           <div className="pts">
-            <b>{formatPoints(otherPts)}</b> pts
+            <b>{formatPoints(otherPts)}</b> {t('cerveau.pts')}
           </div>
         </div>
       </div>
 
       <p className="detail-line">
-        {detail.added} ajoutée{detail.added > 1 ? 's' : ''} · {detail.own} faite
-        {detail.own > 1 ? 's' : ''} · {detail.other} pour l’autre
+        {t('cerveau.detail', {
+          ajoutees: detail.added,
+          faites: detail.own,
+          autres: detail.other,
+        })}
         <button
           type="button"
           className="link bareme-link"
           onClick={() => setShowBareme((v) => !v)}
         >
-          barème
+          {t('cerveau.bareme')}
         </button>
       </p>
 
       {showBareme && (
         <div className="setcard bareme">
           <div className="rowline">
-            <span>Ajouter une tâche</span>
+            <span>{t('cerveau.baremeAjouter')}</span>
             <b>{formatPoints(POINT_ADD)} pt</b>
           </div>
           <div className="rowline">
-            <span>Cocher sa propre tâche</span>
+            <span>{t('cerveau.baremeSienne')}</span>
             <b>{formatPoints(POINT_OWN)} pt</b>
           </div>
           <div className="rowline">
-            <span>Cocher la tâche de l’autre</span>
+            <span>{t('cerveau.baremeAutre')}</span>
             <b>{formatPoints(POINT_OTHER)} pts</b>
           </div>
           <p className="setnote">
-            Les points se cumulent sans limite. Dépense-les quand tu veux, ou
-            épargne pour une récompense plus forte.
+{t('cerveau.baremeNote')}
           </p>
         </div>
       )}
 
       {next && (
         <section className="gage-card">
-          <h4>Prochaine récompense : {next.reward.label}</h4>
+          <h4>{t('cerveau.prochaine', { nom: next.reward.label })}</h4>
           <div className="gauge" aria-hidden="true">
-            <span style={{ width: `${Math.round(fillFor(myPts) * 100)}%` }} />
+            <span
+              style={{
+                width: `${Math.round(Math.min(1, myPts / next.reward.cost) * 100)}%`,
+              }}
+            />
           </div>
           <p className="setnote">
-            Encore <b>{formatPoints(next.missing)}</b> pts pour te l’offrir.
+            {t('cerveau.manque', { n: formatPoints(next.missing) })}
           </p>
         </section>
       )}
 
       <section className="gage-section">
-        <h2 className="gage-title">Les récompenses</h2>
+        <h2 className="gage-title">{t('recompenses.titre')}</h2>
         {catalogue.length === 0 ? (
           <p className="setnote">
-            Le catalogue est vide pour l’instant.
+            {t('recompenses.vide')}
           </p>
         ) : (
           <ul className="gage-list">
@@ -144,7 +152,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                     disabled={!ok}
                     onClick={() => store.claimReward(r)}
                   >
-                    Prendre
+                    {t('recompenses.prendre')}
                   </button>
                 </li>
               );
@@ -153,20 +161,20 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         )}
 
         <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
-          <h3 className="wish-title">Récompense sur mesure</h3>
+          <h3 className="wish-title">{t('recompenses.surMesure')}</h3>
           {canClaimCustom(myPts) ? (
             openWish ? (
               <form onSubmit={submitWish}>
                 <p className="wish-text">
-                  Dis ce que tu veux. Tu l’obtiens tout de suite.
+                  {t('recompenses.surMesureInvite')}
                 </p>
-                <label className="field-label" htmlFor="wish">Ta demande</label>
+                <label className="field-label" htmlFor="wish">{t('recompenses.surMesureChamp')}</label>
                 <input
                   id="wish"
                   className="field"
                   value={wish}
                   autoFocus
-                  placeholder="Un week-end à deux…"
+                  placeholder={t('recompenses.surMesurePlaceholder')}
                   onChange={(e) => {
                     setWishError(null);
                     setWish(e.target.value);
@@ -175,43 +183,41 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 {wishError && <p className="error">{wishError}</p>}
                 <div className="add-actions">
                   <button className="btn btn-small btn-accent" type="submit">
-                    Obtenir ({REWARD_CUSTOM} pts)
+                    {t('recompenses.surMesureObtenir', { n: REWARD_CUSTOM })}
                   </button>
                   <button
                     className="btn btn-small"
                     type="button"
                     onClick={() => setOpenWish(false)}
                   >
-                    Annuler
+                    {t('app.annuler')}
                   </button>
                 </div>
               </form>
             ) : (
               <>
                 <p className="wish-text">
-                  Tu as tes {REWARD_CUSTOM} points. Demande ce que tu veux, sans
-                  passer par le catalogue.
+                  {t('recompenses.surMesurePrete', { n: REWARD_CUSTOM })}
                 </p>
                 <button
                   className="btn btn-accent btn-block"
                   type="button"
                   onClick={() => setOpenWish(true)}
                 >
-                  Demander ma récompense
+                  {t('recompenses.surMesureBouton')}
                 </button>
               </>
             )
           ) : (
             <>
               <p className="wish-text">
-                À <b>{REWARD_CUSTOM} points</b>, tu demandes ce que tu veux,
-                obtenu sur-le-champ.
+                {t('recompenses.surMesureAttente', { n: REWARD_CUSTOM })}
               </p>
               <div className="gauge" aria-hidden="true">
                 <span style={{ width: `${Math.round((myPts / REWARD_CUSTOM) * 100)}%` }} />
               </div>
               <p className="wish-text">
-                Encore <b>{formatPoints(customMissing(myPts))}</b> points.
+                {t('recompenses.surMesureEncore', { n: formatPoints(customMissing(myPts)) })}
               </p>
             </>
           )}
@@ -221,12 +227,12 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
       {mesClaims.length > 0 && (
         <section className="gage-section">
-          <h2 className="gage-title">Déjà offert</h2>
+          <h2 className="gage-title">{t('recompenses.dejaOffert')}</h2>
           <ul className="gage-list">
             {mesClaims.map((c) => (
               <li key={c.id} className="gage-item">
                 <span>
-                  {!c.rewardId && <span className="claim-wish">sur mesure</span>}
+                  {!c.rewardId && <span className="claim-wish">{t('recompenses.surMesureBadge')}</span>}
                   {c.label}
                   <span className="claim-who">
                     {' '}
@@ -239,7 +245,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                     type="button"
                     onClick={() => store.cancelClaim(c.id)}
                   >
-                    Annuler
+                    {t('app.annuler')}
                   </button>
                 )}
               </li>

@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
 
 // Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
 // faire renvoyer un lien quand le mot de passe est perdu.
 export default function Auth({ account }) {
+  const t = useT();
   const [mode, setMode] = useState('connexion');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,13 +39,12 @@ export default function Auth({ account }) {
       <div className="screen">
         <Header />
         <div className="panel">
-          <p className="lede">Regarde tes mails.</p>
+          <p className="lede">{t('auth.lienEnvoye')}</p>
           <p className="soft-text">
-            On t'a envoyé un lien à <strong>{email}</strong>. Ouvre-le pour
-            entrer, puis choisis un nouveau mot de passe dans « Mon compte ».
+{t('auth.lienEnvoyeAide', { email })}
           </p>
           <button className="btn btn-block" type="button" onClick={() => go('connexion')}>
-            Revenir
+            {t('app.revenir')}
           </button>
         </div>
         <InstallHint />
@@ -57,17 +58,17 @@ export default function Auth({ account }) {
       <InstallHint />
       <form className="panel" onSubmit={submit}>
         <p className="lede">
-          {creation ? 'Créer ton compte.' : oubli ? 'Mot de passe oublié.' : 'Se connecter.'}
+          {creation ? t('auth.creation') : oubli ? t('auth.oubli') : t('auth.connexion')}
         </p>
         <p className="soft-text">
           {creation
-            ? 'Deux champs, et tu entres. Aucun mail à aller chercher.'
+            ? t('auth.creationAide')
             : oubli
-              ? 'On t’envoie un lien pour rentrer et en choisir un nouveau.'
-              : 'Ton e-mail et ton mot de passe.'}
+              ? t('auth.oubliAide')
+              : t('auth.connexionAide')}
         </p>
 
-        <label className="field-label" htmlFor="email">Ton adresse e-mail</label>
+        <label className="field-label" htmlFor="email">{t('auth.email')}</label>
         <input
           id="email"
           className="field"
@@ -77,12 +78,12 @@ export default function Auth({ account }) {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="prenom@exemple.fr"
+          placeholder={t('auth.emailPlaceholder')}
         />
 
         {!oubli && (
           <>
-            <label className="field-label" htmlFor="pass">Ton mot de passe</label>
+            <label className="field-label" htmlFor="pass">{t('auth.motDePasse')}</label>
             <input
               id="pass"
               className="field"
@@ -92,7 +93,7 @@ export default function Auth({ account }) {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="8 caractères au minimum"
+              placeholder={t('auth.motDePassePlaceholder')}
             />
           </>
         )}
@@ -101,28 +102,28 @@ export default function Auth({ account }) {
 
         <button className="btn btn-accent btn-block" type="submit" disabled={busy}>
           {busy
-            ? 'Un instant…'
+            ? t('app.instant')
             : creation
-              ? 'Créer mon compte'
+              ? t('auth.creerMonCompte')
               : oubli
-                ? 'Recevoir le lien'
-                : 'Se connecter'}
+                ? t('auth.recevoirLien')
+                : t('auth.seConnecter')}
         </button>
 
         <p className="authlinks">
           {mode === 'connexion' ? (
             <>
               <button type="button" onClick={() => go('oubli')}>
-                Mot de passe oublié ?
+                {t('auth.oublieLien')}
               </button>
               <span aria-hidden="true"> · </span>
               <button type="button" onClick={() => go('creation')}>
-                Créer un compte
+                {t('auth.creerLien')}
               </button>
             </>
           ) : (
             <button type="button" onClick={() => go('connexion')}>
-              Revenir à la connexion
+              {t('auth.retourConnexion')}
             </button>
           )}
         </p>

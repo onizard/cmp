@@ -1,4 +1,5 @@
 // Barre d'onglets en bas : les tâches, le cerveau, le compte.
+import { useT } from '../i18n/index.js';
 
 const ListIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -31,15 +32,16 @@ const UserIcon = () => (
 );
 
 export default function TabBar({ tab, onChange, honourCount = 0, admin = false }) {
+  const t = useT();
   const tabs = [
-    { id: 'liste', label: 'Tâches', Icon: ListIcon },
-    { id: 'cerveau', label: 'Cerveau', Icon: BrainIcon },
-    { id: 'compte', label: 'Mon compte', Icon: UserIcon },
+    { id: 'liste', label: t('tabs.taches'), Icon: ListIcon },
+    { id: 'cerveau', label: t('tabs.cerveau'), Icon: BrainIcon },
+    { id: 'compte', label: t('tabs.compte'), Icon: UserIcon },
   ];
   // L'onglet n'apparaît que pour un administrateur. Ce n'est qu'un confort :
   // c'est la base qui refuse les chiffres à tout autre appelant.
   if (admin) {
-    tabs.push({ id: 'admin', label: 'Bord', Icon: ChartIcon });
+    tabs.push({ id: 'admin', label: t('tabs.bord'), Icon: ChartIcon });
   }
   return (
     <nav className="tabbar" role="tablist" aria-label="Sections">

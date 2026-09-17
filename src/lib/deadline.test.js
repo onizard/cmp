@@ -91,7 +91,7 @@ describe('saisie de l’échéance', () => {
 
   it('écrit l’échéance en toutes lettres', () => {
     const due = buildDue('2026-09-21', '18:30');
-    expect(dueFull(due.iso, true)).toBe('21/09/2026 à 18 h 30');
+    expect(dueFull(due.iso, true)).toBe('21/09/2026 à 18:30');
     expect(dueFull(due.iso, false)).toBe('21/09/2026');
   });
 });

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useT } from '../i18n/index.js';
 import {
   lienDInvitation,
   messageDInvitation,
@@ -6,6 +7,7 @@ import {
 } from '../lib/invite.js';
 
 export default function ShareInvite({ code, prenom }) {
+  const t = useT();
   const [qr, setQr] = useState('');
   const [ouvert, setOuvert] = useState(false);
   const [copie, setCopie] = useState(null);
@@ -66,7 +68,7 @@ export default function ShareInvite({ code, prenom }) {
           partager('foyer', messageDInvitation(prenom), lienFoyer)
         }
       >
-        {copie === 'foyer' ? 'Lien copié ✓' : 'Inviter ma moitié'}
+        {copie === 'foyer' ? t('partage.copie') : t('partage.inviter')}
       </button>
 
       <button
@@ -74,13 +76,13 @@ export default function ShareInvite({ code, prenom }) {
         type="button"
         onClick={() => partager('appli', messageDecouverte(), lienNu)}
       >
-        {copie === 'appli' ? 'Lien copié ✓' : 'Partager l’application'}
+        {copie === 'appli' ? t('partage.copie') : t('partage.partagerAppli')}
       </button>
 
       {lienFoyer && (
         <p className="qr-lien">
           <button type="button" aria-expanded={ouvert} onClick={() => setOuvert((v) => !v)}>
-            {ouvert ? 'Masquer le QR d’invitation' : 'Afficher le QR d’invitation'}
+            {ouvert ? t('partage.qrMasquer') : t('partage.qrAfficher')}
           </button>
         </p>
       )}
@@ -91,7 +93,7 @@ export default function ShareInvite({ code, prenom }) {
             <div
               className="qr-image"
               role="img"
-              aria-label="QR code d’invitation"
+              aria-label={t('partage.qrAlt')}
               dangerouslySetInnerHTML={{ __html: qr }}
             />
           ) : (
@@ -101,7 +103,7 @@ export default function ShareInvite({ code, prenom }) {
       )}
 
       <p className="code-repli">
-        Code du foyer : <span>{code}</span>
+        {t('partage.codeFoyer', { code })}
       </p>
     </>
   );

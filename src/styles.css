@@ -68,8 +68,8 @@ body,
   max-width: 460px;
   margin: 0 auto;
   padding: 8px 16px 64px;
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
+  padding-inline-start: max(16px, env(safe-area-inset-left));
+  padding-inline-end: max(16px, env(safe-area-inset-right));
 }
 
 /* --- En-tête --- */
@@ -266,7 +266,7 @@ body,
   align-items: center;
   gap: 12px;
   width: 100%;
-  text-align: left;
+  text-align: start;
   background: none;
   border: none;
   padding: 4px 2px 8px;
@@ -302,7 +302,7 @@ body,
   align-items: center;
   gap: 12px;
   width: 100%;
-  text-align: left;
+  text-align: start;
   background: none;
   border: none;
   padding: 16px 18px;
@@ -334,7 +334,7 @@ body,
   content: "";
   width: 9px;
   height: 9px;
-  border-right: 2.5px solid var(--ink-3);
+  border-inline-end: 2.5px solid var(--ink-3);
   border-bottom: 2.5px solid var(--ink-3);
   transform: rotate(45deg);
   transition: transform 0.25s ease;
@@ -407,7 +407,7 @@ body,
 .task-text {
   flex: 1 1 auto;
   min-width: 0;
-  text-align: left;
+  text-align: start;
   background: none;
   border: none;
   padding: 12px 6px 12px 0;
@@ -563,7 +563,7 @@ body,
 .tab-badge {
   position: absolute;
   top: -4px;
-  right: -6px;
+  inset-inline-end: -6px;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -793,7 +793,7 @@ body,
   content: "";
   position: absolute;
   top: 2px;
-  left: 2px;
+  inset-inline-start: 2px;
   width: 21px;
   height: 21px;
   border-radius: 50%;
@@ -808,7 +808,7 @@ body,
 }
 
 .switch[aria-checked="true"]::after {
-  left: 22px;
+  inset-inline-start: 22px;
 }
 
 .btn-block {
@@ -1052,7 +1052,7 @@ body,
 
 .install-steps {
   margin: 0 0 10px;
-  padding-left: 20px;
+  padding-inline-start: 20px;
   font-size: 14px;
   color: var(--ink-2);
   line-height: 1.55;
@@ -1140,7 +1140,7 @@ body,
   background: var(--grad);
   border-radius: 999px;
   padding: 2px 9px;
-  margin-right: 8px;
+  margin-inline-end: 8px;
   vertical-align: 1px;
 }
 
@@ -1150,11 +1150,13 @@ body,
 .chrono {
   flex: none;
   vertical-align: -2px;
-  margin-right: 5px;
+  margin-inline-end: 5px;
 }
 
 .due {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
+  margin-inline-start: auto;
   align-items: center;
   font-family: var(--display);
   font-size: 12px;
@@ -1204,14 +1206,14 @@ body,
 
 /* Un liseré sur le bord gauche de la tâche, discret mais lisible d'un coup d'œil. */
 .task.has-due .task-row {
-  border-left: 3px solid transparent;
-  padding-left: 5px;
-  margin-left: -8px;
+  border-inline-start: 3px solid transparent;
+  padding-inline-start: 5px;
+  margin-inline-start: -8px;
 }
 
-.task.due-lvl-proche .task-row { border-left-color: var(--due-proche); }
-.task.due-lvl-urgent .task-row { border-left-color: var(--due-urgent); }
-.task.due-lvl-depasse .task-row { border-left-color: var(--due-depasse); }
+.task.due-lvl-proche .task-row { border-inline-start-color: var(--due-proche); }
+.task.due-lvl-urgent .task-row { border-inline-start-color: var(--due-urgent); }
+.task.due-lvl-depasse .task-row { border-inline-start-color: var(--due-depasse); }
 
 .action-due {
   display: inline-flex;
@@ -1478,7 +1480,7 @@ body,
 
 .privacy {
   margin: 0;
-  padding-left: 18px;
+  padding-inline-start: 18px;
   font-size: 13.5px;
   color: var(--ink-2);
   line-height: 1.55;
@@ -1495,4 +1497,84 @@ body,
 .privacy b {
   color: var(--ink);
   font-weight: 700;
+}
+
+
+/* --- Les dix teintes de la jauge ---
+   Un tour de roue chromatique en pastel : chaque centaine de points change de
+   teinte, et la dixième ramène à la première. */
+
+.teinte-0 { background: linear-gradient(105deg, #f0919c 0%, #b486cc 52%, #8b9de6 100%); }
+.teinte-1 { background: linear-gradient(105deg, #b486cc 0%, #8b9de6 52%, #7fc8d4 100%); }
+.teinte-2 { background: linear-gradient(105deg, #8b9de6 0%, #7fc8d4 52%, #8fd1a8 100%); }
+.teinte-3 { background: linear-gradient(105deg, #7fc8d4 0%, #8fd1a8 52%, #bcd98a 100%); }
+.teinte-4 { background: linear-gradient(105deg, #8fd1a8 0%, #bcd98a 52%, #ecd07a 100%); }
+.teinte-5 { background: linear-gradient(105deg, #bcd98a 0%, #ecd07a 52%, #f0b07e 100%); }
+.teinte-6 { background: linear-gradient(105deg, #ecd07a 0%, #f0b07e 52%, #f0919c 100%); }
+.teinte-7 { background: linear-gradient(105deg, #f0b07e 0%, #f0919c 52%, #e88ab5 100%); }
+.teinte-8 { background: linear-gradient(105deg, #f0919c 0%, #e88ab5 52%, #b486cc 100%); }
+.teinte-9 { background: linear-gradient(105deg, #e88ab5 0%, #b486cc 52%, #7d8fe0 100%); }
+
+
+/* --- Sens de lecture inversé (hébreu, arabe) ---
+   L'essentiel est déjà porté par les propriétés logiques ci-dessus ; il reste
+   les rotations, qui n'ont pas d'équivalent logique. */
+
+/* L'espacement des lettres casse les liaisons cursives de l'arabe, et les
+   capitales n'existent ni en hébreu ni en arabe. */
+[dir='rtl'] .tag {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+[dir='rtl'] .month-head::after,
+[dir='rtl'] .year-head::after {
+  transform: rotate(-45deg);
+}
+
+[dir='rtl'] .month.open .month-head::after,
+[dir='rtl'] .year.open .year-head::after {
+  transform: rotate(135deg);
+}
+
+[dir='rtl'] .codebox,
+[dir='rtl'] .code-repli span {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* Le compte de points et les pourcentages restent lus de gauche à droite. */
+[dir='rtl'] .stat-val,
+[dir='rtl'] .pts,
+[dir='rtl'] .mesure-tete b {
+  direction: ltr;
+}
+
+/* --- Choix de la langue --- */
+
+.langues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.langue {
+  flex: 1 1 auto;
+  min-width: 88px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--paper-deep);
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 10px 8px;
+  min-height: 42px;
+  cursor: pointer;
+}
+
+.langue.actif {
+  background: var(--grad);
+  border-color: transparent;
+  color: #fff;
 }

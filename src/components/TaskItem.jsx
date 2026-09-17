@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useT } from '../i18n/index.js';
 import { carriedFromLabel } from '../lib/visibility.js';
 import { buildDue, splitDue, dueFull, dueLevel } from '../lib/deadline.js';
 import DueBadge, { Chrono } from './DueBadge.jsx';
 
 export default function TaskItem({ task, month, currentMonth, store }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(task.text);
@@ -50,7 +52,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
           className="check"
           role="checkbox"
           aria-checked={task.done}
-          aria-label={task.done ? 'Décocher' : 'Cocher'}
+          aria-label={task.done ? t('taches.decocher') : t('taches.cocher')}
           onClick={() => store.toggleDone(task, currentMonth)}
         >
           <span className="check-box">{task.done ? '✓' : ''}</span>
@@ -66,7 +68,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
             />
             <div className="edit-actions">
               <button className="btn btn-small btn-accent" type="submit">
-                Enregistrer
+                {t('app.enregistrer')}
               </button>
               <button
                 className="btn btn-small"
@@ -76,7 +78,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
                   setEditing(false);
                 }}
               >
-                Annuler
+                {t('app.annuler')}
               </button>
             </div>
           </form>
@@ -97,11 +99,11 @@ export default function TaskItem({ task, month, currentMonth, store }) {
       {open && !editing && dueOpen && (
         <form className="due-form" onSubmit={saveDue}>
           <p className="due-form-title">
-            <Chrono size={15} /> Échéance
+            <Chrono size={15} /> {t('echeance.titre')}
           </p>
           <div className="due-fields">
             <label className="due-field">
-              <span className="field-label">Jour</span>
+              <span className="field-label">{t('echeance.jour')}</span>
               <input
                 className="field"
                 type="date"
@@ -110,7 +112,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
               />
             </label>
             <label className="due-field">
-              <span className="field-label">Heure (facultative)</span>
+              <span className="field-label">{t('echeance.heure')}</span>
               <input
                 className="field"
                 type="time"
@@ -120,16 +122,15 @@ export default function TaskItem({ task, month, currentMonth, store }) {
             </label>
           </div>
           <p className="due-note">
-            Sans heure, l’échéance tombe en fin de journée. Les rappels se
-            resserrent à mesure qu’elle approche.
+{t('echeance.aide')}
           </p>
           <div className="edit-actions">
             <button className="btn btn-small btn-urgent" type="submit" disabled={!date}>
-              Enregistrer
+              {t('app.enregistrer')}
             </button>
             {task.dueAt && (
               <button className="btn btn-small" type="button" onClick={clearDue}>
-                Retirer
+                {t('echeance.retirer')}
               </button>
             )}
             <button
@@ -137,14 +138,14 @@ export default function TaskItem({ task, month, currentMonth, store }) {
               type="button"
               onClick={() => setDueOpen(false)}
             >
-              Annuler
+              {t('app.annuler')}
             </button>
           </div>
         </form>
       )}
 
       {open && !editing && !dueOpen && (
-        <div className="actions" role="group" aria-label="Actions">
+        <div className="actions" role="group" aria-label={t('taches.actions')}>
           <button
             className="action"
             type="button"
@@ -153,7 +154,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
               setOpen(false);
             }}
           >
-            Modifier
+            {t('taches.modifier')}
           </button>
           <button
             className="action action-due"
@@ -161,14 +162,14 @@ export default function TaskItem({ task, month, currentMonth, store }) {
             onClick={() => setDueOpen(true)}
           >
             <Chrono />
-            {task.dueAt ? 'Échéance' : 'Ajouter une échéance'}
+            {task.dueAt ? t('echeance.titre') : t('echeance.ajouter')}
           </button>
           <button className="action action-danger" type="button" onClick={remove}>
-            Supprimer
+            {t('taches.supprimer')}
           </button>
           {task.dueAt && (
             <p className="due-recap">
-              Échéance : {dueFull(task.dueAt, task.dueHasTime)}
+              {t('echeance.recap', { quand: dueFull(task.dueAt, task.dueHasTime) })}
             </p>
           )}
         </div>

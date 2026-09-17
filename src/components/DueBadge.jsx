@@ -1,4 +1,5 @@
 import { dueLevel, dueLabel } from '../lib/deadline.js';
+import { useT } from '../i18n/index.js';
 
 /** Le chronomètre du logo d'échéance, en trait, aux couleurs héritées. */
 export function Chrono({ size = 13 }) {
@@ -26,6 +27,7 @@ export function Chrono({ size = 13 }) {
 
 /** Pastille « ⏱ dans 3 h », dont la couleur monte avec l'urgence. */
 export default function DueBadge({ dueAt, done, now = Date.now() }) {
+  const t = useT();
   const level = dueLevel(dueAt, now);
   if (!level) return null;
   // Une tâche faite ne réclame plus rien : la pastille se calme.
@@ -33,7 +35,7 @@ export default function DueBadge({ dueAt, done, now = Date.now() }) {
   return (
     <span className={`due due-${tone}`}>
       <Chrono />
-      {done ? 'fait' : dueLabel(dueAt, now)}
+      {done ? t('echeance.fait') : dueLabel(dueAt, now)}
     </span>
   );
 }

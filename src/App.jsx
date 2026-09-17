@@ -3,6 +3,7 @@ import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
 import { useAdmin } from './lib/admin.js';
+import { t, appliquerAuDocument } from './i18n/index.js';
 import { monthKey, tasksVisibleIn, headline } from './lib/visibility.js';
 import { pointsAvailable, affordable } from './lib/gamify.js';
 import Header from './components/Header.jsx';
@@ -20,11 +21,7 @@ function NotConfigured() {
   return (
     <div className="screen">
       <Header />
-      <p className="notice">
-        L'application n'est pas encore reliée à sa base de données. Les clés
-        Supabase doivent être fournies au moment de la compilation
-        (<code>VITE_SUPABASE_URL</code> et <code>VITE_SUPABASE_ANON_KEY</code>).
-      </p>
+      <p className="notice">{t('app.nonConfigure')}</p>
     </div>
   );
 }
@@ -41,7 +38,7 @@ export default function App() {
     return (
       <div className="screen">
         <Header />
-        <p className="notice">Un instant…</p>
+        <p className="notice">{t('app.instant')}</p>
       </div>
     );
   }
@@ -102,7 +99,7 @@ function Home({ account, currentMonth }) {
 
       {tab === 'liste' &&
         (store.loading && store.tasks.length === 0 ? (
-          <p className="notice">Chargement…</p>
+          <p className="notice">{t('app.chargement')}</p>
         ) : (
           <TaskList store={store} currentMonth={currentMonth} />
         ))}

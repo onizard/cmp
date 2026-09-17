@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 
 export default function Onboarding({ account }) {
+  const t = useT();
   // Un code reçu par lien arrive déjà rempli : il n'y a plus qu'à confirmer.
   const [code, setCode] = useState(account.invitation || '');
   const [busy, setBusy] = useState(false);
@@ -23,15 +25,13 @@ export default function Onboarding({ account }) {
     <div className="screen">
       <Header />
       <div className="panel">
-        <p className="lede">Rejoindre le foyer.</p>
+        <p className="lede">{t('foyer.rejoindre')}</p>
         <p className="soft-text">
-          {account.invitation
-            ? 'Ton invitation est reconnue. Il ne reste qu’à confirmer.'
-            : "Si l'autre personne t'a envoyé un code d'invitation, colle-le ici."}
+          {account.invitation ? t('foyer.inviteReconnue') : t('foyer.rejoindreAide')}
         </p>
         <form onSubmit={join}>
           <label className="field-label" htmlFor="code">
-            Code d'invitation
+            {t('foyer.code')}
           </label>
           <input
             id="code"
@@ -42,27 +42,27 @@ export default function Onboarding({ account }) {
             spellCheck="false"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="colle le code ici"
+            placeholder={t('foyer.codePlaceholder')}
           />
           {account.error && <p className="error">{account.error}</p>}
           <button className="btn btn-accent" type="submit" disabled={busy}>
-            {busy ? 'Un instant…' : 'Rejoindre'}
+            {busy ? t('app.instant') : t('foyer.bouton')}
           </button>
         </form>
       </div>
 
       <div className="panel">
         <p className="soft-text">
-          Tu installes la maison pour la première fois ?
+          {t('foyer.premiereFois')}
         </p>
         <button className="btn" type="button" onClick={create} disabled={busy}>
-          Créer un nouveau foyer
+          {t('foyer.creer')}
         </button>
       </div>
 
       <p className="signout-line">
         <button className="link" type="button" onClick={account.signOut}>
-          Se déconnecter
+          {t('auth.deconnexion')}
         </button>
       </p>
     </div>

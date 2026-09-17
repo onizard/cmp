@@ -5,6 +5,7 @@
 // réinstallation, rotation d'endpoint par le navigateur). On le recrée alors
 // en silence au lieu de repasser l'option sur « off ».
 import { supabase } from '../supabaseClient.js';
+import { t } from '../i18n/index.js';
 
 const VAPID = import.meta.env.VITE_VAPID_PUBLIC || '';
 
@@ -132,17 +133,17 @@ async function subscribe(reg) {
 /** Demande l'autorisation, s'abonne, et enregistre côté serveur. */
 export async function enablePush(userId, householdId) {
   if (!pushSupported()) {
-    throw new Error("Ce navigateur ne gère pas les notifications.");
+    throw new Error(t('notifications.nonGere'));
   }
   if (!VAPID) {
-    throw new Error('Cette version de l’application n’a pas la clé de notification.');
+    throw new Error(t('notifications.sansCle'));
   }
   const perm = await Notification.requestPermission();
   if (perm !== 'granted') {
-    throw new Error('Notifications refusées. Autorise-les dans les réglages du téléphone.');
+    throw new Error(t('notifications.refusees'));
   }
   const reg = await registration();
-  if (!reg) throw new Error("L’application n’est pas encore prête, réessaie dans un instant.");
+  if (!reg) throw new Error(t('notifications.pasPrete'));
   const sub = await subscribe(reg);
   await store(sub, userId, householdId, wantsEvening());
   write(WANT, true);

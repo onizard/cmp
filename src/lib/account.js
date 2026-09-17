@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase, isConfigured } from '../supabaseClient.js';
+import { t } from '../i18n/index.js';
 import {
   capturerInvitation,
   invitationEnAttente,
@@ -122,7 +123,7 @@ export function useAccount() {
         }
       }
       // Le code ne mène nulle part : on laisse l'écran d'accueil reprendre la main.
-      setError("Ce code d'invitation ne mène à aucun foyer.");
+      setError(t('foyer.codeSansFoyer'));
     }
 
     setHousehold(null);
@@ -144,7 +145,7 @@ export function useAccount() {
     if (err) {
       setError(
         /invalid login/i.test(err.message)
-          ? 'E-mail ou mot de passe incorrect.'
+          ? t('auth.identifiantsFaux')
           : err.message,
       );
       return false;
@@ -156,7 +157,7 @@ export function useAccount() {
   const signUp = useCallback(async (email, password) => {
     setError(null);
     if (password.length < 8) {
-      setError('Le mot de passe doit faire au moins 8 caractères.');
+      setError(t('auth.motDePasseCourt'));
       return false;
     }
     const { data, error: err } = await supabase.auth.signUp({
@@ -166,7 +167,7 @@ export function useAccount() {
     if (err) {
       setError(
         /already registered/i.test(err.message)
-          ? 'Un compte existe déjà avec cet e-mail. Connecte-toi.'
+          ? t('auth.dejaInscrit')
           : err.message,
       );
       return false;
@@ -174,7 +175,7 @@ export function useAccount() {
     // Si le serveur exige encore une confirmation, aucune session n'est ouverte.
     if (!data.session) {
       setError(
-        'Compte créé. Vérifie tes mails pour confirmer, puis connecte-toi.',
+        t('auth.confirmationRequise'),
       );
       return false;
     }
@@ -199,7 +200,7 @@ export function useAccount() {
   const setPassword = useCallback(async (password) => {
     setError(null);
     if (password.length < 8) {
-      setError('Le mot de passe doit faire au moins 8 caractères.');
+      setError(t('auth.motDePasseCourt'));
       return false;
     }
     const { error: err } = await supabase.auth.updateUser({ password });
@@ -242,7 +243,7 @@ export function useAccount() {
       setError(null);
       const clean = code.trim();
       if (!UUID_RE.test(clean)) {
-        setError("Ce code d'invitation n'est pas valide.");
+        setError(t('foyer.codeInvalide'));
         return;
       }
       const { error: err } = await supabase
@@ -251,7 +252,7 @@ export function useAccount() {
       if (err) {
         setError(
           err.code === '23503'
-            ? "Aucun foyer ne correspond à ce code."
+            ? t('foyer.codeInconnu')
             : err.message,
         );
         return;

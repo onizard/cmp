@@ -1,10 +1,12 @@
 import { useInstall } from '../lib/install.js';
+import { useT } from '../i18n/index.js';
 
 /**
  * Explique comment poser l'application sur l'écran d'accueil.
  * Ne s'affiche jamais quand c'est déjà fait.
  */
 export default function InstallHint() {
+  const t = useT();
   const { mode, install, navigateur, hote } = useInstall();
 
   if (mode === 'installed' || mode === 'aucun') return null;
@@ -12,13 +14,10 @@ export default function InstallHint() {
   if (mode === 'bouton') {
     return (
       <div className="install">
-        <p className="install-title">Garde-la sous la main</p>
-        <p className="install-text">
-          Installe l’application sur ton écran d’accueil : elle s’ouvre en
-          plein écran et peut t’envoyer des notifications.
-        </p>
+        <p className="install-title">{t('installation.titre')}</p>
+        <p className="install-text">{t('installation.texte')}</p>
         <button className="btn btn-accent btn-block" type="button" onClick={install}>
-          Installer l’application
+          {t('installation.bouton')}
         </button>
       </div>
     );
@@ -30,22 +29,16 @@ export default function InstallHint() {
   if (navigateur === 'integre') {
     return (
       <div className="install install-blocked">
-        <p className="install-title">Ouvre d’abord cette page dans Safari</p>
+        <p className="install-title">{t('installation.bloqueTitre')}</p>
         <p className="install-text">
-          Tu es dans le navigateur intégré{hote ? ` à ${hote}` : ' de ton application'},
-          qui ne sait pas installer d’application.
+          {t('installation.bloqueTexte', {
+            hote: hote ? t('installation.bloqueA', { hote }) : t('installation.bloqueSansNom'),
+          })}
         </p>
         <ol className="install-steps">
-          <li>
-            Touche <b>•••</b> (ou l’icône de partage) en bas à droite de
-            l’écran.
-          </li>
-          <li>
-            Choisis <b>Ouvrir dans Safari</b>.
-          </li>
-          <li>
-            La marche à suivre s’affichera alors ici même.
-          </li>
+          <li>{t('installation.bloque1')}</li>
+          <li>{t('installation.bloque2')}</li>
+          <li>{t('installation.bloque3')}</li>
         </ol>
       </div>
     );
@@ -54,40 +47,23 @@ export default function InstallHint() {
   // iOS : aucun bouton n'est possible, Apple ne l'autorise pas.
   return (
     <div className="install">
-      <p className="install-title">Sur iPhone, en deux gestes</p>
+      <p className="install-title">{t('installation.iosTitre')}</p>
       {navigateur === 'safari' ? (
         <ol className="install-steps">
-          <li>
-            Touche <b>Partager</b> en bas de l’écran (le carré avec la flèche
-            vers le haut).
-          </li>
-          <li>
-            Fais défiler, puis choisis <b>Sur l’écran d’accueil</b>.
-          </li>
-          <li>
-            Touche <b>Ajouter</b> en haut à droite.
-          </li>
+          <li>{t('installation.iosPartager')}</li>
+          <li>{t('installation.iosEcran')}</li>
+          <li>{t('installation.iosAjouter')}</li>
         </ol>
       ) : (
         <>
-          <p className="install-text">
-            Ce navigateur ne sait pas toujours le faire. Le plus sûr :
-            rouvre cette page dans <b>Safari</b>.
-          </p>
+          <p className="install-text">{t('installation.iosAutre')}</p>
           <ol className="install-steps">
-            <li>
-              Dans Safari, touche <b>Partager</b> en bas de l’écran.
-            </li>
-            <li>
-              Choisis <b>Sur l’écran d’accueil</b>, puis <b>Ajouter</b>.
-            </li>
+            <li>{t('installation.iosPartager')}</li>
+            <li>{t('installation.iosEcran')}</li>
           </ol>
         </>
       )}
-      <p className="install-text">
-        Il n’y a rien à télécharger : l’icône se pose directement sur l’écran
-        d’accueil.
-      </p>
+      <p className="install-text">{t('installation.iosRien')}</p>
     </div>
   );
 }

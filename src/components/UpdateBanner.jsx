@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { initUpdates, applyUpdate } from '../lib/updates.js';
+import { useT } from '../i18n/index.js';
 
 export default function UpdateBanner() {
   const [ready, setReady] = useState(false);
+  const t = useT();
 
   useEffect(() => {
     try {
@@ -16,9 +18,9 @@ export default function UpdateBanner() {
 
   return (
     <div className="update-bar" role="status">
-      <span>Une nouvelle version est prête.</span>
+      <span>{t('maj.prete')}</span>
       <button type="button" onClick={applyUpdate}>
-        Mettre à jour
+        {t('maj.bouton')}
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { part, nombre, courbe, total } from '../lib/stats.js';
+import { useT } from '../i18n/index.js';
 
 function Tuile({ valeur, libelle, detail }) {
   return (
@@ -29,30 +30,31 @@ function Jauge({ libelle, n, total: t, aide }) {
 
 // Inscriptions par jour : une seule série, donc pas de légende — le titre la nomme.
 function Courbe({ points }) {
+  const t = useT();
   const W = 300;
   const H = 64;
   const { ligne, aire, max, n } = courbe(points, W, H);
   if (!n) return null;
   return (
     <section className="setgroup">
-      <h2 className="setlabel">Inscriptions · 30 derniers jours</h2>
+      <h2 className="setlabel">{t('admin.courbe')}</h2>
       <div className="setcard">
         <p className="courbe-tete">
-          <b>{nombre(total(points))}</b> comptes créés · pointe à {max} par jour
+          {t('admin.courbeTete', { n: nombre(total(points)), max })}
         </p>
         <svg
           className="courbe"
           viewBox={`0 0 ${W} ${H}`}
           preserveAspectRatio="none"
           role="img"
-          aria-label={`Inscriptions quotidiennes, ${total(points)} au total`}
+          aria-label={t('admin.courbe')}
         >
           <polygon points={aire} className="courbe-aire" />
           <polyline points={ligne} className="courbe-ligne" />
         </svg>
         <p className="courbe-pied">
-          <span>il y a 30 j</span>
-          <span>aujourd’hui</span>
+          <span>{t('admin.ilYa30')}</span>
+          <span>{t('admin.aujourdhui')}</span>
         </p>
       </div>
     </section>
@@ -60,6 +62,7 @@ function Courbe({ points }) {
 }
 
 export default function AdminView({ admin }) {
+  const t = useT();
   const { stats, loading, error, refresh } = admin;
 
   useEffect(() => {
@@ -69,7 +72,7 @@ export default function AdminView({ admin }) {
   if (error) {
     return (
       <main className="account">
-        <p className="brain-lede">Tableau de bord</p>
+        <p className="brain-lede">{t('admin.titre')}</p>
         <p className="error">{error}</p>
       </main>
     );
@@ -78,8 +81,8 @@ export default function AdminView({ admin }) {
   if (!stats) {
     return (
       <main className="account">
-        <p className="brain-lede">Tableau de bord</p>
-        <p className="notice">{loading ? 'Un instant…' : 'Rien à afficher.'}</p>
+        <p className="brain-lede">{t('admin.titre')}</p>
+        <p className="notice">{loading ? t('app.instant') : t('admin.rien')}</p>
       </main>
     );
   }
@@ -88,41 +91,41 @@ export default function AdminView({ admin }) {
 
   return (
     <main className="account">
-      <p className="brain-lede">Tableau de bord</p>
+      <p className="brain-lede">{t('admin.titre')}</p>
 
       <section className="setgroup">
-        <h2 className="setlabel">Les gens</h2>
+        <h2 className="setlabel">{t('admin.gens')}</h2>
         <div className="stats">
-          <Tuile valeur={s.comptes} libelle="comptes" detail={`+${s.comptes_7j} cette semaine`} />
-          <Tuile valeur={s.actifs_7j} libelle="actifs 7 j" detail={`${s.actifs_30j} sur 30 j`} />
-          <Tuile valeur={s.foyers} libelle="foyers" detail={`${s.foyers_a_deux} à deux`} />
-          <Tuile valeur={s.notifs} libelle="notifications" detail="appareils abonnés" />
+          <Tuile valeur={s.comptes} libelle={t('admin.comptes')} detail={t('admin.cetteSemaine', { n: s.comptes_7j })} />
+          <Tuile valeur={s.actifs_7j} libelle={t('admin.actifs7')} detail={t('admin.sur30', { n: s.actifs_30j })} />
+          <Tuile valeur={s.foyers} libelle={t('admin.foyers')} detail={t('admin.aDeux', { n: s.foyers_a_deux })} />
+          <Tuile valeur={s.notifs} libelle={t('admin.notifs')} detail={t('admin.appareils')} />
         </div>
       </section>
 
       <section className="setgroup">
-        <h2 className="setlabel">L’usage</h2>
+        <h2 className="setlabel">{t('admin.usage')}</h2>
         <div className="setcard">
           <Jauge
-            libelle="Comptes qui ont créé une tâche"
+            libelle={t('admin.activation')}
             n={s.actives}
             total={s.comptes}
-            aide="Le vrai taux d’activation : combien vont au-delà de l’inscription."
+            aide={t('admin.activationAide')}
           />
           <Jauge
-            libelle="Comptes revenus dans les 7 jours"
+            libelle={t('admin.retour')}
             n={s.actifs_7j}
             total={s.comptes}
-            aide="Ce chiffre-là dit si l’application tient dans la durée."
+            aide={t('admin.retourAide')}
           />
           <Jauge
-            libelle="Foyers à deux"
+            libelle={t('admin.foyersADeux')}
             n={s.foyers_a_deux}
             total={s.foyers}
-            aide="Seul, l’intérêt de l’application s’effondre."
+            aide={t('admin.foyersADeuxAide')}
           />
           <Jauge
-            libelle="Foyers actifs sur 30 jours"
+            libelle={t('admin.foyersActifs')}
             n={s.foyers_actifs}
             total={s.foyers}
           />
@@ -130,24 +133,22 @@ export default function AdminView({ admin }) {
       </section>
 
       <section className="setgroup">
-        <h2 className="setlabel">Ce qu’ils en font</h2>
+        <h2 className="setlabel">{t('admin.quoi')}</h2>
         <div className="stats">
-          <Tuile valeur={s.taches} libelle="tâches" detail={`+${s.taches_7j} cette semaine`} />
-          <Tuile valeur={s.cochees_7j} libelle="cochées 7 j" />
-          <Tuile valeur={s.echeances} libelle="échéances" />
-          <Tuile valeur={s.recompenses} libelle="récompenses prises" />
+          <Tuile valeur={s.taches} libelle={t('admin.taches')} detail={t('admin.cetteSemaine', { n: s.taches_7j })} />
+          <Tuile valeur={s.cochees_7j} libelle={t('admin.cochees')} />
+          <Tuile valeur={s.echeances} libelle={t('admin.echeances')} />
+          <Tuile valeur={s.recompenses} libelle={t('admin.recompenses')} />
         </div>
       </section>
 
       <Courbe points={s.courbe} />
 
       <button className="btn btn-block" type="button" onClick={refresh} disabled={loading}>
-        {loading ? 'Actualisation…' : 'Actualiser'}
+        {loading ? t('admin.actualisation') : t('admin.actualiser')}
       </button>
 
-      <p className="miniquit">
-        Chiffres agrégés. Aucune tâche, aucun contenu de foyer n’est lisible ici.
-      </p>
+      <p className="miniquit">{t('admin.agrege')}</p>
     </main>
   );
 }

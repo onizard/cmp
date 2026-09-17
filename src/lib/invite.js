@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Invitation par lien : le code du foyer voyage dans l'adresse.
 //
 // Le lien mène à /?foyer=<code>. À l'ouverture, on met le code de côté et on
@@ -35,13 +36,13 @@ export function lienDInvitation(origine, code) {
 export function messageDInvitation(prenom) {
   const qui = String(prenom || '').trim();
   return qui
-    ? `${qui} t’invite à partager la charge mentale. Rejoins notre foyer :`
-    : 'Rejoins notre foyer sur « charge mentale partagée » :';
+    ? t('partage.messageInvitation', { prenom: qui })
+    : t('partage.messageInvitationNeutre');
 }
 
 /** Le message quand on fait simplement découvrir l'application. */
 export function messageDecouverte() {
-  return 'Charge mentale partagée — la liste des choses à porter, à deux.';
+  return t('partage.messageDecouverte');
 }
 
 const lire = () => {

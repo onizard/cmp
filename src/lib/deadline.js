@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Échéances : à quel point c'est urgent, et comment le dire.
 //
 // Quatre niveaux, du plus calme au plus pressant. Ils pilotent à la fois la
@@ -13,15 +14,15 @@ const pad = (n) => String(n).padStart(2, '0');
 
 const at = (dueAt) => {
   if (!dueAt) return null;
-  const t = new Date(dueAt).getTime();
-  return Number.isNaN(t) ? null : t;
+  const ms = new Date(dueAt).getTime();
+  return Number.isNaN(ms) ? null : ms;
 };
 
 /** Niveau d'urgence, ou null s'il n'y a pas d'échéance. */
 export function dueLevel(dueAt, now = Date.now()) {
-  const t = at(dueAt);
-  if (t === null) return null;
-  const left = t - now;
+  const instant = at(dueAt);
+  if (instant === null) return null;
+  const left = instant - now;
   if (left < 0) return 'depasse';
   if (left <= 6 * HOUR) return 'urgent';
   if (left <= 48 * HOUR) return 'proche';
@@ -30,34 +31,38 @@ export function dueLevel(dueAt, now = Date.now()) {
 
 /** Temps restant dit court, pour la pastille : « dans 3 h », « en retard de 2 j ». */
 export function dueLabel(dueAt, now = Date.now()) {
-  const t = at(dueAt);
-  if (t === null) return '';
-  const diff = t - now;
+  const instant = at(dueAt);
+  if (instant === null) return '';
+  const diff = instant - now;
   const late = diff < 0;
   const abs = Math.abs(diff);
 
-  if (abs < 60000) return late ? 'à l’instant' : 'maintenant';
+  if (abs < 60000) return late ? t('echeance.alInstant') : t('echeance.maintenant');
   if (abs < HOUR) {
-    const m = Math.floor(abs / 60000);
-    return late ? `en retard de ${m} min` : `dans ${m} min`;
+    const n = Math.floor(abs / 60000);
+    return t(late ? 'echeance.retardMin' : 'echeance.dansMin', { n });
   }
   if (abs < DAY) {
-    const h = Math.floor(abs / HOUR);
-    return late ? `en retard de ${h} h` : `dans ${h} h`;
+    const n = Math.floor(abs / HOUR);
+    return t(late ? 'echeance.retardH' : 'echeance.dansH', { n });
   }
   const j = Math.floor(abs / DAY);
-  if (j < 30) return late ? `en retard de ${j} j` : `dans ${j} j`;
-  const d = new Date(t);
+  if (j < 30) return t(late ? 'echeance.retardJ' : 'echeance.dansJ', { n: j });
+  const d = new Date(instant);
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
 }
 
 /** L'échéance en toutes lettres, pour le panneau de la tâche. */
 export function dueFull(dueAt, hasTime = true) {
-  const t = at(dueAt);
-  if (t === null) return '';
-  const d = new Date(t);
+  const instant = at(dueAt);
+  if (instant === null) return '';
+  const d = new Date(instant);
   const jour = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-  return hasTime ? `${jour} à ${pad(d.getHours())} h ${pad(d.getMinutes())}` : jour;
+  if (!hasTime) return jour;
+  return t('echeance.a', {
+    jour,
+    heure: `${pad(d.getHours())}:${pad(d.getMinutes())}`,
+  });
 }
 
 /**
@@ -75,9 +80,9 @@ export function buildDue(date, time) {
 
 /** Les valeurs à remettre dans les champs date et heure. */
 export function splitDue(dueAt, hasTime = true) {
-  const t = at(dueAt);
-  if (t === null) return { date: '', time: '' };
-  const d = new Date(t);
+  const instant = at(dueAt);
+  if (instant === null) return { date: '', time: '' };
+  const d = new Date(instant);
   const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   return { date, time: hasTime ? `${pad(d.getHours())}:${pad(d.getMinutes())}` : '' };
 }
