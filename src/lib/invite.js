@@ -39,6 +39,11 @@ export function messageDInvitation(prenom) {
     : 'Rejoins notre foyer sur « charge mentale partagée » :';
 }
 
+/** Le message quand on fait simplement découvrir l'application. */
+export function messageDecouverte() {
+  return 'Charge mentale partagée — la liste des choses à porter, à deux.';
+}
+
 const lire = () => {
   try {
     return localStorage.getItem(CLE);

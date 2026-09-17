@@ -3,6 +3,7 @@ import {
   codeDeLUrl,
   lienDInvitation,
   messageDInvitation,
+  messageDecouverte,
 } from './invite.js';
 
 const CODE = '980b1023-47e4-48af-8094-7fd863abe45b';
@@ -59,5 +60,10 @@ describe('message', () => {
   it('reste neutre sans prénom', () => {
     expect(messageDInvitation('')).toMatch(/^Rejoins notre foyer/);
     expect(messageDInvitation(null)).toMatch(/^Rejoins notre foyer/);
+  });
+
+  it('le message de découverte ne parle pas de foyer', () => {
+    expect(messageDecouverte()).not.toMatch(/foyer/i);
+    expect(messageDecouverte()).toMatch(/charge mentale/i);
   });
 });

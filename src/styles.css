@@ -816,6 +816,10 @@ body,
   margin-top: 4px;
 }
 
+.btn-block + .btn-block {
+  margin-top: 9px;
+}
+
 .miniquit {
   text-align: center;
   color: var(--ink-3);
@@ -1418,31 +1422,22 @@ body,
 
 /* --- Partage de l'invitation --- */
 
-.canaux {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0;
+.qr-lien {
+  text-align: center;
+  margin: 14px 0 0;
 }
 
-.canal {
-  flex: 1 1 0;
-  min-width: 72px;
-  text-align: center;
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 13.5px;
-  color: var(--ink);
-  background: var(--paper-deep);
+.qr-lien button {
+  background: none;
   border: none;
-  border-radius: 12px;
-  padding: 11px 6px;
-  min-height: 42px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .qr-foyer {
@@ -1455,7 +1450,7 @@ body,
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 12px;
-  margin: 0 auto 10px;
+  margin: 0 auto;
   width: min(230px, 70%);
 }
 

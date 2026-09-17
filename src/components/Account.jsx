@@ -228,7 +228,7 @@ export default function Account({ account }) {
       </section>
 
       <section className="setgroup">
-        <h2 className="setlabel">Le foyer</h2>
+        <h2 className="setlabel">Partager</h2>
         <div className="setcard">
           <ShareInvite code={code} prenom={account.displayName} />
         </div>
@@ -295,7 +295,7 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">charge mentale partagée · v3.6</p>
+      <p className="ver">charge mentale partagée · v3.7</p>
     </main>
   );
 }
