@@ -1575,6 +1575,9 @@ body,
 }
 
 .langue.actif {
+  /* Seule sur sa ligne, toute la largeur : sa place ne depend pas du nombre
+     de langues ni de la longueur des noms. */
+  flex: 1 0 100%;
   background: var(--grad);
   border-color: transparent;
   color: #fff;
