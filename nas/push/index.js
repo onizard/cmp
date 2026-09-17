@@ -37,6 +37,8 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
+const VERSION = 'v3.0';
+
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
@@ -163,14 +165,33 @@ setInterval(async () => {
   }
 }, 60_000);
 
+// Une seule connexion à la fois. Sans ce garde-fou, chaque erreur programmait
+// sa propre reprise : après une coupure, plusieurs clients écoutaient « cmp_push »
+// en parallèle et chaque notification partait en double.
+let retryTimer = null;
+
+function scheduleRetry(why) {
+  if (retryTimer) return;
+  log(why, '— nouvel essai dans 5 s');
+  retryTimer = setTimeout(() => {
+    retryTimer = null;
+    start();
+  }, 5000);
+}
+
+function drop(c) {
+  if (client === c) client = null;
+  c.removeAllListeners();
+  c.end().catch(() => {});
+}
+
 async function connect() {
-  client = new Client(cfg);
-  client.on('error', (e) => {
-    log('connexion perdue :', e.message);
-    client = null;
-    setTimeout(start, 5000);
+  const c = new Client(cfg);
+  c.on('error', (e) => {
+    drop(c);
+    scheduleRetry(`connexion perdue : ${e.message}`);
   });
-  client.on('notification', (msg) => {
+  c.on('notification', (msg) => {
     if (msg.channel !== 'cmp_push') return;
     let ev;
     try {
@@ -178,21 +199,22 @@ async function connect() {
     } catch {
       return;
     }
-    handleEvent(ev).catch((e) => log('traitement événement :', e.message));
+    handleEvent(ev).catch((err) => log('traitement événement :', err.message));
   });
-  await client.connect();
-  await client.query('LISTEN cmp_push');
+  await c.connect();
+  await c.query('LISTEN cmp_push');
+  client = c;
   log('connecté à Postgres, en écoute sur « cmp_push »');
 }
 
 async function start() {
+  if (client) return; // déjà en écoute
   try {
     await connect();
   } catch (e) {
-    log('connexion impossible :', e.message, '— nouvel essai dans 5 s');
-    client = null;
-    setTimeout(start, 5000);
+    scheduleRetry(`connexion impossible : ${e.message}`);
   }
 }
 
+log(`service push ${VERSION} — rappels à ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ})`);
 start();

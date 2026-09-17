@@ -12670,6 +12670,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
+var VERSION = "v3.0";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -12773,14 +12774,28 @@ setInterval(async () => {
     log(`rappel du ${moment} : \xE9chec`, e.message);
   }
 }, 6e4);
-async function connect() {
-  client = new Client(cfg);
-  client.on("error", (e) => {
-    log("connexion perdue :", e.message);
-    client = null;
-    setTimeout(start, 5e3);
+var retryTimer = null;
+function scheduleRetry(why) {
+  if (retryTimer) return;
+  log(why, "\u2014 nouvel essai dans 5 s");
+  retryTimer = setTimeout(() => {
+    retryTimer = null;
+    start();
+  }, 5e3);
+}
+function drop(c) {
+  if (client === c) client = null;
+  c.removeAllListeners();
+  c.end().catch(() => {
   });
-  client.on("notification", (msg) => {
+}
+async function connect() {
+  const c = new Client(cfg);
+  c.on("error", (e) => {
+    drop(c);
+    scheduleRetry(`connexion perdue : ${e.message}`);
+  });
+  c.on("notification", (msg) => {
     if (msg.channel !== "cmp_push") return;
     let ev;
     try {
@@ -12788,21 +12803,22 @@ async function connect() {
     } catch {
       return;
     }
-    handleEvent(ev).catch((e) => log("traitement \xE9v\xE9nement :", e.message));
+    handleEvent(ev).catch((err) => log("traitement \xE9v\xE9nement :", err.message));
   });
-  await client.connect();
-  await client.query("LISTEN cmp_push");
+  await c.connect();
+  await c.query("LISTEN cmp_push");
+  client = c;
   log("connect\xE9 \xE0 Postgres, en \xE9coute sur \xAB cmp_push \xBB");
 }
 async function start() {
+  if (client) return;
   try {
     await connect();
   } catch (e) {
-    log("connexion impossible :", e.message, "\u2014 nouvel essai dans 5 s");
-    client = null;
-    setTimeout(start, 5e3);
+    scheduleRetry(`connexion impossible : ${e.message}`);
   }
 }
+log(`service push ${VERSION} \u2014 rappels \xE0 ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ})`);
 start();
 /*! Bundled license information:
 
