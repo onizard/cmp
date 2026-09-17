@@ -30,6 +30,9 @@ export default function Account({ account }) {
   const touched = useRef(false);
   const dirty = name.trim() !== (account.displayName || '').trim();
   const [confirmLeave, setConfirmLeave] = useState(false);
+  const [zoneRouge, setZoneRouge] = useState(false);
+  const [suppressionEnCours, setSuppression] = useState(false);
+  const [suppressionErreur, setSuppressionErreur] = useState(null);
 
   // On part du choix mémorisé : l'interrupteur affiche tout de suite le bon
   // état, même si le navigateur met un instant à retrouver son abonnement.
@@ -301,7 +304,41 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">{t('app.titre')} · v4.8</p>
+      <section className="danger">
+        {zoneRouge ? (
+          <>
+            <h2 className="danger-titre">{t('suppression.titre')}</h2>
+            <p className="danger-texte">{t('suppression.avertissement')}</p>
+            {suppressionErreur && <p className="error">{suppressionErreur}</p>}
+            <button
+              className="btn btn-block btn-danger"
+              type="button"
+              disabled={suppressionEnCours}
+              onClick={supprimer}
+            >
+              {suppressionEnCours ? t('app.instant') : t('suppression.oui')}
+            </button>
+            <button
+              className="btn btn-block"
+              type="button"
+              disabled={suppressionEnCours}
+              onClick={() => setZoneRouge(false)}
+            >
+              {t('suppression.non')}
+            </button>
+          </>
+        ) : (
+          <button
+            className="danger-lien"
+            type="button"
+            onClick={() => setZoneRouge(true)}
+          >
+            {t('suppression.bouton')}
+          </button>
+        )}
+      </section>
+
+      <p className="ver">{t('app.titre')} · v4.9</p>
     </main>
   );
 }

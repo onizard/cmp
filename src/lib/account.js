@@ -334,6 +334,31 @@ export function useAccount() {
     [session, household],
   );
 
+  /**
+   * Supprime définitivement son propre compte.
+   * La fonction serveur ne prend aucun paramètre : elle ne peut agir que sur
+   * l'appelant. Les tâches d'un foyer partagé restent à l'autre.
+   */
+  const supprimerLeCompte = useCallback(async () => {
+    setError(null);
+    if (!supabase) return false;
+    const { error: err } = await supabase.rpc('cmp_supprimer_mon_compte');
+    if (err) {
+      setError(err.message);
+      return false;
+    }
+    // Plus rien ne doit survivre sur l'appareil non plus.
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith('cmp'))
+        .forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* ignore */
+    }
+    await supabase.auth.signOut();
+    return true;
+  }, []);
+
   const leaveHousehold = useCallback(async () => {
     if (!supabase || !session || !household) return;
     await supabase
@@ -367,5 +392,6 @@ export function useAccount() {
     joinHousehold,
     updateDisplayName,
     leaveHousehold,
+    supprimerLeCompte,
   };
 }

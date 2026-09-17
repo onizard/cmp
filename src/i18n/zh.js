@@ -69,6 +69,15 @@ export default {
     utiliseLe: '{quand} 使用',
   },
 
+  suppression: {
+    titre: '删除我的账户',
+    bouton: '永久删除我的账户',
+    avertissement: '你的账户、积分、券和设置都会消失。如果家庭里只有你一个人，任务也会一起删除；如果有两个人，任务会留给对方。立即生效，无法撤销。',
+    oui: '是的，全部删除',
+    non: '我点错了',
+    erreur: '删除没有成功。',
+  },
+
   compte: {
     titre: '我的账户', profil: '资料', prenom: '名字', prenomPlaceholder: '你的名字',
     email: '邮箱', prenomErreur: '名字未能保存。',

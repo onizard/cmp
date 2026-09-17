@@ -69,6 +69,15 @@ export default {
     utiliseLe: 'usato il {quand}',
   },
 
+  suppression: {
+    titre: 'Eliminare il mio account',
+    bouton: 'Eliminare definitivamente il mio account',
+    avertissement: 'Il tuo account, i tuoi punti, i tuoi buoni e le tue impostazioni spariscono. Se sei solo nella tua casa, se ne vanno anche i compiti. Se siete in due, restano all’altro. È immediato e senza ritorno.',
+    oui: 'Sì, cancellare tutto',
+    non: 'Mi sono sbagliato',
+    erreur: 'L’eliminazione non è andata a buon fine.',
+  },
+
   compte: {
     titre: 'Account', profil: 'Profilo', prenom: 'Nome', prenomPlaceholder: 'Il tuo nome',
     email: 'Email', prenomErreur: 'Non è stato possibile salvare il nome.',

@@ -69,6 +69,15 @@ export default {
     utiliseLe: 'استُخدمت في {quand}',
   },
 
+  suppression: {
+    titre: 'حذف حسابي',
+    bouton: 'حذف حسابي نهائيًا',
+    avertissement: 'يختفي حسابك ونقاطك وقسائمك وإعداداتك. إن كنت وحدك في بيتك، تذهب مهامه معك. وإن كنتما اثنين، تبقى للآخر. فوري ولا رجعة فيه.',
+    oui: 'نعم، احذف كل شيء',
+    non: 'ضغطت بالخطأ',
+    erreur: 'لم يكتمل الحذف.',
+  },
+
   compte: {
     titre: 'حسابي', profil: 'الملف', prenom: 'الاسم', prenomPlaceholder: 'اسمك',
     email: 'البريد', prenomErreur: 'تعذّر حفظ الاسم.',

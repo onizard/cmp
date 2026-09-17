@@ -69,6 +69,15 @@ export default {
     utiliseLe: 'eingelöst am {quand}',
   },
 
+  suppression: {
+    titre: 'Mein Konto löschen',
+    bouton: 'Mein Konto endgültig löschen',
+    avertissement: 'Dein Konto, deine Punkte, deine Gutscheine und Einstellungen verschwinden. Bist du allein im Haushalt, gehen seine Aufgaben mit. Seid ihr zu zweit, bleiben sie der anderen Person. Sofort und endgültig.',
+    oui: 'Ja, alles löschen',
+    non: 'Ich habe mich vertan',
+    erreur: 'Das Löschen ist fehlgeschlagen.',
+  },
+
   compte: {
     titre: 'Konto', profil: 'Profil', prenom: 'Vorname', prenomPlaceholder: 'Dein Vorname',
     email: 'E-Mail', prenomErreur: 'Der Vorname konnte nicht gespeichert werden.',

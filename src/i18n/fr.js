@@ -156,6 +156,15 @@ export default {
     utiliseLe: 'utilisé le {quand}',
   },
 
+  suppression: {
+    titre: 'Supprimer mon compte',
+    bouton: 'Supprimer définitivement mon compte',
+    avertissement: 'Ton compte, tes points, tes bons et tes réglages disparaissent. Si tu es seul·e dans ton foyer, ses tâches partent avec. Si vous êtes deux, elles restent à l’autre. C’est immédiat et sans retour.',
+    oui: 'Oui, tout supprimer',
+    non: 'Je me suis trompé·e',
+    erreur: 'La suppression n’a pas abouti.',
+  },
+
   compte: {
     titre: 'Mon compte',
     profil: 'Profil',

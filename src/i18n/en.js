@@ -69,6 +69,15 @@ export default {
     utiliseLe: 'used {quand}',
   },
 
+  suppression: {
+    titre: 'Delete my account',
+    bouton: 'Permanently delete my account',
+    avertissement: 'Your account, points, vouchers and settings disappear. If you are alone in your household, its tasks go too. If there are two of you, they stay with the other. Immediate and final.',
+    oui: 'Yes, delete everything',
+    non: 'I clicked by mistake',
+    erreur: 'The deletion did not go through.',
+  },
+
   compte: {
     titre: 'Account', profil: 'Profile', prenom: 'First name', prenomPlaceholder: 'Your first name',
     email: 'Email', prenomErreur: 'The first name could not be saved.',
