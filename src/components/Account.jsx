@@ -147,8 +147,6 @@ export default function Account({ account }) {
         </div>
       </section>
 
-      <LangPicker />
-
       <section className="setgroup">
         <h2 className="setlabel">{t('compte.motDePasse')}</h2>
         <div className="setcard">
@@ -240,6 +238,8 @@ export default function Account({ account }) {
         </div>
       </section>
 
+      <LangPicker />
+
       <button className="btn btn-block" type="button" onClick={account.signOut}>
         {t('auth.deconnexion')}
       </button>
@@ -270,7 +270,7 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">{t('app.titre')} · v3.9</p>
+      <p className="ver">{t('app.titre')} · v4.0</p>
     </main>
   );
 }
