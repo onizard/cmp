@@ -109,7 +109,7 @@ export default {
     bloque2: '选择「在 Safari 中打开」。', bloque3: '操作步骤届时会显示在这里。',
   },
   maj: { prete: '新版本已就绪。', bouton: '更新' },
-  admin: {
+  admin: { foyersDetail: '家庭', membresN: '{n} 位成员', tachesN: '{n} 项任务', restantesN: '{n} 项待办', sansPrenom: '未填名字', vuLe: '{quand} 来过', jamaisVenu: '再没来过',
     titre: '数据面板', rien: '暂无内容。', actualiser: '刷新', actualisation: '刷新中…',
     gens: '用户', comptes: '账户', cetteSemaine: '本周 +{n}', actifs7: '7 天活跃',
     sur30: '30 天内 {n}', foyers: '家庭', aDeux: '{n} 个成双', notifs: '通知',

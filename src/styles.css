@@ -1582,3 +1582,89 @@ body,
   border-color: transparent;
   color: #fff;
 }
+
+
+/* --- Detail des foyers (tableau de bord) --- */
+
+.stat-clic {
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.stat-clic.ouvert {
+  border-color: var(--violet);
+  background: var(--grad-soft);
+}
+
+.foyers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.foyer {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.foyer-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.foyer-tete b {
+  font-family: var(--display);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.foyer-gens {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.foyer-gens li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 7px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.foyer-gens li b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.foyer-mail {
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+.foyer-vu {
+  margin-inline-start: auto;
+  color: var(--ink-3);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.foyer-code {
+  margin: 10px 0 0;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}

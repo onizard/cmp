@@ -1,8 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { part, nombre, courbe, total } from '../lib/stats.js';
 import { useT } from '../i18n/index.js';
 
-function Tuile({ valeur, libelle, detail }) {
+function Tuile({ valeur, libelle, detail, onClick, ouvert }) {
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`stat stat-clic ${ouvert ? 'ouvert' : ''}`}
+        aria-expanded={ouvert}
+        onClick={onClick}
+      >
+        <div className="stat-val">{nombre(valeur)}</div>
+        <div className="stat-lab">{libelle}</div>
+        {detail && <div className="stat-det">{detail}</div>}
+      </button>
+    );
+  }
   return (
     <div className="stat">
       <div className="stat-val">{nombre(valeur)}</div>
@@ -61,8 +75,21 @@ function Courbe({ points }) {
   );
 }
 
+// Date courte, dans la langue en cours.
+const jour = (iso) => {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      day: '2-digit',
+      month: '2-digit',
+    }).format(new Date(iso));
+  } catch {
+    return '';
+  }
+};
+
 export default function AdminView({ admin }) {
   const t = useT();
+  const [ouvert, setOuvert] = useState(false);
   const { stats, loading, error, refresh } = admin;
 
   useEffect(() => {
@@ -98,10 +125,58 @@ export default function AdminView({ admin }) {
         <div className="stats">
           <Tuile valeur={s.comptes} libelle={t('admin.comptes')} detail={t('admin.cetteSemaine', { n: s.comptes_7j })} />
           <Tuile valeur={s.actifs_7j} libelle={t('admin.actifs7')} detail={t('admin.sur30', { n: s.actifs_30j })} />
-          <Tuile valeur={s.foyers} libelle={t('admin.foyers')} detail={t('admin.aDeux', { n: s.foyers_a_deux })} />
+          <Tuile
+            valeur={s.foyers}
+            libelle={t('admin.foyers')}
+            detail={t('admin.aDeux', { n: s.foyers_a_deux })}
+            ouvert={ouvert}
+            onClick={() => {
+              setOuvert((v) => !v);
+              if (!admin.foyers) admin.chargerFoyers();
+            }}
+          />
           <Tuile valeur={s.notifs} libelle={t('admin.notifs')} detail={t('admin.appareils')} />
         </div>
       </section>
+
+      {ouvert && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('admin.foyersDetail')}</h2>
+          {!admin.foyers ? (
+            <p className="notice">{t('app.instant')}</p>
+          ) : admin.foyers.length === 0 ? (
+            <p className="notice">{t('admin.rien')}</p>
+          ) : (
+            <div className="foyers">
+              {admin.foyers.map((f) => (
+                <div className="foyer" key={f.id}>
+                  <p className="foyer-tete">
+                    <b>{t('admin.membresN', { n: f.membres })}</b>
+                    <span>
+                      {t('admin.tachesN', { n: f.taches })} ·{' '}
+                      {t('admin.restantesN', { n: f.restantes })}
+                    </span>
+                  </p>
+                  <ul className="foyer-gens">
+                    {f.gens.map((g) => (
+                      <li key={g.email}>
+                        <b>{g.prenom || t('admin.sansPrenom')}</b>
+                        <span className="foyer-mail">{g.email}</span>
+                        <span className="foyer-vu">
+                          {g.vu
+                            ? t('admin.vuLe', { quand: jour(g.vu) })
+                            : t('admin.jamaisVenu')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="foyer-code">{f.id}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="setgroup">
         <h2 className="setlabel">{t('admin.usage')}</h2>

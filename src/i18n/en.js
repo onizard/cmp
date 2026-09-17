@@ -109,7 +109,7 @@ export default {
     bloque2: 'Choose Open in Safari.', bloque3: 'The instructions will then appear right here.',
   },
   maj: { prete: 'A new version is ready.', bouton: 'Update' },
-  admin: {
+  admin: { foyersDetail: 'Households', membresN: '{n} member(s)', tachesN: '{n} task(s)', restantesN: '{n} pending', sansPrenom: 'no first name', vuLe: 'seen {quand}', jamaisVenu: 'never came back',
     titre: 'Dashboard', rien: 'Nothing to show.', actualiser: 'Refresh', actualisation: 'Refreshing…',
     gens: 'People', comptes: 'accounts', cetteSemaine: '+{n} this week', actifs7: 'active 7 d',
     sur30: '{n} over 30 d', foyers: 'households', aDeux: '{n} paired up', notifs: 'notifications',

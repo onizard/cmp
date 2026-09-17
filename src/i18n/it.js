@@ -109,7 +109,7 @@ export default {
     bloque2: 'Scegli Apri in Safari.', bloque3: 'Le istruzioni compariranno proprio qui.',
   },
   maj: { prete: 'Una nuova versione è pronta.', bouton: 'Aggiorna' },
-  admin: {
+  admin: { foyersDetail: 'Le case', membresN: '{n} membro/i', tachesN: '{n} compito/i', restantesN: '{n} in sospeso', sansPrenom: 'senza nome', vuLe: 'visto il {quand}', jamaisVenu: 'mai tornato',
     titre: 'Cruscotto', rien: 'Niente da mostrare.', actualiser: 'Aggiorna', actualisation: 'Aggiornamento…',
     gens: 'Le persone', comptes: 'account', cetteSemaine: '+{n} questa settimana', actifs7: 'attivi 7 g',
     sur30: '{n} su 30 g', foyers: 'case', aDeux: '{n} in due', notifs: 'notifiche',

@@ -109,7 +109,7 @@ export default {
     bloque2: 'اختر فتح في سفاري.', bloque3: 'ستظهر الخطوات هنا عندئذ.',
   },
   maj: { prete: 'نسخة جديدة جاهزة.', bouton: 'تحديث' },
-  admin: {
+  admin: { foyersDetail: 'البيوت', membresN: '{n} عضو', tachesN: '{n} مهمة', restantesN: '{n} في الانتظار', sansPrenom: 'بلا اسم', vuLe: 'شوهد في {quand}', jamaisVenu: 'لم يعد أبدًا',
     titre: 'لوحة المتابعة', rien: 'لا شيء لعرضه.', actualiser: 'تحديث', actualisation: 'جارٍ التحديث…',
     gens: 'الناس', comptes: 'حسابات', cetteSemaine: '+{n} هذا الأسبوع', actifs7: 'نشطون 7 أيام',
     sur30: '{n} خلال 30 يومًا', foyers: 'بيوت', aDeux: '{n} ثنائية', notifs: 'إشعارات',

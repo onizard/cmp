@@ -109,7 +109,7 @@ export default {
     bloque2: 'Выберите Открыть в Safari.', bloque3: 'Тогда инструкция появится прямо здесь.',
   },
   maj: { prete: 'Готова новая версия.', bouton: 'Обновить' },
-  admin: {
+  admin: { foyersDetail: 'Дома', membresN: '{n} участник(ов)', tachesN: '{n} задач(а)', restantesN: '{n} в ожидании', sansPrenom: 'без имени', vuLe: 'был {quand}', jamaisVenu: 'не возвращался',
     titre: 'Сводка', rien: 'Нечего показать.', actualiser: 'Обновить', actualisation: 'Обновление…',
     gens: 'Люди', comptes: 'аккаунтов', cetteSemaine: '+{n} за неделю', actifs7: 'активны 7 д',
     sur30: '{n} за 30 д', foyers: 'домов', aDeux: '{n} вдвоём', notifs: 'уведомления',

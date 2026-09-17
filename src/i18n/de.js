@@ -109,7 +109,7 @@ export default {
     bloque2: 'Wähle In Safari öffnen.', bloque3: 'Die Anleitung erscheint dann genau hier.',
   },
   maj: { prete: 'Eine neue Version ist bereit.', bouton: 'Aktualisieren' },
-  admin: {
+  admin: { foyersDetail: 'Die Haushalte', membresN: '{n} Mitglied(er)', tachesN: '{n} Aufgabe(n)', restantesN: '{n} offen', sansPrenom: 'ohne Vornamen', vuLe: 'gesehen am {quand}', jamaisVenu: 'nie wiedergekommen',
     titre: 'Übersicht', rien: 'Nichts anzuzeigen.', actualiser: 'Aktualisieren', actualisation: 'Wird aktualisiert…',
     gens: 'Die Leute', comptes: 'Konten', cetteSemaine: '+{n} diese Woche', actifs7: 'aktiv 7 T.',
     sur30: '{n} in 30 T.', foyers: 'Haushalte', aDeux: '{n} zu zweit', notifs: 'Benachrichtigungen',

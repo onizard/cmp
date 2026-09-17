@@ -11,6 +11,7 @@ import { supabase } from '../supabaseClient.js';
 export function useAdmin() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [stats, setStats] = useState(null);
+  const [foyers, setFoyers] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -38,5 +39,13 @@ export function useAdmin() {
     setLoading(false);
   }, []);
 
-  return { isAdmin, stats, loading, error, refresh };
+  /** Le détail des foyers, chargé seulement quand on le demande. */
+  const chargerFoyers = useCallback(async () => {
+    if (!supabase) return;
+    const { data, error: err } = await supabase.rpc('cmp_foyers');
+    if (err) setError(err.message);
+    else setFoyers(Array.isArray(data) ? data : []);
+  }, []);
+
+  return { isAdmin, stats, foyers, loading, error, refresh, chargerFoyers };
 }

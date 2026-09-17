@@ -240,7 +240,7 @@ export default {
     bouton: 'Mettre à jour',
   },
 
-  admin: {
+  admin: { foyersDetail: 'Les foyers', membresN: '{n} membre(s)', tachesN: '{n} tâche(s)', restantesN: '{n} en attente', sansPrenom: 'sans prénom', vuLe: 'vu le {quand}', jamaisVenu: 'jamais revenu',
     titre: 'Tableau de bord',
     rien: 'Rien à afficher.',
     actualiser: 'Actualiser',

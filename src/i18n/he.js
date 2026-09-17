@@ -109,7 +109,7 @@ export default {
     bloque2: 'בחר פתח בספארי.', bloque3: 'ההוראות יופיעו כאן.',
   },
   maj: { prete: 'גרסה חדשה מוכנה.', bouton: 'עדכון' },
-  admin: {
+  admin: { foyersDetail: 'הבתים', membresN: '{n} חברים', tachesN: '{n} משימות', restantesN: '{n} ממתינות', sansPrenom: 'ללא שם', vuLe: 'נראה ב־{quand}', jamaisVenu: 'לא חזר מעולם',
     titre: 'לוח בקרה', rien: 'אין מה להציג.', actualiser: 'רענון', actualisation: 'מרענן…',
     gens: 'האנשים', comptes: 'חשבונות', cetteSemaine: '+{n} השבוע', actifs7: 'פעילים 7 י׳',
     sur30: '{n} ב־30 י׳', foyers: 'בתים', aDeux: '{n} בזוג', notifs: 'התראות',

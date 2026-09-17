@@ -109,7 +109,7 @@ export default {
     bloque2: 'Elige Abrir en Safari.', bloque3: 'Las instrucciones aparecerán aquí mismo.',
   },
   maj: { prete: 'Hay una versión nueva lista.', bouton: 'Actualizar' },
-  admin: {
+  admin: { foyersDetail: 'Los hogares', membresN: '{n} miembro(s)', tachesN: '{n} tarea(s)', restantesN: '{n} pendientes', sansPrenom: 'sin nombre', vuLe: 'visto el {quand}', jamaisVenu: 'nunca volvió',
     titre: 'Panel', rien: 'Nada que mostrar.', actualiser: 'Actualizar', actualisation: 'Actualizando…',
     gens: 'La gente', comptes: 'cuentas', cetteSemaine: '+{n} esta semana', actifs7: 'activos 7 d',
     sur30: '{n} en 30 d', foyers: 'hogares', aDeux: '{n} en pareja', notifs: 'notificaciones',
