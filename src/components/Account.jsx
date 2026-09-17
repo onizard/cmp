@@ -209,19 +209,19 @@ export default function Account({ account }) {
                 Une notification quand ta moitié ajoute ou coche une chose.
               </p>
               <div className="rowline">
-                <span>Petit rappel du soir</span>
+                <span>Rappel matin et soir</span>
                 <button
                   type="button"
                   className="switch"
                   role="switch"
                   aria-checked={soirOn}
-                  aria-label="Rappel du soir"
+                  aria-label="Rappel matin et soir"
                   disabled={!notifOn}
                   onClick={toggleSoir}
                 />
               </div>
               <p className="setnote">
-                Vers 20 h, s’il reste des choses à porter.
+                Vers 8 h et 20 h, la tâche qui attend depuis le plus longtemps.
               </p>
               {notifError && <p className="error">{notifError}</p>}
             </>
@@ -267,7 +267,7 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v2.9</p>
+      <p className="ver">charge mentale partagée · v3.0</p>
     </main>
   );
 }

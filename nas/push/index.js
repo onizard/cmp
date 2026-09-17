@@ -1,6 +1,7 @@
 // Service de notifications push pour « Charge mentale partagée ».
 // Écoute les changements de tâches (via LISTEN/NOTIFY Postgres) et envoie
-// une notification à l'autre personne du foyer. Envoie aussi un rappel du soir.
+// une notification à l'autre personne du foyer. Rappelle aussi matin et soir
+// la tâche qui attend depuis le plus longtemps.
 
 const { Client } = require('pg');
 const webpush = require('web-push');
@@ -15,8 +16,26 @@ const cfg = {
   database: process.env.PGDATABASE || process.env.POSTGRES_DB || 'postgres',
 };
 
-const REMINDER_HOUR = Number(process.env.REMINDER_HOUR || 20);
+// Deux rendez-vous par jour, à l'heure de Paris — le conteneur, lui, tourne
+// en UTC, d'où le calcul explicite du fuseau plus bas.
+const MORNING_HOUR = Number(process.env.MORNING_HOUR || 8);
+const EVENING_HOUR = Number(process.env.EVENING_HOUR || process.env.REMINDER_HOUR || 20);
+const TZ = process.env.REMINDER_TZ || 'Europe/Paris';
 const APP_URL = process.env.PUBLIC_URL || '/';
+
+/** Heure et date du jour dans le fuseau choisi, indépendamment de celui du conteneur. */
+function localNow(d = new Date()) {
+  const parts = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: TZ,
+    hour: '2-digit',
+    hour12: false,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(d);
+  const get = (t) => parts.find((p) => p.type === t).value;
+  return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
+}
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -86,46 +105,61 @@ async function handleEvent(ev) {
   });
 }
 
-/** Rappel du soir : combien de choses restent à porter. */
-async function eveningReminder() {
+/** Depuis combien de temps elle attend, dit simplement. */
+function waitingSince(days) {
+  if (days < 1) return 'ajoutée aujourd’hui';
+  if (days < 2) return 'elle attend depuis hier';
+  if (days < 7) return `elle attend depuis ${Math.floor(days)} jours`;
+  if (days < 14) return 'elle attend depuis une semaine';
+  if (days < 61) return `elle attend depuis ${Math.floor(days / 7)} semaines`;
+  return `elle attend depuis ${Math.floor(days / 30)} mois`;
+}
+
+/**
+ * Rappel : la tâche qui attend depuis le plus longtemps, une par foyer.
+ * `moment` vaut 'matin' ou 'soir' — seul le titre change.
+ */
+async function oldestReminder(moment) {
   const { rows } = await client.query(
-    `select household_id, count(*)::int as n
+    `select distinct on (household_id)
+            household_id, text,
+            extract(epoch from (now() - created_at)) / 86400 as jours
        from tasks
       where not deleted and not done and month <= $1
-      group by household_id`,
+      order by household_id, created_at asc`,
     [monthKey()],
   );
   for (const r of rows) {
-    if (!r.n) continue;
     await sendToHousehold(
       r.household_id,
       null,
       {
-        title: 'Le point du soir',
-        body:
-          r.n === 1
-            ? 'Il reste 1 tâche à faire.'
-            : `Il reste ${r.n} tâches à faire.`,
+        title:
+          moment === 'matin'
+            ? 'La plus ancienne t’attend'
+            : 'Toujours en attente',
+        body: `${r.text} — ${waitingSince(Number(r.jours))}.`,
         url: APP_URL,
-        tag: 'cmp-soir',
+        tag: 'cmp-ancienne',
       },
       true,
     );
   }
 }
 
-let lastReminderDay = '';
+const lastSent = { matin: '', soir: '' };
 setInterval(async () => {
   if (!client) return;
-  const now = new Date();
-  const day = now.toISOString().slice(0, 10);
-  if (now.getHours() !== REMINDER_HOUR || lastReminderDay === day) return;
-  lastReminderDay = day;
+  const { hour, day } = localNow();
+  const moment =
+    hour === MORNING_HOUR ? 'matin' : hour === EVENING_HOUR ? 'soir' : null;
+  if (!moment || lastSent[moment] === day) return;
+  lastSent[moment] = day;
   try {
-    await eveningReminder();
-    log('rappel du soir envoyé');
+    await oldestReminder(moment);
+    log(`rappel du ${moment} envoyé`);
   } catch (e) {
-    log('rappel du soir : échec', e.message);
+    log(`rappel du ${moment} : échec`, e.message);
   }
 }, 60_000);
 

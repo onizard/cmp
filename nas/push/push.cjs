@@ -12654,8 +12654,22 @@ var cfg = {
   password: process.env.PGPASSWORD || process.env.POSTGRES_PASSWORD,
   database: process.env.PGDATABASE || process.env.POSTGRES_DB || "postgres"
 };
-var REMINDER_HOUR = Number(process.env.REMINDER_HOUR || 20);
+var MORNING_HOUR = Number(process.env.MORNING_HOUR || 8);
+var EVENING_HOUR = Number(process.env.EVENING_HOUR || process.env.REMINDER_HOUR || 20);
+var TZ = process.env.REMINDER_TZ || "Europe/Paris";
 var APP_URL = process.env.PUBLIC_URL || "/";
+function localNow(d = /* @__PURE__ */ new Date()) {
+  const parts = new Intl.DateTimeFormat("fr-FR", {
+    timeZone: TZ,
+    hour: "2-digit",
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(d);
+  const get = (t) => parts.find((p) => p.type === t).value;
+  return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
+}
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -12713,41 +12727,50 @@ async function handleEvent(ev) {
     tag: "cmp-tache"
   });
 }
-async function eveningReminder() {
+function waitingSince(days) {
+  if (days < 1) return "ajout\xE9e aujourd\u2019hui";
+  if (days < 2) return "elle attend depuis hier";
+  if (days < 7) return `elle attend depuis ${Math.floor(days)} jours`;
+  if (days < 14) return "elle attend depuis une semaine";
+  if (days < 61) return `elle attend depuis ${Math.floor(days / 7)} semaines`;
+  return `elle attend depuis ${Math.floor(days / 30)} mois`;
+}
+async function oldestReminder(moment) {
   const { rows } = await client.query(
-    `select household_id, count(*)::int as n
+    `select distinct on (household_id)
+            household_id, text,
+            extract(epoch from (now() - created_at)) / 86400 as jours
        from tasks
       where not deleted and not done and month <= $1
-      group by household_id`,
+      order by household_id, created_at asc`,
     [monthKey()]
   );
   for (const r of rows) {
-    if (!r.n) continue;
     await sendToHousehold(
       r.household_id,
       null,
       {
-        title: "Le point du soir",
-        body: r.n === 1 ? "Il reste 1 t\xE2che \xE0 faire." : `Il reste ${r.n} t\xE2ches \xE0 faire.`,
+        title: moment === "matin" ? "La plus ancienne t\u2019attend" : "Toujours en attente",
+        body: `${r.text} \u2014 ${waitingSince(Number(r.jours))}.`,
         url: APP_URL,
-        tag: "cmp-soir"
+        tag: "cmp-ancienne"
       },
       true
     );
   }
 }
-var lastReminderDay = "";
+var lastSent = { matin: "", soir: "" };
 setInterval(async () => {
   if (!client) return;
-  const now = /* @__PURE__ */ new Date();
-  const day = now.toISOString().slice(0, 10);
-  if (now.getHours() !== REMINDER_HOUR || lastReminderDay === day) return;
-  lastReminderDay = day;
+  const { hour, day } = localNow();
+  const moment = hour === MORNING_HOUR ? "matin" : hour === EVENING_HOUR ? "soir" : null;
+  if (!moment || lastSent[moment] === day) return;
+  lastSent[moment] = day;
   try {
-    await eveningReminder();
-    log("rappel du soir envoy\xE9");
+    await oldestReminder(moment);
+    log(`rappel du ${moment} envoy\xE9`);
   } catch (e) {
-    log("rappel du soir : \xE9chec", e.message);
+    log(`rappel du ${moment} : \xE9chec`, e.message);
   }
 }, 6e4);
 async function connect() {
