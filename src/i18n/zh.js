@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: '密码未能保存。', langue: '语言',
     contact: '有想法、有疑问、哪里不对？{lien}。', contactLien: '写信给我们',
   },
-  notifications: {
+  notifications: { binome: '「邀请你的另一半」提醒', binomeAide: '这个家庭里只有你一个人。我们每周提醒一次，最多四次。如果你更想一个人用，关掉即可。',
     titre: '通知', quandLautreAgit: '当对方有动作时',
     quandLautreAide: '另一半添加或勾选时，给你一条通知。',
     rappel: '早晚提醒',

@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'Não foi possível guardar a palavra-passe.', langue: 'Idioma',
     contact: 'Uma ideia, uma dúvida, algo que falha? {lien}.', contactLien: 'Escreve-nos',
   },
-  notifications: {
+  notifications: { binome: 'Lembrete «convida a tua cara-metade»', binomeAide: 'Estás sozinho nesta casa. Lembramos-te uma vez por semana, no máximo quatro vezes. Desliga se preferes usá-la sozinho.',
     titre: 'Notificações', quandLautreAgit: 'Quando o outro age',
     quandLautreAide: 'Uma notificação quando a tua cara-metade adiciona ou marca algo.',
     rappel: 'Lembrete de manhã e à noite',

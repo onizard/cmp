@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'The password could not be saved.', langue: 'Language',
     contact: 'An idea, a question, something wrong? {lien}.', contactLien: 'Write to us',
   },
-  notifications: {
+  notifications: { binome: '“Invite your other half” reminder', binomeAide: 'You are alone in this household. We remind you once a week, four times at most. Turn it off if you’d rather use it on your own.',
     titre: 'Notifications', quandLautreAgit: 'When the other acts',
     quandLautreAide: 'A notification when your other half adds or ticks something.',
     rappel: 'Morning and evening reminder',

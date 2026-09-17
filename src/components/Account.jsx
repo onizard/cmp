@@ -5,6 +5,9 @@ import {
   disablePush,
   setEvening,
   eveningEnabled,
+  setBinome,
+  binomeEnabled,
+  wantsBinome,
   syncPush,
   wantsPush,
   wantsEvening,
@@ -36,6 +39,8 @@ export default function Account({ account }) {
 
   const [notifOn, setNotifOn] = useState(wantsPush);
   const [soirOn, setSoirOn] = useState(wantsEvening);
+  const [binomeOn, setBinomeOn] = useState(wantsBinome);
+  const seul = account.seul === true;
   const [notifBusy, setNotifBusy] = useState(false);
   const [notifError, setNotifError] = useState(null);
 
@@ -58,6 +63,8 @@ export default function Account({ account }) {
       if (state.on) {
         const soir = await eveningEnabled();
         if (alive) setSoirOn(soir);
+        const bin = await binomeEnabled();
+        if (alive) setBinomeOn(bin);
       }
     })();
     return () => {
@@ -106,6 +113,13 @@ export default function Account({ account }) {
       setNotifError(e.message);
     }
     setNotifBusy(false);
+  };
+
+  const toggleBinome = async () => {
+    if (!notifOn) return;
+    const next = !binomeOn;
+    setBinomeOn(next);
+    await setBinome(next);
   };
 
   const toggleSoir = async () => {
@@ -210,6 +224,23 @@ export default function Account({ account }) {
                 />
               </div>
               <p className="setnote">{t('notifications.rappelAide')}</p>
+              {seul && (
+                <>
+                  <div className="rowline">
+                    <span>{t('notifications.binome')}</span>
+                    <button
+                      type="button"
+                      className="switch"
+                      role="switch"
+                      aria-checked={binomeOn}
+                      aria-label={t('notifications.binome')}
+                      disabled={!notifOn}
+                      onClick={toggleBinome}
+                    />
+                  </div>
+                  <p className="setnote">{t('notifications.binomeAide')}</p>
+                </>
+              )}
               {notifError && <p className="error">{notifError}</p>}
             </>
           ) : (
@@ -270,7 +301,7 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">{t('app.titre')} · v4.6</p>
+      <p className="ver">{t('app.titre')} · v4.7</p>
     </main>
   );
 }

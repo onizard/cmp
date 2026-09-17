@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'تعذّر حفظ كلمة السر.', langue: 'اللغة',
     contact: 'فكرة، سؤال، شيء لا يعمل؟ {lien}.', contactLien: 'اكتب إلينا',
   },
-  notifications: {
+  notifications: { binome: 'تذكير «ادعُ نصفك الآخر»', binomeAide: 'أنت وحدك في هذا البيت. نذكّرك مرة كل أسبوع، أربع مرات على الأكثر. أوقفه إن كنت تفضّل استخدامه وحدك.',
     titre: 'الإشعارات', quandLautreAgit: 'عندما يتصرف الآخر',
     quandLautreAide: 'إشعار عندما يضيف نصفك الآخر شيئًا أو يحدده.',
     rappel: 'تذكير صباحي ومسائي',

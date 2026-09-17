@@ -165,7 +165,7 @@ export default {
     contactLien: 'Écris-nous',
   },
 
-  notifications: {
+  notifications: { binome: 'Rappel « invite ta moitié »', binomeAide: 'Tu es seul·e dans ce foyer. On te le rappelle une fois par semaine, quatre fois au plus. Coupe-le si tu préfères l’utiliser seul·e.',
     titre: 'Notifications',
     quandLautreAgit: 'Quand l’autre agit',
     quandLautreAide:

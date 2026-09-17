@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'Non è stato possibile salvare la password.', langue: 'Lingua',
     contact: 'Un’idea, una domanda, qualcosa che non va? {lien}.', contactLien: 'Scrivici',
   },
-  notifications: {
+  notifications: { binome: 'Promemoria «invita la tua metà»', binomeAide: 'Sei solo in questa casa. Te lo ricordiamo una volta a settimana, al massimo quattro volte. Disattivalo se preferisci usarla da solo.',
     titre: 'Notifiche', quandLautreAgit: 'Quando l’altro agisce',
     quandLautreAide: 'Una notifica quando la tua metà aggiunge o spunta qualcosa.',
     rappel: 'Promemoria mattina e sera',

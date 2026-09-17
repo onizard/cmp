@@ -37,7 +37,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v3.2';
+const VERSION = 'v4.7';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -212,6 +212,69 @@ async function dueReminders() {
   }
 }
 
+// --- Rappel « invite ta moitié » ---
+//
+// Seul dans son foyer, l'application perd tout son sens. On le rappelle, mais
+// avec mesure : une fois par semaine, pas avant deux jours d'anciennete, et
+// quatre fois au maximum. Passe ce plafond on se tait — quelqu'un qui n'a pas
+// invite apres un mois a ses raisons, et l'appli s'utilise tres bien seul.
+const BINOME_MAX = 4;
+const BINOME_JOURS = 7;
+
+const BINOME_TEXTE = {
+  fr: ['Toujours seul·e ici', 'Partage ton foyer : à deux, l’application prend tout son sens. Mon compte → Partager.'],
+  en: ['Still on your own', 'Share your household: with two, the app comes into its own. Account → Share.'],
+  es: ['Todavía en solitario', 'Comparte tu hogar: entre dos, la aplicación cobra sentido. Mi cuenta → Compartir.'],
+  pt: ['Ainda sozinho', 'Partilha a tua casa: a dois, a aplicação ganha sentido. Conta → Partilhar.'],
+  de: ['Noch allein', 'Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto → Teilen.'],
+  it: ['Ancora da solo', 'Condividi la tua casa: in due, l’app prende senso. Account → Condividi.'],
+  ru: ['Всё ещё одни', 'Поделитесь домом: вдвоём приложение обретает смысл. Аккаунт → Поделиться.'],
+  zh: ['还是一个人', '把家庭分享出去：两个人用，这个应用才有意义。我的账户 → 分享。'],
+  ar: ['ما زلت وحدك', 'شارك بيتك: مع اثنين يجد التطبيق معناه. حسابي ← مشاركة.'],
+  he: ['עדיין לבד', 'שתף את הבית שלך: בשניים האפליקציה מקבלת משמעות. החשבון שלי ← שיתוף.'],
+  fa: ['هنوز تنهایی', 'خانه‌ات را هم‌رسانی کن: با دو نفر، برنامه معنا پیدا می‌کند. حساب من ← هم‌رسانی.'],
+};
+
+const texteBinome = (lang) => BINOME_TEXTE[lang] || BINOME_TEXTE.fr;
+
+async function binomeReminder() {
+  // Un abonnement dont le foyer n'a qu'un seul membre, qui veut le rappel,
+  // qui n'a pas atteint le plafond, et qu'on n'a pas sollicite cette semaine.
+  const { rows } = await client.query(
+    `select p.id, p.endpoint, p.p256dh, p.auth, p.langue
+       from push_subscriptions p
+      where p.invite_on
+        and p.invite_envois < $1
+        and (p.invite_dernier is null or p.invite_dernier < now() - ($2 || ' days')::interval)
+        and p.created_at < now() - interval '2 days'
+        and (select count(*) from members m where m.household_id = p.household_id) = 1`,
+    [BINOME_MAX, BINOME_JOURS],
+  );
+  for (const r of rows) {
+    const [titre, corps] = texteBinome(r.langue);
+    const sub = { endpoint: r.endpoint, keys: { p256dh: r.p256dh, auth: r.auth } };
+    try {
+      await webpush.sendNotification(
+        sub,
+        JSON.stringify({ title: titre, body: corps, url: APP_URL, tag: 'cmp-binome' }),
+      );
+      await client.query(
+        'update push_subscriptions set invite_envois = invite_envois + 1, invite_dernier = now() where id = $1',
+        [r.id],
+      );
+      log('rappel binôme →', r.endpoint.slice(0, 40) + '…');
+    } catch (e) {
+      const code = e.statusCode;
+      if (code === 404 || code === 410) {
+        await client.query('delete from push_subscriptions where id = $1', [r.id]);
+        log('abonnement expiré, supprimé');
+      } else {
+        log('rappel binôme : échec', code, e.message);
+      }
+    }
+  }
+}
+
 const lastSent = { matin: '', soir: '' };
 setInterval(async () => {
   if (!client) return;
@@ -225,6 +288,15 @@ setInterval(async () => {
     log(`rappel du ${moment} envoyé`);
   } catch (e) {
     log(`rappel du ${moment} : échec`, e.message);
+  }
+  // Le rappel « invite ta moitié » part le matin seulement, et s'espace
+  // tout seul d'une semaine grâce à invite_dernier.
+  if (moment === 'matin') {
+    try {
+      await binomeReminder();
+    } catch (e) {
+      log('rappel binôme : échec', e.message);
+    }
   }
 }, 60_000);
 

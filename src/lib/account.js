@@ -48,6 +48,8 @@ export function useAccount() {
   // Vrai quand on n'a PAS PU savoir si la personne a un foyer, ce qui n'est
   // pas la même chose que « elle n'en a pas ».
   const [lectureRatee, setLectureRatee] = useState(false);
+  // Seul·e dans son foyer ? Null tant qu'on ne sait pas.
+  const [seul, setSeul] = useState(null);
 
   // Session
   useEffect(() => {
@@ -149,6 +151,23 @@ export function useAccount() {
   useEffect(() => {
     if (session) loadHousehold();
   }, [session, loadHousehold]);
+
+  // Combien sont-ils dans ce foyer ? La politique de sécurité laisse compter
+  // les membres du sien, pas ceux des autres.
+  useEffect(() => {
+    if (!supabase || !household) return;
+    let vivant = true;
+    supabase
+      .from('members')
+      .select('user_id', { count: 'exact', head: true })
+      .eq('household_id', household.id)
+      .then(({ count, error: err }) => {
+        if (vivant && !err) setSeul(count === 1);
+      });
+    return () => {
+      vivant = false;
+    };
+  }, [household]);
 
   /** Connexion classique : e-mail + mot de passe, vérifiée sur place. */
   const signIn = useCallback(async (email, password) => {
@@ -331,6 +350,7 @@ export function useAccount() {
     isConfigured,
     invitation,
     lectureRatee,
+    seul,
     reessayer: loadHousehold,
     session,
     household,

@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'Das Passwort konnte nicht gespeichert werden.', langue: 'Sprache',
     contact: 'Eine Idee, eine Frage, etwas klemmt? {lien}.', contactLien: 'Schreib uns',
   },
-  notifications: {
+  notifications: { binome: 'Erinnerung „lade deine bessere Hälfte ein“', binomeAide: 'Du bist allein in diesem Haushalt. Wir erinnern dich einmal pro Woche, höchstens viermal. Schalte es ab, wenn du sie lieber allein nutzt.',
     titre: 'Benachrichtigungen', quandLautreAgit: 'Wenn die andere Person handelt',
     quandLautreAide: 'Eine Meldung, wenn deine bessere Hälfte etwas hinzufügt oder abhakt.',
     rappel: 'Erinnerung morgens und abends',

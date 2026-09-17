@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'לא ניתן היה לשמור את הסיסמה.', langue: 'שפה',
     contact: 'רעיון, שאלה, משהו לא עובד? {lien}.', contactLien: 'כתוב לנו',
   },
-  notifications: {
+  notifications: { binome: 'תזכורת «הזמן את החצי השני»', binomeAide: 'אתה לבד בבית הזה. נזכיר לך פעם בשבוע, לכל היותר ארבע פעמים. כבה אותה אם אתה מעדיף להשתמש לבד.',
     titre: 'התראות', quandLautreAgit: 'כשהשני פועל',
     quandLautreAide: 'התראה כשהחצי השני מוסיף או מסמן משהו.',
     rappel: 'תזכורת בוקר וערב',

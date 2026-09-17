@@ -68,7 +68,7 @@ export default {
     motDePasseErreur: 'No se ha podido guardar la contraseña.', langue: 'Idioma',
     contact: '¿Una idea, una duda, algo que falla? {lien}.', contactLien: 'Escríbenos',
   },
-  notifications: {
+  notifications: { binome: 'Recordatorio «invita a tu media naranja»', binomeAide: 'Estás solo en este hogar. Te lo recordamos una vez por semana, cuatro veces como mucho. Desactívalo si prefieres usarla en solitario.',
     titre: 'Notificaciones', quandLautreAgit: 'Cuando el otro actúa',
     quandLautreAide: 'Una notificación cuando tu media naranja añade o marca algo.',
     rappel: 'Recordatorio mañana y noche',

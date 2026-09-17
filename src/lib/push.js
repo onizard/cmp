@@ -5,7 +5,7 @@
 // réinstallation, rotation d'endpoint par le navigateur). On le recrée alors
 // en silence au lieu de repasser l'option sur « off ».
 import { supabase } from '../supabaseClient.js';
-import { t } from '../i18n/index.js';
+import { t, langue } from '../i18n/index.js';
 
 const VAPID = import.meta.env.VITE_VAPID_PUBLIC || '';
 
@@ -110,6 +110,8 @@ async function store(sub, userId, householdId, evening, previous) {
       p256dh: json.keys.p256dh,
       auth: json.keys.auth,
       evening,
+      // Le service d'envoi lit cette colonne pour choisir la langue du texte.
+      langue: langue(),
     },
     { onConflict: 'endpoint' },
   );
@@ -217,6 +219,35 @@ export async function setEvening(on) {
     .from('push_subscriptions')
     .update({ evening: on })
     .eq('endpoint', sub.endpoint);
+}
+
+const CLE_BINOME = 'cmp.push.binome';
+
+/** Le rappel « invite ta moitié » est-il voulu sur cet appareil ? */
+export const wantsBinome = () => read(CLE_BINOME, true);
+
+export async function setBinome(on) {
+  write(CLE_BINOME, on);
+  const sub = await currentSubscription();
+  if (!sub) return;
+  await supabase
+    .from('push_subscriptions')
+    .update({ invite_on: on })
+    .eq('endpoint', sub.endpoint);
+}
+
+/** L'état enregistré côté serveur, qui fait foi. */
+export async function binomeEnabled() {
+  const sub = await currentSubscription();
+  if (!sub) return wantsBinome();
+  const { data, error } = await supabase
+    .from('push_subscriptions')
+    .select('invite_on')
+    .eq('endpoint', sub.endpoint)
+    .maybeSingle();
+  if (error || !data) return wantsBinome();
+  write(CLE_BINOME, data.invite_on);
+  return Boolean(data.invite_on);
 }
 
 /** Le rappel du soir est-il actif pour cet appareil ? */

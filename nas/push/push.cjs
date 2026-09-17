@@ -12670,7 +12670,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v3.2";
+var VERSION = "v4.7";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -12813,6 +12813,57 @@ async function dueReminders() {
     log(`\xE9ch\xE9ance palier ${cible} \u2192`, r.text.slice(0, 40));
   }
 }
+var BINOME_MAX = 4;
+var BINOME_JOURS = 7;
+var BINOME_TEXTE = {
+  fr: ["Toujours seul\xB7e ici", "Partage ton foyer : \xE0 deux, l\u2019application prend tout son sens. Mon compte \u2192 Partager."],
+  en: ["Still on your own", "Share your household: with two, the app comes into its own. Account \u2192 Share."],
+  es: ["Todav\xEDa en solitario", "Comparte tu hogar: entre dos, la aplicaci\xF3n cobra sentido. Mi cuenta \u2192 Compartir."],
+  pt: ["Ainda sozinho", "Partilha a tua casa: a dois, a aplica\xE7\xE3o ganha sentido. Conta \u2192 Partilhar."],
+  de: ["Noch allein", "Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto \u2192 Teilen."],
+  it: ["Ancora da solo", "Condividi la tua casa: in due, l\u2019app prende senso. Account \u2192 Condividi."],
+  ru: ["\u0412\u0441\u0451 \u0435\u0449\u0451 \u043E\u0434\u043D\u0438", "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u0435\u0441\u044C \u0434\u043E\u043C\u043E\u043C: \u0432\u0434\u0432\u043E\u0451\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0435\u0442\u0430\u0435\u0442 \u0441\u043C\u044B\u0441\u043B. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u2192 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F."],
+  zh: ["\u8FD8\u662F\u4E00\u4E2A\u4EBA", "\u628A\u5BB6\u5EAD\u5206\u4EAB\u51FA\u53BB\uFF1A\u4E24\u4E2A\u4EBA\u7528\uFF0C\u8FD9\u4E2A\u5E94\u7528\u624D\u6709\u610F\u4E49\u3002\u6211\u7684\u8D26\u6237 \u2192 \u5206\u4EAB\u3002"],
+  ar: ["\u0645\u0627 \u0632\u0644\u062A \u0648\u062D\u062F\u0643", "\u0634\u0627\u0631\u0643 \u0628\u064A\u062A\u0643: \u0645\u0639 \u0627\u062B\u0646\u064A\u0646 \u064A\u062C\u062F \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0639\u0646\u0627\u0647. \u062D\u0633\u0627\u0628\u064A \u2190 \u0645\u0634\u0627\u0631\u0643\u0629."],
+  he: ["\u05E2\u05D3\u05D9\u05D9\u05DF \u05DC\u05D1\u05D3", "\u05E9\u05EA\u05E3 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05DA: \u05D1\u05E9\u05E0\u05D9\u05D9\u05DD \u05D4\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05DE\u05E7\u05D1\u05DC\u05EA \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA. \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF \u05E9\u05DC\u05D9 \u2190 \u05E9\u05D9\u05EA\u05D5\u05E3."],
+  fa: ["\u0647\u0646\u0648\u0632 \u062A\u0646\u0647\u0627\u06CC\u06CC", "\u062E\u0627\u0646\u0647\u200C\u0627\u062A \u0631\u0627 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC \u06A9\u0646: \u0628\u0627 \u062F\u0648 \u0646\u0641\u0631\u060C \u0628\u0631\u0646\u0627\u0645\u0647 \u0645\u0639\u0646\u0627 \u067E\u06CC\u062F\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F. \u062D\u0633\u0627\u0628 \u0645\u0646 \u2190 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC."]
+};
+var texteBinome = (lang) => BINOME_TEXTE[lang] || BINOME_TEXTE.fr;
+async function binomeReminder() {
+  const { rows } = await client.query(
+    `select p.id, p.endpoint, p.p256dh, p.auth, p.langue
+       from push_subscriptions p
+      where p.invite_on
+        and p.invite_envois < $1
+        and (p.invite_dernier is null or p.invite_dernier < now() - ($2 || ' days')::interval)
+        and p.created_at < now() - interval '2 days'
+        and (select count(*) from members m where m.household_id = p.household_id) = 1`,
+    [BINOME_MAX, BINOME_JOURS]
+  );
+  for (const r of rows) {
+    const [titre, corps] = texteBinome(r.langue);
+    const sub = { endpoint: r.endpoint, keys: { p256dh: r.p256dh, auth: r.auth } };
+    try {
+      await webpush.sendNotification(
+        sub,
+        JSON.stringify({ title: titre, body: corps, url: APP_URL, tag: "cmp-binome" })
+      );
+      await client.query(
+        "update push_subscriptions set invite_envois = invite_envois + 1, invite_dernier = now() where id = $1",
+        [r.id]
+      );
+      log("rappel bin\xF4me \u2192", r.endpoint.slice(0, 40) + "\u2026");
+    } catch (e) {
+      const code = e.statusCode;
+      if (code === 404 || code === 410) {
+        await client.query("delete from push_subscriptions where id = $1", [r.id]);
+        log("abonnement expir\xE9, supprim\xE9");
+      } else {
+        log("rappel bin\xF4me : \xE9chec", code, e.message);
+      }
+    }
+  }
+}
 var lastSent = { matin: "", soir: "" };
 setInterval(async () => {
   if (!client) return;
@@ -12825,6 +12876,13 @@ setInterval(async () => {
     log(`rappel du ${moment} envoy\xE9`);
   } catch (e) {
     log(`rappel du ${moment} : \xE9chec`, e.message);
+  }
+  if (moment === "matin") {
+    try {
+      await binomeReminder();
+    } catch (e) {
+      log("rappel bin\xF4me : \xE9chec", e.message);
+    }
   }
 }, 6e4);
 setInterval(() => {
