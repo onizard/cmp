@@ -12644,9 +12644,315 @@ var require_src2 = __commonJS({
   }
 });
 
+// nas/push/i18n.cjs
+var require_i18n = __commonJS({
+  "nas/push/i18n.cjs"(exports2, module2) {
+    var TEXTES = {
+      fr: {
+        "add": "{qui} a ajout\xE9 une t\xE2che",
+        "done": "{qui} a coch\xE9 une t\xE2che",
+        "quelquun": "Quelqu\u2019un",
+        "binome": "Ton bin\xF4me",
+        "matin": "La plus ancienne t\u2019attend",
+        "soir": "Toujours en attente",
+        "aujourdhui": "ajout\xE9e aujourd\u2019hui",
+        "hier": "elle attend depuis hier",
+        "jours": "elle attend depuis {n} jours",
+        "semaine": "elle attend depuis une semaine",
+        "semaines": "elle attend depuis {n} semaines",
+        "mois": "elle attend depuis {n} mois",
+        "dueDepasse": "\u23F1 \xC9ch\xE9ance d\xE9pass\xE9e",
+        "dueMaintenant": "\u23F1 C\u2019est maintenant",
+        "dueApproche": "\u23F1 \xC7a approche",
+        "dueTitre": "\u23F1 \xC9ch\xE9ance",
+        "cestLheure": "C\u2019est l\u2019heure.",
+        "retardH": "En retard de {n} h.",
+        "retardJ": "En retard de {n} jour(s).",
+        "dansMin": "Dans {n} minutes.",
+        "dansH": "Dans {n} h.",
+        "dansJ": "Dans {n} jour(s).",
+        "binomeTitre": "Toujours seul\xB7e ici",
+        "binomeCorps": "Partage ton foyer : \xE0 deux, l\u2019application prend tout son sens. Mon compte \u2192 Partager."
+      },
+      en: {
+        "add": "{qui} added a task",
+        "done": "{qui} ticked a task",
+        "quelquun": "Someone",
+        "binome": "Your other half",
+        "matin": "The oldest one is waiting",
+        "soir": "Still waiting",
+        "aujourdhui": "added today",
+        "hier": "waiting since yesterday",
+        "jours": "waiting for {n} days",
+        "semaine": "waiting for a week",
+        "semaines": "waiting for {n} weeks",
+        "mois": "waiting for {n} months",
+        "dueDepasse": "\u23F1 Deadline passed",
+        "dueMaintenant": "\u23F1 It\u2019s now",
+        "dueApproche": "\u23F1 Getting close",
+        "dueTitre": "\u23F1 Deadline",
+        "cestLheure": "It\u2019s time.",
+        "retardH": "{n} h overdue.",
+        "retardJ": "{n} day(s) overdue.",
+        "dansMin": "In {n} minutes.",
+        "dansH": "In {n} h.",
+        "dansJ": "In {n} day(s).",
+        "binomeTitre": "Still on your own",
+        "binomeCorps": "Share your household: with two, the app comes into its own. Account \u2192 Share."
+      },
+      es: {
+        "add": "{qui} ha a\xF1adido una tarea",
+        "done": "{qui} ha marcado una tarea",
+        "quelquun": "Alguien",
+        "binome": "Tu media naranja",
+        "matin": "La m\xE1s antigua te espera",
+        "soir": "Sigue pendiente",
+        "aujourdhui": "a\xF1adida hoy",
+        "hier": "espera desde ayer",
+        "jours": "espera desde hace {n} d\xEDas",
+        "semaine": "espera desde hace una semana",
+        "semaines": "espera desde hace {n} semanas",
+        "mois": "espera desde hace {n} meses",
+        "dueDepasse": "\u23F1 Plazo vencido",
+        "dueMaintenant": "\u23F1 Es ahora",
+        "dueApproche": "\u23F1 Se acerca",
+        "dueTitre": "\u23F1 Fecha l\xEDmite",
+        "cestLheure": "Es la hora.",
+        "retardH": "{n} h de retraso.",
+        "retardJ": "{n} d\xEDa(s) de retraso.",
+        "dansMin": "En {n} minutos.",
+        "dansH": "En {n} h.",
+        "dansJ": "En {n} d\xEDa(s).",
+        "binomeTitre": "Todav\xEDa en solitario",
+        "binomeCorps": "Comparte tu hogar: entre dos, la aplicaci\xF3n cobra sentido. Mi cuenta \u2192 Compartir."
+      },
+      pt: {
+        "add": "{qui} adicionou uma tarefa",
+        "done": "{qui} marcou uma tarefa",
+        "quelquun": "Algu\xE9m",
+        "binome": "A tua cara-metade",
+        "matin": "A mais antiga espera-te",
+        "soir": "Ainda por fazer",
+        "aujourdhui": "adicionada hoje",
+        "hier": "espera desde ontem",
+        "jours": "espera h\xE1 {n} dias",
+        "semaine": "espera h\xE1 uma semana",
+        "semaines": "espera h\xE1 {n} semanas",
+        "mois": "espera h\xE1 {n} meses",
+        "dueDepasse": "\u23F1 Prazo ultrapassado",
+        "dueMaintenant": "\u23F1 \xC9 agora",
+        "dueApproche": "\u23F1 Est\xE1 a chegar",
+        "dueTitre": "\u23F1 Prazo",
+        "cestLheure": "\xC9 a hora.",
+        "retardH": "{n} h de atraso.",
+        "retardJ": "{n} dia(s) de atraso.",
+        "dansMin": "Dentro de {n} minutos.",
+        "dansH": "Dentro de {n} h.",
+        "dansJ": "Dentro de {n} dia(s).",
+        "binomeTitre": "Ainda sozinho",
+        "binomeCorps": "Partilha a tua casa: a dois, a aplica\xE7\xE3o ganha sentido. Conta \u2192 Partilhar."
+      },
+      de: {
+        "add": "{qui} hat eine Aufgabe hinzugef\xFCgt",
+        "done": "{qui} hat eine Aufgabe abgehakt",
+        "quelquun": "Jemand",
+        "binome": "Deine bessere H\xE4lfte",
+        "matin": "Die \xE4lteste wartet auf dich",
+        "soir": "Immer noch offen",
+        "aujourdhui": "heute hinzugef\xFCgt",
+        "hier": "wartet seit gestern",
+        "jours": "wartet seit {n} Tagen",
+        "semaine": "wartet seit einer Woche",
+        "semaines": "wartet seit {n} Wochen",
+        "mois": "wartet seit {n} Monaten",
+        "dueDepasse": "\u23F1 Frist \xFCberschritten",
+        "dueMaintenant": "\u23F1 Jetzt ist es so weit",
+        "dueApproche": "\u23F1 Es wird knapp",
+        "dueTitre": "\u23F1 Frist",
+        "cestLheure": "Es ist so weit.",
+        "retardH": "{n} Std. \xFCberf\xE4llig.",
+        "retardJ": "{n} Tag(e) \xFCberf\xE4llig.",
+        "dansMin": "In {n} Minuten.",
+        "dansH": "In {n} Std.",
+        "dansJ": "In {n} Tag(en).",
+        "binomeTitre": "Noch allein",
+        "binomeCorps": "Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto \u2192 Teilen."
+      },
+      it: {
+        "add": "{qui} ha aggiunto un compito",
+        "done": "{qui} ha spuntato un compito",
+        "quelquun": "Qualcuno",
+        "binome": "La tua met\xE0",
+        "matin": "Il pi\xF9 vecchio ti aspetta",
+        "soir": "Ancora in sospeso",
+        "aujourdhui": "aggiunto oggi",
+        "hier": "aspetta da ieri",
+        "jours": "aspetta da {n} giorni",
+        "semaine": "aspetta da una settimana",
+        "semaines": "aspetta da {n} settimane",
+        "mois": "aspetta da {n} mesi",
+        "dueDepasse": "\u23F1 Scadenza superata",
+        "dueMaintenant": "\u23F1 \xC8 adesso",
+        "dueApproche": "\u23F1 Si avvicina",
+        "dueTitre": "\u23F1 Scadenza",
+        "cestLheure": "\xC8 l\u2019ora.",
+        "retardH": "{n} h di ritardo.",
+        "retardJ": "{n} giorno/i di ritardo.",
+        "dansMin": "Tra {n} minuti.",
+        "dansH": "Tra {n} h.",
+        "dansJ": "Tra {n} giorno/i.",
+        "binomeTitre": "Ancora da solo",
+        "binomeCorps": "Condividi la tua casa: in due, l\u2019app prende senso. Account \u2192 Condividi."
+      },
+      ru: {
+        "add": "{qui} \u0434\u043E\u0431\u0430\u0432\u0438\u043B(\u0430) \u0437\u0430\u0434\u0430\u0447\u0443",
+        "done": "{qui} \u043E\u0442\u043C\u0435\u0442\u0438\u043B(\u0430) \u0437\u0430\u0434\u0430\u0447\u0443",
+        "quelquun": "\u041A\u0442\u043E-\u0442\u043E",
+        "binome": "\u0412\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "matin": "\u0421\u0430\u043C\u0430\u044F \u0441\u0442\u0430\u0440\u0430\u044F \u0436\u0434\u0451\u0442 \u0432\u0430\u0441",
+        "soir": "\u0412\u0441\u0451 \u0435\u0449\u0451 \u0436\u0434\u0451\u0442",
+        "aujourdhui": "\u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F",
+        "hier": "\u0436\u0434\u0451\u0442 \u0441\u043E \u0432\u0447\u0435\u0440\u0430",
+        "jours": "\u0436\u0434\u0451\u0442 {n} \u0434\u043D\u0435\u0439",
+        "semaine": "\u0436\u0434\u0451\u0442 \u043D\u0435\u0434\u0435\u043B\u044E",
+        "semaines": "\u0436\u0434\u0451\u0442 {n} \u043D\u0435\u0434\u0435\u043B\u044C",
+        "mois": "\u0436\u0434\u0451\u0442 {n} \u043C\u0435\u0441\u044F\u0446\u0435\u0432",
+        "dueDepasse": "\u23F1 \u0421\u0440\u043E\u043A \u043F\u0440\u043E\u0448\u0451\u043B",
+        "dueMaintenant": "\u23F1 \u0423\u0436\u0435 \u043F\u043E\u0440\u0430",
+        "dueApproche": "\u23F1 \u0421\u043A\u043E\u0440\u043E \u0441\u0440\u043E\u043A",
+        "dueTitre": "\u23F1 \u0421\u0440\u043E\u043A",
+        "cestLheure": "\u041F\u043E\u0440\u0430.",
+        "retardH": "\u041F\u0440\u043E\u0441\u0440\u043E\u0447\u0435\u043D\u043E \u043D\u0430 {n} \u0447.",
+        "retardJ": "\u041F\u0440\u043E\u0441\u0440\u043E\u0447\u0435\u043D\u043E \u043D\u0430 {n} \u0434\u043D.",
+        "dansMin": "\u0427\u0435\u0440\u0435\u0437 {n} \u043C\u0438\u043D\u0443\u0442.",
+        "dansH": "\u0427\u0435\u0440\u0435\u0437 {n} \u0447.",
+        "dansJ": "\u0427\u0435\u0440\u0435\u0437 {n} \u0434\u043D.",
+        "binomeTitre": "\u0412\u0441\u0451 \u0435\u0449\u0451 \u043E\u0434\u043D\u0438",
+        "binomeCorps": "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u0435\u0441\u044C \u0434\u043E\u043C\u043E\u043C: \u0432\u0434\u0432\u043E\u0451\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0435\u0442\u0430\u0435\u0442 \u0441\u043C\u044B\u0441\u043B. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u2192 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F."
+      },
+      zh: {
+        "add": "{qui} \u6DFB\u52A0\u4E86\u4E00\u9879\u4EFB\u52A1",
+        "done": "{qui} \u52FE\u9009\u4E86\u4E00\u9879\u4EFB\u52A1",
+        "quelquun": "\u6709\u4EBA",
+        "binome": "\u4F60\u7684\u53E6\u4E00\u534A",
+        "matin": "\u7B49\u5F97\u6700\u4E45\u7684\u90A3\u4EF6\u5728\u7B49\u4F60",
+        "soir": "\u4ECD\u7136\u6CA1\u505A",
+        "aujourdhui": "\u4ECA\u5929\u6DFB\u52A0",
+        "hier": "\u4ECE\u6628\u5929\u7B49\u5230\u73B0\u5728",
+        "jours": "\u5DF2\u7ECF\u7B49\u4E86 {n} \u5929",
+        "semaine": "\u5DF2\u7ECF\u7B49\u4E86\u4E00\u5468",
+        "semaines": "\u5DF2\u7ECF\u7B49\u4E86 {n} \u5468",
+        "mois": "\u5DF2\u7ECF\u7B49\u4E86 {n} \u4E2A\u6708",
+        "dueDepasse": "\u23F1 \u5DF2\u8FC7\u671F",
+        "dueMaintenant": "\u23F1 \u5C31\u662F\u73B0\u5728",
+        "dueApproche": "\u23F1 \u5FEB\u5230\u4E86",
+        "dueTitre": "\u23F1 \u622A\u6B62\u65F6\u95F4",
+        "cestLheure": "\u65F6\u95F4\u5230\u4E86\u3002",
+        "retardH": "\u5DF2\u903E\u671F {n} \u5C0F\u65F6\u3002",
+        "retardJ": "\u5DF2\u903E\u671F {n} \u5929\u3002",
+        "dansMin": "\u8FD8\u6709 {n} \u5206\u949F\u3002",
+        "dansH": "\u8FD8\u6709 {n} \u5C0F\u65F6\u3002",
+        "dansJ": "\u8FD8\u6709 {n} \u5929\u3002",
+        "binomeTitre": "\u8FD8\u662F\u4E00\u4E2A\u4EBA",
+        "binomeCorps": "\u628A\u5BB6\u5EAD\u5206\u4EAB\u51FA\u53BB\uFF1A\u4E24\u4E2A\u4EBA\u7528\uFF0C\u8FD9\u4E2A\u5E94\u7528\u624D\u6709\u610F\u4E49\u3002\u6211\u7684\u8D26\u6237 \u2192 \u5206\u4EAB\u3002"
+      },
+      ar: {
+        "add": "{qui} \u0623\u0636\u0627\u0641 \u0645\u0647\u0645\u0629",
+        "done": "{qui} \u0639\u0644\u0651\u0645 \u0645\u0647\u0645\u0629",
+        "quelquun": "\u0623\u062D\u062F\u0647\u0645",
+        "binome": "\u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "matin": "\u0627\u0644\u0623\u0642\u062F\u0645 \u0641\u064A \u0627\u0646\u062A\u0638\u0627\u0631\u0643",
+        "soir": "\u0645\u0627 \u0632\u0627\u0644\u062A \u062A\u0646\u062A\u0638\u0631",
+        "aujourdhui": "\u0623\u064F\u0636\u064A\u0641\u062A \u0627\u0644\u064A\u0648\u0645",
+        "hier": "\u062A\u0646\u062A\u0638\u0631 \u0645\u0646\u0630 \u0623\u0645\u0633",
+        "jours": "\u062A\u0646\u062A\u0638\u0631 \u0645\u0646\u0630 {n} \u0623\u064A\u0627\u0645",
+        "semaine": "\u062A\u0646\u062A\u0638\u0631 \u0645\u0646\u0630 \u0623\u0633\u0628\u0648\u0639",
+        "semaines": "\u062A\u0646\u062A\u0638\u0631 \u0645\u0646\u0630 {n} \u0623\u0633\u0627\u0628\u064A\u0639",
+        "mois": "\u062A\u0646\u062A\u0638\u0631 \u0645\u0646\u0630 {n} \u0623\u0634\u0647\u0631",
+        "dueDepasse": "\u23F1 \u0641\u0627\u062A \u0627\u0644\u0645\u0648\u0639\u062F",
+        "dueMaintenant": "\u23F1 \u062D\u0627\u0646 \u0627\u0644\u0648\u0642\u062A",
+        "dueApproche": "\u23F1 \u064A\u0642\u062A\u0631\u0628",
+        "dueTitre": "\u23F1 \u0645\u0648\u0639\u062F \u0646\u0647\u0627\u0626\u064A",
+        "cestLheure": "\u062D\u0627\u0646 \u0627\u0644\u0648\u0642\u062A.",
+        "retardH": "\u0645\u062A\u0623\u062E\u0631 {n} \u0633\u0627\u0639\u0629.",
+        "retardJ": "\u0645\u062A\u0623\u062E\u0631 {n} \u064A\u0648\u0645.",
+        "dansMin": "\u062E\u0644\u0627\u0644 {n} \u062F\u0642\u064A\u0642\u0629.",
+        "dansH": "\u062E\u0644\u0627\u0644 {n} \u0633\u0627\u0639\u0629.",
+        "dansJ": "\u062E\u0644\u0627\u0644 {n} \u064A\u0648\u0645.",
+        "binomeTitre": "\u0645\u0627 \u0632\u0644\u062A \u0648\u062D\u062F\u0643",
+        "binomeCorps": "\u0634\u0627\u0631\u0643 \u0628\u064A\u062A\u0643: \u0645\u0639 \u0627\u062B\u0646\u064A\u0646 \u064A\u062C\u062F \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0639\u0646\u0627\u0647. \u062D\u0633\u0627\u0628\u064A \u2190 \u0645\u0634\u0627\u0631\u0643\u0629."
+      },
+      he: {
+        "add": "{qui} \u05D4\u05D5\u05E1\u05D9\u05E3 \u05DE\u05E9\u05D9\u05DE\u05D4",
+        "done": "{qui} \u05E1\u05D9\u05DE\u05DF \u05DE\u05E9\u05D9\u05DE\u05D4",
+        "quelquun": "\u05DE\u05D9\u05E9\u05D4\u05D5",
+        "binome": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9",
+        "matin": "\u05D4\u05D9\u05E9\u05E0\u05D4 \u05D1\u05D9\u05D5\u05EA\u05E8 \u05DE\u05D7\u05DB\u05D4 \u05DC\u05DA",
+        "soir": "\u05E2\u05D3\u05D9\u05D9\u05DF \u05DE\u05DE\u05EA\u05D9\u05E0\u05D4",
+        "aujourdhui": "\u05E0\u05D5\u05E1\u05E4\u05D4 \u05D4\u05D9\u05D5\u05DD",
+        "hier": "\u05DE\u05D7\u05DB\u05D4 \u05DE\u05D0\u05EA\u05DE\u05D5\u05DC",
+        "jours": "\u05DE\u05D7\u05DB\u05D4 \u05DB\u05D1\u05E8 {n} \u05D9\u05DE\u05D9\u05DD",
+        "semaine": "\u05DE\u05D7\u05DB\u05D4 \u05DB\u05D1\u05E8 \u05E9\u05D1\u05D5\u05E2",
+        "semaines": "\u05DE\u05D7\u05DB\u05D4 \u05DB\u05D1\u05E8 {n} \u05E9\u05D1\u05D5\u05E2\u05D5\u05EA",
+        "mois": "\u05DE\u05D7\u05DB\u05D4 \u05DB\u05D1\u05E8 {n} \u05D7\u05D5\u05D3\u05E9\u05D9\u05DD",
+        "dueDepasse": "\u23F1 \u05D4\u05DE\u05D5\u05E2\u05D3 \u05D7\u05DC\u05E3",
+        "dueMaintenant": "\u23F1 \u05D6\u05D4 \u05E2\u05DB\u05E9\u05D9\u05D5",
+        "dueApproche": "\u23F1 \u05DE\u05EA\u05E7\u05E8\u05D1",
+        "dueTitre": "\u23F1 \u05DE\u05D5\u05E2\u05D3 \u05D9\u05E2\u05D3",
+        "cestLheure": "\u05D4\u05D2\u05D9\u05E2 \u05D4\u05D6\u05DE\u05DF.",
+        "retardH": "\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8 \u05E9\u05DC {n} \u05E9\u05E2\u05D5\u05EA.",
+        "retardJ": "\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8 \u05E9\u05DC {n} \u05D9\u05DE\u05D9\u05DD.",
+        "dansMin": "\u05D1\u05E2\u05D5\u05D3 {n} \u05D3\u05E7\u05D5\u05EA.",
+        "dansH": "\u05D1\u05E2\u05D5\u05D3 {n} \u05E9\u05E2\u05D5\u05EA.",
+        "dansJ": "\u05D1\u05E2\u05D5\u05D3 {n} \u05D9\u05DE\u05D9\u05DD.",
+        "binomeTitre": "\u05E2\u05D3\u05D9\u05D9\u05DF \u05DC\u05D1\u05D3",
+        "binomeCorps": "\u05E9\u05EA\u05E3 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05DA: \u05D1\u05E9\u05E0\u05D9\u05D9\u05DD \u05D4\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05DE\u05E7\u05D1\u05DC\u05EA \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA. \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF \u05E9\u05DC\u05D9 \u2190 \u05E9\u05D9\u05EA\u05D5\u05E3."
+      },
+      fa: {
+        "add": "{qui} \u06A9\u0627\u0631\u06CC \u0627\u0641\u0632\u0648\u062F",
+        "done": "{qui} \u06A9\u0627\u0631\u06CC \u0631\u0627 \u0639\u0644\u0627\u0645\u062A \u0632\u062F",
+        "quelquun": "\u06A9\u0633\u06CC",
+        "binome": "\u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
+        "matin": "\u06A9\u0647\u0646\u0647\u200C\u062A\u0631\u06CC\u0646 \u0645\u0646\u062A\u0638\u0631 \u062A\u0648\u0633\u062A",
+        "soir": "\u0647\u0646\u0648\u0632 \u0645\u0627\u0646\u062F\u0647",
+        "aujourdhui": "\u0627\u0645\u0631\u0648\u0632 \u0627\u0641\u0632\u0648\u062F\u0647 \u0634\u062F",
+        "hier": "\u0627\u0632 \u062F\u06CC\u0631\u0648\u0632 \u0645\u0646\u062A\u0638\u0631 \u0627\u0633\u062A",
+        "jours": "{n} \u0631\u0648\u0632 \u0627\u0633\u062A \u0645\u0646\u062A\u0638\u0631 \u0627\u0633\u062A",
+        "semaine": "\u06CC\u06A9 \u0647\u0641\u062A\u0647 \u0627\u0633\u062A \u0645\u0646\u062A\u0638\u0631 \u0627\u0633\u062A",
+        "semaines": "{n} \u0647\u0641\u062A\u0647 \u0627\u0633\u062A \u0645\u0646\u062A\u0638\u0631 \u0627\u0633\u062A",
+        "mois": "{n} \u0645\u0627\u0647 \u0627\u0633\u062A \u0645\u0646\u062A\u0638\u0631 \u0627\u0633\u062A",
+        "dueDepasse": "\u23F1 \u0645\u0647\u0644\u062A \u06AF\u0630\u0634\u062A",
+        "dueMaintenant": "\u23F1 \u0647\u0645\u06CC\u0646 \u062D\u0627\u0644\u0627",
+        "dueApproche": "\u23F1 \u0646\u0632\u062F\u06CC\u06A9 \u0645\u06CC\u200C\u0634\u0648\u062F",
+        "dueTitre": "\u23F1 \u0645\u0647\u0644\u062A",
+        "cestLheure": "\u0648\u0642\u062A\u0634 \u0631\u0633\u06CC\u062F.",
+        "retardH": "{n} \u0633\u0627\u0639\u062A \u062F\u06CC\u0631\u06A9\u0631\u062F.",
+        "retardJ": "{n} \u0631\u0648\u0632 \u062F\u06CC\u0631\u06A9\u0631\u062F.",
+        "dansMin": "{n} \u062F\u0642\u06CC\u0642\u0647\u0654 \u062F\u06CC\u06AF\u0631.",
+        "dansH": "{n} \u0633\u0627\u0639\u062A \u062F\u06CC\u06AF\u0631.",
+        "dansJ": "{n} \u0631\u0648\u0632 \u062F\u06CC\u06AF\u0631.",
+        "binomeTitre": "\u0647\u0646\u0648\u0632 \u062A\u0646\u0647\u0627\u06CC\u06CC",
+        "binomeCorps": "\u062E\u0627\u0646\u0647\u200C\u0627\u062A \u0631\u0627 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC \u06A9\u0646: \u0628\u0627 \u062F\u0648 \u0646\u0641\u0631\u060C \u0628\u0631\u0646\u0627\u0645\u0647 \u0645\u0639\u0646\u0627 \u067E\u06CC\u062F\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F. \u062D\u0633\u0627\u0628 \u0645\u0646 \u2190 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC."
+      }
+    };
+    var REPLI = "fr";
+    function tr2(lang, cle, vars) {
+      const dict = TEXTES[lang] || TEXTES[REPLI];
+      const brut = dict[cle] !== void 0 ? dict[cle] : TEXTES[REPLI][cle];
+      if (brut === void 0) return cle;
+      return String(brut).replace(
+        /\{(\w+)\}/g,
+        (_, k) => vars && k in vars ? String(vars[k]) : `{${k}}`
+      );
+    }
+    module2.exports = { tr: tr2, LANGUES: Object.keys(TEXTES) };
+  }
+});
+
 // nas/push/index.js
 var { Client } = require_lib2();
 var webpush = require_src2();
+var { tr } = require_i18n();
 var cfg = {
   host: process.env.PGHOST || process.env.POSTGRES_HOST || "db",
   port: Number(process.env.PGPORT || process.env.POSTGRES_PORT || 5432),
@@ -12670,7 +12976,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.7";
+var VERSION = "v4.8";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -12683,9 +12989,9 @@ webpush.setVapidDetails(
 );
 var client = null;
 var monthKey = (d = /* @__PURE__ */ new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = false) {
+async function sendToHousehold(householdId, exceptUser, composer, eveningOnly = false) {
   const { rows } = await client.query(
-    `select id, endpoint, p256dh, auth
+    `select id, endpoint, p256dh, auth, langue
        from push_subscriptions
       where household_id = $1
         and ($2::uuid is null or user_id <> $2)
@@ -12695,6 +13001,7 @@ async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = f
   for (const row of rows) {
     const sub = { endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } };
     try {
+      const payload = typeof composer === "function" ? composer(row.langue) : composer;
       await webpush.sendNotification(sub, JSON.stringify(payload));
       log("envoy\xE9 \u2192", row.endpoint.slice(0, 40) + "\u2026");
     } catch (e) {
@@ -12709,32 +13016,34 @@ async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = f
   }
 }
 async function actorName(householdId, userId) {
-  if (!userId) return "Quelqu\u2019un";
+  if (!userId) return null;
   const { rows } = await client.query(
     "select display_name from members where household_id = $1 and user_id = $2",
     [householdId, userId]
   );
-  return rows[0] && rows[0].display_name || "Ton bin\xF4me";
+  const nom = rows[0] && rows[0].display_name;
+  return nom && nom.trim() ? nom.trim() : null;
 }
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (!household) return;
-  const who = await actorName(household, actor);
-  const title = kind === "add" ? `${who} a ajout\xE9 une t\xE2che` : `${who} a coch\xE9 une t\xE2che`;
-  await sendToHousehold(household, actor, {
-    title,
+  const nom = await actorName(household, actor);
+  await sendToHousehold(household, actor, (lang) => ({
+    title: tr(lang, kind === "add" ? "add" : "done", {
+      qui: nom || tr(lang, actor ? "binome" : "quelquun")
+    }),
     body: text || "",
     url: APP_URL,
     tag: "cmp-tache"
-  });
+  }));
 }
-function waitingSince(days) {
-  if (days < 1) return "ajout\xE9e aujourd\u2019hui";
-  if (days < 2) return "elle attend depuis hier";
-  if (days < 7) return `elle attend depuis ${Math.floor(days)} jours`;
-  if (days < 14) return "elle attend depuis une semaine";
-  if (days < 61) return `elle attend depuis ${Math.floor(days / 7)} semaines`;
-  return `elle attend depuis ${Math.floor(days / 30)} mois`;
+function waitingSince(lang, days) {
+  if (days < 1) return tr(lang, "aujourdhui");
+  if (days < 2) return tr(lang, "hier");
+  if (days < 7) return tr(lang, "jours", { n: Math.floor(days) });
+  if (days < 14) return tr(lang, "semaine");
+  if (days < 61) return tr(lang, "semaines", { n: Math.floor(days / 7) });
+  return tr(lang, "mois", { n: Math.floor(days / 30) });
 }
 async function oldestReminder(moment) {
   const { rows } = await client.query(
@@ -12750,12 +13059,12 @@ async function oldestReminder(moment) {
     await sendToHousehold(
       r.household_id,
       null,
-      {
-        title: moment === "matin" ? "La plus ancienne t\u2019attend" : "Toujours en attente",
-        body: `${r.text} \u2014 ${waitingSince(Number(r.jours))}.`,
+      (lang) => ({
+        title: tr(lang, moment === "matin" ? "matin" : "soir"),
+        body: `${r.text} \u2014 ${waitingSince(lang, Number(r.jours))}.`,
         url: APP_URL,
         tag: "cmp-ancienne"
-      },
+      }),
       true
     );
   }
@@ -12768,22 +13077,24 @@ function stagePour(heuresRestantes) {
   }
   return PALIERS.length + Math.floor(-heuresRestantes / RETARD_H);
 }
-function texteEcheance(heuresRestantes) {
+function texteEcheance(lang, heuresRestantes) {
   if (heuresRestantes <= 0) {
     const h = -heuresRestantes;
-    if (h < 1) return "C\u2019est l\u2019heure.";
-    if (h < 24) return `En retard de ${Math.floor(h)} h.`;
-    return `En retard de ${Math.floor(h / 24)} jour(s).`;
+    if (h < 1) return tr(lang, "cestLheure");
+    if (h < 24) return tr(lang, "retardH", { n: Math.floor(h) });
+    return tr(lang, "retardJ", { n: Math.floor(h / 24) });
   }
-  if (heuresRestantes < 1) return `Dans ${Math.round(heuresRestantes * 60)} minutes.`;
-  if (heuresRestantes < 24) return `Dans ${Math.floor(heuresRestantes)} h.`;
-  return `Dans ${Math.floor(heuresRestantes / 24)} jour(s).`;
+  if (heuresRestantes < 1)
+    return tr(lang, "dansMin", { n: Math.round(heuresRestantes * 60) });
+  if (heuresRestantes < 24)
+    return tr(lang, "dansH", { n: Math.floor(heuresRestantes) });
+  return tr(lang, "dansJ", { n: Math.floor(heuresRestantes / 24) });
 }
-function titreEcheance(heuresRestantes) {
-  if (heuresRestantes <= 0) return "\u23F1 \xC9ch\xE9ance d\xE9pass\xE9e";
-  if (heuresRestantes <= 2) return "\u23F1 C\u2019est maintenant";
-  if (heuresRestantes <= 6) return "\u23F1 \xC7a approche";
-  return "\u23F1 \xC9ch\xE9ance";
+function titreEcheance(lang, heuresRestantes) {
+  if (heuresRestantes <= 0) return tr(lang, "dueDepasse");
+  if (heuresRestantes <= 2) return tr(lang, "dueMaintenant");
+  if (heuresRestantes <= 6) return tr(lang, "dueApproche");
+  return tr(lang, "dueTitre");
 }
 async function dueReminders() {
   const { rows } = await client.query(
@@ -12801,13 +13112,13 @@ async function dueReminders() {
     await sendToHousehold(
       r.household_id,
       null,
-      {
-        title: titreEcheance(h),
-        body: `${r.text} \u2014 ${texteEcheance(h)}`,
+      (lang) => ({
+        title: titreEcheance(lang, h),
+        body: `${r.text} \u2014 ${texteEcheance(lang, h)}`,
         url: APP_URL,
         tag: `cmp-due-${r.id}`,
         urgent: presse
-      },
+      }),
       false
     );
     log(`\xE9ch\xE9ance palier ${cible} \u2192`, r.text.slice(0, 40));
@@ -12815,20 +13126,6 @@ async function dueReminders() {
 }
 var BINOME_MAX = 4;
 var BINOME_JOURS = 7;
-var BINOME_TEXTE = {
-  fr: ["Toujours seul\xB7e ici", "Partage ton foyer : \xE0 deux, l\u2019application prend tout son sens. Mon compte \u2192 Partager."],
-  en: ["Still on your own", "Share your household: with two, the app comes into its own. Account \u2192 Share."],
-  es: ["Todav\xEDa en solitario", "Comparte tu hogar: entre dos, la aplicaci\xF3n cobra sentido. Mi cuenta \u2192 Compartir."],
-  pt: ["Ainda sozinho", "Partilha a tua casa: a dois, a aplica\xE7\xE3o ganha sentido. Conta \u2192 Partilhar."],
-  de: ["Noch allein", "Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto \u2192 Teilen."],
-  it: ["Ancora da solo", "Condividi la tua casa: in due, l\u2019app prende senso. Account \u2192 Condividi."],
-  ru: ["\u0412\u0441\u0451 \u0435\u0449\u0451 \u043E\u0434\u043D\u0438", "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u0435\u0441\u044C \u0434\u043E\u043C\u043E\u043C: \u0432\u0434\u0432\u043E\u0451\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0435\u0442\u0430\u0435\u0442 \u0441\u043C\u044B\u0441\u043B. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u2192 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F."],
-  zh: ["\u8FD8\u662F\u4E00\u4E2A\u4EBA", "\u628A\u5BB6\u5EAD\u5206\u4EAB\u51FA\u53BB\uFF1A\u4E24\u4E2A\u4EBA\u7528\uFF0C\u8FD9\u4E2A\u5E94\u7528\u624D\u6709\u610F\u4E49\u3002\u6211\u7684\u8D26\u6237 \u2192 \u5206\u4EAB\u3002"],
-  ar: ["\u0645\u0627 \u0632\u0644\u062A \u0648\u062D\u062F\u0643", "\u0634\u0627\u0631\u0643 \u0628\u064A\u062A\u0643: \u0645\u0639 \u0627\u062B\u0646\u064A\u0646 \u064A\u062C\u062F \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0639\u0646\u0627\u0647. \u062D\u0633\u0627\u0628\u064A \u2190 \u0645\u0634\u0627\u0631\u0643\u0629."],
-  he: ["\u05E2\u05D3\u05D9\u05D9\u05DF \u05DC\u05D1\u05D3", "\u05E9\u05EA\u05E3 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05DA: \u05D1\u05E9\u05E0\u05D9\u05D9\u05DD \u05D4\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05DE\u05E7\u05D1\u05DC\u05EA \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA. \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF \u05E9\u05DC\u05D9 \u2190 \u05E9\u05D9\u05EA\u05D5\u05E3."],
-  fa: ["\u0647\u0646\u0648\u0632 \u062A\u0646\u0647\u0627\u06CC\u06CC", "\u062E\u0627\u0646\u0647\u200C\u0627\u062A \u0631\u0627 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC \u06A9\u0646: \u0628\u0627 \u062F\u0648 \u0646\u0641\u0631\u060C \u0628\u0631\u0646\u0627\u0645\u0647 \u0645\u0639\u0646\u0627 \u067E\u06CC\u062F\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F. \u062D\u0633\u0627\u0628 \u0645\u0646 \u2190 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC."]
-};
-var texteBinome = (lang) => BINOME_TEXTE[lang] || BINOME_TEXTE.fr;
 async function binomeReminder() {
   const { rows } = await client.query(
     `select p.id, p.endpoint, p.p256dh, p.auth, p.langue
@@ -12841,7 +13138,8 @@ async function binomeReminder() {
     [BINOME_MAX, BINOME_JOURS]
   );
   for (const r of rows) {
-    const [titre, corps] = texteBinome(r.langue);
+    const titre = tr(r.langue, "binomeTitre");
+    const corps = tr(r.langue, "binomeCorps");
     const sub = { endpoint: r.endpoint, keys: { p256dh: r.p256dh, auth: r.auth } };
     try {
       await webpush.sendNotification(

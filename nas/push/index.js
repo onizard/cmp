@@ -5,6 +5,7 @@
 
 const { Client } = require('pg');
 const webpush = require('web-push');
+const { tr } = require('./i18n.cjs');
 
 // Accepte les deux conventions de nommage, pour pouvoir réutiliser
 // directement le fichier .env de la pile (POSTGRES_*).
@@ -37,7 +38,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.7';
+const VERSION = 'v4.8';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -56,10 +57,14 @@ let client = null;
 const monthKey = (d = new Date()) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 
-/** Envoie à tous les abonnés d'un foyer, sauf éventuellement l'auteur. */
-async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = false) {
+/**
+ * Envoie à tous les abonnés d'un foyer, sauf éventuellement l'auteur.
+ * `composer` reçoit la langue de l'appareil et rend la charge utile : chacun
+ * lit donc la notification dans SA langue, pas dans celle du foyer.
+ */
+async function sendToHousehold(householdId, exceptUser, composer, eveningOnly = false) {
   const { rows } = await client.query(
-    `select id, endpoint, p256dh, auth
+    `select id, endpoint, p256dh, auth, langue
        from push_subscriptions
       where household_id = $1
         and ($2::uuid is null or user_id <> $2)
@@ -69,6 +74,8 @@ async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = f
   for (const row of rows) {
     const sub = { endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } };
     try {
+      const payload =
+        typeof composer === 'function' ? composer(row.langue) : composer;
       await webpush.sendNotification(sub, JSON.stringify(payload));
       log('envoyé →', row.endpoint.slice(0, 40) + '…');
     } catch (e) {
@@ -83,38 +90,39 @@ async function sendToHousehold(householdId, exceptUser, payload, eveningOnly = f
   }
 }
 
-/** Prénom de l'auteur, sinon un libellé neutre. */
+/** Prénom de l'auteur, s'il l'a renseigné. Sinon on laisse la langue décider. */
 async function actorName(householdId, userId) {
-  if (!userId) return 'Quelqu’un';
+  if (!userId) return null;
   const { rows } = await client.query(
     'select display_name from members where household_id = $1 and user_id = $2',
     [householdId, userId],
   );
-  return (rows[0] && rows[0].display_name) || 'Ton binôme';
+  const nom = rows[0] && rows[0].display_name;
+  return nom && nom.trim() ? nom.trim() : null;
 }
 
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (!household) return;
-  const who = await actorName(household, actor);
-  const title =
-    kind === 'add' ? `${who} a ajouté une tâche` : `${who} a coché une tâche`;
-  await sendToHousehold(household, actor, {
-    title,
+  const nom = await actorName(household, actor);
+  await sendToHousehold(household, actor, (lang) => ({
+    title: tr(lang, kind === 'add' ? 'add' : 'done', {
+      qui: nom || tr(lang, actor ? 'binome' : 'quelquun'),
+    }),
     body: text || '',
     url: APP_URL,
     tag: 'cmp-tache',
-  });
+  }));
 }
 
 /** Depuis combien de temps elle attend, dit simplement. */
-function waitingSince(days) {
-  if (days < 1) return 'ajoutée aujourd’hui';
-  if (days < 2) return 'elle attend depuis hier';
-  if (days < 7) return `elle attend depuis ${Math.floor(days)} jours`;
-  if (days < 14) return 'elle attend depuis une semaine';
-  if (days < 61) return `elle attend depuis ${Math.floor(days / 7)} semaines`;
-  return `elle attend depuis ${Math.floor(days / 30)} mois`;
+function waitingSince(lang, days) {
+  if (days < 1) return tr(lang, 'aujourdhui');
+  if (days < 2) return tr(lang, 'hier');
+  if (days < 7) return tr(lang, 'jours', { n: Math.floor(days) });
+  if (days < 14) return tr(lang, 'semaine');
+  if (days < 61) return tr(lang, 'semaines', { n: Math.floor(days / 7) });
+  return tr(lang, 'mois', { n: Math.floor(days / 30) });
 }
 
 /**
@@ -135,15 +143,12 @@ async function oldestReminder(moment) {
     await sendToHousehold(
       r.household_id,
       null,
-      {
-        title:
-          moment === 'matin'
-            ? 'La plus ancienne t’attend'
-            : 'Toujours en attente',
-        body: `${r.text} — ${waitingSince(Number(r.jours))}.`,
+      (lang) => ({
+        title: tr(lang, moment === 'matin' ? 'matin' : 'soir'),
+        body: `${r.text} — ${waitingSince(lang, Number(r.jours))}.`,
         url: APP_URL,
         tag: 'cmp-ancienne',
-      },
+      }),
       true,
     );
   }
@@ -164,23 +169,25 @@ function stagePour(heuresRestantes) {
   return PALIERS.length + Math.floor(-heuresRestantes / RETARD_H);
 }
 
-function texteEcheance(heuresRestantes) {
+function texteEcheance(lang, heuresRestantes) {
   if (heuresRestantes <= 0) {
     const h = -heuresRestantes;
-    if (h < 1) return 'C’est l’heure.';
-    if (h < 24) return `En retard de ${Math.floor(h)} h.`;
-    return `En retard de ${Math.floor(h / 24)} jour(s).`;
+    if (h < 1) return tr(lang, 'cestLheure');
+    if (h < 24) return tr(lang, 'retardH', { n: Math.floor(h) });
+    return tr(lang, 'retardJ', { n: Math.floor(h / 24) });
   }
-  if (heuresRestantes < 1) return `Dans ${Math.round(heuresRestantes * 60)} minutes.`;
-  if (heuresRestantes < 24) return `Dans ${Math.floor(heuresRestantes)} h.`;
-  return `Dans ${Math.floor(heuresRestantes / 24)} jour(s).`;
+  if (heuresRestantes < 1)
+    return tr(lang, 'dansMin', { n: Math.round(heuresRestantes * 60) });
+  if (heuresRestantes < 24)
+    return tr(lang, 'dansH', { n: Math.floor(heuresRestantes) });
+  return tr(lang, 'dansJ', { n: Math.floor(heuresRestantes / 24) });
 }
 
-function titreEcheance(heuresRestantes) {
-  if (heuresRestantes <= 0) return '⏱ Échéance dépassée';
-  if (heuresRestantes <= 2) return '⏱ C’est maintenant';
-  if (heuresRestantes <= 6) return '⏱ Ça approche';
-  return '⏱ Échéance';
+function titreEcheance(lang, heuresRestantes) {
+  if (heuresRestantes <= 0) return tr(lang, 'dueDepasse');
+  if (heuresRestantes <= 2) return tr(lang, 'dueMaintenant');
+  if (heuresRestantes <= 6) return tr(lang, 'dueApproche');
+  return tr(lang, 'dueTitre');
 }
 
 async function dueReminders() {
@@ -199,13 +206,13 @@ async function dueReminders() {
     await sendToHousehold(
       r.household_id,
       null,
-      {
-        title: titreEcheance(h),
-        body: `${r.text} — ${texteEcheance(h)}`,
+      (lang) => ({
+        title: titreEcheance(lang, h),
+        body: `${r.text} — ${texteEcheance(lang, h)}`,
         url: APP_URL,
         tag: `cmp-due-${r.id}`,
         urgent: presse,
-      },
+      }),
       false,
     );
     log(`échéance palier ${cible} →`, r.text.slice(0, 40));
@@ -221,21 +228,6 @@ async function dueReminders() {
 const BINOME_MAX = 4;
 const BINOME_JOURS = 7;
 
-const BINOME_TEXTE = {
-  fr: ['Toujours seul·e ici', 'Partage ton foyer : à deux, l’application prend tout son sens. Mon compte → Partager.'],
-  en: ['Still on your own', 'Share your household: with two, the app comes into its own. Account → Share.'],
-  es: ['Todavía en solitario', 'Comparte tu hogar: entre dos, la aplicación cobra sentido. Mi cuenta → Compartir.'],
-  pt: ['Ainda sozinho', 'Partilha a tua casa: a dois, a aplicação ganha sentido. Conta → Partilhar.'],
-  de: ['Noch allein', 'Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto → Teilen.'],
-  it: ['Ancora da solo', 'Condividi la tua casa: in due, l’app prende senso. Account → Condividi.'],
-  ru: ['Всё ещё одни', 'Поделитесь домом: вдвоём приложение обретает смысл. Аккаунт → Поделиться.'],
-  zh: ['还是一个人', '把家庭分享出去：两个人用，这个应用才有意义。我的账户 → 分享。'],
-  ar: ['ما زلت وحدك', 'شارك بيتك: مع اثنين يجد التطبيق معناه. حسابي ← مشاركة.'],
-  he: ['עדיין לבד', 'שתף את הבית שלך: בשניים האפליקציה מקבלת משמעות. החשבון שלי ← שיתוף.'],
-  fa: ['هنوز تنهایی', 'خانه‌ات را هم‌رسانی کن: با دو نفر، برنامه معنا پیدا می‌کند. حساب من ← هم‌رسانی.'],
-};
-
-const texteBinome = (lang) => BINOME_TEXTE[lang] || BINOME_TEXTE.fr;
 
 async function binomeReminder() {
   // Un abonnement dont le foyer n'a qu'un seul membre, qui veut le rappel,
@@ -251,7 +243,8 @@ async function binomeReminder() {
     [BINOME_MAX, BINOME_JOURS],
   );
   for (const r of rows) {
-    const [titre, corps] = texteBinome(r.langue);
+    const titre = tr(r.langue, 'binomeTitre');
+    const corps = tr(r.langue, 'binomeCorps');
     const sub = { endpoint: r.endpoint, keys: { p256dh: r.p256dh, auth: r.auth } };
     try {
       await webpush.sendNotification(
