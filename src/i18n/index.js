@@ -35,22 +35,30 @@ export const LANGUES = [
   { code: 'he', nom: 'עברית', dir: 'rtl', dict: he },
 ];
 
-const DEFAUT = 'fr';
+// Le dictionnaire de référence est le français, mais quelqu'un dont la langue
+// n'est pas gérée a bien plus de chances de lire l'anglais : c'est lui le
+// repli. Le français n'apparaît que si le téléphone le réclame.
+const REFERENCE = 'fr';
+const REPLI = 'en';
 const CLE = 'cmp.langue';
 
 const parCode = (code) => LANGUES.find((l) => l.code === code) || null;
 
-/** La langue du navigateur, si on la gère. */
+/**
+ * La langue du téléphone, si on la gère. On parcourt toute la liste des
+ * préférences : quelqu'un qui a « ja, en » recevra l'anglais, sa deuxième
+ * langue, plutôt qu'un repli imposé.
+ */
 function langueDuNavigateur() {
-  if (typeof navigator === 'undefined') return DEFAUT;
+  if (typeof navigator === 'undefined') return REFERENCE;
   const liste = navigator.languages || [navigator.language || ''];
   for (const brut of liste) {
     const court = String(brut).toLowerCase().split('-')[0];
     // L'hébreu s'est appelé « iw » avant de s'appeler « he ».
-    const code = court === 'iw' ? 'he' : court === 'in' ? 'id' : court;
+    const code = court === 'iw' ? 'he' : court;
     if (parCode(code)) return code;
   }
-  return DEFAUT;
+  return REPLI;
 }
 
 function lue() {
@@ -63,7 +71,7 @@ function lue() {
   return langueDuNavigateur();
 }
 
-let courante = typeof window === 'undefined' ? DEFAUT : lue();
+let courante = typeof window === 'undefined' ? REFERENCE : lue();
 const abonnes = new Set();
 
 export const langue = () => courante;
