@@ -118,6 +118,15 @@ export default function Account({ account }) {
     setNotifBusy(false);
   };
 
+  const supprimer = async () => {
+    setSuppressionErreur(null);
+    setSuppression(true);
+    const err = await account.supprimerLeCompte();
+    if (!err) return; // la session se ferme, l'application repart toute seule
+    setSuppression(false);
+    setSuppressionErreur(`${t('suppression.erreur')} ${err}`);
+  };
+
   const toggleBinome = async () => {
     if (!notifOn) return;
     const next = !binomeOn;
@@ -338,7 +347,7 @@ export default function Account({ account }) {
         )}
       </section>
 
-      <p className="ver">{t('app.titre')} · v4.9</p>
+      <p className="ver">{t('app.titre')} · v5.0</p>
     </main>
   );
 }

@@ -341,11 +341,13 @@ export function useAccount() {
    */
   const supprimerLeCompte = useCallback(async () => {
     setError(null);
-    if (!supabase) return false;
+    if (!supabase) return 'Hors ligne.';
     const { error: err } = await supabase.rpc('cmp_supprimer_mon_compte');
+    // On renvoie le message plutôt qu'un booléen : l'état React n'est pas
+    // encore à jour au retour de l'await, l'appelant lirait l'ancien.
     if (err) {
       setError(err.message);
-      return false;
+      return err.message || 'Erreur inconnue.';
     }
     // Plus rien ne doit survivre sur l'appareil non plus.
     try {
@@ -356,7 +358,7 @@ export function useAccount() {
       /* ignore */
     }
     await supabase.auth.signOut();
-    return true;
+    return null;
   }, []);
 
   const leaveHousehold = useCallback(async () => {
