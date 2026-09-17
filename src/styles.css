@@ -1262,3 +1262,12 @@ body,
   font-weight: 600;
   margin: 6px 0 0;
 }
+
+.install-blocked {
+  background: var(--due-wash);
+  border-color: transparent;
+}
+
+.install-blocked .install-title {
+  color: var(--due-urgent);
+}

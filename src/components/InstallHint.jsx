@@ -5,7 +5,7 @@ import { useInstall } from '../lib/install.js';
  * Ne s'affiche jamais quand c'est déjà fait.
  */
 export default function InstallHint() {
-  const { mode, install, navigateur } = useInstall();
+  const { mode, install, navigateur, hote } = useInstall();
 
   if (mode === 'installed' || mode === 'aucun') return null;
 
@@ -20,6 +20,33 @@ export default function InstallHint() {
         <button className="btn btn-accent btn-block" type="button" onClick={install}>
           Installer l’application
         </button>
+      </div>
+    );
+  }
+
+  // Coincé dans le navigateur d'une messagerie : il n'y a rien à faire ici,
+  // l'entrée « Sur l'écran d'accueil » n'existe pas. On explique d'abord
+  // comment en sortir, le reste n'a aucun sens tant qu'on y est.
+  if (navigateur === 'integre') {
+    return (
+      <div className="install install-blocked">
+        <p className="install-title">Ouvre d’abord cette page dans Safari</p>
+        <p className="install-text">
+          Tu es dans le navigateur intégré{hote ? ` à ${hote}` : ' de ton application'},
+          qui ne sait pas installer d’application.
+        </p>
+        <ol className="install-steps">
+          <li>
+            Touche <b>•••</b> (ou l’icône de partage) en bas à droite de
+            l’écran.
+          </li>
+          <li>
+            Choisis <b>Ouvrir dans Safari</b>.
+          </li>
+          <li>
+            La marche à suivre s’affichera alors ici même.
+          </li>
+        </ol>
       </div>
     );
   }

@@ -54,6 +54,7 @@ export default function Auth({ account }) {
   return (
     <div className="screen">
       <Header />
+      <InstallHint />
       <form className="panel" onSubmit={submit}>
         <p className="lede">
           {creation ? 'Créer ton compte.' : oubli ? 'Mot de passe oublié.' : 'Se connecter.'}
@@ -126,7 +127,6 @@ export default function Auth({ account }) {
           )}
         </p>
       </form>
-      <InstallHint />
     </div>
   );
 }

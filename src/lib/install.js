@@ -29,10 +29,27 @@ export const isIOS = () => {
 /** Sur iOS, quel navigateur ? Le geste n'est pas au même endroit. */
 export const iosBrowser = () => {
   const s = ua();
+  // Les navigateurs intégrés aux messageries : c'est le vrai piège. Ils n'ont
+  // pas du tout l'entrée « Sur l'écran d'accueil », il faut d'abord en sortir.
+  if (/FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Snapchat|LinkedInApp|Twitter|Pinterest|GSA\//i.test(s)) {
+    return 'integre';
+  }
   if (/CriOS/i.test(s)) return 'chrome';
   if (/FxiOS/i.test(s)) return 'firefox';
   if (/EdgiOS/i.test(s)) return 'edge';
   return 'safari';
+};
+
+/** Le nom de l'application dans laquelle la page est coincée, si on le sait. */
+export const appHote = () => {
+  const s = ua();
+  if (/WhatsApp/i.test(s)) return 'WhatsApp';
+  if (/Instagram/i.test(s)) return 'Instagram';
+  if (/FBAN|FBAV|FB_IAB/i.test(s)) return 'Facebook';
+  if (/Snapchat/i.test(s)) return 'Snapchat';
+  if (/LinkedInApp/i.test(s)) return 'LinkedIn';
+  if (/Twitter/i.test(s)) return 'X';
+  return null;
 };
 
 /**
@@ -74,5 +91,10 @@ export function useInstall() {
   else if (prompt) mode = 'bouton';
   else if (isIOS()) mode = 'ios';
 
-  return { mode, install, navigateur: isIOS() ? iosBrowser() : null };
+  return {
+    mode,
+    install,
+    navigateur: isIOS() ? iosBrowser() : null,
+    hote: appHote(),
+  };
 }
