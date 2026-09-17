@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { part, nombre, courbe, total } from '../lib/stats.js';
-import { useT } from '../i18n/index.js';
+import { useT, langue } from '../i18n/index.js';
 
 function Tuile({ valeur, libelle, detail, onClick, ouvert }) {
   if (onClick) {
@@ -78,7 +78,7 @@ function Courbe({ points }) {
 // Date courte, dans la langue en cours.
 const jour = (iso) => {
   try {
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(`${langue()}-u-ca-gregory`, {
       day: '2-digit',
       month: '2-digit',
     }).format(new Date(iso));

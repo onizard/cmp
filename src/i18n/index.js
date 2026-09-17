@@ -20,6 +20,7 @@ import it from './it.js';
 import ru from './ru.js';
 import zh from './zh.js';
 import ar from './ar.js';
+import fa from './fa.js';
 import he from './he.js';
 
 export const LANGUES = [
@@ -32,6 +33,7 @@ export const LANGUES = [
   { code: 'ru', nom: 'Русский', dir: 'ltr', dict: ru },
   { code: 'zh', nom: '中文', dir: 'ltr', dict: zh },
   { code: 'ar', nom: 'العربية', dir: 'rtl', dict: ar },
+  { code: 'fa', nom: 'فارسی', dir: 'rtl', dict: fa },
   { code: 'he', nom: 'עברית', dir: 'rtl', dict: he },
 ];
 
@@ -132,7 +134,12 @@ export function t(cle, vars) {
 export const nomDuMois = (annee, mois) => {
   try {
     const d = new Date(Number(annee), Number(mois) - 1, 1);
-    return new Intl.DateTimeFormat(courante, { month: 'long' }).format(d);
+    // Calendrier grégorien imposé : l'application range ses tâches par mois
+    // grégorien, et `fa` bascule sinon sur le calendrier jalali, dont les mois
+    // chevauchent deux mois grégoriens — l'étiquette mentirait sur le contenu.
+    return new Intl.DateTimeFormat(`${courante}-u-ca-gregory`, {
+      month: 'long',
+    }).format(d);
   } catch {
     return String(mois);
   }
