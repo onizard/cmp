@@ -1414,3 +1414,90 @@ body,
   color: var(--ink-3);
   margin: 7px 0 0;
 }
+
+
+/* --- Partage de l'invitation --- */
+
+.canaux {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.canal {
+  flex: 1 1 0;
+  min-width: 72px;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--ink);
+  background: var(--paper-deep);
+  border: none;
+  border-radius: 12px;
+  padding: 11px 6px;
+  min-height: 42px;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-foyer {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.qr-image {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 0 auto 10px;
+  width: min(230px, 70%);
+}
+
+.qr-image svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.code-repli {
+  font-size: 12px;
+  color: var(--ink-3);
+  text-align: center;
+  margin: 14px 0 0;
+  line-height: 1.5;
+}
+
+.code-repli span {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  word-break: break-all;
+}
+
+
+/* --- Confidentialité --- */
+
+.privacy {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.privacy li {
+  margin-bottom: 9px;
+}
+
+.privacy li:last-child {
+  margin-bottom: 0;
+}
+
+.privacy b {
+  color: var(--ink);
+  font-weight: 700;
+}

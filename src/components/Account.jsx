@@ -10,6 +10,7 @@ import {
   wantsEvening,
 } from '../lib/push.js';
 import InstallHint from './InstallHint.jsx';
+import ShareInvite from './ShareInvite.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -22,7 +23,6 @@ export default function Account({ account }) {
   // dès qu'il tape, on ne l'écrase plus sous ses doigts.
   const touched = useRef(false);
   const dirty = name.trim() !== (account.displayName || '').trim();
-  const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
   // On part du choix mémorisé : l'interrupteur affiche tout de suite le bon
@@ -86,16 +86,6 @@ export default function Account({ account }) {
     setPass('');
     setPassSaved(true);
     setTimeout(() => setPassSaved(false), 2200);
-  };
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(false);
-    }
   };
 
   const toggleNotif = async () => {
@@ -240,14 +230,35 @@ export default function Account({ account }) {
       <section className="setgroup">
         <h2 className="setlabel">Le foyer</h2>
         <div className="setcard">
-          <p className="setnote">
-            Transmets ce code à ta moitié pour qu’elle rejoigne le même foyer.
-            Elle le colle une seule fois à l’ouverture de l’appli.
-          </p>
-          <div className="codebox">{code}</div>
-          <button className="btn btn-accent" type="button" onClick={copy}>
-            {copied ? 'Copié ✓' : "Copier le code d'invitation"}
-          </button>
+          <ShareInvite code={code} prenom={account.displayName} />
+        </div>
+      </section>
+
+      <section className="setgroup">
+        <h2 className="setlabel">Tes données</h2>
+        <div className="setcard">
+          <ul className="privacy">
+            <li>
+              <b>Personne d’autre que ton foyer</b> ne voit tes tâches. La base
+              de données le refuse, ce n’est pas qu’une question d’affichage.
+            </li>
+            <li>
+              <b>Rien n’est vendu, rien n’est transmis.</b> Aucune publicité,
+              aucun traçage, aucun outil de mesure extérieur.
+            </li>
+            <li>
+              Tout est hébergé sur <b>un serveur privé, en France</b>, pas chez
+              un géant du nuage.
+            </li>
+            <li>
+              Le texte des notifications est <b>chiffré</b> avant de partir :
+              ni Google ni Apple ne peuvent le lire au passage.
+            </li>
+            <li>
+              Tu veux que tout disparaisse ? Écris-nous, ton compte et tes
+              données sont effacés.
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -284,7 +295,7 @@ export default function Account({ account }) {
         </p>
       )}
 
-      <p className="ver">charge mentale partagée · v3.5</p>
+      <p className="ver">charge mentale partagée · v3.6</p>
     </main>
   );
 }

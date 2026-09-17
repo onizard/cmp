@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase, isConfigured } from '../supabaseClient.js';
+import {
+  capturerInvitation,
+  invitationEnAttente,
+  oublierInvitation,
+} from './invite.js';
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -30,6 +35,9 @@ const redirectTo = () =>
  * création / rattachement.
  */
 export function useAccount() {
+  // Dès l'ouverture : on retire le code de l'adresse et on le met de côté,
+  // en attendant que la personne ait un compte auquel le rattacher.
+  const [invitation, setInvitation] = useState(() => capturerInvitation());
   const [session, setSession] = useState(null);
   const [household, setHousehold] = useState(null);
   const [displayName, setDisplayName] = useState('');
@@ -83,9 +91,41 @@ export function useAccount() {
       );
       writeLastHousehold(row.household_id);
       setDisplayName(row.display_name || '');
-    } else {
-      setHousehold(null);
+      setLoading(false);
+      setReady(true);
+      return;
     }
+
+    // Aucun foyer, mais une invitation en poche : on la consomme ici. C'est
+    // ce qui permet d'arriver directement dans le bon foyer après inscription.
+    const attente = invitationEnAttente();
+    if (!err && attente) {
+      const { error: e } = await supabase
+        .from('members')
+        .insert({ user_id: session.user.id, household_id: attente });
+      oublierInvitation();
+      setInvitation(null);
+      if (!e) {
+        const { data: apres } = await supabase
+          .from('members')
+          .select('household_id, display_name, households(id, name)')
+          .eq('user_id', session.user.id)
+          .eq('household_id', attente);
+        if (apres && apres.length > 0) {
+          const r = apres[0];
+          writeLastHousehold(r.household_id);
+          setHousehold(r.households || { id: r.household_id, name: 'Maison' });
+          setDisplayName(r.display_name || '');
+          setLoading(false);
+          setReady(true);
+          return;
+        }
+      }
+      // Le code ne mène nulle part : on laisse l'écran d'accueil reprendre la main.
+      setError("Ce code d'invitation ne mène à aucun foyer.");
+    }
+
+    setHousehold(null);
     setLoading(false);
     setReady(true);
   }, [session]);
@@ -255,6 +295,7 @@ export function useAccount() {
 
   return {
     isConfigured,
+    invitation,
     session,
     household,
     displayName,

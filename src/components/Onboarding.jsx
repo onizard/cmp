@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Header from './Header.jsx';
 
 export default function Onboarding({ account }) {
-  const [code, setCode] = useState('');
+  // Un code reçu par lien arrive déjà rempli : il n'y a plus qu'à confirmer.
+  const [code, setCode] = useState(account.invitation || '');
   const [busy, setBusy] = useState(false);
 
   const create = async () => {
@@ -24,7 +25,9 @@ export default function Onboarding({ account }) {
       <div className="panel">
         <p className="lede">Rejoindre le foyer.</p>
         <p className="soft-text">
-          Si l'autre personne t'a envoyé un code d'invitation, colle-le ici.
+          {account.invitation
+            ? 'Ton invitation est reconnue. Il ne reste qu’à confirmer.'
+            : "Si l'autre personne t'a envoyé un code d'invitation, colle-le ici."}
         </p>
         <form onSubmit={join}>
           <label className="field-label" htmlFor="code">
