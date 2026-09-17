@@ -102,18 +102,6 @@ export function useRewards(householdId, userId) {
     return () => clearInterval(t);
   }, [householdId, refresh]);
 
-  /** Retire une récompense du catalogue (suppression logique). */
-  const removeReward = useCallback(
-    async (id) => {
-      saveRewards(
-        rRef.current.map((r) => (r.id === id ? { ...r, deleted: true } : r)),
-      );
-      if (supabase)
-        await supabase.from('rewards').update({ deleted: true }).eq('id', id);
-    },
-    [saveRewards],
-  );
-
   /** Dépense ses points pour une récompense (on fige son nom et son coût). */
   const claimReward = useCallback(
     async (reward) => {
@@ -174,7 +162,6 @@ export function useRewards(householdId, userId) {
     names,
     otherUser,
     refresh,
-    removeReward,
     claimReward,
     claimCustom,
     cancelClaim,

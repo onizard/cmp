@@ -146,14 +146,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                   >
                     Prendre
                   </button>
-                  <button
-                    className="reward-del"
-                    type="button"
-                    aria-label={`Retirer ${r.label}`}
-                    onClick={() => store.removeReward(r.id)}
-                  >
-                    ×
-                  </button>
                 </li>
               );
             })}

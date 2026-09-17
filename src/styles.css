@@ -911,19 +911,6 @@ body,
   color: var(--ink-3);
 }
 
-.reward-del {
-  flex: none;
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: none;
-  color: var(--ink-3);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
 .claim-who {
   color: var(--ink-3);
   font-weight: 400;
