@@ -14,6 +14,15 @@ const BrainIcon = () => (
   </svg>
 );
 
+const ChartIcon = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 21h18" />
+    <rect x="5" y="12" width="3.4" height="6" rx="1.2" />
+    <rect x="10.3" y="8" width="3.4" height="10" rx="1.2" />
+    <rect x="15.6" y="4" width="3.4" height="14" rx="1.2" />
+  </svg>
+);
+
 const UserIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="8" r="4" />
@@ -21,12 +30,17 @@ const UserIcon = () => (
   </svg>
 );
 
-export default function TabBar({ tab, onChange, honourCount = 0 }) {
+export default function TabBar({ tab, onChange, honourCount = 0, admin = false }) {
   const tabs = [
     { id: 'liste', label: 'Tâches', Icon: ListIcon },
     { id: 'cerveau', label: 'Cerveau', Icon: BrainIcon },
     { id: 'compte', label: 'Mon compte', Icon: UserIcon },
   ];
+  // L'onglet n'apparaît que pour un administrateur. Ce n'est qu'un confort :
+  // c'est la base qui refuse les chiffres à tout autre appelant.
+  if (admin) {
+    tabs.push({ id: 'admin', label: 'Bord', Icon: ChartIcon });
+  }
   return (
     <nav className="tabbar" role="tablist" aria-label="Sections">
       {tabs.map(({ id, label, Icon }) => (

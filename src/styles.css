@@ -1271,3 +1271,146 @@ body,
 .install-blocked .install-title {
   color: var(--due-urgent);
 }
+
+
+/* --- Contact --- */
+
+.contact {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 22px 0 0;
+}
+
+.contact a {
+  color: var(--violet);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+/* --- Tableau de bord --- */
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+}
+
+.stat-val {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 27px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.stat-lab {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 3px;
+}
+
+.stat-det {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 5px;
+}
+
+.mesure {
+  margin-bottom: 18px;
+}
+
+.mesure:last-child {
+  margin-bottom: 0;
+}
+
+.mesure-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.mesure-tete b {
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--violet);
+  white-space: nowrap;
+}
+
+.mesure-piste {
+  height: 9px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+
+.mesure-piste span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--grad);
+  transition: width 0.4s ease;
+}
+
+.mesure-aide {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.45;
+  margin: 7px 0 0;
+}
+
+.courbe-tete {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin: 0 0 12px;
+}
+
+.courbe-tete b {
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.courbe {
+  display: block;
+  width: 100%;
+  height: 72px;
+  overflow: visible;
+}
+
+.courbe-aire {
+  fill: var(--violet);
+  opacity: 0.16;
+}
+
+.courbe-ligne {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.courbe-pied {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin: 7px 0 0;
+}

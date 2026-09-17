@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
+import { useAdmin } from './lib/admin.js';
 import { monthKey, tasksVisibleIn, headline } from './lib/visibility.js';
 import { pointsAvailable, affordable } from './lib/gamify.js';
 import Header from './components/Header.jsx';
@@ -11,6 +12,7 @@ import TaskList from './components/TaskList.jsx';
 import TabBar from './components/TabBar.jsx';
 import BrainView from './components/BrainView.jsx';
 import Account from './components/Account.jsx';
+import AdminView from './components/AdminView.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
 import { syncPush } from './lib/push.js';
 
@@ -59,6 +61,7 @@ function Home({ account, currentMonth }) {
   const userId = account.session.user.id;
   const store = useTasks(account.household.id, userId);
   const rewards = useRewards(account.household.id, userId);
+  const admin = useAdmin();
   const [tab, setTab] = useState('liste');
   const householdId = account.household.id;
 
@@ -107,8 +110,14 @@ function Home({ account, currentMonth }) {
         <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
       )}
       {tab === 'compte' && <Account account={account} />}
+      {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}
 
-      <TabBar tab={tab} onChange={setTab} honourCount={readyCount} />
+      <TabBar
+        tab={tab}
+        onChange={setTab}
+        honourCount={readyCount}
+        admin={admin.isAdmin}
+      />
     </div>
   );
 }

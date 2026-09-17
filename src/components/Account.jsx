@@ -11,6 +11,9 @@ import {
 } from '../lib/push.js';
 import InstallHint from './InstallHint.jsx';
 
+// Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
+const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
+
 export default function Account({ account }) {
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
@@ -267,7 +270,21 @@ export default function Account({ account }) {
         )}
       </p>
 
-      <p className="ver">charge mentale partagée · v3.3</p>
+      {CONTACT && (
+        <p className="contact">
+          Une idée, une question, quelque chose qui cloche ?{' '}
+          <a
+            href={`mailto:${CONTACT}?subject=${encodeURIComponent(
+              'Charge mentale partagée',
+            )}`}
+          >
+            Écris-nous
+          </a>
+          .
+        </p>
+      )}
+
+      <p className="ver">charge mentale partagée · v3.4</p>
     </main>
   );
 }

@@ -6,6 +6,7 @@ cd "$(dirname "$0")"
 . ./nas/.env
 export VITE_SUPABASE_ANON_KEY="$ANON_KEY"
 export VITE_VAPID_PUBLIC="$VAPID_PUBLIC"
+export VITE_CONTACT_EMAIL="${VITE_CONTACT_EMAIL:-}"
 npx vite build
 VER=$(grep -o 'content="v[0-9][0-9.]*"' dist/index.html | head -1 | cut -d'"' -f2)
 rm -f cmp-app-*.tar.gz
