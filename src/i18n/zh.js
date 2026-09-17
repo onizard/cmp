@@ -17,7 +17,7 @@ export default {
     confirmationRequise: '账户已创建。请在邮箱中确认后登录。',
     deconnexion: '退出登录',
   },
-  foyer: {
+  foyer: { perduTitre: '连接中断。', perduTexte: '无法确认你的家庭。千万不要新建一个：你的家庭完好无损，重试即可。', reessayer: '重试',
     rejoindre: '加入家庭。', rejoindreAide: '如果对方给了你邀请码，粘贴在这里。',
     inviteReconnue: '已识别你的邀请，确认即可。',
     code: '邀请码', codePlaceholder: '在此粘贴邀请码', bouton: '加入',

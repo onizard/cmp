@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'Konto erstellt. Bestätige per E-Mail und melde dich dann an.',
     deconnexion: 'Abmelden',
   },
-  foyer: {
+  foyer: { perduTitre: 'Verbindung verloren.', perduTexte: 'Wir konnten deinen Haushalt nicht prüfen. Lege auf keinen Fall einen neuen an: deiner ist unversehrt, versuch es einfach erneut.', reessayer: 'Erneut versuchen',
     rejoindre: 'Dem Haushalt beitreten.', rejoindreAide: 'Wenn die andere Person dir einen Einladungscode geschickt hat, füge ihn hier ein.',
     inviteReconnue: 'Deine Einladung ist erkannt. Nur noch bestätigen.',
     code: 'Einladungscode', codePlaceholder: 'Code hier einfügen', bouton: 'Beitreten',

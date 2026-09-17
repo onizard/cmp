@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'تم إنشاء الحساب. أكّد من بريدك ثم سجّل الدخول.',
     deconnexion: 'تسجيل الخروج',
   },
-  foyer: {
+  foyer: { perduTitre: 'انقطع الاتصال.', perduTexte: 'لم نتمكن من التحقق من بيتك. لا تنشئ بيتًا جديدًا أبدًا: بيتك سليم، يكفي أن تعيد المحاولة.', reessayer: 'إعادة المحاولة',
     rejoindre: 'الانضمام إلى البيت.', rejoindreAide: 'إذا أرسل لك الشخص الآخر رمز دعوة، ألصقه هنا.',
     inviteReconnue: 'تم التعرف على دعوتك. لم يبقَ سوى التأكيد.',
     code: 'رمز الدعوة', codePlaceholder: 'ألصق الرمز هنا', bouton: 'انضمام',

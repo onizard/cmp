@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'החשבון נוצר. אשר דרך הדוא״ל ואז התחבר.',
     deconnexion: 'התנתקות',
   },
-  foyer: {
+  foyer: { perduTitre: 'החיבור אבד.', perduTexte: 'לא הצלחנו לבדוק את הבית שלך. בשום אופן אל תיצור בית חדש: שלך שלם, די לנסות שוב.', reessayer: 'לנסות שוב',
     rejoindre: 'הצטרפות לבית.', rejoindreAide: 'אם האדם השני שלח לך קוד הזמנה, הדבק אותו כאן.',
     inviteReconnue: 'ההזמנה שלך זוהתה. נותר רק לאשר.',
     code: 'קוד הזמנה', codePlaceholder: 'הדבק את הקוד כאן', bouton: 'הצטרפות',

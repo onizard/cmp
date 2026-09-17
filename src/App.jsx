@@ -44,6 +44,28 @@ export default function App() {
   }
 
   if (!account.session) return <Auth account={account} />;
+
+  // On ne propose « créer un foyer » que si on a VRAIMENT pu vérifier qu'il
+  // n'y en a pas. Sinon on invite des gens a se fabriquer un doublon.
+  if (account.lectureRatee && !account.household) {
+    return (
+      <div className="screen">
+        <Header />
+        <div className="panel">
+          <p className="lede">{t('foyer.perduTitre')}</p>
+          <p className="soft-text">{t('foyer.perduTexte')}</p>
+          <button
+            className="btn btn-accent btn-block"
+            type="button"
+            onClick={account.reessayer}
+          >
+            {t('foyer.reessayer')}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!account.household) return <Onboarding account={account} />;
 
   return (

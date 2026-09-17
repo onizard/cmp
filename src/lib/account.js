@@ -45,6 +45,9 @@ export function useAccount() {
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(null);
+  // Vrai quand on n'a PAS PU savoir si la personne a un foyer, ce qui n'est
+  // pas la même chose que « elle n'en a pas ».
+  const [lectureRatee, setLectureRatee] = useState(false);
 
   // Session
   useEffect(() => {
@@ -82,7 +85,19 @@ export function useAccount() {
       .select('household_id, display_name, households(id, name)')
       .eq('user_id', session.user.id)
       .order('household_id');
-    if (!err && data && data.length > 0) {
+
+    // La requête a échoué : on ne sait rien. Surtout ne pas conclure « aucun
+    // foyer » et proposer d'en créer un — c'est ainsi qu'on fabrique des
+    // doublons chez quelqu'un qui en avait déjà un.
+    if (err) {
+      setLectureRatee(true);
+      setLoading(false);
+      setReady(true);
+      return;
+    }
+    setLectureRatee(false);
+
+    if (data && data.length > 0) {
       // Quelqu'un peut appartenir à plusieurs foyers : on garde celui qu'il
       // utilisait déjà, sinon le premier, pour ne pas changer d'un coup.
       const last = readLastHousehold();
@@ -100,7 +115,7 @@ export function useAccount() {
     // Aucun foyer, mais une invitation en poche : on la consomme ici. C'est
     // ce qui permet d'arriver directement dans le bon foyer après inscription.
     const attente = invitationEnAttente();
-    if (!err && attente) {
+    if (attente) {
       const { error: e } = await supabase
         .from('members')
         .insert({ user_id: session.user.id, household_id: attente });
@@ -218,6 +233,24 @@ export function useAccount() {
 
   const createHousehold = useCallback(async () => {
     setError(null);
+    // On revérifie juste avant de créer : entre l'affichage de l'écran et le
+    // clic, la personne peut très bien avoir déjà un foyer.
+    const { data: deja, error: eDeja } = await supabase
+      .from('members')
+      .select('household_id, display_name, households(id, name)')
+      .eq('user_id', session.user.id)
+      .limit(1);
+    if (eDeja) {
+      setError(eDeja.message);
+      return;
+    }
+    if (deja && deja.length > 0) {
+      const r = deja[0];
+      writeLastHousehold(r.household_id);
+      setHousehold(r.households || { id: r.household_id, name: 'Maison' });
+      setDisplayName(r.display_name || '');
+      return;
+    }
     const { data: h, error: e1 } = await supabase
       .from('households')
       .insert({ name: 'Maison' })
@@ -297,6 +330,8 @@ export function useAccount() {
   return {
     isConfigured,
     invitation,
+    lectureRatee,
+    reessayer: loadHousehold,
     session,
     household,
     displayName,

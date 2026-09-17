@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'Cuenta creada. Confirma desde tu correo y luego inicia sesión.',
     deconnexion: 'Cerrar sesión',
   },
-  foyer: {
+  foyer: { perduTitre: 'Conexión perdida.', perduTexte: 'No pudimos comprobar tu hogar. Sobre todo no crees uno nuevo: el tuyo está intacto, basta con reintentar.', reessayer: 'Reintentar',
     rejoindre: 'Unirse al hogar.', rejoindreAide: 'Si la otra persona te envió un código de invitación, pégalo aquí.',
     inviteReconnue: 'Tu invitación está reconocida. Solo falta confirmar.',
     code: 'Código de invitación', codePlaceholder: 'pega el código aquí', bouton: 'Unirme',

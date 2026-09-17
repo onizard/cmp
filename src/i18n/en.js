@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'Account created. Check your inbox to confirm, then sign in.',
     deconnexion: 'Sign out',
   },
-  foyer: {
+  foyer: { perduTitre: 'Connection lost.', perduTexte: 'We couldn’t check your household. Do not create a new one: yours is intact, just try again.', reessayer: 'Try again',
     rejoindre: 'Join the household.', rejoindreAide: 'If the other person sent you an invitation code, paste it here.',
     inviteReconnue: 'Your invitation is recognised. Just confirm.',
     code: 'Invitation code', codePlaceholder: 'paste the code here', bouton: 'Join',

@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'Account creato. Conferma dalla tua posta, poi accedi.',
     deconnexion: 'Esci',
   },
-  foyer: {
+  foyer: { perduTitre: 'Connessione persa.', perduTexte: 'Non siamo riusciti a verificare la tua casa. Non crearne una nuova: la tua è intatta, basta riprovare.', reessayer: 'Riprova',
     rejoindre: 'Unisciti alla casa.', rejoindreAide: 'Se l’altra persona ti ha mandato un codice di invito, incollalo qui.',
     inviteReconnue: 'Il tuo invito è riconosciuto. Resta solo da confermare.',
     code: 'Codice di invito', codePlaceholder: 'incolla il codice qui', bouton: 'Unisciti',

@@ -17,7 +17,7 @@ export default {
     confirmationRequise: 'Conta criada. Confirma pelo e-mail e depois entra.',
     deconnexion: 'Terminar sessão',
   },
-  foyer: {
+  foyer: { perduTitre: 'Ligação perdida.', perduTexte: 'Não conseguimos verificar a tua casa. Não crie uma nova: a tua está intacta, basta tentar de novo.', reessayer: 'Tentar de novo',
     rejoindre: 'Juntar-se à casa.', rejoindreAide: 'Se a outra pessoa te enviou um código de convite, cola-o aqui.',
     inviteReconnue: 'O teu convite foi reconhecido. Só falta confirmar.',
     code: 'Código de convite', codePlaceholder: 'cola o código aqui', bouton: 'Juntar-me',

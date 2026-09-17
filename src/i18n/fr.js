@@ -49,7 +49,7 @@ export default {
     deconnexion: 'Se déconnecter',
   },
 
-  foyer: {
+  foyer: { perduTitre: 'Connexion perdue.', perduTexte: 'On n’a pas pu vérifier ton foyer. Ne crée surtout pas de nouveau foyer : le tien est intact, il suffit de réessayer.', reessayer: 'Réessayer',
     rejoindre: 'Rejoindre le foyer.',
     rejoindreAide:
       'Si l’autre personne t’a envoyé un code d’invitation, colle-le ici.',
