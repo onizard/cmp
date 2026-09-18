@@ -53,6 +53,34 @@ const patchToRow = (patch) => {
   return row;
 };
 
+// Erreurs sur lesquelles le serveur ne reviendra pas. Les rejouer ne sert à
+// rien et retient toute la file en otage : la modification suivante ne part
+// plus. On les jette, puis on remet l'écran d'accord avec la base.
+const REFUS_DEFINITIF = new Set([
+  '42501', // privilège insuffisant : RLS, ou décoche réservée à l'auteur
+  '23502', // colonne obligatoire absente
+  '23503', // clé étrangère
+  '23514', // contrainte de vérification
+  '22P02', // valeur mal formée
+]);
+
+export const estDefinitif = (err) => Boolean(err) && REFUS_DEFINITIF.has(err.code);
+
+/**
+ * Qui peut décocher. On ne décoche que ce qu'on a coché soi-même : décocher la
+ * tâche de l'autre lui retirerait ses points sans qu'il le sache.
+ *
+ * Une tâche cochée sans auteur enregistré — cochée avant que la colonne ne soit
+ * remplie, ou dont l'auteur a supprimé son compte — n'appartient à personne :
+ * chacun peut la décocher, sans quoi elle resterait cochée pour toujours.
+ *
+ * La même règle est posée dans la base (nas/db/decoche.sql), qui seule fait
+ * autorité : une PWA sert sa version en cache, donc un téléphone en retard
+ * d'une mise à jour ne connaît pas encore celle-ci.
+ */
+export const decochable = (task, userId) =>
+  !task.done || !task.doneBy || task.doneBy === userId;
+
 // --- Stockage local (cache lecture hors ligne + file d'attente d'écritures) ---
 
 const cacheKey = (hid) => `cmp:tasks:${hid}`;
@@ -122,6 +150,17 @@ export function useTasks(householdId, userId) {
     [householdId],
   );
 
+  // Relit la base et écrase le cache local. Séparé de refresh(), qui vide la
+  // file d'abord : ici c'est justement la file qui appelle.
+  const resync = useCallback(async () => {
+    if (!supabase || !householdId) return;
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+      .eq('household_id', householdId);
+    if (!error && data) persist(data.map(fromRow));
+  }, [householdId, persist]);
+
   // Applique une opération au serveur. Renvoie true si envoyée.
   const sendOp = useCallback(async (op) => {
     if (!supabase) return false;
@@ -142,13 +181,17 @@ export function useTasks(householdId, userId) {
   const flushQueue = useCallback(async () => {
     if (flushing.current || !supabase) return;
     flushing.current = true;
+    let refuse = false;
     try {
       let q = getQueue();
       while (q.length > 0) {
         try {
           await sendOp(q[0]);
-        } catch {
-          break; // hors ligne ou erreur transitoire : on réessaiera plus tard
+        } catch (err) {
+          // Hors ligne ou erreur passagère : on garde l'opération pour plus
+          // tard. Refus définitif : on la jette et on notera qu'il faut relire.
+          if (!estDefinitif(err)) break;
+          refuse = true;
         }
         q = q.slice(1);
         setQueue(q);
@@ -156,7 +199,10 @@ export function useTasks(householdId, userId) {
     } finally {
       flushing.current = false;
     }
-  }, [getQueue, sendOp, setQueue]);
+    // L'écran montre une modification que le serveur a refusée : on le remet
+    // d'accord avec la base.
+    if (refuse) await resync();
+  }, [getQueue, sendOp, setQueue, resync]);
 
   const enqueue = useCallback(
     (op) => {
@@ -173,13 +219,9 @@ export function useTasks(householdId, userId) {
       return;
     }
     await flushQueue();
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*')
-      .eq('household_id', householdId);
-    if (!error && data) persist(data.map(fromRow));
+    await resync();
     setLoading(false);
-  }, [householdId, flushQueue, persist]);
+  }, [householdId, flushQueue, resync]);
 
   // Chargement initial + temps réel + reprise au premier plan / reconnexion.
   useEffect(() => {
@@ -289,14 +331,7 @@ export function useTasks(householdId, userId) {
     [applyLocal, enqueue],
   );
 
-  /**
-   * Coche ou décoche. On ne décoche que ce qu'on a coché soi-même : décocher
-   * la tâche de l'autre lui retirerait ses points sans qu'il le sache.
-   */
-  const peutDecocher = useCallback(
-    (task) => !task.done || !task.doneBy || task.doneBy === userId,
-    [userId],
-  );
+  const peutDecocher = useCallback((task) => decochable(task, userId), [userId]);
 
   const toggleDone = useCallback(
     (task, currentMonth) => {
