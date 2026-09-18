@@ -26,7 +26,7 @@ export default {
     codeSansFoyer: 'Questo codice di invito non porta ad alcuna casa.',
     quitter: 'Lascia la casa', quitterSur: 'Lasciare davvero la casa?', quitterOui: 'sì, esci',
   },
-  taches: {
+  taches: { decocheInterdite: 'Solo chi l’ha spuntata può toglierne la spunta.',
     ajouter: 'aggiungi un compito', boutonAjouter: 'Aggiungi', cocher: 'Spunta', decocher: 'Togli la spunta',
     modifier: 'Modifica', supprimer: 'Elimina', actions: 'Azioni', depuis: 'da {mois}',
     aFaire: '{n} da fare', termine: 'finito', rien: 'niente',

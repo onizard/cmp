@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'این رمز دعوت به هیچ خانه‌ای نمی‌رسد.',
     quitter: 'ترک خانه', quitterSur: 'واقعاً خانه را ترک کنی؟', quitterOui: 'بله، ترک کن',
   },
-  taches: {
+  taches: { decocheInterdite: 'فقط کسی که علامت زده می‌تواند آن را بردارد.',
     ajouter: 'کاری بیفزا', boutonAjouter: 'افزودن', cocher: 'علامت زدن', decocher: 'برداشتن علامت',
     modifier: 'ویرایش', supprimer: 'حذف', actions: 'کنش‌ها', depuis: 'از {mois}',
     aFaire: '{n} مانده', termine: 'تمام شد', rien: 'هیچ',

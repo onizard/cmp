@@ -15,8 +15,12 @@ export default defineConfig({
       injectRegister: false,
       includeAssets: ['favicon-32.png', 'apple-touch-icon.png'],
       manifest: {
+        // `id` donne a l'application une identite stable, independante de
+        // l'URL : c'est ce a quoi le systeme la reconnait d'une version a
+        // l'autre. Sans lui, il se rabat sur start_url, donc sur le domaine.
+        id: '/?app=cmp',
         name: 'Charge mentale partagée',
-        short_name: 'Charge partagée',
+        short_name: 'Charge mentale partagée',
         description: 'La liste des choses à porter, à deux.',
         lang: 'fr',
         dir: 'ltr',

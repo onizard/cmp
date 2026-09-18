@@ -26,7 +26,7 @@ export default {
     codeSansFoyer: '这个邀请码没有指向任何家庭。',
     quitter: '退出家庭', quitterSur: '确定要退出家庭吗？', quitterOui: '是，退出',
   },
-  taches: {
+  taches: { decocheInterdite: '只有勾选的人才能取消勾选。',
     ajouter: '添加一项任务', boutonAjouter: '添加', cocher: '勾选', decocher: '取消勾选',
     modifier: '修改', supprimer: '删除', actions: '操作', depuis: '自 {mois} 起',
     aFaire: '{n} 项待办', termine: '已完成', rien: '无',

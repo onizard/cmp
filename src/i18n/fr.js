@@ -67,7 +67,7 @@ export default {
     quitterOui: 'oui, quitter',
   },
 
-  taches: {
+  taches: { decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',
     ajouter: 'ajoute une tâche',
     boutonAjouter: 'Ajouter',
     cocher: 'Cocher',

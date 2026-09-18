@@ -10,6 +10,7 @@ export default function TaskItem({ task, month, currentMonth, store }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(task.text);
   const [dueOpen, setDueOpen] = useState(false);
+  const [refus, setRefus] = useState(false);
   const start = splitDue(task.dueAt, task.dueHasTime);
   const [date, setDate] = useState(start.date);
   const [time, setTime] = useState(start.time);
@@ -53,7 +54,14 @@ export default function TaskItem({ task, month, currentMonth, store }) {
           role="checkbox"
           aria-checked={task.done}
           aria-label={task.done ? t('taches.decocher') : t('taches.cocher')}
-          onClick={() => store.toggleDone(task, currentMonth)}
+          onClick={() => {
+            if (store.toggleDone(task, currentMonth) === false) {
+              // On explique au lieu de rester inerte : un bouton mort passe
+              // pour une panne.
+              setRefus(true);
+              setTimeout(() => setRefus(false), 3200);
+            }
+          }}
         >
           <span className="check-box">{task.done ? '✓' : ''}</span>
         </button>
@@ -95,6 +103,8 @@ export default function TaskItem({ task, month, currentMonth, store }) {
           </button>
         )}
       </div>
+
+      {refus && <p className="refus">{t('taches.decocheInterdite')}</p>}
 
       {open && !editing && dueOpen && (
         <form className="due-form" onSubmit={saveDue}>

@@ -289,14 +289,25 @@ export function useTasks(householdId, userId) {
     [applyLocal, enqueue],
   );
 
+  /**
+   * Coche ou décoche. On ne décoche que ce qu'on a coché soi-même : décocher
+   * la tâche de l'autre lui retirerait ses points sans qu'il le sache.
+   */
+  const peutDecocher = useCallback(
+    (task) => !task.done || !task.doneBy || task.doneBy === userId,
+    [userId],
+  );
+
   const toggleDone = useCallback(
     (task, currentMonth) => {
+      if (task.done && !peutDecocher(task)) return false;
       const patch = task.done
         ? { done: false, doneMonth: null, doneBy: null }
         : { done: true, doneMonth: currentMonth, doneBy: userId ?? null };
       updateTask(task.id, patch);
+      return true;
     },
-    [updateTask, userId],
+    [updateTask, userId, peutDecocher],
   );
 
   /** Pose ou retire l'échéance d'une tâche. */
@@ -324,6 +335,7 @@ export function useTasks(householdId, userId) {
     updateTask,
     setDue,
     toggleDone,
+    peutDecocher,
     removeTask,
   };
 }

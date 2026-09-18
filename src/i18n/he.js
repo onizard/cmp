@@ -26,7 +26,7 @@ export default {
     codeSansFoyer: 'קוד ההזמנה הזה אינו מוביל לשום בית.',
     quitter: 'עזיבת הבית', quitterSur: 'באמת לעזוב את הבית?', quitterOui: 'כן, לעזוב',
   },
-  taches: {
+  taches: { decocheInterdite: 'רק מי שסימן אותה יכול לבטל את הסימון.',
     ajouter: 'הוסף משימה', boutonAjouter: 'הוספה', cocher: 'סימון', decocher: 'ביטול סימון',
     modifier: 'עריכה', supprimer: 'מחיקה', actions: 'פעולות', depuis: 'מאז {mois}',
     aFaire: '{n} לביצוע', termine: 'הושלם', rien: 'כלום',

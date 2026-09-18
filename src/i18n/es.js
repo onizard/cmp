@@ -26,7 +26,7 @@ export default {
     codeSansFoyer: 'Este código de invitación no lleva a ningún hogar.',
     quitter: 'Salir del hogar', quitterSur: '¿Salir del hogar de verdad?', quitterOui: 'sí, salir',
   },
-  taches: {
+  taches: { decocheInterdite: 'Solo quien la marcó puede desmarcarla.',
     ajouter: 'añade una tarea', boutonAjouter: 'Añadir', cocher: 'Marcar', decocher: 'Desmarcar',
     modifier: 'Editar', supprimer: 'Eliminar', actions: 'Acciones', depuis: 'desde {mois}',
     aFaire: '{n} por hacer', termine: 'terminado', rien: 'nada',
