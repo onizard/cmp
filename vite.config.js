@@ -1,6 +1,15 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+
+// La version est inscrite dans index.html ; on la scelle aussi dans le code.
+// La balise dit de quelle page vient le HTML, la constante dit quel JavaScript
+// tourne vraiment — et c'est celui-la qui decide du comportement.
+const version =
+  readFileSync('index.html', 'utf8').match(
+    /name="cmp-build"\s+content="([^"]+)"/,
+  )?.[1] || 'inconnue';
 
 // L'app est servie à la racine du domaine du tunnel (ex. https://cmp.exemple.fr/).
 // Surchargeable au build via VITE_BASE si besoin.
@@ -8,6 +17,7 @@ const base = process.env.VITE_BASE || '/';
 
 export default defineConfig({
   base,
+  define: { __CMP_BUILD__: JSON.stringify(version) },
   plugins: [
     react(),
     VitePWA({

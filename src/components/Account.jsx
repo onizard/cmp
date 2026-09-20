@@ -347,7 +347,11 @@ export default function Account({ account }) {
         )}
       </section>
 
-      <p className="ver">{t('app.titre')} · v5.1</p>
+      {/* Scellee au build depuis index.html : une version ecrite a la main
+          ici resterait figee pendant que l'application, elle, avance. */}
+      <p className="ver">
+        {t('app.titre')} · {__CMP_BUILD__}
+      </p>
     </main>
   );
 }
