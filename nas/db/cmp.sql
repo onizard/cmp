@@ -23,14 +23,20 @@ create table if not exists tasks (
   done boolean not null default false,
   done_month text,
   done_by uuid references auth.users,
+  done_at timestamptz,
   deleted boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 create index if not exists tasks_household_idx on tasks (household_id);
--- Ajout rétro-compatible si la table existait déjà sans la colonne.
+-- Ajouts rétro-compatibles si la table existait déjà sans les colonnes.
 alter table tasks add column if not exists done_by uuid references auth.users;
+-- L'instant de la coche : sert au combo du jour (voir combo.sql).
+alter table tasks add column if not exists done_at timestamptz;
+create index if not exists tasks_done_at_idx
+  on tasks (done_by, done_at)
+  where done_at is not null;
 
 -- Gages (gamification) : offerts d'un membre à l'autre.
 create table if not exists gages (

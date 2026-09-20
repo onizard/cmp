@@ -10,7 +10,7 @@ import {
 import TaskItem from './TaskItem.jsx';
 import AddTask from './AddTask.jsx';
 
-export default function TaskList({ store, currentMonth }) {
+export default function TaskList({ store, currentMonth, onCombo }) {
   const currentYear = currentMonth.slice(0, 4);
   const months = displayedMonths(store.tasks, currentMonth);
   const years = groupByYear(months);
@@ -71,6 +71,7 @@ export default function TaskList({ store, currentMonth }) {
                               month={m}
                               currentMonth={currentMonth}
                               store={store}
+                              onCombo={onCombo}
                             />
                           ))}
                         </ul>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
 import { sortForMonth, tasksVisibleIn } from './visibility.js';
+import { comboProchain } from './combo.js';
 
 // --- Correspondance base <-> modèle client ---
 
@@ -13,6 +14,7 @@ const fromRow = (r) => ({
   done: r.done,
   doneMonth: r.done_month,
   doneBy: r.done_by,
+  doneAt: r.done_at,
   createdBy: r.created_by,
   dueAt: r.due_at,
   dueHasTime: r.due_has_time !== false,
@@ -30,6 +32,7 @@ const toInsertRow = (t) => ({
   done: t.done,
   done_month: t.doneMonth,
   done_by: t.doneBy ?? null,
+  done_at: t.doneAt ?? null,
   created_by: t.createdBy ?? null,
   due_at: t.dueAt ?? null,
   due_has_time: t.dueHasTime !== false,
@@ -44,6 +47,7 @@ const patchToRow = (patch) => {
   if ('done' in patch) row.done = patch.done;
   if ('doneMonth' in patch) row.done_month = patch.doneMonth;
   if ('doneBy' in patch) row.done_by = patch.doneBy;
+  if ('doneAt' in patch) row.done_at = patch.doneAt;
   if ('dueAt' in patch) row.due_at = patch.dueAt;
   if ('dueHasTime' in patch) row.due_has_time = patch.dueHasTime;
   // Changer l'échéance remet les rappels à zéro : les paliers déjà franchis
@@ -310,6 +314,7 @@ export function useTasks(householdId, userId) {
         done: false,
         doneMonth: null,
         doneBy: null,
+        doneAt: null,
         createdBy: userId ?? null,
         dueAt: null,
         dueHasTime: true,
@@ -333,14 +338,28 @@ export function useTasks(householdId, userId) {
 
   const peutDecocher = useCallback((task) => decochable(task, userId), [userId]);
 
+  /**
+   * Coche ou décoche. Renvoie false si la décoche est refusée, sinon le
+   * multiplicateur de combo que la coche vient de décrocher (1 = pas de
+   * combo), pour que l'écran puisse l'annoncer.
+   */
   const toggleDone = useCallback(
     (task, currentMonth) => {
       if (task.done && !peutDecocher(task)) return false;
-      const patch = task.done
-        ? { done: false, doneMonth: null, doneBy: null }
-        : { done: true, doneMonth: currentMonth, doneBy: userId ?? null };
-      updateTask(task.id, patch);
-      return true;
+      if (task.done) {
+        updateTask(task.id, { done: false, doneMonth: null, doneBy: null, doneAt: null });
+        return 1;
+      }
+      // Le rang se lit avant d'écrire : la tâche qu'on coche n'est pas encore
+      // dans le compte de la journée, et c'est elle qui prend le rang suivant.
+      const combo = comboProchain(tasksRef.current, userId);
+      updateTask(task.id, {
+        done: true,
+        doneMonth: currentMonth,
+        doneBy: userId ?? null,
+        doneAt: nowIso(),
+      });
+      return combo;
     },
     [updateTask, userId, peutDecocher],
   );

@@ -1839,3 +1839,121 @@ body,
   margin: 0 0 8px;
   padding-inline-start: 50px;
 }
+
+/* --- Combo du jour ------------------------------------------------------ */
+
+/* La couche couvre l'écran mais ne prend jamais le clic : on doit pouvoir
+   cocher la tâche suivante pendant que l'annonce est encore là. */
+.combo-layer {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 60;
+}
+
+/* Le texte est peint par ses fonds, découpés à la forme des lettres : le
+   dégradé de l'application par-dessous, et une bande blanche par-dessus qui
+   le traverse une fois. Un reflet posé en élément séparé passait devant le
+   dégradé au lieu de le faire briller. */
+.combo {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 14vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent 45.5%,
+      rgba(255, 255, 255, 0.85) 50%,
+      transparent 54.5%
+    ),
+    var(--grad);
+  /* Le reflet est peint sur une image deux fois plus large que le texte :
+     la faire glisser de 100 % a 0 % le promene d'un bord a l'autre, une fois,
+     et pas plus. */
+  background-size: 200% 100%, 100% 100%;
+  background-position: 100% 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 8px 22px rgba(180, 134, 204, 0.45));
+  animation:
+    combo-pop 1.4s cubic-bezier(0.18, 0.9, 0.3, 1) forwards,
+    combo-brille 1.4s ease-out forwards;
+}
+
+@keyframes combo-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) rotate(-7deg);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.14) rotate(2deg);
+  }
+  36% {
+    transform: scale(1) rotate(0deg);
+  }
+  74% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18) translateY(-18px);
+  }
+}
+
+/* Seule la bande blanche bouge ; le dégradé reste en place. */
+@keyframes combo-brille {
+  0%,
+  18% {
+    background-position: 100% 0, 0 0;
+  }
+  78%,
+  100% {
+    background-position: 0% 0, 0 0;
+  }
+}
+
+/* En écriture de droite à gauche, le reflet balaie dans l'autre sens. */
+[dir='rtl'] .combo {
+  animation-name: combo-pop, combo-brille-rtl;
+}
+
+@keyframes combo-brille-rtl {
+  0%,
+  18% {
+    background-position: 0% 0, 0 0;
+  }
+  78%,
+  100% {
+    background-position: 100% 0, 0 0;
+  }
+}
+
+/* Qui a demandé moins d'animation voit l'annonce, mais posée : elle paraît
+   et s'efface, sans bond ni reflet. */
+@media (prefers-reduced-motion: reduce) {
+  .combo {
+    background-position: 100% 0, 0 0;
+    animation: combo-fondu 1.4s ease forwards;
+    filter: none;
+  }
+}
+
+@keyframes combo-fondu {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15%,
+  75% {
+    opacity: 1;
+  }
+}

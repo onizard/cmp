@@ -4,8 +4,15 @@
 //   • cocher une tâche qu'on a ajoutée ..... 1 point
 //   • cocher une tâche ajoutée par l'autre . 1,5 point
 //
+// Puis le combo du jour : la deuxième tâche cochée dans la journée vaut
+// double, la troisième triple, et ainsi de suite. Seuls les points de coche
+// sont multipliés — ajouter une tâche vaut toujours un point, sans quoi il
+// suffirait d'en écrire beaucoup pour s'enrichir.
+//
 // Les points se cumulent sans limite : on dépense quand on veut, ou on
 // épargne pour une récompense plus forte.
+
+import { comboParTache } from './combo.js';
 
 export const POINT_ADD = 1;
 export const POINT_OWN = 1;
@@ -57,24 +64,37 @@ export const brainFill = (tasks, cap = BRAIN_CAP) => {
   return Math.max(0, Math.min(1, pendingCount(tasks) / cap));
 };
 
-/** Détail des points d'une personne : ce qu'elle a ajouté et coché. */
+/**
+ * Détail des points d'une personne : ce qu'elle a ajouté, ce qu'elle a coché,
+ * et ce que les combos du jour lui ont fait gagner en plus.
+ */
 export const pointsBreakdown = (tasks, userId) => {
+  const rangs = comboParTache(tasks, userId);
   let added = 0;
   let own = 0;
   let other = 0;
+  let coches = 0;
+  let bonus = 0;
   for (const t of tasks) {
     if (t.deleted) continue;
     if (t.createdBy && t.createdBy === userId) added += 1;
     if (t.done && t.doneBy === userId) {
-      if (t.createdBy && t.createdBy !== userId) other += 1;
-      else own += 1;
+      const sienne = !t.createdBy || t.createdBy === userId;
+      const base = sienne ? POINT_OWN : POINT_OTHER;
+      if (sienne) own += 1;
+      else other += 1;
+      coches += base;
+      // Le combo multiplie : le rang n vaut n fois le prix. On compte à part
+      // ce qui dépasse le prix normal, pour pouvoir le montrer.
+      bonus += base * ((rangs.get(t.id) || 1) - 1);
     }
   }
   return {
     added,
     own,
     other,
-    total: half(added * POINT_ADD + own * POINT_OWN + other * POINT_OTHER),
+    bonus: half(bonus),
+    total: half(added * POINT_ADD + coches + bonus),
   };
 };
 

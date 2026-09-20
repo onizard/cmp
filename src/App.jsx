@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
@@ -15,6 +15,7 @@ import BrainView from './components/BrainView.jsx';
 import Account from './components/Account.jsx';
 import AdminView from './components/AdminView.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
+import Combo from './components/Combo.jsx';
 import { syncPush } from './lib/push.js';
 
 function NotConfigured() {
@@ -84,6 +85,16 @@ function Home({ account, currentMonth }) {
   const [tab, setTab] = useState('liste');
   const householdId = account.household.id;
 
+  // L'annonce du combo vit ici, et pas dans la tâche : elle s'affiche au
+  // milieu de l'écran, au-dessus de tout. La clé la fait rejouer quand deux
+  // coches se suivent de près.
+  const [combo, setCombo] = useState(null);
+  const annoncerCombo = useCallback(
+    (n) => setCombo({ n, cle: Date.now() }),
+    [],
+  );
+  const finCombo = useCallback(() => setCombo(null), []);
+
   // Une mise à jour, un cache vidé ou une réinstallation peuvent emporter
   // l'abonnement aux notifications. On le rétablit en silence au démarrage et
   // à chaque retour sur l'application, pour que l'option reste sur « on ».
@@ -123,7 +134,11 @@ function Home({ account, currentMonth }) {
         (store.loading && store.tasks.length === 0 ? (
           <p className="notice">{t('app.chargement')}</p>
         ) : (
-          <TaskList store={store} currentMonth={currentMonth} />
+          <TaskList
+            store={store}
+            currentMonth={currentMonth}
+            onCombo={annoncerCombo}
+          />
         ))}
       {tab === 'cerveau' && (
         <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
@@ -137,6 +152,8 @@ function Home({ account, currentMonth }) {
         honourCount={readyCount}
         admin={admin.isAdmin}
       />
+
+      {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
     </div>
   );
 }

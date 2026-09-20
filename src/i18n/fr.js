@@ -67,7 +67,8 @@ export default {
     quitterOui: 'oui, quitter',
   },
 
-  taches: { decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',
+  taches: { combo: 'Combo ×{n}',
+    decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',
     ajouter: 'ajoute une tâche',
     boutonAjouter: 'Ajouter',
     cocher: 'Cocher',
@@ -117,6 +118,8 @@ export default {
     baremeAjouter: 'Ajouter une tâche',
     baremeSienne: 'Cocher sa propre tâche',
     baremeAutre: 'Cocher la tâche de l’autre',
+    baremeCombo: 'Combo du jour',
+    baremeComboNote: '2ᵉ tâche du jour : ×2, 3ᵉ : ×3…',
     baremeNote:
       'Les points se cumulent sans limite. Dépense-les quand tu veux, ou épargne pour une récompense plus forte.',
     pt: 'pt',

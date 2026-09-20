@@ -122,6 +122,11 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             <span>{t('cerveau.baremeAutre')}</span>
             <b>{formatPoints(POINT_OTHER)} pts</b>
           </div>
+          <div className="rowline">
+            <span>{t('cerveau.baremeCombo')}</span>
+            <b>×2, ×3, ×4…</b>
+          </div>
+          <p className="setnote">{t('cerveau.baremeComboNote')}</p>
           <p className="setnote">
 {t('cerveau.baremeNote')}
           </p>

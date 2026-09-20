@@ -4,7 +4,7 @@ import { carriedFromLabel } from '../lib/visibility.js';
 import { buildDue, splitDue, dueFull, dueLevel } from '../lib/deadline.js';
 import DueBadge, { Chrono } from './DueBadge.jsx';
 
-export default function TaskItem({ task, month, currentMonth, store }) {
+export default function TaskItem({ task, month, currentMonth, store, onCombo }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -55,12 +55,15 @@ export default function TaskItem({ task, month, currentMonth, store }) {
           aria-checked={task.done}
           aria-label={task.done ? t('taches.decocher') : t('taches.cocher')}
           onClick={() => {
-            if (store.toggleDone(task, currentMonth) === false) {
+            const combo = store.toggleDone(task, currentMonth);
+            if (combo === false) {
               // On explique au lieu de rester inerte : un bouton mort passe
               // pour une panne.
               setRefus(true);
               setTimeout(() => setRefus(false), 3200);
+              return;
             }
+            if (combo > 1) onCombo(combo);
           }}
         >
           <span className="check-box">{task.done ? '✓' : ''}</span>

@@ -70,6 +70,8 @@ describe('barème', () => {
       added: 2,
       own: 1,
       other: 1,
+      // Sans instant de coche, pas de combo : ces tâches valent leur prix.
+      bonus: 0,
       total: 2 + 1 + 1.5,
     });
   });
