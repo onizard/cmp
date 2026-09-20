@@ -132,3 +132,32 @@ describe('les points suivent le combo', () => {
     expect(pointsBreakdown(tasks, MOI).bonus).toBe(POINT_OWN);
   });
 });
+
+describe('le scenario du test : cocher trois, tout decocher, recocher', () => {
+  const jour = '2026-09-20';
+  const maintenant = new Date(le(jour, 15));
+
+  it('repart de un quand tout a ete decoche', () => {
+    // Trois taches cochees puis decochees : la decoche efface l'instant,
+    // donc plus rien ne compte pour la journee.
+    const apresDecoche = ['a', 'b', 'c'].map((id) => ({
+      id,
+      deleted: false,
+      done: false,
+      doneBy: null,
+      doneAt: null,
+      createdBy: MOI,
+    }));
+    expect(comboProchain(apresDecoche, MOI, maintenant)).toBe(1);
+  });
+
+  it('compte une tache restee cochee ailleurs dans la liste', () => {
+    // Le combo regarde toute la journee, pas seulement le mois affiche :
+    // une tache cochee plus tot compte, et c'est voulu.
+    const tasks = [
+      { id: 'a', deleted: false, done: false, doneBy: null, doneAt: null, createdBy: MOI },
+      fait('oubliee', jour, 9),
+    ];
+    expect(comboProchain(tasks, MOI, maintenant)).toBe(2);
+  });
+});

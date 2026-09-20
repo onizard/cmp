@@ -113,6 +113,14 @@ const uuid = () =>
 
 const nowIso = () => new Date().toISOString();
 
+// Combien de temps une écriture à nous prime sur les échos du serveur.
+//
+// Le temps réel renvoie aussi nos propres écritures, et l'écho d'une coche
+// peut arriver APRÈS qu'on a décoché : sans garde, la tâche se recoche toute
+// seule le temps d'un aller-retour. Personne ne le voit passer, mais le combo,
+// lui, compte une tâche qui n'est plus cochée.
+const GRACE_ECHO = 3000;
+
 /**
  * Hook principal : tâches d'un foyer, avec cache hors ligne, file d'attente
  * d'écritures et synchronisation temps réel.
@@ -131,6 +139,9 @@ export function useTasks(householdId, userId) {
 
   const tasksRef = useRef(tasks);
   const flushing = useRef(false);
+  // Quand on a touché chaque tâche pour la dernière fois, de notre côté.
+  const ecritLocal = useRef(new Map());
+  const echoIgnore = useRef(null);
 
   const persist = useCallback(
     (next) => {
@@ -248,6 +259,21 @@ export function useTasks(householdId, userId) {
             const row = payload.new?.id ? payload.new : payload.old;
             if (!row) return;
             const mapped = fromRow(row);
+            // Une écriture à nous vient de partir sur cette tâche : c'est elle
+            // qui fait foi, l'écho porte peut-être un état plus ancien. On le
+            // laisse passer, et on relit une fois la fenêtre refermée pour ne
+            // pas rater, au passage, une modification de l'autre.
+            const ecrit = ecritLocal.current.get(mapped.id);
+            if (ecrit && Date.now() - ecrit < GRACE_ECHO) {
+              if (!echoIgnore.current) {
+                echoIgnore.current = setTimeout(() => {
+                  echoIgnore.current = null;
+                  refresh();
+                }, GRACE_ECHO);
+              }
+              return;
+            }
+            ecritLocal.current.delete(mapped.id);
             const others = tasksRef.current.filter((t) => t.id !== mapped.id);
             persist([...others, mapped]);
           },
@@ -277,6 +303,7 @@ export function useTasks(householdId, userId) {
     return () => {
       if (channel && supabase) supabase.removeChannel(channel);
       clearInterval(poll);
+      if (echoIgnore.current) clearTimeout(echoIgnore.current);
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
       document.removeEventListener('visibilitychange', onVisible);
@@ -288,6 +315,7 @@ export function useTasks(householdId, userId) {
 
   const applyLocal = useCallback(
     (id, patch) => {
+      ecritLocal.current.set(id, Date.now());
       const next = tasksRef.current.map((t) =>
         t.id === id ? { ...t, ...patch, updatedAt: nowIso() } : t,
       );
