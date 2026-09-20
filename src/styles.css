@@ -1853,34 +1853,33 @@ body,
   z-index: 60;
 }
 
-/* Le texte est peint par ses fonds, découpés à la forme des lettres : le
-   dégradé de l'application par-dessous, et une bande blanche par-dessus qui
-   le traverse une fois. Un reflet posé en élément séparé passait devant le
-   dégradé au lieu de le faire briller. */
+/* Lettres blanches, contour épais en dégradé.
+   Le contour est peint par les fonds de l'élément, découpés à la forme du
+   texte : un contour CSS ne prend qu'une couleur unie, mais rendu transparent
+   il laisse voir le dégradé qui passe derrière. `paint-order` le pose SOUS le
+   remplissage, sans quoi il mord sur les lettres et les amincit.
+   Par-dessus le dégradé, une bande blanche traverse le contour une fois. */
 .combo {
   font-family: var(--display);
   font-size: clamp(2.6rem, 14vw, 4.6rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
+  /* Le contour est épais : sans un peu d'air, les lettres se soudent. */
+  letter-spacing: 0.04em;
   white-space: nowrap;
-  background-image:
-    linear-gradient(
-      100deg,
-      transparent 45.5%,
-      rgba(255, 255, 255, 0.85) 50%,
-      transparent 54.5%
-    ),
-    var(--grad);
-  /* Le reflet est peint sur une image deux fois plus large que le texte :
-     la faire glisser de 100 % a 0 % le promene d'un bord a l'autre, une fois,
-     et pas plus. */
-  background-size: 200% 100%, 100% 100%;
-  background-position: 100% 0, 0 0;
+  color: #fff;
+  -webkit-text-stroke: 0.17em transparent;
+  paint-order: stroke fill;
+  /* Le dégradé est peint plus large que le texte et glisse pendant
+     l'animation : le contour change de teinte sans jamais se rompre. Une
+     bande blanche qui balaie, elle, trouait le contour — le remplissage est
+     déjà blanc, le reflet se lisait comme un manque. */
+  background-image: var(--grad);
+  background-size: 220% 100%;
+  background-position: 0 0;
   background-repeat: no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
   filter: drop-shadow(0 8px 22px rgba(180, 134, 204, 0.45));
   animation:
     combo-pop 1.4s cubic-bezier(0.18, 0.9, 0.3, 1) forwards,
@@ -1911,13 +1910,11 @@ body,
 
 /* Seule la bande blanche bouge ; le dégradé reste en place. */
 @keyframes combo-brille {
-  0%,
-  18% {
-    background-position: 100% 0, 0 0;
+  0% {
+    background-position: 0 0;
   }
-  78%,
   100% {
-    background-position: 0% 0, 0 0;
+    background-position: 100% 0;
   }
 }
 
@@ -1927,13 +1924,11 @@ body,
 }
 
 @keyframes combo-brille-rtl {
-  0%,
-  18% {
-    background-position: 0% 0, 0 0;
+  0% {
+    background-position: 100% 0;
   }
-  78%,
   100% {
-    background-position: 100% 0, 0 0;
+    background-position: 0 0;
   }
 }
 
@@ -1941,7 +1936,7 @@ body,
    et s'efface, sans bond ni reflet. */
 @media (prefers-reduced-motion: reduce) {
   .combo {
-    background-position: 100% 0, 0 0;
+    background-position: 50% 0;
     animation: combo-fondu 1.4s ease forwards;
     filter: none;
   }
