@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useT } from '../i18n/index.js';
 import {
+  addMonths,
   displayedMonths,
   groupByYear,
   monthName,
@@ -10,10 +12,21 @@ import {
 import TaskItem from './TaskItem.jsx';
 import AddTask from './AddTask.jsx';
 
+/**
+ * La liste, en deux vues.
+ *
+ * Ce qui reste à faire tient le devant : une tâche cochée a déjà rendu son
+ * service, elle n'a plus à encombrer. Elle passe dans « Faites », où on la
+ * retrouve — et d'où on peut toujours la décocher si on s'est trompé.
+ *
+ * Le découpage par année et par mois ne change pas d'une vue à l'autre : c'est
+ * le même classement, seul le filtre diffère.
+ */
 export default function TaskList({ store, currentMonth, onCombo }) {
+  const t = useT();
+  const [vue, setVue] = useState('todo');
   const currentYear = currentMonth.slice(0, 4);
-  const months = displayedMonths(store.tasks, currentMonth);
-  const years = groupByYear(months);
+  const moisSuivant = addMonths(currentMonth, 1);
 
   const [openYears, setOpenYears] = useState(() => new Set([currentYear]));
   const [openMonths, setOpenMonths] = useState(() => new Set([currentMonth]));
@@ -25,8 +38,59 @@ export default function TaskList({ store, currentMonth, onCombo }) {
     setter(next);
   };
 
+  const faitesEnTout = useMemo(
+    () => store.tasks.filter((x) => !x.deleted && x.done).length,
+    [store.tasks],
+  );
+
+  // Les mois à montrer dans la vue courante, avec leurs tâches déjà filtrées.
+  // Un mois vide disparaît — sauf le mois en cours et le suivant côté « à
+  // faire », où il faut pouvoir ajouter même quand il n'y a rien.
+  const moisRendus = useMemo(() => {
+    const garde = vue === 'faites';
+    const out = new Map();
+    for (const m of displayedMonths(store.tasks, currentMonth)) {
+      const liste = sortForMonth(
+        tasksVisibleIn(store.tasks, m, currentMonth),
+      ).filter((x) => (garde ? x.done : !x.done));
+      const toujours = !garde && (m === currentMonth || m === moisSuivant);
+      if (liste.length > 0 || toujours) out.set(m, liste);
+    }
+    return out;
+  }, [store.tasks, currentMonth, moisSuivant, vue]);
+
+  const years = groupByYear([...moisRendus.keys()]);
+
   return (
     <main className="list">
+      <div className="sous-onglets" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={vue === 'todo'}
+          className={`sous-onglet ${vue === 'todo' ? 'active' : ''}`}
+          onClick={() => setVue('todo')}
+        >
+          {t('taches.vueAFaire')}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={vue === 'faites'}
+          className={`sous-onglet ${vue === 'faites' ? 'active' : ''}`}
+          onClick={() => setVue('faites')}
+        >
+          {t('taches.vueFaites')}
+          {faitesEnTout > 0 && (
+            <span className="sous-onglet-compte">{faitesEnTout}</span>
+          )}
+        </button>
+      </div>
+
+      {years.length === 0 && (
+        <p className="notice">{t('taches.aucuneFaite')}</p>
+      )}
+
       {years.map(({ year, months: yMonths }) => {
         const yearOpen = openYears.has(year);
         return (
@@ -41,9 +105,7 @@ export default function TaskList({ store, currentMonth, onCombo }) {
             </button>
             {yearOpen &&
               yMonths.map((m) => {
-                const visible = sortForMonth(
-                  tasksVisibleIn(store.tasks, m, currentMonth),
-                );
+                const visible = moisRendus.get(m) || [];
                 const monthOpen = openMonths.has(m);
                 return (
                   <section
@@ -58,16 +120,18 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                     >
                       <span className="month-name">{monthName(m)}</span>
                       <span className="month-count">
-                        {monthSummary(visible)}
+                        {vue === 'faites'
+                          ? t('taches.faitesN', { n: visible.length })
+                          : monthSummary(visible)}
                       </span>
                     </button>
                     {monthOpen && (
                       <div className="month-body">
                         <ul className="tasks">
-                          {visible.map((t) => (
+                          {visible.map((task) => (
                             <TaskItem
-                              key={t.id}
-                              task={t}
+                              key={task.id}
+                              task={task}
                               month={m}
                               currentMonth={currentMonth}
                               store={store}
@@ -75,9 +139,9 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                             />
                           ))}
                         </ul>
-                        <AddTask
-                          onAdd={(text) => store.addTask(m, text)}
-                        />
+                        {vue === 'todo' && (
+                          <AddTask onAdd={(text) => store.addTask(m, text)} />
+                        )}
                       </div>
                     )}
                   </section>

@@ -1952,3 +1952,57 @@ body,
     opacity: 1;
   }
 }
+
+/* --- Sous-onglets de la liste : à faire / faites ------------------------- */
+
+.sous-onglets {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 14px;
+  padding: 4px;
+  background: var(--paper-deep);
+  border-radius: 999px;
+}
+
+.sous-onglet {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.sous-onglet.active {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Le compte des faites : présent sans se faire remarquer, pour qu'on devine
+   qu'il y a quelque chose derrière l'onglet sans avoir à l'ouvrir. */
+.sous-onglet-compte {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--grad-soft);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sous-onglet {
+    transition: none;
+  }
+}
