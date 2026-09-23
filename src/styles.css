@@ -486,10 +486,11 @@ body,
 
 /* Ajouter une tâche : ligne unique */
 
+/* En tete de mois : un peu d'air au-dessus des taches, rien de plus. */
 .add-form {
   display: flex;
   gap: 9px;
-  padding: 12px 6px 14px;
+  padding: 4px 6px 14px;
 }
 
 .add-form .field {

@@ -125,6 +125,9 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                     </button>
                     {monthOpen && (
                       <div className="month-body">
+                        {/* En tete : ajouter est le geste le plus frequent,
+                            il ne doit pas se meriter au bas d'une liste. */}
+                        <AddTask onAdd={(text) => store.addTask(m, text)} />
                         <ul className="tasks">
                           {aFaire.map((task) => (
                             <TaskItem
@@ -137,7 +140,6 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                             />
                           ))}
                         </ul>
-                        <AddTask onAdd={(text) => store.addTask(m, text)} />
                         {m === currentMonth && tiroir}
                       </div>
                     )}
