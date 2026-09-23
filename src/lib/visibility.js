@@ -129,6 +129,28 @@ export const groupByYear = (months) => {
   return groups;
 };
 
+/**
+ * Toutes les tâches faites du foyer, de la plus récemment cochée à la plus
+ * ancienne. Elles ne sont pas rangées par mois : c'est un seul tiroir, qu'on
+ * ouvre depuis le mois en cours.
+ *
+ * Une tâche cochée avant que l'instant ne soit enregistré n'a pas de `doneAt`
+ * — on se rabat alors sur sa dernière modification, puis sur le texte, pour
+ * que l'ordre ne bouge jamais tout seul d'un affichage à l'autre.
+ */
+export const toutesLesFaites = (tasks) =>
+  tasks
+    .filter((x) => !x.deleted && x.done)
+    .slice()
+    .sort((a, b) => {
+      const qa = a.doneAt || a.updatedAt || '';
+      const qb = b.doneAt || b.updatedAt || '';
+      if (qa !== qb) return qa < qb ? 1 : -1;
+      return String(a.text || '').localeCompare(String(b.text || ''), 'fr', {
+        sensitivity: 'base',
+      });
+    });
+
 // --- Textes calculés ---
 
 /** Phrase d'accroche selon le nombre de choses à faire ce mois-ci. */

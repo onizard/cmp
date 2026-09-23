@@ -1953,56 +1953,69 @@ body,
   }
 }
 
-/* --- Sous-onglets de la liste : à faire / faites ------------------------- */
+/* --- Tiroir des tâches faites, au bas du mois en cours ------------------- */
 
-.sous-onglets {
-  display: flex;
-  gap: 4px;
-  margin: 0 0 14px;
-  padding: 4px;
-  background: var(--paper-deep);
-  border-radius: 999px;
+.tiroir {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
 }
 
-.sous-onglet {
-  flex: 1;
+.tiroir-tete {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 38px;
-  padding: 0 14px;
+  gap: 9px;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 8px 2px;
   border: 0;
-  border-radius: 999px;
   background: transparent;
   color: var(--ink-2);
   font-family: var(--sans);
   font-size: 0.95rem;
   font-weight: 700;
+  text-align: start;
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease;
 }
 
-.sous-onglet.active {
-  background: var(--card);
-  color: var(--ink);
-  box-shadow: var(--shadow-sm);
+/* Le chevron, comme sur les mois : il dit que ça s'ouvre. */
+.tiroir-tete::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  margin-inline-start: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.18s ease;
 }
 
-/* Le compte des faites : présent sans se faire remarquer, pour qu'on devine
-   qu'il y a quelque chose derrière l'onglet sans avoir à l'ouvrir. */
-.sous-onglet-compte {
+.tiroir-tete[aria-expanded='true']::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.tiroir-compte {
   min-width: 22px;
-  padding: 1px 7px;
+  padding: 1px 8px;
   border-radius: 999px;
   background: var(--grad-soft);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 700;
+  text-align: center;
+}
+
+.tiroir-corps {
+  padding-top: 2px;
+}
+
+.tiroir-vide {
+  margin: 4px 2px 10px;
+  color: var(--ink-3);
+  font-size: 0.92rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sous-onglet {
+  .tiroir-tete::after {
     transition: none;
   }
 }

@@ -67,9 +67,7 @@ export default {
     quitterOui: 'oui, quitter',
   },
 
-  taches: { vueAFaire: 'À faire',
-    vueFaites: 'Faites',
-    faitesN: '{n} faite(s)',
+  taches: { faitesTiroir: 'Faites',
     aucuneFaite: 'Rien de fait pour l’instant.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',

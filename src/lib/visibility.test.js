@@ -11,6 +11,7 @@ import {
   addMonths,
   monthRange,
   monthName,
+  toutesLesFaites,
 } from './visibility.js';
 
 const task = (over = {}) => ({
@@ -223,5 +224,59 @@ describe('utilitaires de mois', () => {
   });
   it('monthName donne le mois en français minuscule', () => {
     expect(monthName('2026-08')).toBe('août');
+  });
+});
+
+describe('toutesLesFaites', () => {
+  const T = (id, extra) => ({
+    id,
+    text: id,
+    month: '2026-09',
+    done: false,
+    deleted: false,
+    ...extra,
+  });
+
+  it('ne garde que les cochées vivantes', () => {
+    const tasks = [
+      T('a'),
+      T('b', { done: true, doneAt: '2026-09-20T08:00:00Z' }),
+      T('c', { done: true, deleted: true, doneAt: '2026-09-20T09:00:00Z' }),
+    ];
+    expect(toutesLesFaites(tasks).map((x) => x.id)).toEqual(['b']);
+  });
+
+  it('range de la plus récemment cochée à la plus ancienne', () => {
+    const tasks = [
+      T('vieille', { done: true, doneAt: '2026-08-01T10:00:00Z' }),
+      T('recente', { done: true, doneAt: '2026-09-22T10:00:00Z' }),
+      T('milieu', { done: true, doneAt: '2026-09-01T10:00:00Z' }),
+    ];
+    expect(toutesLesFaites(tasks).map((x) => x.id)).toEqual([
+      'recente',
+      'milieu',
+      'vieille',
+    ]);
+  });
+
+  it('rassemble les mois : ce n’est pas un classement mensuel', () => {
+    const tasks = [
+      T('aout', { month: '2026-08', done: true, doneAt: '2026-08-12T10:00:00Z' }),
+      T('sept', { month: '2026-09', done: true, doneAt: '2026-09-21T10:00:00Z' }),
+    ];
+    expect(toutesLesFaites(tasks)).toHaveLength(2);
+  });
+
+  it('se rabat sur la dernière modification quand l’instant manque', () => {
+    // Cochée avant que la colonne n'existe : elle ne doit ni disparaître ni
+    // se promener d'un affichage à l'autre.
+    const tasks = [
+      T('sansInstant', { done: true, updatedAt: '2026-09-10T10:00:00Z' }),
+      T('avecInstant', { done: true, doneAt: '2026-09-05T10:00:00Z' }),
+    ];
+    expect(toutesLesFaites(tasks).map((x) => x.id)).toEqual([
+      'sansInstant',
+      'avecInstant',
+    ]);
   });
 });
