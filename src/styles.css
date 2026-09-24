@@ -2069,3 +2069,17 @@ body,
     transparent
   );
 }
+
+/* « Annuler · 42 s » ne tient pas sur une demi-carte : pendant la minute où il
+   existe, il prend sa propre ligne sous « Utiliser », qui reste le geste
+   principal. Les chiffres ont tous la même largeur, pour que le bouton ne
+   tremble pas à chaque seconde. */
+.bon-actions {
+  flex-wrap: wrap;
+}
+
+.bon-actions .bon-annuler {
+  flex: 1 1 100%;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}

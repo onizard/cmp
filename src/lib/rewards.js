@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
-import { REWARD_CUSTOM } from './gamify.js';
+import { REWARD_CUSTOM, secondesPourAnnuler } from './gamify.js';
 
 const rewardFrom = (r) => ({
   id: r.id,
@@ -122,8 +122,12 @@ export function useRewards(householdId, userId) {
       // Le visuel n'est pas copié sur le bon : on le retrouve par reward_id au
       // moment de l'affichage, pour qu'un nouveau dessin s'applique aussi aux
       // bons déjà obtenus.
-      saveClaims([...cRef.current, claimFrom(row)]);
-      if (supabase) await supabase.from('claims').insert(row);
+      saveClaims([...cRef.current, { ...claimFrom(row), createdAt: new Date().toISOString() }]);
+      // L'envoi part sans qu'on l'attende : le bon existe déjà à l'écran, et
+      // l'appelant doit pouvoir le montrer tout de suite, même sur un réseau
+      // lent. (Le constructeur de requête ne part qu'à l'appel de .then.)
+      if (supabase) supabase.from('claims').insert(row).then(() => {});
+      return row.id;
     },
     [householdId, userId, saveClaims],
   );
@@ -157,6 +161,30 @@ export function useRewards(householdId, userId) {
   );
 
   /**
+   * Annule un achat fait par erreur, dans la minute. Passé ce délai le bon est
+   * acquis : il ne se rend ni ne s'échange. Si le serveur refuse — délai
+   * dépassé de son point de vue — on relit la base pour remettre l'écran
+   * d'accord avec elle.
+   */
+  const annulerAchat = useCallback(
+    async (id) => {
+      if (!estAMoi(id)) return;
+      const bon = cRef.current.find((c) => c.id === id);
+      if (secondesPourAnnuler(bon) <= 0) return;
+      saveClaims(
+        cRef.current.map((c) => (c.id === id ? { ...c, deleted: true } : c)),
+      );
+      if (!supabase) return;
+      const { error } = await supabase
+        .from('claims')
+        .update({ deleted: true })
+        .eq('id', id);
+      if (error) refresh();
+    },
+    [saveClaims, estAMoi, refresh],
+  );
+
+  /**
    * Récompense sur mesure : on décrit ce qu'on veut et on l'obtient aussitôt.
    * Elle n'entre pas au catalogue — c'est un souhait unique, à prix fixe.
    */
@@ -173,7 +201,7 @@ export function useRewards(householdId, userId) {
         cost: REWARD_CUSTOM,
         deleted: false,
       };
-      saveClaims([...cRef.current, claimFrom(row)]);
+      saveClaims([...cRef.current, { ...claimFrom(row), createdAt: new Date().toISOString() }]);
       if (supabase) await supabase.from('claims').insert(row);
       return null;
     },
@@ -189,5 +217,6 @@ export function useRewards(householdId, userId) {
     claimReward,
     claimCustom,
     useClaim,
+    annulerAchat,
   };
 }

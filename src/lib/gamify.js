@@ -152,6 +152,22 @@ export const rewardFill = (rewards, points) => {
   return Math.min(1, pts / REWARD_MIN);
 };
 
+/**
+ * Une erreur de doigt se répare dans la minute qui suit l'achat, pas au-delà :
+ * passé ce délai, un bon acheté est acquis. La base applique la même borne,
+ * avec un peu de marge pour un réseau lent (nas/db/annulation-bon.sql).
+ */
+export const ANNULATION_S = 60;
+
+/** Secondes restantes pour annuler un bon (0 : plus annulable). */
+export const secondesPourAnnuler = (bon, maintenant = Date.now()) => {
+  if (!bon || bon.deleted || bon.usedAt || !bon.createdAt) return 0;
+  const achat = new Date(bon.createdAt).getTime();
+  if (Number.isNaN(achat)) return 0;
+  const reste = ANNULATION_S - Math.floor((maintenant - achat) / 1000);
+  return Math.max(0, Math.min(ANNULATION_S, reste));
+};
+
 /** Peut-on demander une récompense sur mesure ? */
 export const canClaimCustom = (points) => (Number(points) || 0) >= REWARD_CUSTOM;
 

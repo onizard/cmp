@@ -155,6 +155,7 @@ export default {
     titre: 'Mes bons',
     vide: 'Aucun bon pour l’instant. Prends une récompense et elle arrivera ici.',
     utiliser: 'Utiliser',
+    annuler: 'Annuler · {n} s',
     poinconne: 'UTILISÉ',
     obtenuLe: 'obtenu le {quand}',
     utiliseLe: 'utilisé le {quand}',

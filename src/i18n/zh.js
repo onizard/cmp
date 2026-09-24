@@ -68,6 +68,7 @@ export default {
     titre: '我的券',
     vide: '还没有券。兑换一个奖励，它就会出现在这里。',
     utiliser: '使用',
+    annuler: '撤销 · {n} 秒',
     poinconne: '已使用',
     obtenuLe: '{quand} 获得',
     utiliseLe: '{quand} 使用',

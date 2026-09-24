@@ -68,6 +68,7 @@ export default {
     titre: 'Мои купоны',
     vide: 'Купонов пока нет. Возьмите награду — она появится здесь.',
     utiliser: 'Использовать',
+    annuler: 'Отменить · {n} с',
     poinconne: 'ИСПОЛЬЗОВАН',
     obtenuLe: 'получен {quand}',
     utiliseLe: 'использован {quand}',

@@ -24,8 +24,8 @@ create policy cl_update on claims for update to authenticated
   using (is_member(household_id) and user_id = auth.uid())
   with check (is_member(household_id) and user_id = auth.uid());
 
+-- Pas de DELETE cote client : un bon s'annule par `deleted`, dans la minute
+-- (voir annulation-bon.sql). Un DELETE echapperait a cette borne.
 drop policy if exists cl_delete on claims;
-create policy cl_delete on claims for delete to authenticated
-  using (is_member(household_id) and user_id = auth.uid());
 
 notify pgrst, 'reload schema';

@@ -68,6 +68,7 @@ export default {
     titre: 'قسائمي',
     vide: 'لا قسائم بعد. خذ مكافأة وستظهر هنا.',
     utiliser: 'استخدام',
+    annuler: 'تراجع · {n} ث',
     poinconne: 'مستخدمة',
     obtenuLe: 'حُصل عليها في {quand}',
     utiliseLe: 'استُخدمت في {quand}',

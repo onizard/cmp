@@ -68,6 +68,7 @@ export default {
     titre: 'My vouchers',
     vide: 'No vouchers yet. Take a reward and it will land here.',
     utiliser: 'Use',
+    annuler: 'Undo · {n} s',
     poinconne: 'USED',
     obtenuLe: 'earned {quand}',
     utiliseLe: 'used {quand}',

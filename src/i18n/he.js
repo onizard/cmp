@@ -68,6 +68,7 @@ export default {
     titre: 'השוברים שלי',
     vide: 'עדיין אין שוברים. קח פרס והוא יגיע לכאן.',
     utiliser: 'לממש',
+    annuler: 'ביטול · {n} שנ׳',
     poinconne: 'מומש',
     obtenuLe: 'התקבל ב־{quand}',
     utiliseLe: 'מומש ב־{quand}',

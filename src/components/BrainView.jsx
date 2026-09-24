@@ -62,6 +62,25 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     return (r && r.visuel) || null;
   };
 
+  // Après l'achat, on descend jusqu'au bon : c'est la confirmation qu'il a
+  // bien été obtenu, et c'est là que se trouve « Annuler » si le doigt a
+  // glissé. Sans ça il atterrit hors de vue, et la minute passe.
+  const montrerBon = (id) => {
+    if (!id) return;
+    const calme =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    requestAnimationFrame(() =>
+      document
+        .getElementById(`bon-${id}`)
+        ?.scrollIntoView({ behavior: calme ? 'auto' : 'smooth', block: 'center' }),
+    );
+  };
+
+  const prendre = async (r) => {
+    montrerBon(await store.claimReward(r));
+  };
+
   const submitWish = async (e) => {
     e.preventDefault();
     const err = await store.claimCustom(wish);
@@ -174,7 +193,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                     className="btn btn-small btn-accent"
                     type="button"
                     disabled={!ok}
-                    onClick={() => store.claimReward(r)}
+                    onClick={() => prendre(r)}
                   >
                     {t('recompenses.prendre')}
                   </button>
@@ -264,6 +283,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 visuel={visuelDe(c)}
                 lang={langue()}
                 onUtiliser={() => store.useClaim(c.id)}
+                onAnnuler={() => store.annulerAchat(c.id)}
               />
             ))}
           </div>

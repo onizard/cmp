@@ -68,6 +68,7 @@ export default {
     titre: 'Os meus vales',
     vide: 'Nenhum vale por agora. Leva uma recompensa e aparecerá aqui.',
     utiliser: 'Usar',
+    annuler: 'Anular · {n} s',
     poinconne: 'USADO',
     obtenuLe: 'obtido a {quand}',
     utiliseLe: 'usado a {quand}',

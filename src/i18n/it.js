@@ -68,6 +68,7 @@ export default {
     titre: 'I miei buoni',
     vide: 'Nessun buono per ora. Prendi una ricompensa e finirà qui.',
     utiliser: 'Usare',
+    annuler: 'Annulla · {n} s',
     poinconne: 'USATO',
     obtenuLe: 'ottenuto il {quand}',
     utiliseLe: 'usato il {quand}',

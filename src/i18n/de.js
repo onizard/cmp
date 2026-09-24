@@ -68,6 +68,7 @@ export default {
     titre: 'Meine Gutscheine',
     vide: 'Noch keine Gutscheine. Nimm eine Belohnung, dann landet sie hier.',
     utiliser: 'Einlösen',
+    annuler: 'Rückgängig · {n} s',
     poinconne: 'EINGELÖST',
     obtenuLe: 'erhalten am {quand}',
     utiliseLe: 'eingelöst am {quand}',

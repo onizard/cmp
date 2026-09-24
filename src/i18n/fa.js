@@ -69,6 +69,7 @@ export default {
     titre: 'کوپن‌های من',
     vide: 'هنوز کوپنی نیست. پاداشی بگیر تا اینجا بیاید.',
     utiliser: 'استفاده',
+    annuler: 'لغو · {n} ثانیه',
     poinconne: 'استفاده‌شده',
     obtenuLe: 'گرفته‌شده در {quand}',
     utiliseLe: 'استفاده‌شده در {quand}',

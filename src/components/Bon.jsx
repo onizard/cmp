@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useT } from '../i18n/index.js';
-import { formatPoints } from '../lib/gamify.js';
+import { formatPoints, secondesPourAnnuler } from '../lib/gamify.js';
 
 // Date courte, dans la langue en cours, calendrier grégorien impose.
 const jour = (iso, lang) => {
@@ -21,12 +22,27 @@ const jour = (iso, lang) => {
  * dans /bons/. Sans visuel, la carte se dessine toute seule — même mise en
  * page, pour que le remplacement ne bouge rien d'autre que l'image.
  */
-export default function Bon({ bon, libelle, visuel, lang, onUtiliser }) {
+export default function Bon({ bon, libelle, visuel, lang, onUtiliser, onAnnuler }) {
   const t = useT();
   const utilise = Boolean(bon.usedAt);
 
+  // Le compte à rebours de l'annulation. L'horloge ne tourne que pendant la
+  // minute qui compte ; ensuite plus rien ne se redessine pour rien.
+  const [reste, setReste] = useState(() => secondesPourAnnuler(bon));
+  useEffect(() => {
+    if (!onAnnuler) return undefined;
+    setReste(secondesPourAnnuler(bon));
+    if (secondesPourAnnuler(bon) <= 0) return undefined;
+    const tic = setInterval(() => {
+      const r = secondesPourAnnuler(bon);
+      setReste(r);
+      if (r <= 0) clearInterval(tic);
+    }, 1000);
+    return () => clearInterval(tic);
+  }, [bon, onAnnuler]);
+
   return (
-    <article className={`bon ${utilise ? 'bon-utilise' : ''}`}>
+    <article id={`bon-${bon.id}`} className={`bon ${utilise ? 'bon-utilise' : ''}`}>
       <div
         className="bon-carte"
         style={visuel ? { backgroundImage: `url(/bons/${visuel})` } : undefined}
@@ -50,13 +66,18 @@ export default function Bon({ bon, libelle, visuel, lang, onUtiliser }) {
         )}
       </div>
 
-      {/* Un bon ne se rend pas : il a été payé, il est acquis. La seule chose
-          qu'on en fasse, c'est s'en servir. */}
+      {/* Un bon ne se rend pas : il a été payé, il est acquis. La seule
+          exception, c'est l'erreur de doigt, rattrapable dans la minute. */}
       {!utilise && (
         <div className="bon-actions">
           <button className="btn btn-small btn-accent" type="button" onClick={onUtiliser}>
             {t('inventaire.utiliser')}
           </button>
+          {onAnnuler && reste > 0 && (
+            <button className="btn btn-small bon-annuler" type="button" onClick={onAnnuler}>
+              {t('inventaire.annuler', { n: reste })}
+            </button>
+          )}
         </div>
       )}
     </article>

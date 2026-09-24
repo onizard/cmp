@@ -19,6 +19,8 @@ import {
   POINT_ADD,
   POINT_OWN,
   POINT_OTHER,
+  secondesPourAnnuler,
+  ANNULATION_S,
 } from './gamify.js';
 
 const task = (o = {}) => ({
@@ -196,5 +198,38 @@ describe('récompenses', () => {
   it('écrit les demi-points à la française', () => {
     expect(formatPoints(12.5)).toBe('12,5');
     expect(formatPoints(12)).toBe('12');
+  });
+});
+
+describe('secondesPourAnnuler', () => {
+  const achat = '2026-09-25T10:00:00.000Z';
+  const t0 = new Date(achat).getTime();
+  const bon = { createdAt: achat, usedAt: null, deleted: false };
+
+  it('laisse la minute entière juste après l’achat', () => {
+    expect(secondesPourAnnuler(bon, t0)).toBe(ANNULATION_S);
+  });
+
+  it('décompte seconde par seconde', () => {
+    expect(secondesPourAnnuler(bon, t0 + 18_000)).toBe(42);
+  });
+
+  it('ferme la porte au bout de la minute', () => {
+    expect(secondesPourAnnuler(bon, t0 + 60_000)).toBe(0);
+    expect(secondesPourAnnuler(bon, t0 + 3_600_000)).toBe(0);
+  });
+
+  it('ne rend rien pour un bon déjà utilisé', () => {
+    expect(secondesPourAnnuler({ ...bon, usedAt: achat }, t0 + 5_000)).toBe(0);
+  });
+
+  it('ne rend rien sans date d’achat', () => {
+    // Plutôt pas d'annulation qu'une annulation sans limite.
+    expect(secondesPourAnnuler({ ...bon, createdAt: null }, t0)).toBe(0);
+  });
+
+  it('borne une horloge de téléphone en retard sur le serveur', () => {
+    // Achat daté dans le « futur » vu du téléphone : jamais plus d'une minute.
+    expect(secondesPourAnnuler(bon, t0 - 30_000)).toBe(ANNULATION_S);
   });
 });
