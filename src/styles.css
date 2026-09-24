@@ -2421,3 +2421,10 @@ body,
   margin: 8px 2px 4px;
   color: var(--ink-3);
 }
+
+/* La tâche de l'autre : une information, pas une erreur. */
+.actions-autre .refus-doux {
+  margin: 0;
+  padding-inline-start: 0;
+  color: var(--ink-3);
+}

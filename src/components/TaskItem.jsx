@@ -157,7 +157,20 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo }) 
         </form>
       )}
 
-      {open && !editing && !dueOpen && (
+      {/* La tâche de l'autre : on la coche, on ne la réécrit pas. On explique
+          pourquoi plutôt que d'ouvrir un menu vide. */}
+      {open && !store.peutModifier(task) && (
+        <div className="actions actions-autre">
+          <p className="refus refus-doux">{t('taches.modifInterdite')}</p>
+          {task.dueAt && (
+            <p className="due-recap">
+              {t('echeance.recap', { quand: dueFull(task.dueAt, task.dueHasTime) })}
+            </p>
+          )}
+        </div>
+      )}
+
+      {open && !editing && !dueOpen && store.peutModifier(task) && (
         <div className="actions" role="group" aria-label={t('taches.actions')}>
           <button
             className="action"

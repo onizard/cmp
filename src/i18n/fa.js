@@ -28,7 +28,7 @@ export default {
     codeSansFoyer: 'این رمز دعوت به هیچ خانه‌ای نمی‌رسد.',
     quitter: 'ترک خانه', quitterSur: 'واقعاً خانه را ترک کنی؟', quitterOui: 'بله، ترک کن',
   },
-  taches: { faitesTiroir: 'انجام‌شده',
+  taches: { modifInterdite: 'فقط کسی که آن را افزوده می‌تواند ویرایش یا حذفش کند.', faitesTiroir: 'انجام‌شده',
     aucuneFaite: 'هنوز چیزی انجام نشده.',
     combo: 'کمبو ×{n}',
     decocheInterdite: 'فقط کسی که علامت زده می‌تواند آن را بردارد.',

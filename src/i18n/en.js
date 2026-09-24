@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'This invitation code leads to no household.',
     quitter: 'Leave the household', quitterSur: 'Really leave the household?', quitterOui: 'yes, leave',
   },
-  taches: { faitesTiroir: 'Done',
+  taches: { modifInterdite: 'Only the person who added it can edit or delete it.', faitesTiroir: 'Done',
     aucuneFaite: 'Nothing done yet.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Only the person who ticked it can untick it.',

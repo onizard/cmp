@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Este código de invitación no lleva a ningún hogar.',
     quitter: 'Salir del hogar', quitterSur: '¿Salir del hogar de verdad?', quitterOui: 'sí, salir',
   },
-  taches: { faitesTiroir: 'Hechas',
+  taches: { modifInterdite: 'Solo quien la añadió puede modificarla o eliminarla.', faitesTiroir: 'Hechas',
     aucuneFaite: 'Nada hecho todavía.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Solo quien la marcó puede desmarcarla.',

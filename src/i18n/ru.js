@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Этот код приглашения никуда не ведёт.',
     quitter: 'Покинуть дом', quitterSur: 'Действительно покинуть дом?', quitterOui: 'да, покинуть',
   },
-  taches: { faitesTiroir: 'Готово',
+  taches: { modifInterdite: 'Изменить или удалить её может только тот, кто её добавил.', faitesTiroir: 'Готово',
     aucuneFaite: 'Пока ничего не сделано.',
     combo: 'Комбо ×{n}',
     decocheInterdite: 'Снять отметку может только тот, кто её поставил.',

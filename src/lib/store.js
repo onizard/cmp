@@ -85,6 +85,25 @@ export const estDefinitif = (err) => Boolean(err) && REFUS_DEFINITIF.has(err.cod
 export const decochable = (task, userId) =>
   !task.done || !task.doneBy || task.doneBy === userId;
 
+/**
+ * Qui peut modifier une tâche — son texte, son échéance — ou la supprimer.
+ * Seule la personne qui l'a ajoutée : c'est sa tâche, sa façon de la dire.
+ * L'autre peut toujours la cocher ; c'est même ce qui rapporte le plus.
+ *
+ * Une tâche sans auteur enregistré (ajoutée avant que la colonne n'existe, ou
+ * dont l'auteur a supprimé son compte) n'appartient à personne : chacun peut
+ * la modifier, sans quoi elle resterait figée pour toujours.
+ *
+ * La base applique la même règle (nas/db/taches-auteur.sql), qui seule fait
+ * autorité.
+ */
+export const modifiable = (task, userId) =>
+  Boolean(task) && (!task.createdBy || task.createdBy === userId);
+
+// Les champs qui relèvent de la modification. Cocher et décocher n'en font pas
+// partie : ils ont leur propre règle, plus haut.
+const CHAMPS_DE_L_AUTEUR = ['text', 'deleted', 'dueAt', 'dueHasTime', 'month'];
+
 // --- Stockage local (cache lecture hors ligne + file d'attente d'écritures) ---
 
 const cacheKey = (hid) => `cmp:tasks:${hid}`;
@@ -358,13 +377,19 @@ export function useTasks(householdId, userId) {
 
   const updateTask = useCallback(
     (id, patch) => {
+      if (CHAMPS_DE_L_AUTEUR.some((c) => c in patch)) {
+        const task = tasksRef.current.find((t) => t.id === id);
+        if (!modifiable(task, userId)) return false;
+      }
       applyLocal(id, patch);
       enqueue({ type: 'update', id, row: patchToRow(patch) });
+      return true;
     },
-    [applyLocal, enqueue],
+    [applyLocal, enqueue, userId],
   );
 
   const peutDecocher = useCallback((task) => decochable(task, userId), [userId]);
+  const peutModifier = useCallback((task) => modifiable(task, userId), [userId]);
 
   /**
    * Coche ou décoche. Renvoie false si la décoche est refusée, sinon le
@@ -418,6 +443,7 @@ export function useTasks(householdId, userId) {
     setDue,
     toggleDone,
     peutDecocher,
+    peutModifier,
     removeTask,
   };
 }

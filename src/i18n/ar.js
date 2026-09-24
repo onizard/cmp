@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'رمز الدعوة هذا لا يؤدي إلى أي بيت.',
     quitter: 'مغادرة البيت', quitterSur: 'هل تريد فعلًا مغادرة البيت؟', quitterOui: 'نعم، غادر',
   },
-  taches: { faitesTiroir: 'منجزة',
+  taches: { modifInterdite: 'لا يمكن تعديلها أو حذفها إلا لمن أضافها.', faitesTiroir: 'منجزة',
     aucuneFaite: 'لا شيء منجز بعد.',
     combo: 'كومبو ×{n}',
     decocheInterdite: 'لا يمكن إلغاء التحديد إلا لمن وضعه.',

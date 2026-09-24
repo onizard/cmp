@@ -32,6 +32,9 @@ create table if not exists tasks (
 create index if not exists tasks_household_idx on tasks (household_id);
 -- Ajouts rétro-compatibles si la table existait déjà sans les colonnes.
 alter table tasks add column if not exists done_by uuid references auth.users;
+-- L'auteur de la tache (d'abord pose par push.sql ; ici pour qu'une installation
+-- neuve ait la colonne avant la politique de suppression qui s'en sert).
+alter table tasks add column if not exists created_by uuid;
 -- L'instant de la coche : sert au combo du jour (voir combo.sql).
 alter table tasks add column if not exists done_at timestamptz;
 create index if not exists tasks_done_at_idx
@@ -134,9 +137,12 @@ create policy tasks_update on tasks
   for update using (public.is_member(household_id))
   with check (public.is_member(household_id));
 
+-- Effacer pour de bon est reserve a l'auteur (voir taches-auteur.sql).
 drop policy if exists tasks_delete on tasks;
 create policy tasks_delete on tasks
-  for delete using (public.is_member(household_id));
+  for delete using (
+    public.is_member(household_id)
+    and (created_by is null or created_by = auth.uid()));
 
 -- 5. Temps réel : diffuser les changements de tasks -----------------------
 

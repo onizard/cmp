@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Questo codice di invito non porta ad alcuna casa.',
     quitter: 'Lascia la casa', quitterSur: 'Lasciare davvero la casa?', quitterOui: 'sì, esci',
   },
-  taches: { faitesTiroir: 'Fatte',
+  taches: { modifInterdite: 'Solo chi l’ha aggiunta può modificarla o eliminarla.', faitesTiroir: 'Fatte',
     aucuneFaite: 'Ancora niente fatto.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Solo chi l’ha spuntata può toglierne la spunta.',

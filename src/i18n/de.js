@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Dieser Einladungscode führt zu keinem Haushalt.',
     quitter: 'Haushalt verlassen', quitterSur: 'Den Haushalt wirklich verlassen?', quitterOui: 'ja, verlassen',
   },
-  taches: { faitesTiroir: 'Erledigt',
+  taches: { modifInterdite: 'Nur wer sie hinzugefügt hat, kann sie ändern oder löschen.', faitesTiroir: 'Erledigt',
     aucuneFaite: 'Noch nichts erledigt.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Nur wer sie abgehakt hat, kann den Haken entfernen.',

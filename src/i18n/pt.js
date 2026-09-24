@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Este código de convite não leva a nenhuma casa.',
     quitter: 'Sair da casa', quitterSur: 'Sair mesmo da casa?', quitterOui: 'sim, sair',
   },
-  taches: { faitesTiroir: 'Feitas',
+  taches: { modifInterdite: 'Só quem a adicionou a pode alterar ou apagar.', faitesTiroir: 'Feitas',
     aucuneFaite: 'Nada feito ainda.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Só quem a marcou pode desmarcá-la.',

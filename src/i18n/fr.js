@@ -68,7 +68,7 @@ export default {
     quitterOui: 'oui, quitter',
   },
 
-  taches: { faitesTiroir: 'Faites',
+  taches: { modifInterdite: 'Seule la personne qui l’a ajoutée peut la modifier ou la supprimer.', faitesTiroir: 'Faites',
     aucuneFaite: 'Rien de fait pour l’instant.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',

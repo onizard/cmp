@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { decochable, estDefinitif } from './store.js';
+import { decochable, estDefinitif, modifiable } from './store.js';
 
 const MOI = 'aaaaaaaa-0000-0000-0000-000000000001';
 const AUTRE = 'bbbbbbbb-0000-0000-0000-000000000002';
@@ -36,5 +36,24 @@ describe('estDefinitif', () => {
     expect(estDefinitif(new TypeError('Failed to fetch'))).toBe(false);
     expect(estDefinitif({ code: '503' })).toBe(false);
     expect(estDefinitif(undefined)).toBe(false);
+  });
+});
+
+describe('modifiable', () => {
+  it('laisse l’auteur modifier sa tâche', () => {
+    expect(modifiable({ createdBy: MOI }, MOI)).toBe(true);
+  });
+
+  it('refuse de modifier la tâche que l’autre a ajoutée', () => {
+    expect(modifiable({ createdBy: AUTRE }, MOI)).toBe(false);
+  });
+
+  it('laisse modifier une tâche sans auteur enregistré', () => {
+    // Sinon elle resterait figée pour toujours.
+    expect(modifiable({ createdBy: null }, MOI)).toBe(true);
+  });
+
+  it('refuse quand on ne sait pas qui regarde', () => {
+    expect(modifiable({ createdBy: AUTRE }, undefined)).toBe(false);
   });
 });
