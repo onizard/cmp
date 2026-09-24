@@ -4,9 +4,8 @@
 -- donc aucun choix, juste une case a cocher. On garde les memes paliers — ils
 -- forment une echelle qui marche — et on y pose de quoi hesiter.
 --
--- Dont les corvees : la recompense la plus concrete d'une application de charge
--- mentale, c'est que l'autre prenne une tache a sa place. Le prix suit l'effort,
--- de la vaisselle d'un soir (10) a une semaine de repas (75).
+-- (Les corvees posees par la premiere version de ce script ont ete retirees :
+-- voir catalogue.sql. Relance, il ne les remet plus.)
 --
 -- Chaque recompense du catalogue porte desormais une `cle`. L'application s'en
 -- sert pour afficher le libelle dans la langue de chacun ; le `label` francais
@@ -29,16 +28,7 @@ cross join (values
   ('bainCoule', 'Un bain coulé, sans être dérangé·e', 25),
   ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25),
   ('matineeDehors', 'Une matinée dehors, sans horaire', 35),
-  ('weekendSansCorvee', 'Un week-end sans aucune corvée', 50),
-  ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75),
-  ('vaisselle', 'La vaisselle faite par l''autre', 10),
-  ('poubelles', 'Les poubelles sorties par l''autre pendant une semaine', 12),
-  ('repasCuisine', 'Le repas du soir cuisiné par l''autre', 18),
-  ('courses', 'Les courses faites par l''autre', 25),
-  ('linge', 'Le linge lavé, étendu, plié et rangé par l''autre', 25),
-  ('rangement', 'La maison rangée par l''autre', 35),
-  ('menage', 'Le ménage complet fait par l''autre', 50),
-  ('semaineRepas', 'Une semaine de repas cuisinés par l''autre', 75)
+  ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75)
 ) as v(cle, label, cost)
 where not exists (
   select 1 from rewards r

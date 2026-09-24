@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'вместе легче', horsLigne: 'нет сети', synchro: 'синхронизация…', enAttente: '{n} в очереди', titre: 'общая мысленная нагрузка', accroche: 'Список того, что нужно нести, — вдвоём.', instant: 'Минутку…', chargement: 'Загрузка…', annuler: 'Отмена', enregistrer: 'Сохранить', enregistre: 'Сохранено ✓', revenir: 'Назад', nonConfigure: 'Приложение ещё не подключено к своей базе данных.' },
-  tabs: { taches: 'Задачи', cerveau: 'Баланс', compte: 'Аккаунт', bord: 'Статистика' },
+  tabs: {
+    bilan: 'Итоги', taches: 'Задачи', cerveau: 'Баланс', compte: 'Аккаунт', bord: 'Статистика' },
   auth: {
     connexion: 'Вход.', connexionAide: 'Ваша почта и пароль.',
     creation: 'Создайте аккаунт.', creationAide: 'Два поля — и вы внутри. Никаких писем искать не нужно.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Кофе в постель',
     filmSoiree: 'Выбрать фильм на вечер',
-    grasseMatinee: 'Поспать подольше, пока ваша половина берёт всё на себя',
+    grasseMatinee: 'Поспать подольше, без будильника',
     massage20: 'Массаж на 20 минут',
     soireeLibre: 'Полностью свободный вечер',
     restoAmoureux: 'Романтический ужин в ресторане, который организует ваша половина',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'Утро вне дома, без расписания',
     weekendSansCorvee: 'Выходные без единой домашней обязанности',
     weekendADeux: 'Выходные вдвоём, которые организует ваша половина',
+    baladeADeux: 'Прогулка вдвоём, телефоны выключены',
+    soireeSurprise: 'Вечер-сюрприз, который организует ваша половина',
+    spectacleADeux: 'Концерт или спектакль вдвоём',
     vaisselle: 'Посуду моет ваша половина',
     poubelles: 'Мусор неделю выносит ваша половина',
     repasCuisine: 'Ужин готовит ваша половина',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ Купон от {qui}', autre: '🎟️ Купоны от {qui}: {n}' },
     texte: 'Ваш ход. {qui} подтвердит, когда всё будет сделано.',
     ok: 'Иду',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Баллы за всё время',
+    dontCombos: 'из них {n} за комбо',
+    depenses: 'Потрачено',
+    disponibles: 'Доступно',
+    totalRealisees: 'Выполнено задач',
+    totalCreees: 'Создано задач',
+    parMois: 'Ваши задачи по месяцам',
+    creees: 'Создано',
+    realisees: 'Выполнено',
+    mois: 'Месяц',
+    voirTableau: 'Показать таблицей',
+    voirGraphique: 'Показать график',
+    vide: 'Здесь появятся ваши первые задачи.',
   },
 };

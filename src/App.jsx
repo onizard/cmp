@@ -14,6 +14,7 @@ import TabBar from './components/TabBar.jsx';
 import BrainView from './components/BrainView.jsx';
 import Account from './components/Account.jsx';
 import AdminView from './components/AdminView.jsx';
+import BilanView from './components/BilanView.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
 import Combo from './components/Combo.jsx';
 import BonsAHonorer from './components/BonsAHonorer.jsx';
@@ -143,6 +144,9 @@ function Home({ account, currentMonth }) {
         ))}
       {tab === 'cerveau' && (
         <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
+      )}
+      {tab === 'bilan' && (
+        <BilanView tasks={store.tasks} claims={rewards.claims} userId={userId} />
       )}
       {tab === 'compte' && <Account account={account} />}
       {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}

@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'أخفّ معًا', horsLigne: 'غير متصل', synchro: 'جارٍ المزامنة…', enAttente: '{n} في الانتظار', titre: 'العبء الذهني المشترك', accroche: 'قائمة ما يجب حمله، معًا.', instant: 'لحظة…', chargement: 'جارٍ التحميل…', annuler: 'إلغاء', enregistrer: 'حفظ', enregistre: 'تم الحفظ ✓', revenir: 'رجوع', nonConfigure: 'التطبيق غير متصل بعد بقاعدة بياناته.' },
-  tabs: { taches: 'المهام', cerveau: 'الميزان', compte: 'حسابي', bord: 'الإحصاءات' },
+  tabs: {
+    bilan: 'حصيلتي', taches: 'المهام', cerveau: 'الميزان', compte: 'حسابي', bord: 'الإحصاءات' },
   auth: {
     connexion: 'تسجيل الدخول.', connexionAide: 'بريدك وكلمة السر.',
     creation: 'أنشئ حسابك.', creationAide: 'حقلان وتدخل. لا بريد تبحث عنه.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'قهوة تُقدَّم في السرير',
     filmSoiree: 'اختيار فيلم السهرة',
-    grasseMatinee: 'نوم متأخر بينما يتولى نصفك الآخر كل شيء',
+    grasseMatinee: 'نوم متأخر، بلا منبّه',
     massage20: 'تدليك لمدة 20 دقيقة',
     soireeLibre: 'سهرة حرة بالكامل',
     restoAmoureux: 'عشاء رومانسي في مطعم، ينظّمه نصفك الآخر',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'صباح في الخارج، دون مواعيد',
     weekendSansCorvee: 'عطلة نهاية أسبوع بلا أي أعمال منزلية',
     weekendADeux: 'عطلة نهاية أسبوع لشخصين، ينظّمها نصفك الآخر',
+    baladeADeux: 'نزهة لشخصين، والهواتف مطفأة',
+    soireeSurprise: 'سهرة مفاجئة، ينظّمها نصفك الآخر',
+    spectacleADeux: 'حفلة موسيقية أو عرض لشخصين',
     vaisselle: 'غسل الصحون يتولاه نصفك الآخر',
     poubelles: 'إخراج القمامة يتولاه نصفك الآخر لمدة أسبوع',
     repasCuisine: 'العشاء يطبخه نصفك الآخر',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ قسيمة من {qui}', autre: '🎟️ {n} قسائم من {qui}' },
     texte: 'دورك الآن. التأكيد عند {qui} بعد الإنجاز.',
     ok: 'حاضر',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'النقاط المجمّعة منذ البداية',
+    dontCombos: 'منها {n} من الكومبو',
+    depenses: 'المُنفَقة',
+    disponibles: 'المتاحة',
+    totalRealisees: 'المهام المنجزة',
+    totalCreees: 'المهام المُنشأة',
+    parMois: 'مهامّك شهرًا بشهر',
+    creees: 'مُنشأة',
+    realisees: 'منجزة',
+    mois: 'الشهر',
+    voirTableau: 'عرض كجدول',
+    voirGraphique: 'عرض الرسم',
+    vide: 'ستظهر مهامّك الأولى هنا.',
   },
 };

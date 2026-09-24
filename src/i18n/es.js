@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'más ligeros juntos', horsLigne: 'sin conexión', synchro: 'sincronizando…', enAttente: '{n} pendientes', titre: 'carga mental compartida', accroche: 'La lista de lo que hay que llevar, entre dos.', instant: 'Un momento…', chargement: 'Cargando…', annuler: 'Cancelar', enregistrer: 'Guardar', enregistre: 'Guardado ✓', revenir: 'Volver', nonConfigure: 'La aplicación aún no está conectada a su base de datos.' },
-  tabs: { taches: 'Tareas', cerveau: 'Balance', compte: 'Mi cuenta', bord: 'Panel' },
+  tabs: {
+    bilan: 'Balance', taches: 'Tareas', cerveau: 'Balance', compte: 'Mi cuenta', bord: 'Panel' },
   auth: {
     connexion: 'Iniciar sesión.', connexionAide: 'Tu correo y tu contraseña.',
     creation: 'Crea tu cuenta.', creationAide: 'Dos campos y entras. Ningún correo que buscar.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Un café servido en la cama',
     filmSoiree: 'Elegir la película de la noche',
-    grasseMatinee: 'Quedarte en la cama mientras tu media naranja se encarga de todo',
+    grasseMatinee: 'Dormir hasta tarde, sin despertador',
     massage20: 'Un masaje de 20 minutos',
     soireeLibre: 'Una noche completamente libre',
     restoAmoureux: 'Una cena romántica, organizada por tu media naranja',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'Una mañana fuera, sin horarios',
     weekendSansCorvee: 'Un fin de semana sin ninguna tarea',
     weekendADeux: 'Un fin de semana en pareja, organizado por tu media naranja',
+    baladeADeux: 'Un paseo a dos, con los móviles apagados',
+    soireeSurprise: 'Una noche sorpresa, organizada por tu media naranja',
+    spectacleADeux: 'Un concierto o un espectáculo para dos',
     vaisselle: 'Los platos, fregados por tu media naranja',
     poubelles: 'La basura, sacada por tu media naranja durante una semana',
     repasCuisine: 'La cena, cocinada por tu media naranja',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ Vale de {qui}', autre: '🎟️ {n} vales de {qui}' },
     texte: 'Te toca. {qui} lo confirmará cuando esté hecho.',
     ok: 'Voy',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Puntos acumulados desde el inicio',
+    dontCombos: 'de ellos {n} por combos',
+    depenses: 'Gastados',
+    disponibles: 'Disponibles',
+    totalRealisees: 'Tareas hechas',
+    totalCreees: 'Tareas creadas',
+    parMois: 'Tus tareas, mes a mes',
+    creees: 'Creadas',
+    realisees: 'Hechas',
+    mois: 'Mes',
+    voirTableau: 'Ver en tabla',
+    voirGraphique: 'Ver el gráfico',
+    vide: 'Tus primeras tareas aparecerán aquí.',
   },
 };

@@ -1,6 +1,7 @@
 export default {
   app: { tagline: '一起，轻一点', horsLigne: '离线', synchro: '同步中…', enAttente: '{n} 项待同步', titre: '共担的心理负荷', accroche: '两个人一起要操心的事，都在这里。', instant: '稍等…', chargement: '加载中…', annuler: '取消', enregistrer: '保存', enregistre: '已保存 ✓', revenir: '返回', nonConfigure: '应用尚未连接到数据库。' },
-  tabs: { taches: '任务', cerveau: '平衡', compte: '我的账户', bord: '数据' },
+  tabs: {
+    bilan: '统计', taches: '任务', cerveau: '平衡', compte: '我的账户', bord: '数据' },
   auth: {
     connexion: '登录。', connexionAide: '你的邮箱和密码。',
     creation: '创建账户。', creationAide: '两个输入框，马上进入。不用去翻邮件。',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: '端到床边的一杯咖啡',
     filmSoiree: '选今晚看的电影',
-    grasseMatinee: '睡个懒觉，另一半包揽一切',
+    grasseMatinee: '睡个懒觉，不设闹钟',
     massage20: '20分钟的按摩',
     soireeLibre: '完全自由的一个晚上',
     restoAmoureux: '另一半安排的浪漫晚餐',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: '在外面度过一个上午，不用看时间',
     weekendSansCorvee: '一个完全不用做家务的周末',
     weekendADeux: '另一半安排的二人周末',
+    baladeADeux: '两人散步，手机关机',
+    soireeSurprise: '另一半安排的惊喜之夜',
+    spectacleADeux: '两人一起看演唱会或演出',
     vaisselle: '另一半洗碗',
     poubelles: '一周的垃圾由另一半倒',
     repasCuisine: '另一半做晚饭',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ {qui} 使用了奖励券', autre: '🎟️ {qui} 使用了 {n} 张奖励券' },
     texte: '轮到你了。完成后由 {qui} 确认。',
     ok: '这就去',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: '累计获得积分',
+    dontCombos: '其中 {n} 来自连击',
+    depenses: '已花',
+    disponibles: '可用',
+    totalRealisees: '已完成任务',
+    totalCreees: '已创建任务',
+    parMois: '每月任务',
+    creees: '创建',
+    realisees: '完成',
+    mois: '月份',
+    voirTableau: '以表格查看',
+    voirGraphique: '以图表查看',
+    vide: '你的第一批任务会显示在这里。',
   },
 };

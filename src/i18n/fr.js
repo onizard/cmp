@@ -15,6 +15,7 @@ export default {
   },
 
   tabs: {
+    bilan: 'Bilan',
     taches: 'Tâches',
     cerveau: 'Cerveau',
     compte: 'Mon compte',
@@ -308,7 +309,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Un café servi au lit',
     filmSoiree: 'Choisir le film de la soirée',
-    grasseMatinee: 'Une grasse matinée pendant que l\'autre gère',
+    grasseMatinee: 'Une grasse matinée, sans réveil',
     massage20: 'Un massage de 20 minutes',
     soireeLibre: 'Une soirée entièrement libre',
     restoAmoureux: 'Un resto en amoureux, organisé par l\'autre',
@@ -323,6 +324,9 @@ export default {
     matineeDehors: 'Une matinée dehors, sans horaire',
     weekendSansCorvee: 'Un week-end sans aucune corvée',
     weekendADeux: 'Un week-end à deux, organisé par l\'autre',
+    baladeADeux: 'Une balade à deux, téléphones éteints',
+    soireeSurprise: 'Une soirée surprise, organisée par l\'autre',
+    spectacleADeux: 'Un concert ou un spectacle à deux',
     vaisselle: 'La vaisselle faite par l\'autre',
     poubelles: 'Les poubelles sorties par l\'autre pendant une semaine',
     repasCuisine: 'Le repas du soir cuisiné par l\'autre',
@@ -338,5 +342,22 @@ export default {
     titre: { un: '🎟️ {qui} utilise son bon', autre: '🎟️ {qui} utilise {n} bons' },
     texte: 'À toi de jouer. {qui} validera quand ce sera fait.',
     ok: 'J’y vais',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Points cumulés depuis le début',
+    dontCombos: 'dont {n} grâce aux combos',
+    depenses: 'Dépensés',
+    disponibles: 'Disponibles',
+    totalRealisees: 'Tâches réalisées',
+    totalCreees: 'Tâches créées',
+    parMois: 'Tes tâches, mois par mois',
+    creees: 'Créées',
+    realisees: 'Réalisées',
+    mois: 'Mois',
+    voirTableau: 'Voir en tableau',
+    voirGraphique: 'Voir le graphique',
+    vide: 'Tes premières tâches apparaîtront ici.',
   },
 };

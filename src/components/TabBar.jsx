@@ -24,6 +24,15 @@ const ChartIcon = () => (
   </svg>
 );
 
+// Le bilan : une courbe qui monte — distincte des colonnes du tableau de bord.
+const TrendIcon = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 17l5-5 4 3 8-8" />
+    <path d="M15 7h5v5" />
+    <path d="M3 21h18" />
+  </svg>
+);
+
 const UserIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="8" r="4" />
@@ -36,6 +45,7 @@ export default function TabBar({ tab, onChange, honourCount = 0, admin = false }
   const tabs = [
     { id: 'liste', label: t('tabs.taches'), Icon: ListIcon },
     { id: 'cerveau', label: t('tabs.cerveau'), Icon: BrainIcon },
+    { id: 'bilan', label: t('tabs.bilan'), Icon: TrendIcon },
     { id: 'compte', label: t('tabs.compte'), Icon: UserIcon },
   ];
   // L'onglet n'apparaît que pour un administrateur. Ce n'est qu'un confort :

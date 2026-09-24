@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'gemeinsam leichter', horsLigne: 'offline', synchro: 'wird abgeglichen…', enAttente: '{n} ausstehend', titre: 'geteilte mentale Last', accroche: 'Die Liste der Dinge, die zu tragen sind — zu zweit.', instant: 'Einen Moment…', chargement: 'Lädt…', annuler: 'Abbrechen', enregistrer: 'Speichern', enregistre: 'Gespeichert ✓', revenir: 'Zurück', nonConfigure: 'Die App ist noch nicht mit ihrer Datenbank verbunden.' },
-  tabs: { taches: 'Aufgaben', cerveau: 'Bilanz', compte: 'Konto', bord: 'Zahlen' },
+  tabs: {
+    bilan: 'Bilanz', taches: 'Aufgaben', cerveau: 'Bilanz', compte: 'Konto', bord: 'Zahlen' },
   auth: {
     connexion: 'Anmelden.', connexionAide: 'Deine E-Mail und dein Passwort.',
     creation: 'Konto erstellen.', creationAide: 'Zwei Felder und du bist drin. Keine E-Mail zu suchen.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Kaffee ans Bett gebracht',
     filmSoiree: 'Den Film für den Abend aussuchen',
-    grasseMatinee: 'Ausschlafen, während deine bessere Hälfte sich um alles kümmert',
+    grasseMatinee: 'Ausschlafen, ganz ohne Wecker',
     massage20: 'Eine 20-minütige Massage',
     soireeLibre: 'Ein ganz freier Abend',
     restoAmoureux: 'Ein romantisches Essen, organisiert von deiner besseren Hälfte',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'Ein Vormittag draußen, ohne Zeitplan',
     weekendSansCorvee: 'Ein Wochenende ganz ohne Hausarbeit',
     weekendADeux: 'Ein Wochenende zu zweit, organisiert von deiner besseren Hälfte',
+    baladeADeux: 'Ein Spaziergang zu zweit, Handys aus',
+    soireeSurprise: 'Ein Überraschungsabend, organisiert von deiner besseren Hälfte',
+    spectacleADeux: 'Ein Konzert oder eine Show zu zweit',
     vaisselle: 'Der Abwasch, erledigt von deiner besseren Hälfte',
     poubelles: 'Eine Woche lang bringt deine bessere Hälfte den Müll raus',
     repasCuisine: 'Das Abendessen kocht deine bessere Hälfte',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ Gutschein von {qui}', autre: '🎟️ {n} Gutscheine von {qui}' },
     texte: 'Du bist dran. {qui} bestätigt, wenn es erledigt ist.',
     ok: 'Ich mach’s',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Seit Beginn gesammelte Punkte',
+    dontCombos: 'davon {n} durch Combos',
+    depenses: 'Ausgegeben',
+    disponibles: 'Verfügbar',
+    totalRealisees: 'Erledigte Aufgaben',
+    totalCreees: 'Erstellte Aufgaben',
+    parMois: 'Deine Aufgaben, Monat für Monat',
+    creees: 'Erstellt',
+    realisees: 'Erledigt',
+    mois: 'Monat',
+    voirTableau: 'Als Tabelle',
+    voirGraphique: 'Als Diagramm',
+    vide: 'Deine ersten Aufgaben erscheinen hier.',
   },
 };

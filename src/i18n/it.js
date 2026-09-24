@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'più leggeri insieme', horsLigne: 'offline', synchro: 'sincronizzazione…', enAttente: '{n} in attesa', titre: 'carico mentale condiviso', accroche: 'La lista delle cose da portare, in due.', instant: 'Un attimo…', chargement: 'Caricamento…', annuler: 'Annulla', enregistrer: 'Salva', enregistre: 'Salvato ✓', revenir: 'Indietro', nonConfigure: 'L’applicazione non è ancora collegata al suo database.' },
-  tabs: { taches: 'Compiti', cerveau: 'Bilancio', compte: 'Account', bord: 'Statistiche' },
+  tabs: {
+    bilan: 'Bilancio', taches: 'Compiti', cerveau: 'Bilancio', compte: 'Account', bord: 'Statistiche' },
   auth: {
     connexion: 'Accedi.', connexionAide: 'La tua email e la tua password.',
     creation: 'Crea il tuo account.', creationAide: 'Due campi ed entri. Nessuna email da cercare.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Un caffè servito a letto',
     filmSoiree: 'Scegliere il film della serata',
-    grasseMatinee: 'Dormire fino a tardi mentre la tua metà pensa a tutto',
+    grasseMatinee: 'Dormire fino a tardi, senza sveglia',
     massage20: 'Un massaggio di 20 minuti',
     soireeLibre: 'Una serata completamente libera',
     restoAmoureux: 'Una cena romantica, organizzata dalla tua metà',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'Una mattinata fuori, senza orari',
     weekendSansCorvee: 'Un weekend senza nessuna faccenda',
     weekendADeux: 'Un weekend in due, organizzato dalla tua metà',
+    baladeADeux: 'Una passeggiata in due, telefoni spenti',
+    soireeSurprise: 'Una serata a sorpresa, organizzata dalla tua metà',
+    spectacleADeux: 'Un concerto o uno spettacolo in due',
     vaisselle: 'I piatti lavati dalla tua metà',
     poubelles: 'La spazzatura portata fuori dalla tua metà per una settimana',
     repasCuisine: 'La cena cucinata dalla tua metà',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ Buono di {qui}', autre: '🎟️ {n} buoni di {qui}' },
     texte: 'Tocca a te. {qui} confermerà quando sarà fatto.',
     ok: 'Vado',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Punti accumulati dall’inizio',
+    dontCombos: 'di cui {n} grazie alle combo',
+    depenses: 'Spesi',
+    disponibles: 'Disponibili',
+    totalRealisees: 'Attività fatte',
+    totalCreees: 'Attività create',
+    parMois: 'Le tue attività, mese per mese',
+    creees: 'Create',
+    realisees: 'Fatte',
+    mois: 'Mese',
+    voirTableau: 'Vedi in tabella',
+    voirGraphique: 'Vedi il grafico',
+    vide: 'Le tue prime attività appariranno qui.',
   },
 };

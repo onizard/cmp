@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'mais leves a dois', horsLigne: 'sem ligação', synchro: 'a sincronizar…', enAttente: '{n} pendentes', titre: 'carga mental partilhada', accroche: 'A lista das coisas a carregar, a dois.', instant: 'Um momento…', chargement: 'A carregar…', annuler: 'Cancelar', enregistrer: 'Guardar', enregistre: 'Guardado ✓', revenir: 'Voltar', nonConfigure: 'A aplicação ainda não está ligada à sua base de dados.' },
-  tabs: { taches: 'Tarefas', cerveau: 'Balanço', compte: 'Conta', bord: 'Painel' },
+  tabs: {
+    bilan: 'Balanço', taches: 'Tarefas', cerveau: 'Balanço', compte: 'Conta', bord: 'Painel' },
   auth: {
     connexion: 'Entrar.', connexionAide: 'O teu e-mail e a tua palavra-passe.',
     creation: 'Cria a tua conta.', creationAide: 'Dois campos e entras. Nenhum e-mail para ir buscar.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Um café servido na cama',
     filmSoiree: 'Escolher o filme da noite',
-    grasseMatinee: 'Ficar na cama até tarde enquanto a tua cara-metade trata de tudo',
+    grasseMatinee: 'Dormir até tarde, sem despertador',
     massage20: 'Uma massagem de 20 minutos',
     soireeLibre: 'Uma noite totalmente livre',
     restoAmoureux: 'Um jantar romântico, organizado pela tua cara-metade',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'Uma manhã fora, sem horários',
     weekendSansCorvee: 'Um fim de semana sem nenhuma tarefa',
     weekendADeux: 'Um fim de semana a dois, organizado pela tua cara-metade',
+    baladeADeux: 'Um passeio a dois, telemóveis desligados',
+    soireeSurprise: 'Uma noite surpresa, organizada pela tua cara-metade',
+    spectacleADeux: 'Um concerto ou um espetáculo a dois',
     vaisselle: 'A loiça lavada pela tua cara-metade',
     poubelles: 'O lixo levado pela tua cara-metade durante uma semana',
     repasCuisine: 'O jantar cozinhado pela tua cara-metade',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ Vale de {qui}', autre: '🎟️ {n} vales de {qui}' },
     texte: 'É a tua vez. {qui} confirma quando estiver feito.',
     ok: 'Vou já',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Pontos acumulados desde o início',
+    dontCombos: 'dos quais {n} por combos',
+    depenses: 'Gastos',
+    disponibles: 'Disponíveis',
+    totalRealisees: 'Tarefas feitas',
+    totalCreees: 'Tarefas criadas',
+    parMois: 'As tuas tarefas, mês a mês',
+    creees: 'Criadas',
+    realisees: 'Feitas',
+    mois: 'Mês',
+    voirTableau: 'Ver em tabela',
+    voirGraphique: 'Ver o gráfico',
+    vide: 'As tuas primeiras tarefas aparecem aqui.',
   },
 };

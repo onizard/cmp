@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'lighter together', horsLigne: 'offline', synchro: 'syncing…', enAttente: '{n} pending', titre: 'shared mental load', accroche: 'The list of things to carry, together.', instant: 'One moment…', chargement: 'Loading…', annuler: 'Cancel', enregistrer: 'Save', enregistre: 'Saved ✓', revenir: 'Back', nonConfigure: 'The app is not connected to its database yet.' },
-  tabs: { taches: 'Tasks', cerveau: 'Balance', compte: 'Account', bord: 'Stats' },
+  tabs: {
+    bilan: 'Stats', taches: 'Tasks', cerveau: 'Balance', compte: 'Account', bord: 'Stats' },
   auth: {
     connexion: 'Sign in.', connexionAide: 'Your email and password.',
     creation: 'Create your account.', creationAide: 'Two fields and you are in. No email to fetch.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'Coffee served in bed',
     filmSoiree: 'Pick the film for the evening',
-    grasseMatinee: 'A lie-in while your other half handles everything',
+    grasseMatinee: 'A lie-in, no alarm',
     massage20: 'A 20-minute massage',
     soireeLibre: 'A completely free evening',
     restoAmoureux: 'A romantic dinner out, organised by your other half',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'A morning out, with no schedule',
     weekendSansCorvee: 'A weekend without a single chore',
     weekendADeux: 'A weekend for two, organised by your other half',
+    baladeADeux: 'A walk for two, phones off',
+    soireeSurprise: 'A surprise evening, planned by your other half',
+    spectacleADeux: 'A concert or a show for two',
     vaisselle: 'The dishes done by your other half',
     poubelles: 'The bins taken out by your other half for a week',
     repasCuisine: 'Dinner cooked by your other half',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ {qui} is using a voucher', autre: '🎟️ {qui} is using {n} vouchers' },
     texte: 'Your move. {qui} will confirm once it’s done.',
     ok: 'On it',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'Points earned since the start',
+    dontCombos: 'including {n} from combos',
+    depenses: 'Spent',
+    disponibles: 'Available',
+    totalRealisees: 'Tasks done',
+    totalCreees: 'Tasks created',
+    parMois: 'Your tasks, month by month',
+    creees: 'Created',
+    realisees: 'Done',
+    mois: 'Month',
+    voirTableau: 'Show as a table',
+    voirGraphique: 'Show the chart',
+    vide: 'Your first tasks will show up here.',
   },
 };

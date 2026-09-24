@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'با هم سبک‌تر', horsLigne: 'آفلاین', synchro: 'در حال همگام‌سازی…', enAttente: '{n} در انتظار', titre: 'بار ذهنی مشترک', accroche: 'فهرست کارهایی که باید بر دوش کشید — با هم.', instant: 'یک لحظه…', chargement: 'در حال بارگذاری…', annuler: 'انصراف', enregistrer: 'ذخیره', enregistre: 'ذخیره شد ✓', revenir: 'بازگشت', nonConfigure: 'برنامه هنوز به پایگاه داده‌اش وصل نشده است.' },
-  tabs: { taches: 'کارها', cerveau: 'ترازو', compte: 'حساب من', bord: 'آمار' },
+  tabs: {
+    bilan: 'کارنامه', taches: 'کارها', cerveau: 'ترازو', compte: 'حساب من', bord: 'آمار' },
   auth: {
     connexion: 'ورود.', connexionAide: 'ایمیل و رمز عبورت.',
     creation: 'ساختن حساب.', creationAide: 'دو کادر و وارد می‌شوی. دنبال هیچ ایمیلی نمی‌گردی.',
@@ -159,7 +160,7 @@ export default {
   catalogue: {
     cafeAuLit: 'قهوه‌ای که در رختخواب سرو شود',
     filmSoiree: 'انتخاب فیلم امشب',
-    grasseMatinee: 'خواب صبحگاهی طولانی، در حالی که نیمهٔ دیگرت همه‌چیز را اداره می‌کند',
+    grasseMatinee: 'خواب صبحگاهی طولانی، بی‌زنگ ساعت',
     massage20: 'ماساژ ۲۰ دقیقه‌ای',
     soireeLibre: 'یک شب کاملاً آزاد',
     restoAmoureux: 'شام عاشقانه در رستوران، با برنامه‌ریزی نیمهٔ دیگرت',
@@ -174,6 +175,9 @@ export default {
     matineeDehors: 'یک صبح بیرون از خانه، بی‌برنامهٔ زمانی',
     weekendSansCorvee: 'آخر هفته‌ای بدون هیچ کار خانه',
     weekendADeux: 'آخر هفته‌ای دونفره، با برنامه‌ریزی نیمهٔ دیگرت',
+    baladeADeux: 'قدم‌زدن دونفره، با گوشی‌های خاموش',
+    soireeSurprise: 'یک شب غافلگیرکننده، با برنامه‌ریزی نیمهٔ دیگرت',
+    spectacleADeux: 'یک کنسرت یا نمایش دونفره',
     vaisselle: 'ظرف‌ها را نیمهٔ دیگرت می‌شوید',
     poubelles: 'یک هفته زباله‌ها را نیمهٔ دیگرت بیرون می‌برد',
     repasCuisine: 'شام را نیمهٔ دیگرت می‌پزد',
@@ -189,5 +193,22 @@ export default {
     titre: { un: '🎟️ کوپن {qui}', autre: '🎟️ {n} کوپن از {qui}' },
     texte: 'نوبت توست. {qui} پس از انجام تأیید می‌کند.',
     ok: 'رفتم',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'امتیازهای جمع‌شده از آغاز',
+    dontCombos: 'که {n} از کمبوست',
+    depenses: 'خرج‌شده',
+    disponibles: 'در دسترس',
+    totalRealisees: 'کارهای انجام‌شده',
+    totalCreees: 'کارهای ساخته‌شده',
+    parMois: 'کارهای تو، ماه به ماه',
+    creees: 'ساخته‌شده',
+    realisees: 'انجام‌شده',
+    mois: 'ماه',
+    voirTableau: 'نمایش جدول',
+    voirGraphique: 'نمایش نمودار',
+    vide: 'نخستین کارهایت اینجا نمایش داده می‌شوند.',
   },
 };

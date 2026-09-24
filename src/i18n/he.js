@@ -1,6 +1,7 @@
 export default {
   app: { tagline: 'קל יותר ביחד', horsLigne: 'לא מקוון', synchro: 'מסתנכרן…', enAttente: '{n} ממתינות', titre: 'עומס נפשי משותף', accroche: 'רשימת הדברים שצריך לשאת, ביחד.', instant: 'רגע אחד…', chargement: 'טוען…', annuler: 'ביטול', enregistrer: 'שמירה', enregistre: 'נשמר ✓', revenir: 'חזרה', nonConfigure: 'האפליקציה עדיין לא מחוברת למסד הנתונים שלה.' },
-  tabs: { taches: 'משימות', cerveau: 'מאזן', compte: 'החשבון שלי', bord: 'נתונים' },
+  tabs: {
+    bilan: 'סיכום', taches: 'משימות', cerveau: 'מאזן', compte: 'החשבון שלי', bord: 'נתונים' },
   auth: {
     connexion: 'התחברות.', connexionAide: 'הדוא״ל והסיסמה שלך.',
     creation: 'יצירת חשבון.', creationAide: 'שני שדות ונכנסת. בלי לחפש מייל.',
@@ -157,7 +158,7 @@ export default {
   catalogue: {
     cafeAuLit: 'קפה שמוגש למיטה',
     filmSoiree: 'לבחור את הסרט של הערב',
-    grasseMatinee: 'לישון עד מאוחר בזמן שהחצי השני מטפל בהכול',
+    grasseMatinee: 'לישון עד מאוחר, בלי שעון מעורר',
     massage20: 'עיסוי של 20 דקות',
     soireeLibre: 'ערב פנוי לגמרי',
     restoAmoureux: 'ארוחה רומנטית במסעדה, שהחצי השני מארגן',
@@ -172,6 +173,9 @@ export default {
     matineeDehors: 'בוקר בחוץ, בלי לוח זמנים',
     weekendSansCorvee: 'סוף שבוע בלי אף מטלה',
     weekendADeux: 'סוף שבוע זוגי, שהחצי השני מארגן',
+    baladeADeux: 'טיול זוגי, טלפונים כבויים',
+    soireeSurprise: 'ערב הפתעה, שהחצי השני מארגן',
+    spectacleADeux: 'הופעה או מופע לשניים',
     vaisselle: 'החצי השני שוטף את הכלים',
     poubelles: 'החצי השני מוציא את הזבל במשך שבוע',
     repasCuisine: 'החצי השני מבשל את ארוחת הערב',
@@ -187,5 +191,22 @@ export default {
     titre: { un: '🎟️ שובר מ־{qui}', autre: '🎟️ {n} שוברים מ־{qui}' },
     texte: 'תורך. האישור אצל {qui} כשזה יבוצע.',
     ok: 'על זה',
+  },
+
+  // L'onglet Bilan : ses propres chiffres.
+  bilan: {
+    cumules: 'נקודות שנצברו מההתחלה',
+    dontCombos: 'מתוכן {n} מקומבו',
+    depenses: 'נוצלו',
+    disponibles: 'זמינות',
+    totalRealisees: 'משימות שבוצעו',
+    totalCreees: 'משימות שנוצרו',
+    parMois: 'המשימות שלך, חודש אחר חודש',
+    creees: 'נוצרו',
+    realisees: 'בוצעו',
+    mois: 'חודש',
+    voirTableau: 'הצגה כטבלה',
+    voirGraphique: 'הצגת התרשים',
+    vide: 'המשימות הראשונות שלך יופיעו כאן.',
   },
 };

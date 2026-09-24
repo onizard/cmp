@@ -2193,3 +2193,231 @@ body,
     animation: none;
   }
 }
+
+/* --- Bilan : ses propres chiffres --------------------------------------- */
+
+/* Les deux séries du graphique. Les pastels de l'app (#f0919c, #b486cc) sont
+   trop proches l'un de l'autre et trop pâles sur la carte crème ; ces deux
+   pas plus soutenus de la même famille passent tous les contrôles de lisibilité
+   (écart ≥ 15 en vision normale, ≥ 8 en daltonisme simulé, contraste ≥ 3:1). */
+.bilan {
+  --serie-1: #d9577a; /* créées */
+  --serie-2: #7a4fb0; /* réalisées */
+  padding-bottom: 12px;
+}
+
+.bilan-hero {
+  margin: 6px 0 18px;
+  text-align: center;
+}
+
+.bilan-hero-nom {
+  margin: 0 0 4px;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Le seul grand nombre de l'écran, dans la même famille que le texte. */
+.bilan-hero-valeur {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.bilan-hero-valeur small {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.bilan-hero-note {
+  margin: 6px 0 0;
+  color: var(--ink-3);
+  font-size: 0.88rem;
+}
+
+.bilan-tuiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.bilan-tuile {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.bilan-tuile span {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.bilan-tuile b {
+  color: var(--ink);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.bilan-carte {
+  margin: 0;
+  padding: 16px 14px 12px;
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.bilan-titre {
+  margin: 0 2px 8px;
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.bilan-legende {
+  display: flex;
+  gap: 16px;
+  margin: 0 2px 6px;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.bilan-legende span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bilan-legende i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.bilan-graph {
+  position: relative;
+}
+
+.bilan-graph svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bilan-grille {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.bilan-tick,
+.bilan-mois {
+  fill: var(--ink-3);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bilan-cible {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.bilan-cible:focus-visible {
+  stroke: var(--violet);
+  stroke-width: 1.5;
+}
+
+.bilan-eteint path {
+  opacity: 0.35;
+}
+
+/* La bulle : le nombre d'abord, le nom de la série ensuite. */
+.bilan-bulle {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  /* Placée loin à droite, une bulle absolue n'aurait que la place restante
+     et casserait « 13 » en deux lignes : elle prend la largeur de son contenu. */
+  width: max-content;
+  white-space: nowrap;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+
+.bilan-bulle-titre {
+  margin-bottom: 5px;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.bilan-bulle-ligne {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+}
+
+.bilan-bulle-ligne i {
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.bilan-bulle-ligne b {
+  font-size: 1rem;
+}
+
+.bilan-bulle-ligne span {
+  opacity: 0.8;
+}
+
+.bilan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.bilan-table th,
+.bilan-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+}
+
+.bilan-table th {
+  color: var(--ink-2);
+  font-weight: 700;
+}
+
+.bilan-table td + td,
+.bilan-table th + th {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.bilan-bascule {
+  display: block;
+  margin: 8px auto 0;
+}
+
+.bilan-vide {
+  margin: 8px 2px 4px;
+  color: var(--ink-3);
+}

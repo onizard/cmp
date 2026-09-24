@@ -64,7 +64,7 @@ from households h
 cross join (values
   ('cafeAuLit', 'Un café servi au lit', 10),
   ('filmSoiree', 'Choisir le film de la soirée', 12),
-  ('grasseMatinee', 'Une grasse matinée pendant que l''autre gère', 18),
+  ('grasseMatinee', 'Une grasse matinée, sans réveil', 18),
   ('massage20', 'Un massage de 20 minutes', 25),
   ('soireeLibre', 'Une soirée entièrement libre', 35),
   ('restoAmoureux', 'Un resto en amoureux, organisé par l''autre', 50),
@@ -77,16 +77,10 @@ cross join (values
   ('bainCoule', 'Un bain coulé, sans être dérangé·e', 25),
   ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25),
   ('matineeDehors', 'Une matinée dehors, sans horaire', 35),
-  ('weekendSansCorvee', 'Un week-end sans aucune corvée', 50),
   ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75),
-  ('vaisselle', 'La vaisselle faite par l''autre', 10),
-  ('poubelles', 'Les poubelles sorties par l''autre pendant une semaine', 12),
-  ('repasCuisine', 'Le repas du soir cuisiné par l''autre', 18),
-  ('courses', 'Les courses faites par l''autre', 25),
-  ('linge', 'Le linge lavé, étendu, plié et rangé par l''autre', 25),
-  ('rangement', 'La maison rangée par l''autre', 35),
-  ('menage', 'Le ménage complet fait par l''autre', 50),
-  ('semaineRepas', 'Une semaine de repas cuisinés par l''autre', 75)
+  ('baladeADeux', 'Une balade à deux, téléphones éteints', 18),
+  ('soireeSurprise', 'Une soirée surprise, organisée par l''autre', 50),
+  ('spectacleADeux', 'Un concert ou un spectacle à deux', 50)
 ) as v(cle, label, cost)
 where not exists (select 1 from rewards r where r.household_id = h.id);
 
