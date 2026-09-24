@@ -11,6 +11,7 @@ import {
   nextReward,
   jauge,
   formatPoints,
+  etatBon,
   canClaimCustom,
   customMissing,
   REWARD_CUSTOM,
@@ -18,6 +19,8 @@ import {
   POINT_OWN,
   POINT_OTHER,
 } from '../lib/gamify.js';
+
+const RANG_BON = { enAttente: 0, neuf: 1, honore: 2 };
 
 export default function BrainView({ tasks, userId, rewards: store }) {
   const t = useT();
@@ -51,7 +54,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     .filter((c) => !c.deleted && c.userId === userId)
     .slice()
     .sort((a, b) => {
-      if (Boolean(a.usedAt) !== Boolean(b.usedAt)) return a.usedAt ? 1 : -1;
+      // D'abord ce qui attend mon « c'est fait », puis les bons neufs, puis
+      // la collection des bons poinçonnés.
+      const d = RANG_BON[etatBon(a)] - RANG_BON[etatBon(b)];
+      if (d) return d;
       return (b.createdAt || '').localeCompare(a.createdAt || '');
     });
 
@@ -282,8 +288,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 libelle={libelleBon(c, store.rewards)}
                 visuel={visuelDe(c)}
                 lang={langue()}
+                autre={otherName}
                 onUtiliser={() => store.useClaim(c.id)}
                 onAnnuler={() => store.annulerAchat(c.id)}
+                onValider={() => store.validerBon(c.id)}
               />
             ))}
           </div>

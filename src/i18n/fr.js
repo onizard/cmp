@@ -152,6 +152,10 @@ export default {
   },
 
   inventaire: {
+    enAttente: 'En attente',
+    prevenu: 'Notification envoyée à {qui}',
+    cestFait: 'C’est fait ✓',
+    demandeLe: 'demandé le {quand}',
     titre: 'Mes bons',
     vide: 'Aucun bon pour l’instant. Prends une récompense et elle arrivera ici.',
     utiliser: 'Utiliser',
@@ -327,5 +331,12 @@ export default {
     rangement: 'La maison rangée par l\'autre',
     menage: 'Le ménage complet fait par l\'autre',
     semaineRepas: 'Une semaine de repas cuisinés par l\'autre',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ {qui} utilise son bon', autre: '🎟️ {qui} utilise {n} bons' },
+    texte: 'À toi de jouer. {qui} validera quand ce sera fait.',
+    ok: 'J’y vais',
   },
 };

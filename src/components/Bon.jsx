@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useT } from '../i18n/index.js';
-import { formatPoints, secondesPourAnnuler } from '../lib/gamify.js';
+import { formatPoints, secondesPourAnnuler, etatBon } from '../lib/gamify.js';
 
 // Date courte, dans la langue en cours, calendrier grégorien impose.
 const jour = (iso, lang) => {
@@ -22,9 +22,24 @@ const jour = (iso, lang) => {
  * dans /bons/. Sans visuel, la carte se dessine toute seule — même mise en
  * page, pour que le remplacement ne bouge rien d'autre que l'image.
  */
-export default function Bon({ bon, libelle, visuel, lang, onUtiliser, onAnnuler }) {
+export default function Bon({
+  bon,
+  libelle,
+  visuel,
+  lang,
+  autre,
+  lecture = false,
+  onUtiliser,
+  onAnnuler,
+  onValider,
+}) {
   const t = useT();
-  const utilise = Boolean(bon.usedAt);
+  // Poinçonné seulement quand son détenteur a validé que c'est fait. Entre
+  // « Utiliser » et cette validation, le bon est en attente : l'autre est
+  // prévenu, relancé, et le voit au milieu de son écran.
+  const etat = etatBon(bon);
+  const utilise = etat === 'honore';
+  const enAttente = etat === 'enAttente';
 
   // Le compte à rebours de l'annulation. L'horloge ne tourne que pendant la
   // minute qui compte ; ensuite plus rien ne se redessine pour rien.
@@ -42,7 +57,10 @@ export default function Bon({ bon, libelle, visuel, lang, onUtiliser, onAnnuler 
   }, [bon, onAnnuler]);
 
   return (
-    <article id={`bon-${bon.id}`} className={`bon ${utilise ? 'bon-utilise' : ''}`}>
+    <article
+      id={lecture ? undefined : `bon-${bon.id}`}
+      className={`bon ${utilise ? 'bon-utilise' : ''} ${enAttente ? 'bon-attente' : ''}`}
+    >
       <div
         className="bon-carte"
         style={visuel ? { backgroundImage: `url(/bons/${visuel})` } : undefined}
@@ -55,9 +73,13 @@ export default function Bon({ bon, libelle, visuel, lang, onUtiliser, onAnnuler 
           <p className="bon-date">
             {utilise
               ? t('inventaire.utiliseLe', { quand: jour(bon.usedAt, lang) })
-              : t('inventaire.obtenuLe', { quand: jour(bon.createdAt, lang) })}
+              : enAttente
+                ? t('inventaire.demandeLe', { quand: jour(bon.usedAt, lang) })
+                : t('inventaire.obtenuLe', { quand: jour(bon.createdAt, lang) })}
           </p>
         </div>
+
+        {enAttente && <span className="bon-ruban">{t('inventaire.enAttente')}</span>}
 
         {utilise && (
           <div className="bon-poincon" aria-hidden="true">
@@ -68,7 +90,16 @@ export default function Bon({ bon, libelle, visuel, lang, onUtiliser, onAnnuler 
 
       {/* Un bon ne se rend pas : il a été payé, il est acquis. La seule
           exception, c'est l'erreur de doigt, rattrapable dans la minute. */}
-      {!utilise && (
+      {!lecture && enAttente && (
+        <div className="bon-actions">
+          <p className="bon-prevenu">{t('inventaire.prevenu', { qui: autre })}</p>
+          <button className="btn btn-small btn-accent" type="button" onClick={onValider}>
+            {t('inventaire.cestFait')}
+          </button>
+        </div>
+      )}
+
+      {!lecture && etat === 'neuf' && (
         <div className="bon-actions">
           <button className="btn btn-small btn-accent" type="button" onClick={onUtiliser}>
             {t('inventaire.utiliser')}

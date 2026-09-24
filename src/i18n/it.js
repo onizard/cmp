@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'Ottieni ({n} pt)', surMesureVide: 'Di’ cosa stai chiedendo.',
   },
   inventaire: {
+    enAttente: 'In attesa',
+    prevenu: 'Notifica inviata a {qui}',
+    cestFait: 'Fatto ✓',
+    demandeLe: 'richiesto il {quand}',
     titre: 'I miei buoni',
     vide: 'Nessun buono per ora. Prendi una ricompensa e finirà qui.',
     utiliser: 'Usare',
@@ -176,5 +180,12 @@ export default {
     rangement: 'La casa riordinata dalla tua metà',
     menage: 'Le pulizie complete fatte dalla tua metà',
     semaineRepas: 'Una settimana di pasti cucinati dalla tua metà',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ Buono di {qui}', autre: '🎟️ {n} buoni di {qui}' },
+    texte: 'Tocca a te. {qui} confermerà quando sarà fatto.',
+    ok: 'Vado',
   },
 };

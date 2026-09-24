@@ -16,6 +16,7 @@ import Account from './components/Account.jsx';
 import AdminView from './components/AdminView.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
 import Combo from './components/Combo.jsx';
+import BonsAHonorer from './components/BonsAHonorer.jsx';
 import { syncPush } from './lib/push.js';
 
 function NotConfigured() {
@@ -154,6 +155,15 @@ function Home({ account, currentMonth }) {
       />
 
       {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
+
+      {/* Quel que soit l'onglet ouvert : un bon utilisé par l'autre passe
+          devant tout le reste. */}
+      <BonsAHonorer
+        claims={rewards.claims}
+        rewards={rewards.rewards}
+        names={rewards.names}
+        userId={userId}
+      />
     </div>
   );
 }

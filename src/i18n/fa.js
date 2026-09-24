@@ -66,6 +66,10 @@ export default {
     surMesureObtenir: 'گرفتن ({n} امتیاز)', surMesureVide: 'بگو چه می‌خواهی.',
   },
   inventaire: {
+    enAttente: 'در انتظار',
+    prevenu: 'اعلان برای {qui} فرستاده شد',
+    cestFait: 'انجام شد ✓',
+    demandeLe: 'درخواست در {quand}',
     titre: 'کوپن‌های من',
     vide: 'هنوز کوپنی نیست. پاداشی بگیر تا اینجا بیاید.',
     utiliser: 'استفاده',
@@ -178,5 +182,12 @@ export default {
     rangement: 'خانه را نیمهٔ دیگرت مرتب می‌کند',
     menage: 'نظافت کامل خانه را نیمهٔ دیگرت انجام می‌دهد',
     semaineRepas: 'یک هفته آشپزی با نیمهٔ دیگرت',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ کوپن {qui}', autre: '🎟️ {n} کوپن از {qui}' },
+    texte: 'نوبت توست. {qui} پس از انجام تأیید می‌کند.',
+    ok: 'رفتم',
   },
 };

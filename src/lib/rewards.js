@@ -21,6 +21,8 @@ const claimFrom = (r) => ({
   userId: r.user_id,
   // Poinçonné quand il a servi. Un bon utilisé reste dans l'inventaire.
   usedAt: r.used_at || null,
+  // Validé par son détenteur : l'autre a bien honoré le bon.
+  realiseAt: r.realise_at || null,
   label: r.label,
   cost: Number(r.cost),
   deleted: r.deleted,
@@ -104,7 +106,16 @@ export function useRewards(householdId, userId) {
     if (!householdId) return undefined;
     refresh();
     const t = setInterval(refresh, 30000);
-    return () => clearInterval(t);
+    // Retour sur l'application — souvent depuis la notification d'un bon
+    // utilisé : on relit tout de suite, sans attendre le prochain passage.
+    const auRetour = () => {
+      if (document.visibilityState === 'visible') refresh();
+    };
+    document.addEventListener('visibilitychange', auRetour);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener('visibilitychange', auRetour);
+    };
   }, [householdId, refresh]);
 
   /** Dépense ses points pour une récompense (on fige son nom et son coût). */
@@ -158,6 +169,30 @@ export function useRewards(householdId, userId) {
         await supabase.from('claims').update({ used_at: quand }).eq('id', id);
     },
     [saveClaims, estAMoi],
+  );
+
+  /**
+   * Le détenteur valide que l'autre a honoré le bon : le bon est poinçonné, et
+   * les relances s'arrêtent. Personne d'autre ne peut le faire — la base
+   * réserve l'écriture au détenteur.
+   */
+  const validerBon = useCallback(
+    async (id) => {
+      if (!estAMoi(id)) return;
+      const bon = cRef.current.find((c) => c.id === id);
+      if (!bon || !bon.usedAt || bon.realiseAt) return;
+      const quand = new Date().toISOString();
+      saveClaims(
+        cRef.current.map((c) => (c.id === id ? { ...c, realiseAt: quand } : c)),
+      );
+      if (!supabase) return;
+      const { error } = await supabase
+        .from('claims')
+        .update({ realise_at: quand })
+        .eq('id', id);
+      if (error) refresh();
+    },
+    [saveClaims, estAMoi, refresh],
   );
 
   /**
@@ -218,5 +253,6 @@ export function useRewards(householdId, userId) {
     claimCustom,
     useClaim,
     annulerAchat,
+    validerBon,
   };
 }

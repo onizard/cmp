@@ -5,7 +5,7 @@
 
 const { Client } = require('pg');
 const webpush = require('web-push');
-const { tr } = require('./i18n.cjs');
+const { tr, libelle } = require('./i18n.cjs');
 
 // Accepte les deux conventions de nommage, pour pouvoir réutiliser
 // directement le fichier .env de la pile (POSTGRES_*).
@@ -38,7 +38,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.8';
+const VERSION = 'v4.9';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -104,6 +104,7 @@ async function actorName(householdId, userId) {
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (!household) return;
+  if (kind === 'bon') return handleBon(ev);
   const nom = await actorName(household, actor);
   await sendToHousehold(household, actor, (lang) => ({
     title: tr(lang, kind === 'add' ? 'add' : 'done', {
@@ -219,6 +220,81 @@ async function dueReminders() {
   }
 }
 
+// --- Bons utilisés : l'autre est prévenu, puis relancé jusqu'à validation ---
+//
+// Utiliser un bon engage l'autre personne du foyer. Elle est prévenue tout de
+// suite, quelle que soit l'heure — c'est la conséquence immédiate d'un geste.
+// Les relances, elles, ne partent qu'en journée, et s'arrêtent dès que le
+// détenteur du bon valide que c'est fait (claims.realise_at).
+//
+// Même étiquette pour l'alerte et ses relances : chaque relance remplace la
+// précédente à l'écran (renotify la fait tout de même sonner), au lieu d'en
+// empiler une par heure.
+const BON_RAPPEL_MIN = Number(process.env.BON_RAPPEL_MIN || 60);
+const BON_JOUR_DEBUT = Number(process.env.BON_JOUR_DEBUT || 8);
+const BON_JOUR_FIN = Number(process.env.BON_JOUR_FIN || 22);
+
+/** « 25 min », « 3 h », « 2 jours » : depuis quand le bon attend. */
+function depuis(lang, minutes) {
+  if (minutes < 60) return tr(lang, 'dureeMin', { n: Math.max(1, Math.floor(minutes)) });
+  if (minutes < 60 * 24) return tr(lang, 'dureeH', { n: Math.floor(minutes / 60) });
+  return tr(lang, 'dureeJ', { n: Math.floor(minutes / 1440) });
+}
+
+const BON_SQL = `
+  select c.id, c.household_id, c.user_id, c.label,
+         r.cle,
+         extract(epoch from (now() - c.used_at)) / 60 as minutes
+    from claims c
+    left join rewards r on r.id = c.reward_id
+   where c.used_at is not null and c.realise_at is null and not c.deleted`;
+
+async function envoyerBon(b, relance) {
+  const nom = await actorName(b.household_id, b.user_id);
+  await sendToHousehold(b.household_id, b.user_id, (lang) => {
+    const qui = nom || tr(lang, 'binome');
+    const label = libelle(lang, b.cle, b.label);
+    return relance
+      ? {
+          title: tr(lang, 'bonRappelTitre'),
+          body: tr(lang, 'bonRappelCorps', { qui, label, depuis: depuis(lang, Number(b.minutes)) }),
+          url: APP_URL,
+          tag: `cmp-bon-${b.id}`,
+          urgent: true,
+        }
+      : {
+          title: tr(lang, 'bonTitre', { qui }),
+          body: tr(lang, 'bonCorps', { label }),
+          url: APP_URL,
+          tag: `cmp-bon-${b.id}`,
+          urgent: true,
+        };
+  });
+  await client.query('update claims set rappel_at = now() where id = $1', [b.id]);
+}
+
+async function handleBon(ev) {
+  if (!ev.claim) return;
+  const { rows } = await client.query(`${BON_SQL} and c.id = $1`, [ev.claim]);
+  if (!rows[0]) return; // déjà validé, annulé, ou jamais utilisé
+  await envoyerBon(rows[0], false);
+  log('bon utilisé →', String(rows[0].label).slice(0, 40));
+}
+
+async function bonReminders() {
+  const { hour } = localNow();
+  if (hour < BON_JOUR_DEBUT || hour >= BON_JOUR_FIN) return;
+  const { rows } = await client.query(
+    `${BON_SQL}
+       and (c.rappel_at is null or c.rappel_at < now() - ($1 || ' minutes')::interval)`,
+    [BON_RAPPEL_MIN],
+  );
+  for (const b of rows) {
+    await envoyerBon(b, true);
+    log('relance bon →', String(b.label).slice(0, 40));
+  }
+}
+
 // --- Rappel « invite ta moitié » ---
 //
 // Seul dans son foyer, l'application perd tout son sens. On le rappelle, mais
@@ -294,10 +370,11 @@ setInterval(async () => {
 }, 60_000);
 
 // Les échéances, elles, se vérifient chaque minute : un rappel « dans 1 h »
-// n'a de valeur que s'il part à l'heure.
+// n'a de valeur que s'il part à l'heure. Les bons en attente aussi.
 setInterval(() => {
   if (!client) return;
   dueReminders().catch((e) => log('échéances : échec', e.message));
+  bonReminders().catch((e) => log('bons : échec', e.message));
 }, 60_000);
 
 // Une seule connexion à la fois. Sans ce garde-fou, chaque erreur programmait
@@ -351,5 +428,5 @@ async function start() {
   }
 }
 
-log(`service push ${VERSION} — rappels à ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ})`);
+log(`service push ${VERSION} — rappels à ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ}), bons toutes les ${BON_RAPPEL_MIN} min de ${BON_JOUR_DEBUT} h à ${BON_JOUR_FIN} h`);
 start();

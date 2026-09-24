@@ -12935,6 +12935,407 @@ var require_i18n = __commonJS({
         "binomeCorps": "\u062E\u0627\u0646\u0647\u200C\u0627\u062A \u0631\u0627 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC \u06A9\u0646: \u0628\u0627 \u062F\u0648 \u0646\u0641\u0631\u060C \u0628\u0631\u0646\u0627\u0645\u0647 \u0645\u0639\u0646\u0627 \u067E\u06CC\u062F\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F. \u062D\u0633\u0627\u0628 \u0645\u0646 \u2190 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC."
       }
     };
+    var BONS = {
+      "fr": {
+        "bonTitre": "\u{1F39F}\uFE0F {qui} utilise son bon",
+        "bonCorps": "\xAB {label} \xBB \u2014 \xE0 toi de jouer \u{1F609}",
+        "bonRappelTitre": "\u23F3 Bon toujours en attente",
+        "bonRappelCorps": "{qui} attend toujours : \xAB {label} \xBB, depuis {depuis}.",
+        "dureeMin": "{n} min",
+        "dureeH": "{n} h",
+        "dureeJ": "{n} jour(s)"
+      },
+      "en": {
+        "bonTitre": "\u{1F39F}\uFE0F {qui} is using a voucher",
+        "bonCorps": "\u201C{label}\u201D \u2014 your move \u{1F609}",
+        "bonRappelTitre": "\u23F3 Voucher still waiting",
+        "bonRappelCorps": "{qui}\u2019s voucher: \u201C{label}\u201D, for {depuis}.",
+        "dureeMin": "{n} min",
+        "dureeH": "{n} h",
+        "dureeJ": "{n} day(s)"
+      },
+      "es": {
+        "bonTitre": "\u{1F39F}\uFE0F Vale de {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 te toca \u{1F609}",
+        "bonRappelTitre": "\u23F3 Vale a\xFAn pendiente",
+        "bonRappelCorps": "El vale de {qui}: \xAB{label}\xBB, desde hace {depuis}.",
+        "dureeMin": "{n} min",
+        "dureeH": "{n} h",
+        "dureeJ": "{n} d\xEDa(s)"
+      },
+      "pt": {
+        "bonTitre": "\u{1F39F}\uFE0F Vale de {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 \xE9 a tua vez \u{1F609}",
+        "bonRappelTitre": "\u23F3 Vale ainda pendente",
+        "bonRappelCorps": "O vale de {qui}: \xAB{label}\xBB, h\xE1 {depuis}.",
+        "dureeMin": "{n} min",
+        "dureeH": "{n} h",
+        "dureeJ": "{n} dia(s)"
+      },
+      "de": {
+        "bonTitre": "\u{1F39F}\uFE0F Gutschein von {qui}",
+        "bonCorps": "\u201E{label}\u201C \u2014 du bist dran \u{1F609}",
+        "bonRappelTitre": "\u23F3 Gutschein wartet noch",
+        "bonRappelCorps": "Der Gutschein von {qui}: \u201E{label}\u201C, seit {depuis}.",
+        "dureeMin": "{n} Min.",
+        "dureeH": "{n} Std.",
+        "dureeJ": "{n} Tag(en)"
+      },
+      "it": {
+        "bonTitre": "\u{1F39F}\uFE0F Buono di {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 tocca a te \u{1F609}",
+        "bonRappelTitre": "\u23F3 Buono ancora in attesa",
+        "bonRappelCorps": "Il buono di {qui}: \xAB{label}\xBB, da {depuis}.",
+        "dureeMin": "{n} min",
+        "dureeH": "{n} h",
+        "dureeJ": "{n} giorno/i"
+      },
+      "ru": {
+        "bonTitre": "\u{1F39F}\uFE0F \u041A\u0443\u043F\u043E\u043D \u043E\u0442 {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 \u0432\u0430\u0448 \u0445\u043E\u0434 \u{1F609}",
+        "bonRappelTitre": "\u23F3 \u041A\u0443\u043F\u043E\u043D \u0432\u0441\u0451 \u0435\u0449\u0451 \u0436\u0434\u0451\u0442",
+        "bonRappelCorps": "\u041A\u0443\u043F\u043E\u043D \u043E\u0442 {qui}: \xAB{label}\xBB, \u0443\u0436\u0435 {depuis}.",
+        "dureeMin": "{n} \u043C\u0438\u043D",
+        "dureeH": "{n} \u0447",
+        "dureeJ": "{n} \u0434\u043D."
+      },
+      "zh": {
+        "bonTitre": "\u{1F39F}\uFE0F {qui} \u4F7F\u7528\u4E86\u5956\u52B1\u5238",
+        "bonCorps": "\u300C{label}\u300D\u2014\u2014\u8F6E\u5230\u4F60\u4E86 \u{1F609}",
+        "bonRappelTitre": "\u23F3 \u5956\u52B1\u5238\u8FD8\u5728\u7B49\u4F60",
+        "bonRappelCorps": "{qui} \u7684\u5956\u52B1\u5238\uFF1A\u300C{label}\u300D\uFF0C\u5DF2\u7ECF {depuis}\u3002",
+        "dureeMin": "{n} \u5206\u949F",
+        "dureeH": "{n} \u5C0F\u65F6",
+        "dureeJ": "{n} \u5929"
+      },
+      "ar": {
+        "bonTitre": "\u{1F39F}\uFE0F \u0642\u0633\u064A\u0645\u0629 \u0645\u0646 {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 \u062F\u0648\u0631\u0643 \u0627\u0644\u0622\u0646 \u{1F609}",
+        "bonRappelTitre": "\u23F3 \u0627\u0644\u0642\u0633\u064A\u0645\u0629 \u0645\u0627 \u0632\u0627\u0644\u062A \u062A\u0646\u062A\u0638\u0631",
+        "bonRappelCorps": "\u0642\u0633\u064A\u0645\u0629 {qui}: \xAB{label}\xBB\u060C \u0645\u0646\u0630 {depuis}.",
+        "dureeMin": "{n} \u062F\u0642\u064A\u0642\u0629",
+        "dureeH": "{n} \u0633\u0627\u0639\u0629",
+        "dureeJ": "{n} \u064A\u0648\u0645"
+      },
+      "he": {
+        "bonTitre": "\u{1F39F}\uFE0F \u05E9\u05D5\u05D1\u05E8 \u05DE\u05BE{qui}",
+        "bonCorps": "\u201E{label}\u201D \u2014 \u05EA\u05D5\u05E8\u05DA \u{1F609}",
+        "bonRappelTitre": "\u23F3 \u05D4\u05E9\u05D5\u05D1\u05E8 \u05E2\u05D3\u05D9\u05D9\u05DF \u05DE\u05DE\u05EA\u05D9\u05DF",
+        "bonRappelCorps": "\u05D4\u05E9\u05D5\u05D1\u05E8 \u05E9\u05DC {qui}: \u201E{label}\u201D, \u05DB\u05D1\u05E8 {depuis}.",
+        "dureeMin": "{n} \u05D3\u05E7\u05F3",
+        "dureeH": "{n} \u05E9\u05E2\u05F3",
+        "dureeJ": "{n} \u05D9\u05DE\u05D9\u05DD"
+      },
+      "fa": {
+        "bonTitre": "\u{1F39F}\uFE0F \u06A9\u0648\u067E\u0646 {qui}",
+        "bonCorps": "\xAB{label}\xBB \u2014 \u0646\u0648\u0628\u062A \u062A\u0648\u0633\u062A \u{1F609}",
+        "bonRappelTitre": "\u23F3 \u06A9\u0648\u067E\u0646 \u0647\u0646\u0648\u0632 \u062F\u0631 \u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u0633\u062A",
+        "bonRappelCorps": "\u06A9\u0648\u067E\u0646 {qui}: \xAB{label}\xBB\u060C \u0627\u0632 {depuis} \u067E\u06CC\u0634.",
+        "dureeMin": "{n} \u062F\u0642\u06CC\u0642\u0647",
+        "dureeH": "{n} \u0633\u0627\u0639\u062A",
+        "dureeJ": "{n} \u0631\u0648\u0632"
+      }
+    };
+    for (const l of Object.keys(BONS)) Object.assign(TEXTES[l], BONS[l]);
+    var CATALOGUE = {
+      "fr": {
+        "cafeAuLit": "Un caf\xE9 servi au lit",
+        "filmSoiree": "Choisir le film de la soir\xE9e",
+        "grasseMatinee": "Une grasse matin\xE9e pendant que l'autre g\xE8re",
+        "massage20": "Un massage de 20 minutes",
+        "soireeLibre": "Une soir\xE9e enti\xE8rement libre",
+        "restoAmoureux": "Un resto en amoureux, organis\xE9 par l'autre",
+        "journeePourSoi": "Une journ\xE9e rien que pour soi",
+        "silenceTotal": "Une heure de silence total",
+        "dernierCarre": "Le dernier carr\xE9 de chocolat, sans discuter",
+        "repasChoisi": "Choisir le repas du soir",
+        "telecommande": "La t\xE9l\xE9commande toute la soir\xE9e",
+        "siesteProtegee": "Une sieste que personne ne vient interrompre",
+        "bainCoule": "Un bain coul\xE9, sans \xEAtre d\xE9rang\xE9\xB7e",
+        "sortieAmis": "Une sortie entre ami\xB7es, sans rien organiser",
+        "matineeDehors": "Une matin\xE9e dehors, sans horaire",
+        "weekendSansCorvee": "Un week-end sans aucune corv\xE9e",
+        "weekendADeux": "Un week-end \xE0 deux, organis\xE9 par l'autre",
+        "vaisselle": "La vaisselle faite par l'autre",
+        "poubelles": "Les poubelles sorties par l'autre pendant une semaine",
+        "repasCuisine": "Le repas du soir cuisin\xE9 par l'autre",
+        "courses": "Les courses faites par l'autre",
+        "linge": "Le linge lav\xE9, \xE9tendu, pli\xE9 et rang\xE9 par l'autre",
+        "rangement": "La maison rang\xE9e par l'autre",
+        "menage": "Le m\xE9nage complet fait par l'autre",
+        "semaineRepas": "Une semaine de repas cuisin\xE9s par l'autre"
+      },
+      "en": {
+        "cafeAuLit": "Coffee served in bed",
+        "filmSoiree": "Pick the film for the evening",
+        "grasseMatinee": "A lie-in while your other half handles everything",
+        "massage20": "A 20-minute massage",
+        "soireeLibre": "A completely free evening",
+        "restoAmoureux": "A romantic dinner out, organised by your other half",
+        "journeePourSoi": "A whole day just for yourself",
+        "silenceTotal": "An hour of total silence",
+        "dernierCarre": "The last square of chocolate, no arguing",
+        "repasChoisi": "Pick what's for dinner",
+        "telecommande": "The remote for the whole evening",
+        "siesteProtegee": "A nap nobody interrupts",
+        "bainCoule": "A bath run for you, undisturbed",
+        "sortieAmis": "A night out with friends, with nothing to organise",
+        "matineeDehors": "A morning out, with no schedule",
+        "weekendSansCorvee": "A weekend without a single chore",
+        "weekendADeux": "A weekend for two, organised by your other half",
+        "vaisselle": "The dishes done by your other half",
+        "poubelles": "The bins taken out by your other half for a week",
+        "repasCuisine": "Dinner cooked by your other half",
+        "courses": "The grocery shopping done by your other half",
+        "linge": "The laundry washed, hung, folded and put away by your other half",
+        "rangement": "The house tidied by your other half",
+        "menage": "A full house clean done by your other half",
+        "semaineRepas": "A week of meals cooked by your other half"
+      },
+      "es": {
+        "cafeAuLit": "Un caf\xE9 servido en la cama",
+        "filmSoiree": "Elegir la pel\xEDcula de la noche",
+        "grasseMatinee": "Quedarte en la cama mientras tu media naranja se encarga de todo",
+        "massage20": "Un masaje de 20 minutos",
+        "soireeLibre": "Una noche completamente libre",
+        "restoAmoureux": "Una cena rom\xE1ntica, organizada por tu media naranja",
+        "journeePourSoi": "Un d\xEDa entero solo para ti",
+        "silenceTotal": "Una hora de silencio total",
+        "dernierCarre": "La \xFAltima onza de chocolate, sin discutir",
+        "repasChoisi": "Elegir la cena",
+        "telecommande": "El mando a distancia toda la noche",
+        "siesteProtegee": "Una siesta que nadie interrumpe",
+        "bainCoule": "Un ba\xF1o preparado, sin que nadie moleste",
+        "sortieAmis": "Una salida con amigos, sin organizar nada",
+        "matineeDehors": "Una ma\xF1ana fuera, sin horarios",
+        "weekendSansCorvee": "Un fin de semana sin ninguna tarea",
+        "weekendADeux": "Un fin de semana en pareja, organizado por tu media naranja",
+        "vaisselle": "Los platos, fregados por tu media naranja",
+        "poubelles": "La basura, sacada por tu media naranja durante una semana",
+        "repasCuisine": "La cena, cocinada por tu media naranja",
+        "courses": "La compra, hecha por tu media naranja",
+        "linge": "La ropa lavada, tendida, doblada y guardada por tu media naranja",
+        "rangement": "La casa ordenada por tu media naranja",
+        "menage": "La limpieza completa, hecha por tu media naranja",
+        "semaineRepas": "Una semana de comidas cocinadas por tu media naranja"
+      },
+      "pt": {
+        "cafeAuLit": "Um caf\xE9 servido na cama",
+        "filmSoiree": "Escolher o filme da noite",
+        "grasseMatinee": "Ficar na cama at\xE9 tarde enquanto a tua cara-metade trata de tudo",
+        "massage20": "Uma massagem de 20 minutos",
+        "soireeLibre": "Uma noite totalmente livre",
+        "restoAmoureux": "Um jantar rom\xE2ntico, organizado pela tua cara-metade",
+        "journeePourSoi": "Um dia inteiro s\xF3 para ti",
+        "silenceTotal": "Uma hora de sil\xEAncio total",
+        "dernierCarre": "O \xFAltimo quadrado de chocolate, sem discuss\xE3o",
+        "repasChoisi": "Escolher o jantar",
+        "telecommande": "O comando da televis\xE3o a noite toda",
+        "siesteProtegee": "Uma sesta que ningu\xE9m interrompe",
+        "bainCoule": "Um banho preparado, sem ningu\xE9m a incomodar",
+        "sortieAmis": "Uma sa\xEDda com amigos, sem organizar nada",
+        "matineeDehors": "Uma manh\xE3 fora, sem hor\xE1rios",
+        "weekendSansCorvee": "Um fim de semana sem nenhuma tarefa",
+        "weekendADeux": "Um fim de semana a dois, organizado pela tua cara-metade",
+        "vaisselle": "A loi\xE7a lavada pela tua cara-metade",
+        "poubelles": "O lixo levado pela tua cara-metade durante uma semana",
+        "repasCuisine": "O jantar cozinhado pela tua cara-metade",
+        "courses": "As compras feitas pela tua cara-metade",
+        "linge": "A roupa lavada, estendida, dobrada e arrumada pela tua cara-metade",
+        "rangement": "A casa arrumada pela tua cara-metade",
+        "menage": "A limpeza completa feita pela tua cara-metade",
+        "semaineRepas": "Uma semana de refei\xE7\xF5es cozinhadas pela tua cara-metade"
+      },
+      "de": {
+        "cafeAuLit": "Kaffee ans Bett gebracht",
+        "filmSoiree": "Den Film f\xFCr den Abend aussuchen",
+        "grasseMatinee": "Ausschlafen, w\xE4hrend deine bessere H\xE4lfte sich um alles k\xFCmmert",
+        "massage20": "Eine 20-min\xFCtige Massage",
+        "soireeLibre": "Ein ganz freier Abend",
+        "restoAmoureux": "Ein romantisches Essen, organisiert von deiner besseren H\xE4lfte",
+        "journeePourSoi": "Ein ganzer Tag nur f\xFCr dich",
+        "silenceTotal": "Eine Stunde v\xF6llige Ruhe",
+        "dernierCarre": "Das letzte St\xFCck Schokolade, ohne Diskussion",
+        "repasChoisi": "Das Abendessen aussuchen",
+        "telecommande": "Die Fernbedienung den ganzen Abend",
+        "siesteProtegee": "Ein Mittagsschlaf, den niemand st\xF6rt",
+        "bainCoule": "Ein eingelassenes Bad, ganz ungest\xF6rt",
+        "sortieAmis": "Ein Abend mit Freunden, ohne etwas zu organisieren",
+        "matineeDehors": "Ein Vormittag drau\xDFen, ohne Zeitplan",
+        "weekendSansCorvee": "Ein Wochenende ganz ohne Hausarbeit",
+        "weekendADeux": "Ein Wochenende zu zweit, organisiert von deiner besseren H\xE4lfte",
+        "vaisselle": "Der Abwasch, erledigt von deiner besseren H\xE4lfte",
+        "poubelles": "Eine Woche lang bringt deine bessere H\xE4lfte den M\xFCll raus",
+        "repasCuisine": "Das Abendessen kocht deine bessere H\xE4lfte",
+        "courses": "Den Einkauf erledigt deine bessere H\xE4lfte",
+        "linge": "Die W\xE4sche gewaschen, aufgeh\xE4ngt, gefaltet und einger\xE4umt von deiner besseren H\xE4lfte",
+        "rangement": "Die Wohnung r\xE4umt deine bessere H\xE4lfte auf",
+        "menage": "Den kompletten Hausputz macht deine bessere H\xE4lfte",
+        "semaineRepas": "Eine Woche lang kocht deine bessere H\xE4lfte"
+      },
+      "it": {
+        "cafeAuLit": "Un caff\xE8 servito a letto",
+        "filmSoiree": "Scegliere il film della serata",
+        "grasseMatinee": "Dormire fino a tardi mentre la tua met\xE0 pensa a tutto",
+        "massage20": "Un massaggio di 20 minuti",
+        "soireeLibre": "Una serata completamente libera",
+        "restoAmoureux": "Una cena romantica, organizzata dalla tua met\xE0",
+        "journeePourSoi": "Una giornata tutta per te",
+        "silenceTotal": "Un'ora di silenzio totale",
+        "dernierCarre": "L'ultimo quadratino di cioccolato, senza discutere",
+        "repasChoisi": "Scegliere la cena",
+        "telecommande": "Il telecomando per tutta la serata",
+        "siesteProtegee": "Un pisolino che nessuno interrompe",
+        "bainCoule": "Un bagno gi\xE0 pronto, senza disturbi",
+        "sortieAmis": "Un'uscita con gli amici, senza organizzare nulla",
+        "matineeDehors": "Una mattinata fuori, senza orari",
+        "weekendSansCorvee": "Un weekend senza nessuna faccenda",
+        "weekendADeux": "Un weekend in due, organizzato dalla tua met\xE0",
+        "vaisselle": "I piatti lavati dalla tua met\xE0",
+        "poubelles": "La spazzatura portata fuori dalla tua met\xE0 per una settimana",
+        "repasCuisine": "La cena cucinata dalla tua met\xE0",
+        "courses": "La spesa fatta dalla tua met\xE0",
+        "linge": "Il bucato lavato, steso, piegato e riposto dalla tua met\xE0",
+        "rangement": "La casa riordinata dalla tua met\xE0",
+        "menage": "Le pulizie complete fatte dalla tua met\xE0",
+        "semaineRepas": "Una settimana di pasti cucinati dalla tua met\xE0"
+      },
+      "ru": {
+        "cafeAuLit": "\u041A\u043E\u0444\u0435 \u0432 \u043F\u043E\u0441\u0442\u0435\u043B\u044C",
+        "filmSoiree": "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u0444\u0438\u043B\u044C\u043C \u043D\u0430 \u0432\u0435\u0447\u0435\u0440",
+        "grasseMatinee": "\u041F\u043E\u0441\u043F\u0430\u0442\u044C \u043F\u043E\u0434\u043E\u043B\u044C\u0448\u0435, \u043F\u043E\u043A\u0430 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430 \u0431\u0435\u0440\u0451\u0442 \u0432\u0441\u0451 \u043D\u0430 \u0441\u0435\u0431\u044F",
+        "massage20": "\u041C\u0430\u0441\u0441\u0430\u0436 \u043D\u0430 20 \u043C\u0438\u043D\u0443\u0442",
+        "soireeLibre": "\u041F\u043E\u043B\u043D\u043E\u0441\u0442\u044C\u044E \u0441\u0432\u043E\u0431\u043E\u0434\u043D\u044B\u0439 \u0432\u0435\u0447\u0435\u0440",
+        "restoAmoureux": "\u0420\u043E\u043C\u0430\u043D\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0443\u0436\u0438\u043D \u0432 \u0440\u0435\u0441\u0442\u043E\u0440\u0430\u043D\u0435, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0443\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "journeePourSoi": "\u0426\u0435\u043B\u044B\u0439 \u0434\u0435\u043D\u044C \u0442\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F \u0441\u0435\u0431\u044F",
+        "silenceTotal": "\u0427\u0430\u0441 \u043F\u043E\u043B\u043D\u043E\u0439 \u0442\u0438\u0448\u0438\u043D\u044B",
+        "dernierCarre": "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u043A\u0443\u0441\u043E\u0447\u0435\u043A \u0448\u043E\u043A\u043E\u043B\u0430\u0434\u0430 \u2014 \u0431\u0435\u0437 \u0441\u043F\u043E\u0440\u043E\u0432",
+        "repasChoisi": "\u0412\u044B\u0431\u0440\u0430\u0442\u044C, \u0447\u0442\u043E \u0431\u0443\u0434\u0435\u0442 \u043D\u0430 \u0443\u0436\u0438\u043D",
+        "telecommande": "\u041F\u0443\u043B\u044C\u0442 \u043E\u0442 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440\u0430 \u043D\u0430 \u0432\u0435\u0441\u044C \u0432\u0435\u0447\u0435\u0440",
+        "siesteProtegee": "\u0414\u043D\u0435\u0432\u043D\u043E\u0439 \u0441\u043E\u043D, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u043D\u0438\u043A\u0442\u043E \u043D\u0435 \u043F\u0440\u0435\u0440\u0432\u0451\u0442",
+        "bainCoule": "\u041D\u0430\u0431\u0440\u0430\u043D\u043D\u0430\u044F \u0432\u0430\u043D\u043D\u0430 \u2014 \u0438 \u043D\u0438\u043A\u0442\u043E \u043D\u0435 \u0431\u0435\u0441\u043F\u043E\u043A\u043E\u0438\u0442",
+        "sortieAmis": "\u0412\u0441\u0442\u0440\u0435\u0447\u0430 \u0441 \u0434\u0440\u0443\u0437\u044C\u044F\u043C\u0438 \u2014 \u0438 \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043D\u0443\u0436\u043D\u043E \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u043E\u0432\u044B\u0432\u0430\u0442\u044C",
+        "matineeDehors": "\u0423\u0442\u0440\u043E \u0432\u043D\u0435 \u0434\u043E\u043C\u0430, \u0431\u0435\u0437 \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F",
+        "weekendSansCorvee": "\u0412\u044B\u0445\u043E\u0434\u043D\u044B\u0435 \u0431\u0435\u0437 \u0435\u0434\u0438\u043D\u043E\u0439 \u0434\u043E\u043C\u0430\u0448\u043D\u0435\u0439 \u043E\u0431\u044F\u0437\u0430\u043D\u043D\u043E\u0441\u0442\u0438",
+        "weekendADeux": "\u0412\u044B\u0445\u043E\u0434\u043D\u044B\u0435 \u0432\u0434\u0432\u043E\u0451\u043C, \u043A\u043E\u0442\u043E\u0440\u044B\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0443\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "vaisselle": "\u041F\u043E\u0441\u0443\u0434\u0443 \u043C\u043E\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "poubelles": "\u041C\u0443\u0441\u043E\u0440 \u043D\u0435\u0434\u0435\u043B\u044E \u0432\u044B\u043D\u043E\u0441\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "repasCuisine": "\u0423\u0436\u0438\u043D \u0433\u043E\u0442\u043E\u0432\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "courses": "\u0417\u0430 \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u0430\u043C\u0438 \u0445\u043E\u0434\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "linge": "\u0411\u0435\u043B\u044C\u0451 \u0441\u0442\u0438\u0440\u0430\u0435\u0442, \u0440\u0430\u0437\u0432\u0435\u0448\u0438\u0432\u0430\u0435\u0442, \u0441\u043A\u043B\u0430\u0434\u044B\u0432\u0430\u0435\u0442 \u0438 \u0443\u0431\u0438\u0440\u0430\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "rangement": "\u041F\u043E\u0440\u044F\u0434\u043E\u043A \u0432 \u0434\u043E\u043C\u0435 \u043D\u0430\u0432\u043E\u0434\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "menage": "\u0413\u0435\u043D\u0435\u0440\u0430\u043B\u044C\u043D\u0443\u044E \u0443\u0431\u043E\u0440\u043A\u0443 \u0434\u0435\u043B\u0430\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "semaineRepas": "\u041D\u0435\u0434\u0435\u043B\u044E \u0433\u043E\u0442\u043E\u0432\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430"
+      },
+      "zh": {
+        "cafeAuLit": "\u7AEF\u5230\u5E8A\u8FB9\u7684\u4E00\u676F\u5496\u5561",
+        "filmSoiree": "\u9009\u4ECA\u665A\u770B\u7684\u7535\u5F71",
+        "grasseMatinee": "\u7761\u4E2A\u61D2\u89C9\uFF0C\u53E6\u4E00\u534A\u5305\u63FD\u4E00\u5207",
+        "massage20": "20\u5206\u949F\u7684\u6309\u6469",
+        "soireeLibre": "\u5B8C\u5168\u81EA\u7531\u7684\u4E00\u4E2A\u665A\u4E0A",
+        "restoAmoureux": "\u53E6\u4E00\u534A\u5B89\u6392\u7684\u6D6A\u6F2B\u665A\u9910",
+        "journeePourSoi": "\u5B8C\u5168\u5C5E\u4E8E\u81EA\u5DF1\u7684\u4E00\u5929",
+        "silenceTotal": "\u4E00\u5C0F\u65F6\u7684\u7EDD\u5BF9\u5B89\u9759",
+        "dernierCarre": "\u6700\u540E\u4E00\u5757\u5DE7\u514B\u529B\uFF0C\u4E0D\u8BB8\u4E89",
+        "repasChoisi": "\u51B3\u5B9A\u665A\u996D\u5403\u4EC0\u4E48",
+        "telecommande": "\u6574\u665A\u7684\u9065\u63A7\u5668\u5F52\u4F60",
+        "siesteProtegee": "\u6CA1\u4EBA\u6253\u6270\u7684\u5348\u7761",
+        "bainCoule": "\u653E\u597D\u70ED\u6C34\u7684\u6CE1\u6FA1\uFF0C\u65E0\u4EBA\u6253\u6270",
+        "sortieAmis": "\u548C\u670B\u53CB\u51FA\u53BB\u73A9\uFF0C\u4EC0\u4E48\u90FD\u4E0D\u7528\u5B89\u6392",
+        "matineeDehors": "\u5728\u5916\u9762\u5EA6\u8FC7\u4E00\u4E2A\u4E0A\u5348\uFF0C\u4E0D\u7528\u770B\u65F6\u95F4",
+        "weekendSansCorvee": "\u4E00\u4E2A\u5B8C\u5168\u4E0D\u7528\u505A\u5BB6\u52A1\u7684\u5468\u672B",
+        "weekendADeux": "\u53E6\u4E00\u534A\u5B89\u6392\u7684\u4E8C\u4EBA\u5468\u672B",
+        "vaisselle": "\u53E6\u4E00\u534A\u6D17\u7897",
+        "poubelles": "\u4E00\u5468\u7684\u5783\u573E\u7531\u53E6\u4E00\u534A\u5012",
+        "repasCuisine": "\u53E6\u4E00\u534A\u505A\u665A\u996D",
+        "courses": "\u53E6\u4E00\u534A\u53BB\u4E70\u83DC",
+        "linge": "\u53E6\u4E00\u534A\u6D17\u8863\u3001\u667E\u8863\u3001\u53E0\u8863\u3001\u6536\u597D",
+        "rangement": "\u53E6\u4E00\u534A\u6574\u7406\u623F\u95F4",
+        "menage": "\u53E6\u4E00\u534A\u505A\u5168\u5C4B\u5927\u626B\u9664",
+        "semaineRepas": "\u53E6\u4E00\u534A\u505A\u4E00\u5468\u7684\u996D"
+      },
+      "ar": {
+        "cafeAuLit": "\u0642\u0647\u0648\u0629 \u062A\u064F\u0642\u062F\u064E\u0651\u0645 \u0641\u064A \u0627\u0644\u0633\u0631\u064A\u0631",
+        "filmSoiree": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0641\u064A\u0644\u0645 \u0627\u0644\u0633\u0647\u0631\u0629",
+        "grasseMatinee": "\u0646\u0648\u0645 \u0645\u062A\u0623\u062E\u0631 \u0628\u064A\u0646\u0645\u0627 \u064A\u062A\u0648\u0644\u0649 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631 \u0643\u0644 \u0634\u064A\u0621",
+        "massage20": "\u062A\u062F\u0644\u064A\u0643 \u0644\u0645\u062F\u0629 20 \u062F\u0642\u064A\u0642\u0629",
+        "soireeLibre": "\u0633\u0647\u0631\u0629 \u062D\u0631\u0629 \u0628\u0627\u0644\u0643\u0627\u0645\u0644",
+        "restoAmoureux": "\u0639\u0634\u0627\u0621 \u0631\u0648\u0645\u0627\u0646\u0633\u064A \u0641\u064A \u0645\u0637\u0639\u0645\u060C \u064A\u0646\u0638\u0651\u0645\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "journeePourSoi": "\u064A\u0648\u0645 \u0643\u0627\u0645\u0644 \u0644\u0646\u0641\u0633\u0643 \u0641\u0642\u0637",
+        "silenceTotal": "\u0633\u0627\u0639\u0629 \u0645\u0646 \u0627\u0644\u0635\u0645\u062A \u0627\u0644\u062A\u0627\u0645",
+        "dernierCarre": "\u0622\u062E\u0631 \u0642\u0637\u0639\u0629 \u0634\u0648\u0643\u0648\u0644\u0627\u062A\u0629\u060C \u0628\u0644\u0627 \u0646\u0642\u0627\u0634",
+        "repasChoisi": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0648\u062C\u0628\u0629 \u0627\u0644\u0639\u0634\u0627\u0621",
+        "telecommande": "\u062C\u0647\u0627\u0632 \u0627\u0644\u062A\u062D\u0643\u0645 \u0637\u0648\u0627\u0644 \u0627\u0644\u0633\u0647\u0631\u0629",
+        "siesteProtegee": "\u0642\u064A\u0644\u0648\u0644\u0629 \u0644\u0627 \u064A\u0642\u0627\u0637\u0639\u0647\u0627 \u0623\u062D\u062F",
+        "bainCoule": "\u062D\u0645\u0651\u0627\u0645 \u062F\u0627\u0641\u0626 \u0645\u064F\u0639\u064E\u062F\u0651\u060C \u062F\u0648\u0646 \u0625\u0632\u0639\u0627\u062C",
+        "sortieAmis": "\u062E\u0631\u0648\u062C \u0645\u0639 \u0627\u0644\u0623\u0635\u062F\u0642\u0627\u0621\u060C \u062F\u0648\u0646 \u062A\u0646\u0638\u064A\u0645 \u0623\u064A \u0634\u064A\u0621",
+        "matineeDehors": "\u0635\u0628\u0627\u062D \u0641\u064A \u0627\u0644\u062E\u0627\u0631\u062C\u060C \u062F\u0648\u0646 \u0645\u0648\u0627\u0639\u064A\u062F",
+        "weekendSansCorvee": "\u0639\u0637\u0644\u0629 \u0646\u0647\u0627\u064A\u0629 \u0623\u0633\u0628\u0648\u0639 \u0628\u0644\u0627 \u0623\u064A \u0623\u0639\u0645\u0627\u0644 \u0645\u0646\u0632\u0644\u064A\u0629",
+        "weekendADeux": "\u0639\u0637\u0644\u0629 \u0646\u0647\u0627\u064A\u0629 \u0623\u0633\u0628\u0648\u0639 \u0644\u0634\u062E\u0635\u064A\u0646\u060C \u064A\u0646\u0638\u0651\u0645\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "vaisselle": "\u063A\u0633\u0644 \u0627\u0644\u0635\u062D\u0648\u0646 \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "poubelles": "\u0625\u062E\u0631\u0627\u062C \u0627\u0644\u0642\u0645\u0627\u0645\u0629 \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631 \u0644\u0645\u062F\u0629 \u0623\u0633\u0628\u0648\u0639",
+        "repasCuisine": "\u0627\u0644\u0639\u0634\u0627\u0621 \u064A\u0637\u0628\u062E\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "courses": "\u0627\u0644\u062A\u0633\u0648\u0651\u0642 \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "linge": "\u0627\u0644\u063A\u0633\u064A\u0644 \u064A\u063A\u0633\u0644\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631 \u0648\u064A\u0646\u0634\u0631\u0647 \u0648\u064A\u0637\u0648\u064A\u0647 \u0648\u064A\u0631\u062A\u0651\u0628\u0647",
+        "rangement": "\u062A\u0631\u062A\u064A\u0628 \u0627\u0644\u0628\u064A\u062A \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "menage": "\u0627\u0644\u062A\u0646\u0638\u064A\u0641 \u0627\u0644\u0643\u0627\u0645\u0644 \u0644\u0644\u0628\u064A\u062A \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "semaineRepas": "\u0623\u0633\u0628\u0648\u0639 \u0645\u0646 \u0627\u0644\u0648\u062C\u0628\u0627\u062A \u064A\u0637\u0628\u062E\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631"
+      },
+      "he": {
+        "cafeAuLit": "\u05E7\u05E4\u05D4 \u05E9\u05DE\u05D5\u05D2\u05E9 \u05DC\u05DE\u05D9\u05D8\u05D4",
+        "filmSoiree": "\u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05EA \u05D4\u05E1\u05E8\u05D8 \u05E9\u05DC \u05D4\u05E2\u05E8\u05D1",
+        "grasseMatinee": "\u05DC\u05D9\u05E9\u05D5\u05DF \u05E2\u05D3 \u05DE\u05D0\u05D5\u05D7\u05E8 \u05D1\u05D6\u05DE\u05DF \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D8\u05E4\u05DC \u05D1\u05D4\u05DB\u05D5\u05DC",
+        "massage20": "\u05E2\u05D9\u05E1\u05D5\u05D9 \u05E9\u05DC 20 \u05D3\u05E7\u05D5\u05EA",
+        "soireeLibre": "\u05E2\u05E8\u05D1 \u05E4\u05E0\u05D5\u05D9 \u05DC\u05D2\u05DE\u05E8\u05D9",
+        "restoAmoureux": "\u05D0\u05E8\u05D5\u05D7\u05D4 \u05E8\u05D5\u05DE\u05E0\u05D8\u05D9\u05EA \u05D1\u05DE\u05E1\u05E2\u05D3\u05D4, \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D0\u05E8\u05D2\u05DF",
+        "journeePourSoi": "\u05D9\u05D5\u05DD \u05E9\u05DC\u05DD \u05E8\u05E7 \u05D1\u05E9\u05D1\u05D9\u05DC\u05DA",
+        "silenceTotal": "\u05E9\u05E2\u05D4 \u05E9\u05DC \u05E9\u05E7\u05D8 \u05DE\u05D5\u05D7\u05DC\u05D8",
+        "dernierCarre": "\u05D4\u05E7\u05D5\u05D1\u05D9\u05D9\u05D4 \u05D4\u05D0\u05D7\u05E8\u05D5\u05E0\u05D4 \u05E9\u05DC \u05D4\u05E9\u05D5\u05E7\u05D5\u05DC\u05D3, \u05D1\u05DC\u05D9 \u05D5\u05D9\u05DB\u05D5\u05D7\u05D9\u05DD",
+        "repasChoisi": "\u05DC\u05D1\u05D7\u05D5\u05E8 \u05DE\u05D4 \u05D0\u05D5\u05DB\u05DC\u05D9\u05DD \u05D1\u05E2\u05E8\u05D1",
+        "telecommande": "\u05D4\u05E9\u05DC\u05D8 \u05DC\u05DB\u05DC \u05D4\u05E2\u05E8\u05D1",
+        "siesteProtegee": "\u05EA\u05E0\u05D5\u05DE\u05D4 \u05E9\u05D0\u05E3 \u05D0\u05D7\u05D3 \u05DC\u05D0 \u05DE\u05E4\u05E8\u05D9\u05E2 \u05DC\u05D4",
+        "bainCoule": "\u05D0\u05DE\u05D1\u05D8\u05D9\u05D4 \u05DE\u05D5\u05DB\u05E0\u05D4, \u05D1\u05DC\u05D9 \u05E9\u05D9\u05E4\u05E8\u05D9\u05E2\u05D5",
+        "sortieAmis": "\u05D9\u05E6\u05D9\u05D0\u05D4 \u05E2\u05DD \u05D7\u05D1\u05E8\u05D9\u05DD, \u05D1\u05DC\u05D9 \u05DC\u05D0\u05E8\u05D2\u05DF \u05DB\u05DC\u05D5\u05DD",
+        "matineeDehors": "\u05D1\u05D5\u05E7\u05E8 \u05D1\u05D7\u05D5\u05E5, \u05D1\u05DC\u05D9 \u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD",
+        "weekendSansCorvee": "\u05E1\u05D5\u05E3 \u05E9\u05D1\u05D5\u05E2 \u05D1\u05DC\u05D9 \u05D0\u05E3 \u05DE\u05D8\u05DC\u05D4",
+        "weekendADeux": "\u05E1\u05D5\u05E3 \u05E9\u05D1\u05D5\u05E2 \u05D6\u05D5\u05D2\u05D9, \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D0\u05E8\u05D2\u05DF",
+        "vaisselle": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05E9\u05D5\u05D8\u05E3 \u05D0\u05EA \u05D4\u05DB\u05DC\u05D9\u05DD",
+        "poubelles": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D5\u05E6\u05D9\u05D0 \u05D0\u05EA \u05D4\u05D6\u05D1\u05DC \u05D1\u05DE\u05E9\u05DA \u05E9\u05D1\u05D5\u05E2",
+        "repasCuisine": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D1\u05E9\u05DC \u05D0\u05EA \u05D0\u05E8\u05D5\u05D7\u05EA \u05D4\u05E2\u05E8\u05D1",
+        "courses": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05E2\u05D5\u05E9\u05D4 \u05D0\u05EA \u05D4\u05E7\u05E0\u05D9\u05D5\u05EA",
+        "linge": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05DB\u05D1\u05E1, \u05EA\u05D5\u05DC\u05D4, \u05DE\u05E7\u05E4\u05DC \u05D5\u05DE\u05E1\u05D3\u05E8 \u05D0\u05EA \u05D4\u05DB\u05D1\u05D9\u05E1\u05D4",
+        "rangement": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05E1\u05D3\u05E8 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA",
+        "menage": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05E2\u05D5\u05E9\u05D4 \u05E0\u05D9\u05E7\u05D9\u05D5\u05DF \u05D9\u05E1\u05D5\u05D3\u05D9",
+        "semaineRepas": "\u05E9\u05D1\u05D5\u05E2 \u05E9\u05DC \u05D0\u05E8\u05D5\u05D7\u05D5\u05EA \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D1\u05E9\u05DC"
+      },
+      "fa": {
+        "cafeAuLit": "\u0642\u0647\u0648\u0647\u200C\u0627\u06CC \u06A9\u0647 \u062F\u0631 \u0631\u062E\u062A\u062E\u0648\u0627\u0628 \u0633\u0631\u0648 \u0634\u0648\u062F",
+        "filmSoiree": "\u0627\u0646\u062A\u062E\u0627\u0628 \u0641\u06CC\u0644\u0645 \u0627\u0645\u0634\u0628",
+        "grasseMatinee": "\u062E\u0648\u0627\u0628 \u0635\u0628\u062D\u06AF\u0627\u0647\u06CC \u0637\u0648\u0644\u0627\u0646\u06CC\u060C \u062F\u0631 \u062D\u0627\u0644\u06CC \u06A9\u0647 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0647\u0645\u0647\u200C\u0686\u06CC\u0632 \u0631\u0627 \u0627\u062F\u0627\u0631\u0647 \u0645\u06CC\u200C\u06A9\u0646\u062F",
+        "massage20": "\u0645\u0627\u0633\u0627\u0698 \u06F2\u06F0 \u062F\u0642\u06CC\u0642\u0647\u200C\u0627\u06CC",
+        "soireeLibre": "\u06CC\u06A9 \u0634\u0628 \u06A9\u0627\u0645\u0644\u0627\u064B \u0622\u0632\u0627\u062F",
+        "restoAmoureux": "\u0634\u0627\u0645 \u0639\u0627\u0634\u0642\u0627\u0646\u0647 \u062F\u0631 \u0631\u0633\u062A\u0648\u0631\u0627\u0646\u060C \u0628\u0627 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0631\u06CC\u0632\u06CC \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
+        "journeePourSoi": "\u06CC\u06A9 \u0631\u0648\u0632 \u06A9\u0627\u0645\u0644 \u0641\u0642\u0637 \u0628\u0631\u0627\u06CC \u062E\u0648\u062F\u062A",
+        "silenceTotal": "\u06CC\u06A9 \u0633\u0627\u0639\u062A \u0633\u06A9\u0648\u062A \u06A9\u0627\u0645\u0644",
+        "dernierCarre": "\u0622\u062E\u0631\u06CC\u0646 \u062A\u06A9\u0647\u0654 \u0634\u06A9\u0644\u0627\u062A\u060C \u0628\u06CC\u200C\u0628\u062D\u062B",
+        "repasChoisi": "\u0627\u0646\u062A\u062E\u0627\u0628 \u0634\u0627\u0645 \u0627\u0645\u0634\u0628",
+        "telecommande": "\u06A9\u0646\u062A\u0631\u0644 \u062A\u0644\u0648\u06CC\u0632\u06CC\u0648\u0646 \u0628\u0631\u0627\u06CC \u062A\u0645\u0627\u0645 \u0634\u0628",
+        "siesteProtegee": "\u0686\u0631\u062A\u06CC \u06A9\u0647 \u0647\u06CC\u0686\u200C\u06A9\u0633 \u0642\u0637\u0639\u0634 \u0646\u06A9\u0646\u062F",
+        "bainCoule": "\u0648\u0627\u0646 \u0622\u0645\u0627\u062F\u0647\u060C \u0628\u06CC\u200C\u0622\u0646\u06A9\u0647 \u06A9\u0633\u06CC \u0645\u0632\u0627\u062D\u0645 \u0634\u0648\u062F",
+        "sortieAmis": "\u0628\u06CC\u0631\u0648\u0646 \u0631\u0641\u062A\u0646 \u0628\u0627 \u062F\u0648\u0633\u062A\u0627\u0646\u060C \u0628\u06CC\u200C\u0647\u06CC\u0686 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0631\u06CC\u0632\u06CC",
+        "matineeDehors": "\u06CC\u06A9 \u0635\u0628\u062D \u0628\u06CC\u0631\u0648\u0646 \u0627\u0632 \u062E\u0627\u0646\u0647\u060C \u0628\u06CC\u200C\u0628\u0631\u0646\u0627\u0645\u0647\u0654 \u0632\u0645\u0627\u0646\u06CC",
+        "weekendSansCorvee": "\u0622\u062E\u0631 \u0647\u0641\u062A\u0647\u200C\u0627\u06CC \u0628\u062F\u0648\u0646 \u0647\u06CC\u0686 \u06A9\u0627\u0631 \u062E\u0627\u0646\u0647",
+        "weekendADeux": "\u0622\u062E\u0631 \u0647\u0641\u062A\u0647\u200C\u0627\u06CC \u062F\u0648\u0646\u0641\u0631\u0647\u060C \u0628\u0627 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0631\u06CC\u0632\u06CC \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
+        "vaisselle": "\u0638\u0631\u0641\u200C\u0647\u0627 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u06CC\u200C\u0634\u0648\u06CC\u062F",
+        "poubelles": "\u06CC\u06A9 \u0647\u0641\u062A\u0647 \u0632\u0628\u0627\u0644\u0647\u200C\u0647\u0627 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0628\u06CC\u0631\u0648\u0646 \u0645\u06CC\u200C\u0628\u0631\u062F",
+        "repasCuisine": "\u0634\u0627\u0645 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u06CC\u200C\u067E\u0632\u062F",
+        "courses": "\u062E\u0631\u06CC\u062F \u062E\u0627\u0646\u0647 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u062F\u0647\u062F",
+        "linge": "\u0644\u0628\u0627\u0633\u200C\u0647\u0627 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u06CC\u200C\u0634\u0648\u06CC\u062F\u060C \u067E\u0647\u0646 \u0645\u06CC\u200C\u06A9\u0646\u062F\u060C \u062A\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F \u0648 \u062C\u0627 \u0645\u06CC\u200C\u06AF\u0630\u0627\u0631\u062F",
+        "rangement": "\u062E\u0627\u0646\u0647 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u0631\u062A\u0628 \u0645\u06CC\u200C\u06A9\u0646\u062F",
+        "menage": "\u0646\u0638\u0627\u0641\u062A \u06A9\u0627\u0645\u0644 \u062E\u0627\u0646\u0647 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u062F\u0647\u062F",
+        "semaineRepas": "\u06CC\u06A9 \u0647\u0641\u062A\u0647 \u0622\u0634\u067E\u0632\u06CC \u0628\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A"
+      }
+    };
     var REPLI = "fr";
     function tr2(lang, cle, vars) {
       const dict = TEXTES[lang] || TEXTES[REPLI];
@@ -12945,14 +13346,18 @@ var require_i18n = __commonJS({
         (_, k) => vars && k in vars ? String(vars[k]) : `{${k}}`
       );
     }
-    module2.exports = { tr: tr2, LANGUES: Object.keys(TEXTES) };
+    function libelle2(lang, cle, repli) {
+      const dict = CATALOGUE[lang] || CATALOGUE[REPLI];
+      return cle && (dict[cle] || CATALOGUE[REPLI][cle]) || repli || "";
+    }
+    module2.exports = { tr: tr2, libelle: libelle2, LANGUES: Object.keys(TEXTES) };
   }
 });
 
 // nas/push/index.js
 var { Client } = require_lib2();
 var webpush = require_src2();
-var { tr } = require_i18n();
+var { tr, libelle } = require_i18n();
 var cfg = {
   host: process.env.PGHOST || process.env.POSTGRES_HOST || "db",
   port: Number(process.env.PGPORT || process.env.POSTGRES_PORT || 5432),
@@ -12976,7 +13381,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.8";
+var VERSION = "v4.9";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -13027,6 +13432,7 @@ async function actorName(householdId, userId) {
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (!household) return;
+  if (kind === "bon") return handleBon(ev);
   const nom = await actorName(household, actor);
   await sendToHousehold(household, actor, (lang) => ({
     title: tr(lang, kind === "add" ? "add" : "done", {
@@ -13124,6 +13530,62 @@ async function dueReminders() {
     log(`\xE9ch\xE9ance palier ${cible} \u2192`, r.text.slice(0, 40));
   }
 }
+var BON_RAPPEL_MIN = Number(process.env.BON_RAPPEL_MIN || 60);
+var BON_JOUR_DEBUT = Number(process.env.BON_JOUR_DEBUT || 8);
+var BON_JOUR_FIN = Number(process.env.BON_JOUR_FIN || 22);
+function depuis(lang, minutes) {
+  if (minutes < 60) return tr(lang, "dureeMin", { n: Math.max(1, Math.floor(minutes)) });
+  if (minutes < 60 * 24) return tr(lang, "dureeH", { n: Math.floor(minutes / 60) });
+  return tr(lang, "dureeJ", { n: Math.floor(minutes / 1440) });
+}
+var BON_SQL = `
+  select c.id, c.household_id, c.user_id, c.label,
+         r.cle,
+         extract(epoch from (now() - c.used_at)) / 60 as minutes
+    from claims c
+    left join rewards r on r.id = c.reward_id
+   where c.used_at is not null and c.realise_at is null and not c.deleted`;
+async function envoyerBon(b, relance) {
+  const nom = await actorName(b.household_id, b.user_id);
+  await sendToHousehold(b.household_id, b.user_id, (lang) => {
+    const qui = nom || tr(lang, "binome");
+    const label = libelle(lang, b.cle, b.label);
+    return relance ? {
+      title: tr(lang, "bonRappelTitre"),
+      body: tr(lang, "bonRappelCorps", { qui, label, depuis: depuis(lang, Number(b.minutes)) }),
+      url: APP_URL,
+      tag: `cmp-bon-${b.id}`,
+      urgent: true
+    } : {
+      title: tr(lang, "bonTitre", { qui }),
+      body: tr(lang, "bonCorps", { label }),
+      url: APP_URL,
+      tag: `cmp-bon-${b.id}`,
+      urgent: true
+    };
+  });
+  await client.query("update claims set rappel_at = now() where id = $1", [b.id]);
+}
+async function handleBon(ev) {
+  if (!ev.claim) return;
+  const { rows } = await client.query(`${BON_SQL} and c.id = $1`, [ev.claim]);
+  if (!rows[0]) return;
+  await envoyerBon(rows[0], false);
+  log("bon utilis\xE9 \u2192", String(rows[0].label).slice(0, 40));
+}
+async function bonReminders() {
+  const { hour } = localNow();
+  if (hour < BON_JOUR_DEBUT || hour >= BON_JOUR_FIN) return;
+  const { rows } = await client.query(
+    `${BON_SQL}
+       and (c.rappel_at is null or c.rappel_at < now() - ($1 || ' minutes')::interval)`,
+    [BON_RAPPEL_MIN]
+  );
+  for (const b of rows) {
+    await envoyerBon(b, true);
+    log("relance bon \u2192", String(b.label).slice(0, 40));
+  }
+}
 var BINOME_MAX = 4;
 var BINOME_JOURS = 7;
 async function binomeReminder() {
@@ -13186,6 +13648,7 @@ setInterval(async () => {
 setInterval(() => {
   if (!client) return;
   dueReminders().catch((e) => log("\xE9ch\xE9ances : \xE9chec", e.message));
+  bonReminders().catch((e) => log("bons : \xE9chec", e.message));
 }, 6e4);
 var retryTimer = null;
 function scheduleRetry(why) {
@@ -13231,7 +13694,7 @@ async function start() {
     scheduleRetry(`connexion impossible : ${e.message}`);
   }
 }
-log(`service push ${VERSION} \u2014 rappels \xE0 ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ})`);
+log(`service push ${VERSION} \u2014 rappels \xE0 ${MORNING_HOUR} h et ${EVENING_HOUR} h (${TZ}), bons toutes les ${BON_RAPPEL_MIN} min de ${BON_JOUR_DEBUT} h \xE0 ${BON_JOUR_FIN} h`);
 start();
 /*! Bundled license information:
 

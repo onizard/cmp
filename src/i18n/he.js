@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'לקבל ({n} נק׳)', surMesureVide: 'אמור מה אתה מבקש.',
   },
   inventaire: {
+    enAttente: 'ממתין',
+    prevenu: 'נשלחה התראה אל {qui}',
+    cestFait: 'בוצע ✓',
+    demandeLe: 'התבקש ב־{quand}',
     titre: 'השוברים שלי',
     vide: 'עדיין אין שוברים. קח פרס והוא יגיע לכאן.',
     utiliser: 'לממש',
@@ -176,5 +180,12 @@ export default {
     rangement: 'החצי השני מסדר את הבית',
     menage: 'החצי השני עושה ניקיון יסודי',
     semaineRepas: 'שבוע של ארוחות שהחצי השני מבשל',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ שובר מ־{qui}', autre: '🎟️ {n} שוברים מ־{qui}' },
+    texte: 'תורך. האישור אצל {qui} כשזה יבוצע.',
+    ok: 'על זה',
   },
 };

@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'Einlösen ({n} Pkt.)', surMesureVide: 'Sag, was du dir wünschst.',
   },
   inventaire: {
+    enAttente: 'Offen',
+    prevenu: 'Benachrichtigung an {qui} gesendet',
+    cestFait: 'Erledigt ✓',
+    demandeLe: 'angefordert am {quand}',
     titre: 'Meine Gutscheine',
     vide: 'Noch keine Gutscheine. Nimm eine Belohnung, dann landet sie hier.',
     utiliser: 'Einlösen',
@@ -176,5 +180,12 @@ export default {
     rangement: 'Die Wohnung räumt deine bessere Hälfte auf',
     menage: 'Den kompletten Hausputz macht deine bessere Hälfte',
     semaineRepas: 'Eine Woche lang kocht deine bessere Hälfte',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ Gutschein von {qui}', autre: '🎟️ {n} Gutscheine von {qui}' },
+    texte: 'Du bist dran. {qui} bestätigt, wenn es erledigt ist.',
+    ok: 'Ich mach’s',
   },
 };

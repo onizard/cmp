@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'Claim ({n} pts)', surMesureVide: 'Say what you are asking for.',
   },
   inventaire: {
+    enAttente: 'Waiting',
+    prevenu: 'Notification sent to {qui}',
+    cestFait: 'Done ✓',
+    demandeLe: 'requested {quand}',
     titre: 'My vouchers',
     vide: 'No vouchers yet. Take a reward and it will land here.',
     utiliser: 'Use',
@@ -176,5 +180,12 @@ export default {
     rangement: 'The house tidied by your other half',
     menage: 'A full house clean done by your other half',
     semaineRepas: 'A week of meals cooked by your other half',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ {qui} is using a voucher', autre: '🎟️ {qui} is using {n} vouchers' },
+    texte: 'Your move. {qui} will confirm once it’s done.',
+    ok: 'On it',
   },
 };

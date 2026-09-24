@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'Получить ({n} очк.)', surMesureVide: 'Скажите, о чём просите.',
   },
   inventaire: {
+    enAttente: 'Ожидает',
+    prevenu: 'Уведомление отправлено: {qui}',
+    cestFait: 'Готово ✓',
+    demandeLe: 'запрошено {quand}',
     titre: 'Мои купоны',
     vide: 'Купонов пока нет. Возьмите награду — она появится здесь.',
     utiliser: 'Использовать',
@@ -176,5 +180,12 @@ export default {
     rangement: 'Порядок в доме наводит ваша половина',
     menage: 'Генеральную уборку делает ваша половина',
     semaineRepas: 'Неделю готовит ваша половина',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ Купон от {qui}', autre: '🎟️ Купоны от {qui}: {n}' },
+    texte: 'Ваш ход. {qui} подтвердит, когда всё будет сделано.',
+    ok: 'Иду',
   },
 };

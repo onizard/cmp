@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'الحصول عليها ({n} نقطة)', surMesureVide: 'قل ما الذي تطلبه.',
   },
   inventaire: {
+    enAttente: 'قيد الانتظار',
+    prevenu: 'أُرسل إشعار إلى {qui}',
+    cestFait: 'تمّ ✓',
+    demandeLe: 'طُلب في {quand}',
     titre: 'قسائمي',
     vide: 'لا قسائم بعد. خذ مكافأة وستظهر هنا.',
     utiliser: 'استخدام',
@@ -176,5 +180,12 @@ export default {
     rangement: 'ترتيب البيت يتولاه نصفك الآخر',
     menage: 'التنظيف الكامل للبيت يتولاه نصفك الآخر',
     semaineRepas: 'أسبوع من الوجبات يطبخها نصفك الآخر',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ قسيمة من {qui}', autre: '🎟️ {n} قسائم من {qui}' },
+    texte: 'دورك الآن. التأكيد عند {qui} بعد الإنجاز.',
+    ok: 'حاضر',
   },
 };

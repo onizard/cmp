@@ -168,6 +168,28 @@ export const secondesPourAnnuler = (bon, maintenant = Date.now()) => {
   return Math.max(0, Math.min(ANNULATION_S, reste));
 };
 
+/**
+ * Où en est un bon :
+ *   · « neuf »      : acheté, pas encore utilisé ;
+ *   · « enAttente » : utilisé, l'autre est prévenu et relancé ;
+ *   · « honore »    : son détenteur a validé que c'est fait — poinçonné.
+ * Seul le détenteur fait passer un bon d'« enAttente » à « honore ».
+ */
+export const etatBon = (bon) => {
+  if (!bon || !bon.usedAt) return 'neuf';
+  return bon.realiseAt ? 'honore' : 'enAttente';
+};
+
+/**
+ * Les bons que l'AUTRE a utilisés et qui attendent qu'on les honore, du plus
+ * ancien au plus récent : c'est ce qui s'affiche au milieu de l'écran.
+ */
+export const bonsAHonorer = (claims, userId) =>
+  (claims || [])
+    .filter((c) => !c.deleted && c.userId && c.userId !== userId && etatBon(c) === 'enAttente')
+    .slice()
+    .sort((a, b) => String(a.usedAt).localeCompare(String(b.usedAt)));
+
 /** Peut-on demander une récompense sur mesure ? */
 export const canClaimCustom = (points) => (Number(points) || 0) >= REWARD_CUSTOM;
 

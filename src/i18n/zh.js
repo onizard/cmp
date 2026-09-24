@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: '兑换（{n} 分）', surMesureVide: '说出你想要什么。',
   },
   inventaire: {
+    enAttente: '等待中',
+    prevenu: '已通知 {qui}',
+    cestFait: '已完成 ✓',
+    demandeLe: '{quand} 提出',
     titre: '我的券',
     vide: '还没有券。兑换一个奖励，它就会出现在这里。',
     utiliser: '使用',
@@ -176,5 +180,12 @@ export default {
     rangement: '另一半整理房间',
     menage: '另一半做全屋大扫除',
     semaineRepas: '另一半做一周的饭',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ {qui} 使用了奖励券', autre: '🎟️ {qui} 使用了 {n} 张奖励券' },
+    texte: '轮到你了。完成后由 {qui} 确认。',
+    ok: '这就去',
   },
 };

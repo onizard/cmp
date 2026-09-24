@@ -21,6 +21,8 @@ import {
   POINT_OTHER,
   secondesPourAnnuler,
   ANNULATION_S,
+  etatBon,
+  bonsAHonorer,
 } from './gamify.js';
 
 const task = (o = {}) => ({
@@ -231,5 +233,49 @@ describe('secondesPourAnnuler', () => {
   it('borne une horloge de téléphone en retard sur le serveur', () => {
     // Achat daté dans le « futur » vu du téléphone : jamais plus d'une minute.
     expect(secondesPourAnnuler(bon, t0 - 30_000)).toBe(ANNULATION_S);
+  });
+});
+
+describe('cycle de vie d’un bon', () => {
+  const MOI = 'moi';
+  const ELLE = 'elle';
+  const bon = (id, userId, extra = {}) => ({
+    id, userId, deleted: false, usedAt: null, realiseAt: null, ...extra,
+  });
+
+  it('passe de neuf à en attente, puis à honoré', () => {
+    expect(etatBon(bon('a', MOI))).toBe('neuf');
+    expect(etatBon(bon('a', MOI, { usedAt: '2026-09-24T10:00:00Z' }))).toBe('enAttente');
+    expect(
+      etatBon(bon('a', MOI, { usedAt: '2026-09-24T10:00:00Z', realiseAt: '2026-09-24T12:00:00Z' })),
+    ).toBe('honore');
+  });
+
+  it('montre à l’autre les bons qu’il doit honorer', () => {
+    const claims = [
+      bon('sien', ELLE, { usedAt: '2026-09-24T10:00:00Z' }),
+      bon('neuf', ELLE),
+      bon('fait', ELLE, { usedAt: '2026-09-23T10:00:00Z', realiseAt: '2026-09-23T11:00:00Z' }),
+    ];
+    expect(bonsAHonorer(claims, MOI).map((b) => b.id)).toEqual(['sien']);
+  });
+
+  it('ne me montre jamais mes propres bons', () => {
+    // Celui qui utilise un bon n'a rien à honorer : c'est l'autre qu'on presse.
+    const claims = [bon('mien', MOI, { usedAt: '2026-09-24T10:00:00Z' })];
+    expect(bonsAHonorer(claims, MOI)).toEqual([]);
+  });
+
+  it('oublie un bon annulé', () => {
+    const claims = [bon('x', ELLE, { usedAt: '2026-09-24T10:00:00Z', deleted: true })];
+    expect(bonsAHonorer(claims, MOI)).toEqual([]);
+  });
+
+  it('range du plus ancien au plus récent', () => {
+    const claims = [
+      bon('recent', ELLE, { usedAt: '2026-09-24T12:00:00Z' }),
+      bon('ancien', ELLE, { usedAt: '2026-09-22T09:00:00Z' }),
+    ];
+    expect(bonsAHonorer(claims, MOI).map((b) => b.id)).toEqual(['ancien', 'recent']);
   });
 });

@@ -65,6 +65,10 @@ export default {
     surMesureObtenir: 'Obtener ({n} pts)', surMesureVide: 'Di lo que pides.',
   },
   inventaire: {
+    enAttente: 'Pendiente',
+    prevenu: 'Aviso enviado a {qui}',
+    cestFait: 'Hecho ✓',
+    demandeLe: 'pedido el {quand}',
     titre: 'Mis vales',
     vide: 'Ningún vale por ahora. Toma una recompensa y aparecerá aquí.',
     utiliser: 'Usar',
@@ -176,5 +180,12 @@ export default {
     rangement: 'La casa ordenada por tu media naranja',
     menage: 'La limpieza completa, hecha por tu media naranja',
     semaineRepas: 'Una semana de comidas cocinadas por tu media naranja',
+  },
+
+  // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  honorer: {
+    titre: { un: '🎟️ Vale de {qui}', autre: '🎟️ {n} vales de {qui}' },
+    texte: 'Te toca. {qui} lo confirmará cuando esté hecho.',
+    ok: 'Voy',
   },
 };
