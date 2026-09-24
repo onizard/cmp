@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useT, langue } from '../i18n/index.js';
 import Brain from './Brain.jsx';
 import Bon from './Bon.jsx';
+import Defilant from './Defilant.jsx';
+import { libelleRecompense, libelleBon } from '../lib/libelle.js';
 import {
   pointsAvailable,
   pointsBreakdown,
@@ -39,10 +41,14 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // Le compteur, lui, n'a toujours aucune limite.
   const jaugeDe = (pts) => jauge(pts);
 
-  // L'inventaire : les bons de tout le foyer, les non utilisés d'abord, du
-  // plus récent au plus ancien. Aucune limite — c'est une collection.
+  // L'inventaire : MES bons, les non utilisés d'abord, du plus récent au plus
+  // ancien. Aucune limite — c'est une collection.
+  //
+  // Ceux de l'autre n'y figurent pas : ils ont été payés avec ses points, on
+  // n'a pas à en disposer. Ils restent lus depuis la base, en revanche, car
+  // c'est ce qui permet de calculer ses points à elle ou à lui.
   const mesClaims = store.claims
-    .filter((c) => !c.deleted)
+    .filter((c) => !c.deleted && c.userId === userId)
     .slice()
     .sort((a, b) => {
       if (Boolean(a.usedAt) !== Boolean(b.usedAt)) return a.usedAt ? 1 : -1;
@@ -135,7 +141,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
       {next && (
         <section className="gage-card">
-          <h4>{t('cerveau.prochaine', { nom: next.reward.label })}</h4>
+          <h4>{t('cerveau.prochaine', { nom: libelleRecompense(next.reward) })}</h4>
           <div className="gauge" aria-hidden="true">
             <span
               style={{
@@ -156,13 +162,14 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             {t('recompenses.vide')}
           </p>
         ) : (
+          <Defilant label={t('recompenses.titre')}>
           <ul className="gage-list">
             {catalogue.map((r) => {
               const ok = myPts >= r.cost;
               return (
                 <li key={r.id} className={`reward ${ok ? 'ok' : ''}`}>
                   <span className="reward-cost">{formatPoints(r.cost)}</span>
-                  <span className="reward-label">{r.label}</span>
+                  <span className="reward-label">{libelleRecompense(r)}</span>
                   <button
                     className="btn btn-small btn-accent"
                     type="button"
@@ -175,6 +182,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               );
             })}
           </ul>
+          </Defilant>
         )}
 
         <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
@@ -252,10 +260,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               <Bon
                 key={c.id}
                 bon={c}
+                libelle={libelleBon(c, store.rewards)}
                 visuel={visuelDe(c)}
                 lang={langue()}
                 onUtiliser={() => store.useClaim(c.id)}
-                onRendre={() => store.cancelClaim(c.id)}
               />
             ))}
           </div>

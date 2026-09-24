@@ -5,6 +5,8 @@ import { REWARD_CUSTOM } from './gamify.js';
 const rewardFrom = (r) => ({
   id: r.id,
   householdId: r.household_id,
+  // La cle traduit le libelle ; le label francais reste le repli.
+  cle: r.cle || null,
   label: r.label,
   cost: Number(r.cost),
   visuel: r.visuel || null,
@@ -126,9 +128,24 @@ export function useRewards(householdId, userId) {
     [householdId, userId, saveClaims],
   );
 
+  /**
+   * Est-ce mon bon ? On ne dispose pas de ce que l'autre a payé avec ses
+   * points. La base applique la même règle (nas/db/bons-proprietaire.sql),
+   * qui seule fait autorité : un téléphone en retard d'une mise à jour ne
+   * connaît pas encore celle-ci.
+   */
+  const estAMoi = useCallback(
+    (id) => {
+      const bon = cRef.current.find((c) => c.id === id);
+      return Boolean(bon) && bon.userId === userId;
+    },
+    [userId],
+  );
+
   /** Poinçonne un bon : il a servi, il ne sert plus qu'au souvenir. */
   const useClaim = useCallback(
     async (id) => {
+      if (!estAMoi(id)) return;
       const quand = new Date().toISOString();
       saveClaims(
         cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand } : c)),
@@ -136,7 +153,7 @@ export function useRewards(householdId, userId) {
       if (supabase)
         await supabase.from('claims').update({ used_at: quand }).eq('id', id);
     },
-    [saveClaims],
+    [saveClaims, estAMoi],
   );
 
   /**
@@ -163,21 +180,6 @@ export function useRewards(householdId, userId) {
     [householdId, userId, saveClaims],
   );
 
-  /** Annule une dépense (récupère les points). */
-  const cancelClaim = useCallback(
-    async (id) => {
-      // Un bon poinçonné a été consommé : il n'est plus rendable.
-      const bon = cRef.current.find((c) => c.id === id);
-      if (bon && bon.usedAt) return;
-      saveClaims(
-        cRef.current.map((c) => (c.id === id ? { ...c, deleted: true } : c)),
-      );
-      if (supabase)
-        await supabase.from('claims').update({ deleted: true }).eq('id', id);
-    },
-    [saveClaims],
-  );
-
   return {
     rewards,
     claims,
@@ -187,6 +189,5 @@ export function useRewards(householdId, userId) {
     claimReward,
     claimCustom,
     useClaim,
-    cancelClaim,
   };
 }

@@ -40,6 +40,14 @@ export function messageDInvitation(prenom) {
     : t('partage.messageInvitationNeutre');
 }
 
+/**
+ * Le message qui porte le code seul, pour qui a déjà l'application et doit le
+ * saisir à la main. Le lien reste préférable ; ceci est le filet.
+ */
+export function messageDuCode(code) {
+  return t('partage.messageCode', { code: String(code || '') });
+}
+
 /** Le message quand on fait simplement découvrir l'application. */
 export function messageDecouverte() {
   return t('partage.messageDecouverte');

@@ -276,7 +276,6 @@ export default function Account({ account }) {
             <li>{t('donnees.rienVendu')}</li>
             <li>{t('donnees.heberge')}</li>
             <li>{t('donnees.chiffre')}</li>
-            <li>{t('donnees.effacer')}</li>
           </ul>
         </div>
       </section>

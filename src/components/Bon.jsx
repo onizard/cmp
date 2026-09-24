@@ -21,7 +21,7 @@ const jour = (iso, lang) => {
  * dans /bons/. Sans visuel, la carte se dessine toute seule — même mise en
  * page, pour que le remplacement ne bouge rien d'autre que l'image.
  */
-export default function Bon({ bon, visuel, lang, onUtiliser, onRendre }) {
+export default function Bon({ bon, libelle, visuel, lang, onUtiliser }) {
   const t = useT();
   const utilise = Boolean(bon.usedAt);
 
@@ -35,7 +35,7 @@ export default function Bon({ bon, visuel, lang, onUtiliser, onRendre }) {
 
         <div className="bon-corps">
           <p className="bon-cout">{formatPoints(bon.cost)}</p>
-          <p className="bon-texte">{bon.label}</p>
+          <p className="bon-texte">{libelle || bon.label}</p>
           <p className="bon-date">
             {utilise
               ? t('inventaire.utiliseLe', { quand: jour(bon.usedAt, lang) })
@@ -50,13 +50,12 @@ export default function Bon({ bon, visuel, lang, onUtiliser, onRendre }) {
         )}
       </div>
 
+      {/* Un bon ne se rend pas : il a été payé, il est acquis. La seule chose
+          qu'on en fasse, c'est s'en servir. */}
       {!utilise && (
         <div className="bon-actions">
           <button className="btn btn-small btn-accent" type="button" onClick={onUtiliser}>
             {t('inventaire.utiliser')}
-          </button>
-          <button className="btn btn-small" type="button" onClick={onRendre}>
-            {t('inventaire.rendre')}
           </button>
         </div>
       )}

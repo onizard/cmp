@@ -2020,3 +2020,52 @@ body,
     transition: none;
   }
 }
+
+/* --- Liste qui défile sans barre ---------------------------------------- */
+
+/* Environ cinq lignes et demie : la ligne coupée en bas dit, à elle seule,
+   qu'il y a une suite. */
+.defilant {
+  max-height: min(22rem, 55vh);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 14px;
+}
+
+.defilant::-webkit-scrollbar {
+  display: none;
+}
+
+.defilant:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+/* Un bord s'estompe tant qu'il reste du contenu de ce côté. */
+.defilant[data-bas] {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent);
+}
+
+.defilant[data-haut] {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 44px);
+  mask-image: linear-gradient(to bottom, transparent, #000 44px);
+}
+
+.defilant[data-haut][data-bas] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 44px,
+    #000 calc(100% - 44px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 44px,
+    #000 calc(100% - 44px),
+    transparent
+  );
+}

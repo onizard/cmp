@@ -155,7 +155,6 @@ export default {
     titre: 'Mes bons',
     vide: 'Aucun bon pour l’instant. Prends une récompense et elle arrivera ici.',
     utiliser: 'Utiliser',
-    rendre: 'Rendre',
     poinconne: 'UTILISÉ',
     obtenuLe: 'obtenu le {quand}',
     utiliseLe: 'utilisé le {quand}',
@@ -213,7 +212,9 @@ export default {
     qrAfficher: 'Afficher le QR d’invitation',
     qrMasquer: 'Masquer le QR d’invitation',
     qrAlt: 'QR code d’invitation',
-    codeFoyer: 'Code du foyer : {code}',
+    partagerCode: 'Partager le code du foyer',
+    codeCopie: 'Code copié ✓',
+    messageCode: 'Voici le code de notre foyer sur « charge mentale partagée » : {code}',
     messageInvitation:
       '{prenom} t’invite à partager la charge mentale. Rejoins notre foyer :',
     messageInvitationNeutre:
@@ -232,8 +233,6 @@ export default {
       'Tout est hébergé sur un serveur privé, en France, pas chez un géant du nuage.',
     chiffre:
       'Le texte des notifications est chiffré avant de partir : ni Google ni Apple ne peuvent le lire au passage.',
-    effacer:
-      'Tu veux que tout disparaisse ? Écris-nous, ton compte et tes données sont effacés.',
   },
 
   installation: {
@@ -298,5 +297,34 @@ export default {
     aujourdhui: 'aujourd’hui',
     agrege:
       'Chiffres agrégés. Aucune tâche, aucun contenu de foyer n’est lisible ici.',
+  },
+
+  // Le catalogue de recompenses de depart, par cle (colonne rewards.cle).
+  catalogue: {
+    cafeAuLit: 'Un café servi au lit',
+    filmSoiree: 'Choisir le film de la soirée',
+    grasseMatinee: 'Une grasse matinée pendant que l\'autre gère',
+    massage20: 'Un massage de 20 minutes',
+    soireeLibre: 'Une soirée entièrement libre',
+    restoAmoureux: 'Un resto en amoureux, organisé par l\'autre',
+    journeePourSoi: 'Une journée rien que pour soi',
+    silenceTotal: 'Une heure de silence total',
+    dernierCarre: 'Le dernier carré de chocolat, sans discuter',
+    repasChoisi: 'Choisir le repas du soir',
+    telecommande: 'La télécommande toute la soirée',
+    siesteProtegee: 'Une sieste que personne ne vient interrompre',
+    bainCoule: 'Un bain coulé, sans être dérangé·e',
+    sortieAmis: 'Une sortie entre ami·es, sans rien organiser',
+    matineeDehors: 'Une matinée dehors, sans horaire',
+    weekendSansCorvee: 'Un week-end sans aucune corvée',
+    weekendADeux: 'Un week-end à deux, organisé par l\'autre',
+    vaisselle: 'La vaisselle faite par l\'autre',
+    poubelles: 'Les poubelles sorties par l\'autre pendant une semaine',
+    repasCuisine: 'Le repas du soir cuisiné par l\'autre',
+    courses: 'Les courses faites par l\'autre',
+    linge: 'Le linge lavé, étendu, plié et rangé par l\'autre',
+    rangement: 'La maison rangée par l\'autre',
+    menage: 'Le ménage complet fait par l\'autre',
+    semaineRepas: 'Une semaine de repas cuisinés par l\'autre',
   },
 };

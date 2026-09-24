@@ -30,26 +30,64 @@ drop policy if exists rw_all on rewards;
 create policy rw_all on rewards for all to authenticated
   using (is_member(household_id)) with check (is_member(household_id));
 
+-- Chacun ses bons : la lecture est ouverte au foyer (elle sert a calculer les
+-- points de l'autre), l'ecriture ne l'est qu'au proprietaire.
 drop policy if exists cl_all on claims;
-create policy cl_all on claims for all to authenticated
-  using (is_member(household_id)) with check (is_member(household_id));
+
+drop policy if exists cl_select on claims;
+create policy cl_select on claims for select to authenticated
+  using (is_member(household_id));
+
+drop policy if exists cl_insert on claims;
+create policy cl_insert on claims for insert to authenticated
+  with check (is_member(household_id) and user_id = auth.uid());
+
+drop policy if exists cl_update on claims;
+create policy cl_update on claims for update to authenticated
+  using (is_member(household_id) and user_id = auth.uid())
+  with check (is_member(household_id) and user_id = auth.uid());
+
+drop policy if exists cl_delete on claims;
+create policy cl_delete on claims for delete to authenticated
+  using (is_member(household_id) and user_id = auth.uid());
 
 grant all on rewards to anon, authenticated, service_role;
 grant all on claims  to anon, authenticated, service_role;
 
+-- La cle permet d'afficher chaque recompense dans la langue de chacun.
+alter table rewards add column if not exists cle text;
+
 -- Catalogue de départ, uniquement pour les foyers qui n'en ont pas encore.
-insert into rewards (household_id, label, cost)
-select h.id, v.label, v.cost
+insert into rewards (household_id, cle, label, cost)
+select h.id, v.cle, v.label, v.cost
 from households h
 cross join (values
-  ('Un café servi au lit', 10),
-  ('Choisir le film de la soirée', 12),
-  ('Une grasse matinée pendant que l''autre gère', 18),
-  ('Un massage de 20 minutes', 25),
-  ('Une soirée entièrement libre', 35),
-  ('Un resto en amoureux, organisé par l''autre', 50),
-  ('Une journée rien que pour soi', 75)
-) as v(label, cost)
+  ('cafeAuLit', 'Un café servi au lit', 10),
+  ('filmSoiree', 'Choisir le film de la soirée', 12),
+  ('grasseMatinee', 'Une grasse matinée pendant que l''autre gère', 18),
+  ('massage20', 'Un massage de 20 minutes', 25),
+  ('soireeLibre', 'Une soirée entièrement libre', 35),
+  ('restoAmoureux', 'Un resto en amoureux, organisé par l''autre', 50),
+  ('journeePourSoi', 'Une journée rien que pour soi', 75),
+  ('silenceTotal', 'Une heure de silence total', 10),
+  ('dernierCarre', 'Le dernier carré de chocolat, sans discuter', 10),
+  ('repasChoisi', 'Choisir le repas du soir', 12),
+  ('telecommande', 'La télécommande toute la soirée', 12),
+  ('siesteProtegee', 'Une sieste que personne ne vient interrompre', 18),
+  ('bainCoule', 'Un bain coulé, sans être dérangé·e', 25),
+  ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25),
+  ('matineeDehors', 'Une matinée dehors, sans horaire', 35),
+  ('weekendSansCorvee', 'Un week-end sans aucune corvée', 50),
+  ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75),
+  ('vaisselle', 'La vaisselle faite par l''autre', 10),
+  ('poubelles', 'Les poubelles sorties par l''autre pendant une semaine', 12),
+  ('repasCuisine', 'Le repas du soir cuisiné par l''autre', 18),
+  ('courses', 'Les courses faites par l''autre', 25),
+  ('linge', 'Le linge lavé, étendu, plié et rangé par l''autre', 25),
+  ('rangement', 'La maison rangée par l''autre', 35),
+  ('menage', 'Le ménage complet fait par l''autre', 50),
+  ('semaineRepas', 'Une semaine de repas cuisinés par l''autre', 75)
+) as v(cle, label, cost)
 where not exists (select 1 from rewards r where r.household_id = h.id);
 
 -- Les catalogues déjà en place : on ré-étale l'échelle d'origine au lieu de

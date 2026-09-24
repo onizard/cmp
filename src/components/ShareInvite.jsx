@@ -4,6 +4,7 @@ import {
   lienDInvitation,
   messageDInvitation,
   messageDecouverte,
+  messageDuCode,
 } from '../lib/invite.js';
 
 export default function ShareInvite({ code, prenom }) {
@@ -40,17 +41,20 @@ export default function ShareInvite({ code, prenom }) {
   // Un seul bouton : la feuille du téléphone mène déjà à WhatsApp, aux SMS,
   // au mail, au presse-papier. Là où elle n'existe pas, on copie.
   const partager = async (quoi, texte, url) => {
-    if (!url) return;
+    if (url === null) return;
+    const charge = url
+      ? { title: 'Charge mentale partagée', text: texte, url }
+      : { title: 'Charge mentale partagée', text: texte };
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Charge mentale partagée', text: texte, url });
+        await navigator.share(charge);
       } catch {
         /* partage annulé */
       }
       return;
     }
     try {
-      await navigator.clipboard.writeText(`${texte}\n${url}`);
+      await navigator.clipboard.writeText(url ? `${texte}\n${url}` : texte);
       setCopie(quoi);
       setTimeout(() => setCopie(null), 1900);
     } catch {
@@ -102,9 +106,16 @@ export default function ShareInvite({ code, prenom }) {
         </div>
       )}
 
-      <p className="code-repli">
-        {t('partage.codeFoyer', { code })}
-      </p>
+      {code && (
+        <p className="qr-lien">
+          <button
+            type="button"
+            onClick={() => partager('code', messageDuCode(code), undefined)}
+          >
+            {copie === 'code' ? t('partage.codeCopie') : t('partage.partagerCode')}
+          </button>
+        </p>
+      )}
     </>
   );
 }
