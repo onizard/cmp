@@ -20,7 +20,6 @@ insert into rewards (household_id, cle, label, cost)
 select h.id, v.cle, v.label, v.cost
 from households h
 cross join (values
-  ('silenceTotal', 'Une heure de silence total', 10),
   ('dernierCarre', 'Le dernier carré de chocolat, sans discuter', 10),
   ('repasChoisi', 'Choisir le repas du soir', 12),
   ('telecommande', 'La télécommande toute la soirée', 12),

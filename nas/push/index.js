@@ -38,7 +38,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.10';
+const VERSION = 'v4.11';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 

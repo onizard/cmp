@@ -173,6 +173,7 @@ export default {
     matineeDehors: '在外面度过一个上午，不用看时间',
     weekendSansCorvee: '一个完全不用做家务的周末',
     weekendADeux: '另一半安排的二人周末',
+    chocolatChaud: '两人盖着毯子喝热巧克力',
     baladeADeux: '两人散步，手机关机',
     soireeSurprise: '另一半安排的惊喜之夜',
     spectacleADeux: '两人一起看演唱会或演出',

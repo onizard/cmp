@@ -173,6 +173,7 @@ export default {
     matineeDehors: 'Una mattinata fuori, senza orari',
     weekendSansCorvee: 'Un weekend senza nessuna faccenda',
     weekendADeux: 'Un weekend in due, organizzato dalla tua metà',
+    chocolatChaud: 'Una cioccolata calda in due, sotto una coperta',
     baladeADeux: 'Una passeggiata in due, telefoni spenti',
     soireeSurprise: 'Una serata a sorpresa, organizzata dalla tua metà',
     spectacleADeux: 'Un concerto o uno spettacolo in due',

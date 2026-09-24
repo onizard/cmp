@@ -69,7 +69,6 @@ cross join (values
   ('soireeLibre', 'Une soirée entièrement libre', 35),
   ('restoAmoureux', 'Un resto en amoureux, organisé par l''autre', 50),
   ('journeePourSoi', 'Une journée rien que pour soi', 75),
-  ('silenceTotal', 'Une heure de silence total', 10),
   ('dernierCarre', 'Le dernier carré de chocolat, sans discuter', 10),
   ('repasChoisi', 'Choisir le repas du soir', 12),
   ('telecommande', 'La télécommande toute la soirée', 12),
@@ -78,6 +77,7 @@ cross join (values
   ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25),
   ('matineeDehors', 'Une matinée dehors, sans horaire', 35),
   ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75),
+  ('chocolatChaud', 'Un chocolat chaud à deux, sous un plaid', 10),
   ('baladeADeux', 'Une balade à deux, téléphones éteints', 18),
   ('soireeSurprise', 'Une soirée surprise, organisée par l''autre', 50),
   ('spectacleADeux', 'Un concert ou un spectacle à deux', 50)

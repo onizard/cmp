@@ -173,6 +173,7 @@ export default {
     matineeDehors: 'صباح في الخارج، دون مواعيد',
     weekendSansCorvee: 'عطلة نهاية أسبوع بلا أي أعمال منزلية',
     weekendADeux: 'عطلة نهاية أسبوع لشخصين، ينظّمها نصفك الآخر',
+    chocolatChaud: 'شوكولاتة ساخنة لشخصين، تحت بطانية',
     baladeADeux: 'نزهة لشخصين، والهواتف مطفأة',
     soireeSurprise: 'سهرة مفاجئة، ينظّمها نصفك الآخر',
     spectacleADeux: 'حفلة موسيقية أو عرض لشخصين',

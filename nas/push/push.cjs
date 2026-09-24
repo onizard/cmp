@@ -13056,6 +13056,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "Une matin\xE9e dehors, sans horaire",
         "weekendSansCorvee": "Un week-end sans aucune corv\xE9e",
         "weekendADeux": "Un week-end \xE0 deux, organis\xE9 par l'autre",
+        "chocolatChaud": "Un chocolat chaud \xE0 deux, sous un plaid",
         "baladeADeux": "Une balade \xE0 deux, t\xE9l\xE9phones \xE9teints",
         "soireeSurprise": "Une soir\xE9e surprise, organis\xE9e par l'autre",
         "spectacleADeux": "Un concert ou un spectacle \xE0 deux",
@@ -13086,6 +13087,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "A morning out, with no schedule",
         "weekendSansCorvee": "A weekend without a single chore",
         "weekendADeux": "A weekend for two, organised by your other half",
+        "chocolatChaud": "Hot chocolate for two, under a blanket",
         "baladeADeux": "A walk for two, phones off",
         "soireeSurprise": "A surprise evening, planned by your other half",
         "spectacleADeux": "A concert or a show for two",
@@ -13116,6 +13118,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "Una ma\xF1ana fuera, sin horarios",
         "weekendSansCorvee": "Un fin de semana sin ninguna tarea",
         "weekendADeux": "Un fin de semana en pareja, organizado por tu media naranja",
+        "chocolatChaud": "Un chocolate caliente para dos, bajo una manta",
         "baladeADeux": "Un paseo a dos, con los m\xF3viles apagados",
         "soireeSurprise": "Una noche sorpresa, organizada por tu media naranja",
         "spectacleADeux": "Un concierto o un espect\xE1culo para dos",
@@ -13146,6 +13149,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "Uma manh\xE3 fora, sem hor\xE1rios",
         "weekendSansCorvee": "Um fim de semana sem nenhuma tarefa",
         "weekendADeux": "Um fim de semana a dois, organizado pela tua cara-metade",
+        "chocolatChaud": "Um chocolate quente a dois, debaixo de uma manta",
         "baladeADeux": "Um passeio a dois, telem\xF3veis desligados",
         "soireeSurprise": "Uma noite surpresa, organizada pela tua cara-metade",
         "spectacleADeux": "Um concerto ou um espet\xE1culo a dois",
@@ -13176,6 +13180,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "Ein Vormittag drau\xDFen, ohne Zeitplan",
         "weekendSansCorvee": "Ein Wochenende ganz ohne Hausarbeit",
         "weekendADeux": "Ein Wochenende zu zweit, organisiert von deiner besseren H\xE4lfte",
+        "chocolatChaud": "Hei\xDFe Schokolade zu zweit, unter einer Decke",
         "baladeADeux": "Ein Spaziergang zu zweit, Handys aus",
         "soireeSurprise": "Ein \xDCberraschungsabend, organisiert von deiner besseren H\xE4lfte",
         "spectacleADeux": "Ein Konzert oder eine Show zu zweit",
@@ -13206,6 +13211,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "Una mattinata fuori, senza orari",
         "weekendSansCorvee": "Un weekend senza nessuna faccenda",
         "weekendADeux": "Un weekend in due, organizzato dalla tua met\xE0",
+        "chocolatChaud": "Una cioccolata calda in due, sotto una coperta",
         "baladeADeux": "Una passeggiata in due, telefoni spenti",
         "soireeSurprise": "Una serata a sorpresa, organizzata dalla tua met\xE0",
         "spectacleADeux": "Un concerto o uno spettacolo in due",
@@ -13236,6 +13242,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "\u0423\u0442\u0440\u043E \u0432\u043D\u0435 \u0434\u043E\u043C\u0430, \u0431\u0435\u0437 \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u044F",
         "weekendSansCorvee": "\u0412\u044B\u0445\u043E\u0434\u043D\u044B\u0435 \u0431\u0435\u0437 \u0435\u0434\u0438\u043D\u043E\u0439 \u0434\u043E\u043C\u0430\u0448\u043D\u0435\u0439 \u043E\u0431\u044F\u0437\u0430\u043D\u043D\u043E\u0441\u0442\u0438",
         "weekendADeux": "\u0412\u044B\u0445\u043E\u0434\u043D\u044B\u0435 \u0432\u0434\u0432\u043E\u0451\u043C, \u043A\u043E\u0442\u043E\u0440\u044B\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0443\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "chocolatChaud": "\u0413\u043E\u0440\u044F\u0447\u0438\u0439 \u0448\u043E\u043A\u043E\u043B\u0430\u0434 \u0432\u0434\u0432\u043E\u0451\u043C, \u043F\u043E\u0434 \u043F\u043B\u0435\u0434\u043E\u043C",
         "baladeADeux": "\u041F\u0440\u043E\u0433\u0443\u043B\u043A\u0430 \u0432\u0434\u0432\u043E\u0451\u043C, \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u044B \u0432\u044B\u043A\u043B\u044E\u0447\u0435\u043D\u044B",
         "soireeSurprise": "\u0412\u0435\u0447\u0435\u0440-\u0441\u044E\u0440\u043F\u0440\u0438\u0437, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0443\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
         "spectacleADeux": "\u041A\u043E\u043D\u0446\u0435\u0440\u0442 \u0438\u043B\u0438 \u0441\u043F\u0435\u043A\u0442\u0430\u043A\u043B\u044C \u0432\u0434\u0432\u043E\u0451\u043C",
@@ -13266,6 +13273,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "\u5728\u5916\u9762\u5EA6\u8FC7\u4E00\u4E2A\u4E0A\u5348\uFF0C\u4E0D\u7528\u770B\u65F6\u95F4",
         "weekendSansCorvee": "\u4E00\u4E2A\u5B8C\u5168\u4E0D\u7528\u505A\u5BB6\u52A1\u7684\u5468\u672B",
         "weekendADeux": "\u53E6\u4E00\u534A\u5B89\u6392\u7684\u4E8C\u4EBA\u5468\u672B",
+        "chocolatChaud": "\u4E24\u4EBA\u76D6\u7740\u6BEF\u5B50\u559D\u70ED\u5DE7\u514B\u529B",
         "baladeADeux": "\u4E24\u4EBA\u6563\u6B65\uFF0C\u624B\u673A\u5173\u673A",
         "soireeSurprise": "\u53E6\u4E00\u534A\u5B89\u6392\u7684\u60CA\u559C\u4E4B\u591C",
         "spectacleADeux": "\u4E24\u4EBA\u4E00\u8D77\u770B\u6F14\u5531\u4F1A\u6216\u6F14\u51FA",
@@ -13296,6 +13304,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "\u0635\u0628\u0627\u062D \u0641\u064A \u0627\u0644\u062E\u0627\u0631\u062C\u060C \u062F\u0648\u0646 \u0645\u0648\u0627\u0639\u064A\u062F",
         "weekendSansCorvee": "\u0639\u0637\u0644\u0629 \u0646\u0647\u0627\u064A\u0629 \u0623\u0633\u0628\u0648\u0639 \u0628\u0644\u0627 \u0623\u064A \u0623\u0639\u0645\u0627\u0644 \u0645\u0646\u0632\u0644\u064A\u0629",
         "weekendADeux": "\u0639\u0637\u0644\u0629 \u0646\u0647\u0627\u064A\u0629 \u0623\u0633\u0628\u0648\u0639 \u0644\u0634\u062E\u0635\u064A\u0646\u060C \u064A\u0646\u0638\u0651\u0645\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "chocolatChaud": "\u0634\u0648\u0643\u0648\u0644\u0627\u062A\u0629 \u0633\u0627\u062E\u0646\u0629 \u0644\u0634\u062E\u0635\u064A\u0646\u060C \u062A\u062D\u062A \u0628\u0637\u0627\u0646\u064A\u0629",
         "baladeADeux": "\u0646\u0632\u0647\u0629 \u0644\u0634\u062E\u0635\u064A\u0646\u060C \u0648\u0627\u0644\u0647\u0648\u0627\u062A\u0641 \u0645\u0637\u0641\u0623\u0629",
         "soireeSurprise": "\u0633\u0647\u0631\u0629 \u0645\u0641\u0627\u062C\u0626\u0629\u060C \u064A\u0646\u0638\u0651\u0645\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
         "spectacleADeux": "\u062D\u0641\u0644\u0629 \u0645\u0648\u0633\u064A\u0642\u064A\u0629 \u0623\u0648 \u0639\u0631\u0636 \u0644\u0634\u062E\u0635\u064A\u0646",
@@ -13326,6 +13335,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "\u05D1\u05D5\u05E7\u05E8 \u05D1\u05D7\u05D5\u05E5, \u05D1\u05DC\u05D9 \u05DC\u05D5\u05D7 \u05D6\u05DE\u05E0\u05D9\u05DD",
         "weekendSansCorvee": "\u05E1\u05D5\u05E3 \u05E9\u05D1\u05D5\u05E2 \u05D1\u05DC\u05D9 \u05D0\u05E3 \u05DE\u05D8\u05DC\u05D4",
         "weekendADeux": "\u05E1\u05D5\u05E3 \u05E9\u05D1\u05D5\u05E2 \u05D6\u05D5\u05D2\u05D9, \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D0\u05E8\u05D2\u05DF",
+        "chocolatChaud": "\u05E9\u05D5\u05E7\u05D5 \u05D7\u05DD \u05DC\u05E9\u05E0\u05D9\u05D9\u05DD, \u05DE\u05EA\u05D7\u05EA \u05DC\u05E9\u05DE\u05D9\u05DB\u05D4",
         "baladeADeux": "\u05D8\u05D9\u05D5\u05DC \u05D6\u05D5\u05D2\u05D9, \u05D8\u05DC\u05E4\u05D5\u05E0\u05D9\u05DD \u05DB\u05D1\u05D5\u05D9\u05D9\u05DD",
         "soireeSurprise": "\u05E2\u05E8\u05D1 \u05D4\u05E4\u05EA\u05E2\u05D4, \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D0\u05E8\u05D2\u05DF",
         "spectacleADeux": "\u05D4\u05D5\u05E4\u05E2\u05D4 \u05D0\u05D5 \u05DE\u05D5\u05E4\u05E2 \u05DC\u05E9\u05E0\u05D9\u05D9\u05DD",
@@ -13356,6 +13366,7 @@ var require_i18n = __commonJS({
         "matineeDehors": "\u06CC\u06A9 \u0635\u0628\u062D \u0628\u06CC\u0631\u0648\u0646 \u0627\u0632 \u062E\u0627\u0646\u0647\u060C \u0628\u06CC\u200C\u0628\u0631\u0646\u0627\u0645\u0647\u0654 \u0632\u0645\u0627\u0646\u06CC",
         "weekendSansCorvee": "\u0622\u062E\u0631 \u0647\u0641\u062A\u0647\u200C\u0627\u06CC \u0628\u062F\u0648\u0646 \u0647\u06CC\u0686 \u06A9\u0627\u0631 \u062E\u0627\u0646\u0647",
         "weekendADeux": "\u0622\u062E\u0631 \u0647\u0641\u062A\u0647\u200C\u0627\u06CC \u062F\u0648\u0646\u0641\u0631\u0647\u060C \u0628\u0627 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0631\u06CC\u0632\u06CC \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
+        "chocolatChaud": "\u0634\u06A9\u0644\u0627\u062A \u062F\u0627\u063A \u062F\u0648\u0646\u0641\u0631\u0647\u060C \u0632\u06CC\u0631 \u06CC\u06A9 \u067E\u062A\u0648",
         "baladeADeux": "\u0642\u062F\u0645\u200C\u0632\u062F\u0646 \u062F\u0648\u0646\u0641\u0631\u0647\u060C \u0628\u0627 \u06AF\u0648\u0634\u06CC\u200C\u0647\u0627\u06CC \u062E\u0627\u0645\u0648\u0634",
         "soireeSurprise": "\u06CC\u06A9 \u0634\u0628 \u063A\u0627\u0641\u0644\u06AF\u06CC\u0631\u06A9\u0646\u0646\u062F\u0647\u060C \u0628\u0627 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0631\u06CC\u0632\u06CC \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
         "spectacleADeux": "\u06CC\u06A9 \u06A9\u0646\u0633\u0631\u062A \u06CC\u0627 \u0646\u0645\u0627\u06CC\u0634 \u062F\u0648\u0646\u0641\u0631\u0647",
@@ -13414,7 +13425,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.10";
+var VERSION = "v4.11";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");

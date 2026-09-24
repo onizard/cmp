@@ -173,6 +173,7 @@ export default {
     matineeDehors: 'בוקר בחוץ, בלי לוח זמנים',
     weekendSansCorvee: 'סוף שבוע בלי אף מטלה',
     weekendADeux: 'סוף שבוע זוגי, שהחצי השני מארגן',
+    chocolatChaud: 'שוקו חם לשניים, מתחת לשמיכה',
     baladeADeux: 'טיול זוגי, טלפונים כבויים',
     soireeSurprise: 'ערב הפתעה, שהחצי השני מארגן',
     spectacleADeux: 'הופעה או מופע לשניים',

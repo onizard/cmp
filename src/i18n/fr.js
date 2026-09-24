@@ -324,6 +324,7 @@ export default {
     matineeDehors: 'Une matinée dehors, sans horaire',
     weekendSansCorvee: 'Un week-end sans aucune corvée',
     weekendADeux: 'Un week-end à deux, organisé par l\'autre',
+    chocolatChaud: 'Un chocolat chaud à deux, sous un plaid',
     baladeADeux: 'Une balade à deux, téléphones éteints',
     soireeSurprise: 'Une soirée surprise, organisée par l\'autre',
     spectacleADeux: 'Un concert ou un spectacle à deux',
