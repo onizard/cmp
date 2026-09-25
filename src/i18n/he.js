@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'קוד ההזמנה הזה אינו מוביל לשום בית.',
     quitter: 'עזיבת הבית', quitterSur: 'באמת לעזוב את הבית?', quitterOui: 'כן, לעזוב',
   },
-  taches: { modifInterdite: 'רק מי שהוסיף אותה יכול לשנות או למחוק אותה.', faitesTiroir: 'שבוצעו',
+  taches: { dejaLa: 'היא כבר ברשימה.', modifInterdite: 'רק מי שהוסיף אותה יכול לשנות או למחוק אותה.', faitesTiroir: 'שבוצעו',
     aucuneFaite: 'עדיין לא בוצע דבר.',
     combo: 'קומבו ×{n}',
     decocheInterdite: 'רק מי שסימן אותה יכול לבטל את הסימון.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'שום דבר על הראש החודש.',
   },
   echeance: {
-    titre: 'תאריך יעד', ajouter: 'הוספת תאריך יעד', jour: 'יום', heure: 'שעה (לא חובה)',
+    titre: 'תאריך יעד', ajouter: 'הוספת תאריך יעד', modifier: 'עריכת תאריך יעד', jour: 'יום', heure: 'שעה (לא חובה)',
     aide: 'בלי שעה, היעד חל בסוף היום. התזכורות מתקרבות ככל שהוא מתקרב.',
     retirer: 'הסרה', recap: 'תאריך יעד: {quand}', fait: 'בוצע', maintenant: 'עכשיו', alInstant: 'זה עתה',
     dansMin: 'בעוד {n} דק׳', dansH: 'בעוד {n} ש׳', dansJ: 'בעוד {n} י׳',

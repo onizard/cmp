@@ -4,7 +4,7 @@ import { carriedFromLabel } from '../lib/visibility.js';
 import { buildDue, splitDue, dueFull, dueLevel } from '../lib/deadline.js';
 import DueBadge, { Chrono } from './DueBadge.jsx';
 
-export default function TaskItem({ task, month, currentMonth, store, onCombo }) {
+export default function TaskItem({ task, month, currentMonth, store, onCombo, eclat = false }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -46,7 +46,10 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo }) 
   };
 
   return (
-    <li className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''}`}>
+    <li
+      data-tache={task.id}
+      className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''} ${eclat ? 'task-eclat' : ''}`}
+    >
       <div className="task-row">
         <button
           type="button"
@@ -172,27 +175,31 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo }) 
 
       {open && !editing && !dueOpen && store.peutModifier(task) && (
         <div className="actions" role="group" aria-label={t('taches.actions')}>
-          <button
-            className="action"
-            type="button"
-            onClick={() => {
-              setEditing(true);
-              setOpen(false);
-            }}
-          >
-            {t('taches.modifier')}
-          </button>
+          {/* L'échéance seule sur sa ligne, puis modifier et supprimer côte à
+              côte : les deux gestes qui touchent à la tâche elle-même. */}
           <button
             className="action action-due"
             type="button"
             onClick={() => setDueOpen(true)}
           >
             <Chrono />
-            {task.dueAt ? t('echeance.titre') : t('echeance.ajouter')}
+            {task.dueAt ? t('echeance.modifier') : t('echeance.ajouter')}
           </button>
-          <button className="action action-danger" type="button" onClick={remove}>
-            {t('taches.supprimer')}
-          </button>
+          <div className="actions-ligne">
+            <button
+              className="action"
+              type="button"
+              onClick={() => {
+                setEditing(true);
+                setOpen(false);
+              }}
+            >
+              {t('taches.modifier')}
+            </button>
+            <button className="action action-danger" type="button" onClick={remove}>
+              {t('taches.supprimer')}
+            </button>
+          </div>
           {task.dueAt && (
             <p className="due-recap">
               {t('echeance.recap', { quand: dueFull(task.dueAt, task.dueHasTime) })}

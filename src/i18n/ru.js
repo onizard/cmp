@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Этот код приглашения никуда не ведёт.',
     quitter: 'Покинуть дом', quitterSur: 'Действительно покинуть дом?', quitterOui: 'да, покинуть',
   },
-  taches: { modifInterdite: 'Изменить или удалить её может только тот, кто её добавил.', faitesTiroir: 'Готово',
+  taches: { dejaLa: 'Она уже есть в списке.', modifInterdite: 'Изменить или удалить её может только тот, кто её добавил.', faitesTiroir: 'Готово',
     aucuneFaite: 'Пока ничего не сделано.',
     combo: 'Комбо ×{n}',
     decocheInterdite: 'Снять отметку может только тот, кто её поставил.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Ничего на уме в этом месяце.',
   },
   echeance: {
-    titre: 'Срок', ajouter: 'Добавить срок', jour: 'День', heure: 'Время (необязательно)',
+    titre: 'Срок', ajouter: 'Добавить срок', modifier: 'Изменить срок', jour: 'День', heure: 'Время (необязательно)',
     aide: 'Без времени срок истекает в конце дня. Напоминания учащаются по мере приближения.',
     retirer: 'Убрать', recap: 'Срок: {quand}', fait: 'сделано', maintenant: 'сейчас', alInstant: 'только что',
     dansMin: 'через {n} мин', dansH: 'через {n} ч', dansJ: 'через {n} д',

@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'This invitation code leads to no household.',
     quitter: 'Leave the household', quitterSur: 'Really leave the household?', quitterOui: 'yes, leave',
   },
-  taches: { modifInterdite: 'Only the person who added it can edit or delete it.', faitesTiroir: 'Done',
+  taches: { dejaLa: 'It’s already on the list.', modifInterdite: 'Only the person who added it can edit or delete it.', faitesTiroir: 'Done',
     aucuneFaite: 'Nothing done yet.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Only the person who ticked it can untick it.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Nothing on your mind this month.',
   },
   echeance: {
-    titre: 'Deadline', ajouter: 'Add a deadline', jour: 'Day', heure: 'Time (optional)',
+    titre: 'Deadline', ajouter: 'Add a deadline', modifier: 'Edit the deadline', jour: 'Day', heure: 'Time (optional)',
     aide: 'Without a time, the deadline falls at the end of the day. Reminders tighten as it approaches.',
     retirer: 'Remove', recap: 'Deadline: {quand}', fait: 'done', maintenant: 'now', alInstant: 'just now',
     dansMin: 'in {n} min', dansH: 'in {n} h', dansJ: 'in {n} d',

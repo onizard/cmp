@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Este código de invitación no lleva a ningún hogar.',
     quitter: 'Salir del hogar', quitterSur: '¿Salir del hogar de verdad?', quitterOui: 'sí, salir',
   },
-  taches: { modifInterdite: 'Solo quien la añadió puede modificarla o eliminarla.', faitesTiroir: 'Hechas',
+  taches: { dejaLa: 'Ya está en la lista.', modifInterdite: 'Solo quien la añadió puede modificarla o eliminarla.', faitesTiroir: 'Hechas',
     aucuneFaite: 'Nada hecho todavía.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Solo quien la marcó puede desmarcarla.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Nada en mente este mes.',
   },
   echeance: {
-    titre: 'Fecha límite', ajouter: 'Añadir una fecha límite', jour: 'Día', heure: 'Hora (opcional)',
+    titre: 'Fecha límite', ajouter: 'Añadir una fecha límite', modifier: 'Modificar la fecha límite', jour: 'Día', heure: 'Hora (opcional)',
     aide: 'Sin hora, el plazo vence al final del día. Los recordatorios se acercan a medida que llega.',
     retirer: 'Quitar', recap: 'Fecha límite: {quand}', fait: 'hecho', maintenant: 'ahora', alInstant: 'hace un instante',
     dansMin: 'en {n} min', dansH: 'en {n} h', dansJ: 'en {n} d',

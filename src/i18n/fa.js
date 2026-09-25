@@ -28,7 +28,7 @@ export default {
     codeSansFoyer: 'این رمز دعوت به هیچ خانه‌ای نمی‌رسد.',
     quitter: 'ترک خانه', quitterSur: 'واقعاً خانه را ترک کنی؟', quitterOui: 'بله، ترک کن',
   },
-  taches: { modifInterdite: 'فقط کسی که آن را افزوده می‌تواند ویرایش یا حذفش کند.', faitesTiroir: 'انجام‌شده',
+  taches: { dejaLa: 'این کار از قبل در فهرست هست.', modifInterdite: 'فقط کسی که آن را افزوده می‌تواند ویرایش یا حذفش کند.', faitesTiroir: 'انجام‌شده',
     aucuneFaite: 'هنوز چیزی انجام نشده.',
     combo: 'کمبو ×{n}',
     decocheInterdite: 'فقط کسی که علامت زده می‌تواند آن را بردارد.',
@@ -39,7 +39,7 @@ export default {
     accrocheVide: 'این ماه چیزی روی ذهن نیست.',
   },
   echeance: {
-    titre: 'مهلت', ajouter: 'افزودن مهلت', jour: 'روز', heure: 'ساعت (اختیاری)',
+    titre: 'مهلت', ajouter: 'افزودن مهلت', modifier: 'ویرایش مهلت', jour: 'روز', heure: 'ساعت (اختیاری)',
     aide: 'بدون ساعت، مهلت در پایان روز سر می‌رسد. هرچه نزدیک‌تر شود، یادآوری‌ها پیاپی‌تر می‌شوند.',
     retirer: 'برداشتن', recap: 'مهلت: {quand}', fait: 'انجام شد', maintenant: 'همین حالا', alInstant: 'همین الان',
     dansMin: '{n} دقیقهٔ دیگر', dansH: '{n} ساعت دیگر', dansJ: '{n} روز دیگر',

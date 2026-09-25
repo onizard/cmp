@@ -100,6 +100,33 @@ export const decochable = (task, userId) =>
 export const modifiable = (task, userId) =>
   Boolean(task) && (!task.createdBy || task.createdBy === userId);
 
+/**
+ * Deux textes de tâche qui disent la même chose : on ignore la casse, les
+ * accents et les espaces en trop. « Déboucher  le siphon » = « deboucher le
+ * siphon ».
+ */
+export const memeTexte = (a, b) => {
+  const norme = (x) =>
+    String(x || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  return norme(a) !== '' && norme(a) === norme(b);
+};
+
+/**
+ * La tâche encore à faire qui porte déjà ce texte et se voit dans ce mois-là
+ * (celles des mois passés y sont reportées), s'il y en a une. Deux tâches
+ * identiques à faire en même temps, ce n'est presque jamais voulu : c'est un
+ * ajout répété parce que le premier ne s'était pas vu.
+ */
+export const doublonAFaire = (tasks, month, text) =>
+  (tasks || []).find(
+    (t) => !t.deleted && !t.done && t.month <= month && memeTexte(t.text, text),
+  ) || null;
+
 // Les champs qui relèvent de la modification. Cocher et décocher n'en font pas
 // partie : ils ont leur propre règle, plus haut.
 const CHAMPS_DE_L_AUTEUR = ['text', 'deleted', 'dueAt', 'dueHasTime', 'month'];
@@ -343,10 +370,17 @@ export function useTasks(householdId, userId) {
     [persist],
   );
 
+  /**
+   * Ajoute une tâche. Renvoie { id } pour la nouvelle, ou { doublon: id } si
+   * une tâche identique attend déjà — l'écran la montre alors au lieu d'en
+   * créer une seconde.
+   */
   const addTask = useCallback(
     (month, text) => {
       const trimmed = text.trim();
-      if (!trimmed) return;
+      if (!trimmed) return null;
+      const existante = doublonAFaire(tasksRef.current, month, trimmed);
+      if (existante) return { doublon: existante.id };
       const inMonth = tasksRef.current.filter(
         (t) => t.month === month && !t.deleted,
       );
@@ -371,6 +405,7 @@ export function useTasks(householdId, userId) {
       };
       persist([...tasksRef.current, task]);
       enqueue({ type: 'insert', row: toInsertRow(task) });
+      return { id: task.id };
     },
     [householdId, userId, persist, enqueue],
   );

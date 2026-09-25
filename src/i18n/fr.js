@@ -68,7 +68,7 @@ export default {
     quitterOui: 'oui, quitter',
   },
 
-  taches: { modifInterdite: 'Seule la personne qui l’a ajoutée peut la modifier ou la supprimer.', faitesTiroir: 'Faites',
+  taches: { dejaLa: 'Elle est déjà dans la liste.', modifInterdite: 'Seule la personne qui l’a ajoutée peut la modifier ou la supprimer.', faitesTiroir: 'Faites',
     aucuneFaite: 'Rien de fait pour l’instant.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',
@@ -93,6 +93,7 @@ export default {
   echeance: {
     titre: 'Échéance',
     ajouter: 'Ajouter une échéance',
+    modifier: "Modifier l'échéance",
     jour: 'Jour',
     heure: 'Heure (facultative)',
     aide:

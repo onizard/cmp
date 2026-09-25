@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Dieser Einladungscode führt zu keinem Haushalt.',
     quitter: 'Haushalt verlassen', quitterSur: 'Den Haushalt wirklich verlassen?', quitterOui: 'ja, verlassen',
   },
-  taches: { modifInterdite: 'Nur wer sie hinzugefügt hat, kann sie ändern oder löschen.', faitesTiroir: 'Erledigt',
+  taches: { dejaLa: 'Sie steht schon auf der Liste.', modifInterdite: 'Nur wer sie hinzugefügt hat, kann sie ändern oder löschen.', faitesTiroir: 'Erledigt',
     aucuneFaite: 'Noch nichts erledigt.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Nur wer sie abgehakt hat, kann den Haken entfernen.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Nichts im Kopf diesen Monat.',
   },
   echeance: {
-    titre: 'Frist', ajouter: 'Frist hinzufügen', jour: 'Tag', heure: 'Uhrzeit (optional)',
+    titre: 'Frist', ajouter: 'Frist hinzufügen', modifier: 'Frist ändern', jour: 'Tag', heure: 'Uhrzeit (optional)',
     aide: 'Ohne Uhrzeit endet die Frist am Tagesende. Die Erinnerungen rücken näher, je näher sie kommt.',
     retirer: 'Entfernen', recap: 'Frist: {quand}', fait: 'erledigt', maintenant: 'jetzt', alInstant: 'gerade eben',
     dansMin: 'in {n} Min.', dansH: 'in {n} Std.', dansJ: 'in {n} T.',

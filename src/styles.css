@@ -489,6 +489,7 @@ body,
 /* En tete de mois : un peu d'air au-dessus des taches, rien de plus. */
 .add-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 9px;
   padding: 4px 6px 14px;
 }
@@ -2427,4 +2428,46 @@ body,
   margin: 0;
   padding-inline-start: 0;
   color: var(--ink-3);
+}
+
+/* Modifier et supprimer, côte à côte, sous l'échéance. La ligne prend toute
+   la largeur : c'est elle qui renvoie l'échéance seule sur la sienne. */
+.actions-ligne {
+  display: flex;
+  flex-basis: 100%;
+  gap: 8px;
+}
+
+/* La tâche qu'on vient d'ajouter — ou celle qui existait déjà — s'allume un
+   instant, pour que l'œil la trouve. */
+.task-eclat {
+  animation: task-eclat 1.8s ease-out;
+  border-radius: 14px;
+}
+
+@keyframes task-eclat {
+  0%,
+  35% {
+    background: rgba(180, 134, 204, 0.18);
+    box-shadow: 0 0 0 2px rgba(180, 134, 204, 0.45);
+  }
+  100% {
+    background: transparent;
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-eclat {
+    animation: none;
+    background: rgba(180, 134, 204, 0.14);
+  }
+}
+
+.add-deja {
+  flex-basis: 100%;
+  margin: 2px 4px 0;
+  color: var(--violet);
+  font-size: 0.88rem;
+  font-weight: 700;
 }

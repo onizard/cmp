@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Questo codice di invito non porta ad alcuna casa.',
     quitter: 'Lascia la casa', quitterSur: 'Lasciare davvero la casa?', quitterOui: 'sì, esci',
   },
-  taches: { modifInterdite: 'Solo chi l’ha aggiunta può modificarla o eliminarla.', faitesTiroir: 'Fatte',
+  taches: { dejaLa: 'È già nella lista.', modifInterdite: 'Solo chi l’ha aggiunta può modificarla o eliminarla.', faitesTiroir: 'Fatte',
     aucuneFaite: 'Ancora niente fatto.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Solo chi l’ha spuntata può toglierne la spunta.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Niente in testa questo mese.',
   },
   echeance: {
-    titre: 'Scadenza', ajouter: 'Aggiungi una scadenza', jour: 'Giorno', heure: 'Ora (facoltativa)',
+    titre: 'Scadenza', ajouter: 'Aggiungi una scadenza', modifier: 'Modifica la scadenza', jour: 'Giorno', heure: 'Ora (facoltativa)',
     aide: 'Senza ora, la scadenza cade a fine giornata. I promemoria si stringono man mano che si avvicina.',
     retirer: 'Togli', recap: 'Scadenza: {quand}', fait: 'fatto', maintenant: 'adesso', alInstant: 'proprio ora',
     dansMin: 'tra {n} min', dansH: 'tra {n} h', dansJ: 'tra {n} g',

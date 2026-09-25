@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useT } from '../i18n/index.js';
 import {
   addMonths,
@@ -29,6 +29,28 @@ export default function TaskList({ store, currentMonth, onCombo }) {
   const [openYears, setOpenYears] = useState(() => new Set([currentYear]));
   const [openMonths, setOpenMonths] = useState(() => new Set([currentMonth]));
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
+  // La tâche qu'on vient d'ajouter, ou celle qui existait déjà : on descend
+  // jusqu'à elle et elle brille un instant. Sans ça, une tâche ajoutée en tête
+  // de mois atterrit plus bas, hors de vue, et on la ressaisit.
+  const [eclat, setEclat] = useState(null);
+
+  useEffect(() => {
+    if (!eclat) return undefined;
+    const el = document.querySelector(
+      `[data-mois="${eclat.mois}"] [data-tache="${eclat.id}"]`,
+    );
+    const calme = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    el?.scrollIntoView({ behavior: calme ? 'auto' : 'smooth', block: 'center' });
+    const fin = setTimeout(() => setEclat(null), 1800);
+    return () => clearTimeout(fin);
+  }, [eclat]);
+
+  const ajouter = (mois, text) => {
+    const r = store.addTask(mois, text);
+    const id = r && (r.id || r.doublon);
+    if (id) setEclat({ mois, id, cle: Date.now() });
+    return r;
+  };
 
   const toggle = (set, setter, key) => {
     const next = new Set(set);
@@ -113,6 +135,7 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                   <section
                     className={`month ${monthOpen ? 'open' : 'closed'}`}
                     key={m}
+                    data-mois={m}
                   >
                     <button
                       className="month-head"
@@ -127,12 +150,13 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                       <div className="month-body">
                         {/* En tete : ajouter est le geste le plus frequent,
                             il ne doit pas se meriter au bas d'une liste. */}
-                        <AddTask onAdd={(text) => store.addTask(m, text)} />
+                        <AddTask onAdd={(text) => ajouter(m, text)} />
                         <ul className="tasks">
                           {aFaire.map((task) => (
                             <TaskItem
                               key={task.id}
                               task={task}
+                              eclat={eclat && eclat.id === task.id && eclat.mois === m}
                               month={m}
                               currentMonth={currentMonth}
                               store={store}

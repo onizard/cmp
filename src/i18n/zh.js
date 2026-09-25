@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: '这个邀请码没有指向任何家庭。',
     quitter: '退出家庭', quitterSur: '确定要退出家庭吗？', quitterOui: '是，退出',
   },
-  taches: { modifInterdite: '只有添加者才能修改或删除。', faitesTiroir: '已完成',
+  taches: { dejaLa: '它已经在清单里了。', modifInterdite: '只有添加者才能修改或删除。', faitesTiroir: '已完成',
     aucuneFaite: '还没有完成任何事。',
     combo: '连击 ×{n}',
     decocheInterdite: '只有勾选的人才能取消勾选。',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: '本月没有挂心的事。',
   },
   echeance: {
-    titre: '截止时间', ajouter: '添加截止时间', jour: '日期', heure: '时间（可选）',
+    titre: '截止时间', ajouter: '添加截止时间', modifier: '修改截止时间', jour: '日期', heure: '时间（可选）',
     aide: '不填时间则在当天结束时到期。越临近，提醒越密集。',
     retirer: '移除', recap: '截止：{quand}', fait: '已完成', maintenant: '现在', alInstant: '刚刚',
     dansMin: '{n} 分钟后', dansH: '{n} 小时后', dansJ: '{n} 天后',

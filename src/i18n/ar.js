@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'رمز الدعوة هذا لا يؤدي إلى أي بيت.',
     quitter: 'مغادرة البيت', quitterSur: 'هل تريد فعلًا مغادرة البيت؟', quitterOui: 'نعم، غادر',
   },
-  taches: { modifInterdite: 'لا يمكن تعديلها أو حذفها إلا لمن أضافها.', faitesTiroir: 'منجزة',
+  taches: { dejaLa: 'إنها موجودة في القائمة بالفعل.', modifInterdite: 'لا يمكن تعديلها أو حذفها إلا لمن أضافها.', faitesTiroir: 'منجزة',
     aucuneFaite: 'لا شيء منجز بعد.',
     combo: 'كومبو ×{n}',
     decocheInterdite: 'لا يمكن إلغاء التحديد إلا لمن وضعه.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'لا شيء في البال هذا الشهر.',
   },
   echeance: {
-    titre: 'الموعد النهائي', ajouter: 'إضافة موعد نهائي', jour: 'اليوم', heure: 'الساعة (اختياري)',
+    titre: 'الموعد النهائي', ajouter: 'إضافة موعد نهائي', modifier: 'تعديل الموعد النهائي', jour: 'اليوم', heure: 'الساعة (اختياري)',
     aide: 'بدون ساعة، ينتهي الموعد في آخر اليوم. تتقارب التذكيرات كلما اقترب.',
     retirer: 'إزالة', recap: 'الموعد النهائي: {quand}', fait: 'تم', maintenant: 'الآن', alInstant: 'للتو',
     dansMin: 'خلال {n} د', dansH: 'خلال {n} س', dansJ: 'خلال {n} ي',

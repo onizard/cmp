@@ -27,7 +27,7 @@ export default {
     codeSansFoyer: 'Este código de convite não leva a nenhuma casa.',
     quitter: 'Sair da casa', quitterSur: 'Sair mesmo da casa?', quitterOui: 'sim, sair',
   },
-  taches: { modifInterdite: 'Só quem a adicionou a pode alterar ou apagar.', faitesTiroir: 'Feitas',
+  taches: { dejaLa: 'Já está na lista.', modifInterdite: 'Só quem a adicionou a pode alterar ou apagar.', faitesTiroir: 'Feitas',
     aucuneFaite: 'Nada feito ainda.',
     combo: 'Combo ×{n}',
     decocheInterdite: 'Só quem a marcou pode desmarcá-la.',
@@ -38,7 +38,7 @@ export default {
     accrocheVide: 'Nada em mente este mês.',
   },
   echeance: {
-    titre: 'Prazo', ajouter: 'Adicionar um prazo', jour: 'Dia', heure: 'Hora (opcional)',
+    titre: 'Prazo', ajouter: 'Adicionar um prazo', modifier: 'Alterar o prazo', jour: 'Dia', heure: 'Hora (opcional)',
     aide: 'Sem hora, o prazo termina no fim do dia. Os lembretes aproximam-se à medida que chega.',
     retirer: 'Retirar', recap: 'Prazo: {quand}', fait: 'feito', maintenant: 'agora', alInstant: 'agora mesmo',
     dansMin: 'em {n} min', dansH: 'em {n} h', dansJ: 'em {n} d',
