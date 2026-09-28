@@ -72,7 +72,7 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
           <span className="check-box">{task.done ? '✓' : ''}</span>
         </button>
 
-        {editing ? (
+        {editing && !task.done ? (
           <form className="edit" onSubmit={saveEdit}>
             <input
               className="field"
@@ -112,7 +112,7 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
 
       {refus && <p className="refus">{t('taches.decocheInterdite')}</p>}
 
-      {open && !editing && dueOpen && (
+      {open && !editing && dueOpen && !task.done && (
         <form className="due-form" onSubmit={saveDue}>
           <p className="due-form-title">
             <Chrono size={15} /> {t('echeance.titre')}
@@ -173,7 +173,17 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
         </div>
       )}
 
-      {open && !editing && !dueOpen && store.peutModifier(task) && (
+      {/* Une tâche faite n'a plus rien à changer : ni texte, ni échéance. On
+          peut seulement la supprimer. */}
+      {open && store.peutModifier(task) && task.done && (
+        <div className="actions" role="group" aria-label={t('taches.actions')}>
+          <button className="action action-danger" type="button" onClick={remove}>
+            {t('taches.supprimer')}
+          </button>
+        </div>
+      )}
+
+      {open && !editing && !dueOpen && store.peutModifier(task) && !task.done && (
         <div className="actions" role="group" aria-label={t('taches.actions')}>
           {/* L'échéance seule sur sa ligne, puis modifier et supprimer côte à
               côte : les deux gestes qui touchent à la tâche elle-même. */}
