@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Iniciar sesión', creerMonCompte: 'Crear mi cuenta', recevoirLien: 'Recibir el enlace',
     lienEnvoye: 'Mira tu correo.',
     lienEnvoyeAide: 'Te enviamos un enlace a {email}. Ábrelo para entrar y elige una nueva contraseña en «Mi cuenta».',
-    oublieLien: '¿Contraseña olvidada?', creerLien: 'Crear una cuenta', retourConnexion: 'Volver al inicio de sesión',
+    oublieLien: '¿Contraseña olvidada?', creerLien: 'Crear una cuenta', retourConnexion: 'Volver al inicio de sesión', dejaUnCompte: 'Ya tengo una cuenta · Iniciar sesión',
     identifiantsFaux: 'Correo o contraseña incorrectos.',
     dejaInscrit: 'Ya existe una cuenta con este correo. Inicia sesión.',
     motDePasseCourt: 'La contraseña debe tener al menos 8 caracteres.',

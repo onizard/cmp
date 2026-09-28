@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
+import { dejaVenu } from '../lib/account.js';
 
 // Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
-// faire renvoyer un lien quand le mot de passe est perdu.
+// faire renvoyer un lien quand le mot de passe est perdu. Un appareil qui n'a
+// jamais servi ouvre sur la création : qui a déjà un compte est en général
+// déjà connecté.
 export default function Auth({ account }) {
   const t = useT();
-  const [mode, setMode] = useState('connexion');
+  const [mode, setMode] = useState(() => (dejaVenu() ? 'connexion' : 'creation'));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -27,7 +30,9 @@ export default function Auth({ account }) {
     if (oubli) {
       if (await account.sendMagicLink(email)) setSent(true);
     } else if (creation) {
-      await account.signUp(email, password);
+      // Compte existant et mauvais mot de passe : on bascule sur la connexion,
+      // l'e-mail déjà rempli.
+      if ((await account.signUp(email, password)) === 'dejaInscrit') setMode('connexion');
     } else {
       await account.signIn(email, password);
     }
@@ -123,7 +128,7 @@ export default function Auth({ account }) {
             </>
           ) : (
             <button type="button" onClick={() => go('connexion')}>
-              {t('auth.retourConnexion')}
+              {creation ? t('auth.dejaUnCompte') : t('auth.retourConnexion')}
             </button>
           )}
         </p>

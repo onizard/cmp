@@ -11,7 +11,7 @@ export default {
     seConnecter: 'התחברות', creerMonCompte: 'יצירת החשבון שלי', recevoirLien: 'שליחת הקישור',
     lienEnvoye: 'בדוק את תיבת הדואר.',
     lienEnvoyeAide: 'שלחנו קישור אל {email}. פתח אותו כדי להיכנס, ואז בחר סיסמה חדשה תחת ״החשבון שלי״.',
-    oublieLien: 'שכחת סיסמה?', creerLien: 'יצירת חשבון', retourConnexion: 'חזרה להתחברות',
+    oublieLien: 'שכחת סיסמה?', creerLien: 'יצירת חשבון', retourConnexion: 'חזרה להתחברות', dejaUnCompte: 'כבר יש לי חשבון · התחברות',
     identifiantsFaux: 'דוא״ל או סיסמה שגויים.',
     dejaInscrit: 'כבר קיים חשבון עם כתובת זו. התחבר במקום זאת.',
     motDePasseCourt: 'הסיסמה חייבת להכיל 8 תווים לפחות.',

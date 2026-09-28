@@ -11,7 +11,7 @@ export default {
     seConnecter: '登录', creerMonCompte: '创建我的账户', recevoirLien: '发送链接',
     lienEnvoye: '请查看邮箱。',
     lienEnvoyeAide: '我们已把链接发到 {email}。打开它进入，然后在「我的账户」里设置新密码。',
-    oublieLien: '忘记密码？', creerLien: '创建账户', retourConnexion: '返回登录',
+    oublieLien: '忘记密码？', creerLien: '创建账户', retourConnexion: '返回登录', dejaUnCompte: '我已有账户 · 登录',
     identifiantsFaux: '邮箱或密码不正确。',
     dejaInscrit: '该邮箱已有账户，请直接登录。',
     motDePasseCourt: '密码至少需要 8 个字符。',

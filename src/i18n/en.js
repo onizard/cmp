@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Sign in', creerMonCompte: 'Create my account', recevoirLien: 'Send the link',
     lienEnvoye: 'Check your inbox.',
     lienEnvoyeAide: 'We sent a link to {email}. Open it to get in, then choose a new password under “Account”.',
-    oublieLien: 'Forgotten password?', creerLien: 'Create an account', retourConnexion: 'Back to sign in',
+    oublieLien: 'Forgotten password?', creerLien: 'Create an account', retourConnexion: 'Back to sign in', dejaUnCompte: 'I already have an account · Sign in',
     identifiantsFaux: 'Wrong email or password.',
     dejaInscrit: 'An account already exists with this email. Sign in instead.',
     motDePasseCourt: 'The password must be at least 8 characters.',

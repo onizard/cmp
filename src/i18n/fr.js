@@ -41,7 +41,7 @@ export default {
       'On t’a envoyé un lien à {email}. Ouvre-le pour entrer, puis choisis un nouveau mot de passe dans « Mon compte ».',
     oublieLien: 'Mot de passe oublié ?',
     creerLien: 'Créer un compte',
-    retourConnexion: 'Revenir à la connexion',
+    retourConnexion: 'Revenir à la connexion', dejaUnCompte: 'J’ai déjà un compte · Me connecter',
     identifiantsFaux: 'E-mail ou mot de passe incorrect.',
     dejaInscrit: 'Un compte existe déjà avec cet e-mail. Connecte-toi.',
     motDePasseCourt: 'Le mot de passe doit faire au moins 8 caractères.',

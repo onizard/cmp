@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Entrar', creerMonCompte: 'Criar a minha conta', recevoirLien: 'Receber o link',
     lienEnvoye: 'Vê o teu e-mail.',
     lienEnvoyeAide: 'Enviámos um link para {email}. Abre-o para entrar e escolhe uma nova palavra-passe em «Conta».',
-    oublieLien: 'Palavra-passe esquecida?', creerLien: 'Criar uma conta', retourConnexion: 'Voltar ao início de sessão',
+    oublieLien: 'Palavra-passe esquecida?', creerLien: 'Criar uma conta', retourConnexion: 'Voltar ao início de sessão', dejaUnCompte: 'Já tenho uma conta · Iniciar sessão',
     identifiantsFaux: 'E-mail ou palavra-passe incorretos.',
     dejaInscrit: 'Já existe uma conta com este e-mail. Entra antes.',
     motDePasseCourt: 'A palavra-passe deve ter pelo menos 8 caracteres.',

@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Anmelden', creerMonCompte: 'Mein Konto erstellen', recevoirLien: 'Link senden',
     lienEnvoye: 'Schau in dein Postfach.',
     lienEnvoyeAide: 'Wir haben einen Link an {email} geschickt. Öffne ihn und wähle dann unter „Konto“ ein neues Passwort.',
-    oublieLien: 'Passwort vergessen?', creerLien: 'Konto erstellen', retourConnexion: 'Zurück zur Anmeldung',
+    oublieLien: 'Passwort vergessen?', creerLien: 'Konto erstellen', retourConnexion: 'Zurück zur Anmeldung', dejaUnCompte: 'Ich habe schon ein Konto · Anmelden',
     identifiantsFaux: 'E-Mail oder Passwort falsch.',
     dejaInscrit: 'Mit dieser E-Mail gibt es bereits ein Konto. Melde dich an.',
     motDePasseCourt: 'Das Passwort muss mindestens 8 Zeichen haben.',

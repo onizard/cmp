@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Accedi', creerMonCompte: 'Crea il mio account', recevoirLien: 'Ricevi il link',
     lienEnvoye: 'Guarda la tua posta.',
     lienEnvoyeAide: 'Abbiamo inviato un link a {email}. Aprilo per entrare, poi scegli una nuova password in «Account».',
-    oublieLien: 'Password dimenticata?', creerLien: 'Crea un account', retourConnexion: 'Torna all’accesso',
+    oublieLien: 'Password dimenticata?', creerLien: 'Crea un account', retourConnexion: 'Torna all’accesso', dejaUnCompte: 'Ho già un account · Accedi',
     identifiantsFaux: 'Email o password errate.',
     dejaInscrit: 'Esiste già un account con questa email. Accedi.',
     motDePasseCourt: 'La password deve avere almeno 8 caratteri.',

@@ -11,7 +11,7 @@ export default {
     seConnecter: 'ورود', creerMonCompte: 'ساختن حساب من', recevoirLien: 'فرستادن پیوند',
     lienEnvoye: 'ایمیلت را ببین.',
     lienEnvoyeAide: 'پیوندی به {email} فرستادیم. بازش کن تا وارد شوی، سپس در «حساب من» رمز تازه‌ای انتخاب کن.',
-    oublieLien: 'رمز عبور را فراموش کرده‌ای؟', creerLien: 'ساختن حساب', retourConnexion: 'بازگشت به ورود',
+    oublieLien: 'رمز عبور را فراموش کرده‌ای؟', creerLien: 'ساختن حساب', retourConnexion: 'بازگشت به ورود', dejaUnCompte: 'حساب دارم · ورود',
     identifiantsFaux: 'ایمیل یا رمز عبور نادرست است.',
     dejaInscrit: 'با این ایمیل حسابی وجود دارد. وارد شو.',
     motDePasseCourt: 'رمز عبور باید دست‌کم ۸ نویسه باشد.',

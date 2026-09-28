@@ -11,7 +11,7 @@ export default {
     seConnecter: 'Войти', creerMonCompte: 'Создать аккаунт', recevoirLien: 'Получить ссылку',
     lienEnvoye: 'Проверьте почту.',
     lienEnvoyeAide: 'Мы отправили ссылку на {email}. Откройте её, чтобы войти, затем выберите новый пароль в разделе «Аккаунт».',
-    oublieLien: 'Забыли пароль?', creerLien: 'Создать аккаунт', retourConnexion: 'Вернуться ко входу',
+    oublieLien: 'Забыли пароль?', creerLien: 'Создать аккаунт', retourConnexion: 'Вернуться ко входу', dejaUnCompte: 'У меня уже есть аккаунт · Войти',
     identifiantsFaux: 'Неверная почта или пароль.',
     dejaInscrit: 'Аккаунт с этой почтой уже существует. Войдите.',
     motDePasseCourt: 'Пароль должен быть не короче 8 символов.',

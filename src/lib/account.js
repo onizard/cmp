@@ -11,6 +11,25 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const LAST_HH = 'cmp.household';
+
+// Cet appareil a-t-il déjà servi à se connecter ? Sinon, le premier écran
+// propose de créer un compte plutôt que de se connecter. La déconnexion garde
+// la marque ; seule la suppression du compte l'efface (clés « cmp… »).
+const DEJA_VENU = 'cmp.dejaVenu';
+export const dejaVenu = () => {
+  try {
+    return localStorage.getItem(DEJA_VENU) === '1';
+  } catch {
+    return false;
+  }
+};
+const marquerVenu = () => {
+  try {
+    localStorage.setItem(DEJA_VENU, '1');
+  } catch {
+    /* ignore */
+  }
+};
 const readLastHousehold = () => {
   try {
     return localStorage.getItem(LAST_HH);
@@ -149,7 +168,10 @@ export function useAccount() {
   }, [session]);
 
   useEffect(() => {
-    if (session) loadHousehold();
+    if (session) {
+      marquerVenu();
+      loadHousehold();
+    }
   }, [session, loadHousehold]);
 
   // Combien sont-ils dans ce foyer ? La politique de sécurité laisse compter
@@ -199,12 +221,20 @@ export function useAccount() {
       password,
     });
     if (err) {
-      setError(
-        /already registered/i.test(err.message)
-          ? t('auth.dejaInscrit')
-          : err.message,
-      );
-      return false;
+      if (!/already registered/i.test(err.message)) {
+        setError(err.message);
+        return false;
+      }
+      // Le compte existe déjà : c'est souvent quelqu'un qui revient sur un
+      // appareil neuf (ou l'app de l'écran d'accueil, qui ne partage rien avec
+      // Safari). Avec le bon mot de passe, on le fait entrer directement.
+      const { error: err2 } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+      if (!err2) return true;
+      setError(t('auth.dejaInscrit'));
+      return 'dejaInscrit';
     }
     // Si le serveur exige encore une confirmation, aucune session n'est ouverte.
     if (!data.session) {

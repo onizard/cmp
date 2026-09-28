@@ -11,7 +11,7 @@ export default {
     seConnecter: 'تسجيل الدخول', creerMonCompte: 'إنشاء حسابي', recevoirLien: 'إرسال الرابط',
     lienEnvoye: 'تحقق من بريدك.',
     lienEnvoyeAide: 'أرسلنا رابطًا إلى {email}. افتحه للدخول، ثم اختر كلمة سر جديدة في «حسابي».',
-    oublieLien: 'نسيت كلمة السر؟', creerLien: 'إنشاء حساب', retourConnexion: 'العودة إلى تسجيل الدخول',
+    oublieLien: 'نسيت كلمة السر؟', creerLien: 'إنشاء حساب', retourConnexion: 'العودة إلى تسجيل الدخول', dejaUnCompte: 'لدي حساب بالفعل · تسجيل الدخول',
     identifiantsFaux: 'البريد أو كلمة السر غير صحيحة.',
     dejaInscrit: 'يوجد حساب بهذا البريد بالفعل. سجّل الدخول.',
     motDePasseCourt: 'يجب ألا تقل كلمة السر عن 8 أحرف.',
