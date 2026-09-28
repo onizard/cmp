@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} סימן/ה',
+    aujourdhui: 'היום ב-{h}',
+    hier: 'אתמול ב-{h}',
+    le: 'ב-{d} ב-{h}',
+    encore: { un: 'אחרי זה עוד חדשה אחת', autre: 'אחרי זה עוד {n} חדשות' },
+    ok: 'אישור',
+  },
   honorer: {
     titre: { un: '🎟️ שובר מ־{qui}', autre: '🎟️ {n} שוברים מ־{qui}' },
     texte: 'תורך. האישור אצל {qui} כשזה יבוצע.',

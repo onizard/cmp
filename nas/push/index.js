@@ -1,7 +1,8 @@
 // Service de notifications push pour « Charge mentale partagée ».
 // Écoute les changements de tâches (via LISTEN/NOTIFY Postgres) et envoie
 // une notification à l'autre personne du foyer. Rappelle aussi matin et soir
-// la tâche qui attend depuis le plus longtemps.
+// la tâche qui attend depuis le plus longtemps, et chaque matin toutes les
+// échéances en cours.
 
 const { Client } = require('pg');
 const webpush = require('web-push');
@@ -38,7 +39,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.11';
+const VERSION = 'v4.12';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -220,6 +221,63 @@ async function dueReminders() {
   }
 }
 
+// --- Récap du matin : toutes les échéances d'un coup ---
+//
+// Les rappels ci-dessus ne parlent d'une échéance qu'à l'approche du jour J :
+// une tâche importante à une semaine restait muette, cachée derrière la plus
+// pressante. Chaque matin, une seule notification les liste toutes, de la
+// plus proche à la plus lointaine. Même étiquette d'un jour à l'autre : le
+// récap du jour remplace celui de la veille au lieu de s'empiler.
+const RECAP_MAX = 6;
+
+function quandCourt(lang, jours) {
+  if (jours < 0) return tr(lang, 'recapRetard');
+  if (jours === 0) return tr(lang, 'recapAujourdhui');
+  if (jours === 1) return tr(lang, 'recapDemain');
+  return tr(lang, 'recapDans', { n: jours });
+}
+
+function recapEcheances(lang, taches) {
+  const lignes = taches
+    .slice(0, RECAP_MAX)
+    .map((t) => `• ${t.text} — ${quandCourt(lang, t.jours)}`);
+  if (taches.length > RECAP_MAX) {
+    const reste = taches.length - RECAP_MAX;
+    lignes.push(reste === 1 ? tr(lang, 'recapAutre1') : tr(lang, 'recapAutres', { n: reste }));
+  }
+  return {
+    title:
+      taches.length === 1
+        ? tr(lang, 'recapTitre1')
+        : tr(lang, 'recapTitre', { n: taches.length }),
+    body: lignes.join('\n'),
+    url: APP_URL,
+    tag: 'cmp-echeances',
+  };
+}
+
+async function dueRecap() {
+  // Jours comptés en dates du calendrier local : « demain » veut dire demain,
+  // même pour une échéance à 8 h qu'on lit la veille à 8 h 05.
+  const { rows } = await client.query(
+    `select household_id, text,
+            (due_at at time zone $1)::date - (now() at time zone $1)::date as jours
+       from tasks
+      where due_at is not null and not deleted and not done
+      order by household_id, due_at`,
+    [TZ],
+  );
+  const parFoyer = new Map();
+  for (const r of rows) {
+    if (!parFoyer.has(r.household_id)) parFoyer.set(r.household_id, []);
+    parFoyer.get(r.household_id).push({ text: r.text, jours: Number(r.jours) });
+  }
+  for (const [foyer, taches] of parFoyer) {
+    await sendToHousehold(foyer, null, (lang) => recapEcheances(lang, taches), false);
+  }
+  return parFoyer.size;
+}
+
 // --- Bons utilisés : l'autre est prévenu, puis relancé jusqu'à validation ---
 //
 // Utiliser un bon engage l'autre personne du foyer. Elle est prévenue tout de
@@ -357,6 +415,16 @@ setInterval(async () => {
     log(`rappel du ${moment} envoyé`);
   } catch (e) {
     log(`rappel du ${moment} : échec`, e.message);
+  }
+  // Le récap des échéances part à tout le monde, comme les rappels
+  // d'échéance : ne pas en louper une ne dépend pas du rappel matin et soir.
+  if (moment === 'matin') {
+    try {
+      const n = await dueRecap();
+      log(`récap des échéances envoyé à ${n} foyer(s)`);
+    } catch (e) {
+      log('récap des échéances : échec', e.message);
+    }
   }
   // Le rappel « invite ta moitié » part le matin seulement, et s'espace
   // tout seul d'une semaine grâce à invite_dernier.

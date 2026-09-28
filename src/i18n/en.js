@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} ticked off',
+    aujourdhui: 'Today at {h}',
+    hier: 'Yesterday at {h}',
+    le: 'On {d} at {h}',
+    encore: { un: '1 more piece of news after this one', autre: '{n} more pieces of news after this one' },
+    ok: 'OK',
+  },
   honorer: {
     titre: { un: '🎟️ {qui} is using a voucher', autre: '🎟️ {qui} is using {n} vouchers' },
     texte: 'Your move. {qui} will confirm once it’s done.',

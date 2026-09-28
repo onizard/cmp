@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} ha marcado',
+    aujourdhui: 'Hoy a las {h}',
+    hier: 'Ayer a las {h}',
+    le: 'El {d} a las {h}',
+    encore: { un: 'Queda 1 novedad más', autre: 'Quedan {n} novedades más' },
+    ok: 'OK',
+  },
   honorer: {
     titre: { un: '🎟️ Vale de {qui}', autre: '🎟️ {n} vales de {qui}' },
     texte: 'Te toca. {qui} lo confirmará cuando esté hecho.',

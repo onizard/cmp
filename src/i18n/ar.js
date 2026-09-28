@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} أنجز',
+    aujourdhui: 'اليوم في {h}',
+    hier: 'أمس في {h}',
+    le: 'في {d} عند {h}',
+    encore: { un: 'بعدها خبر واحد آخر', autre: 'بعدها أخبار أخرى: {n}' },
+    ok: 'حسنًا',
+  },
   honorer: {
     titre: { un: '🎟️ قسيمة من {qui}', autre: '🎟️ {n} قسائم من {qui}' },
     texte: 'دورك الآن. التأكيد عند {qui} بعد الإنجاز.',

@@ -12671,6 +12671,14 @@ var require_i18n = __commonJS({
         "dansMin": "Dans {n} minutes.",
         "dansH": "Dans {n} h.",
         "dansJ": "Dans {n} jour(s).",
+        "recapTitre1": "\u23F1 1 \xE9ch\xE9ance en cours",
+        "recapTitre": "\u23F1 {n} \xE9ch\xE9ances en cours",
+        "recapRetard": "en retard",
+        "recapAujourdhui": "aujourd\u2019hui",
+        "recapDemain": "demain",
+        "recapDans": "dans {n} jours",
+        "recapAutre1": "+ 1 autre",
+        "recapAutres": "+ {n} autres",
         "binomeTitre": "Toujours seul\xB7e ici",
         "binomeCorps": "Partage ton foyer : \xE0 deux, l\u2019application prend tout son sens. Mon compte \u2192 Partager."
       },
@@ -12697,6 +12705,14 @@ var require_i18n = __commonJS({
         "dansMin": "In {n} minutes.",
         "dansH": "In {n} h.",
         "dansJ": "In {n} day(s).",
+        "recapTitre1": "\u23F1 1 deadline coming up",
+        "recapTitre": "\u23F1 {n} deadlines coming up",
+        "recapRetard": "overdue",
+        "recapAujourdhui": "today",
+        "recapDemain": "tomorrow",
+        "recapDans": "in {n} days",
+        "recapAutre1": "+ 1 more",
+        "recapAutres": "+ {n} more",
         "binomeTitre": "Still on your own",
         "binomeCorps": "Share your household: with two, the app comes into its own. Account \u2192 Share."
       },
@@ -12723,6 +12739,14 @@ var require_i18n = __commonJS({
         "dansMin": "En {n} minutos.",
         "dansH": "En {n} h.",
         "dansJ": "En {n} d\xEDa(s).",
+        "recapTitre1": "\u23F1 1 fecha l\xEDmite pendiente",
+        "recapTitre": "\u23F1 {n} fechas l\xEDmite pendientes",
+        "recapRetard": "con retraso",
+        "recapAujourdhui": "hoy",
+        "recapDemain": "ma\xF1ana",
+        "recapDans": "en {n} d\xEDas",
+        "recapAutre1": "+ 1 m\xE1s",
+        "recapAutres": "+ {n} m\xE1s",
         "binomeTitre": "Todav\xEDa en solitario",
         "binomeCorps": "Comparte tu hogar: entre dos, la aplicaci\xF3n cobra sentido. Mi cuenta \u2192 Compartir."
       },
@@ -12749,6 +12773,14 @@ var require_i18n = __commonJS({
         "dansMin": "Dentro de {n} minutos.",
         "dansH": "Dentro de {n} h.",
         "dansJ": "Dentro de {n} dia(s).",
+        "recapTitre1": "\u23F1 1 prazo em curso",
+        "recapTitre": "\u23F1 {n} prazos em curso",
+        "recapRetard": "em atraso",
+        "recapAujourdhui": "hoje",
+        "recapDemain": "amanh\xE3",
+        "recapDans": "dentro de {n} dias",
+        "recapAutre1": "+ 1 outro",
+        "recapAutres": "+ {n} outros",
         "binomeTitre": "Ainda sozinho",
         "binomeCorps": "Partilha a tua casa: a dois, a aplica\xE7\xE3o ganha sentido. Conta \u2192 Partilhar."
       },
@@ -12775,6 +12807,14 @@ var require_i18n = __commonJS({
         "dansMin": "In {n} Minuten.",
         "dansH": "In {n} Std.",
         "dansJ": "In {n} Tag(en).",
+        "recapTitre1": "\u23F1 1 offene Frist",
+        "recapTitre": "\u23F1 {n} offene Fristen",
+        "recapRetard": "\xFCberf\xE4llig",
+        "recapAujourdhui": "heute",
+        "recapDemain": "morgen",
+        "recapDans": "in {n} Tagen",
+        "recapAutre1": "+ 1 weitere",
+        "recapAutres": "+ {n} weitere",
         "binomeTitre": "Noch allein",
         "binomeCorps": "Teile deinen Haushalt: zu zweit entfaltet die App ihren Sinn. Konto \u2192 Teilen."
       },
@@ -12801,6 +12841,14 @@ var require_i18n = __commonJS({
         "dansMin": "Tra {n} minuti.",
         "dansH": "Tra {n} h.",
         "dansJ": "Tra {n} giorno/i.",
+        "recapTitre1": "\u23F1 1 scadenza in corso",
+        "recapTitre": "\u23F1 {n} scadenze in corso",
+        "recapRetard": "in ritardo",
+        "recapAujourdhui": "oggi",
+        "recapDemain": "domani",
+        "recapDans": "tra {n} giorni",
+        "recapAutre1": "+ 1 altra",
+        "recapAutres": "+ altre {n}",
         "binomeTitre": "Ancora da solo",
         "binomeCorps": "Condividi la tua casa: in due, l\u2019app prende senso. Account \u2192 Condividi."
       },
@@ -12827,6 +12875,14 @@ var require_i18n = __commonJS({
         "dansMin": "\u0427\u0435\u0440\u0435\u0437 {n} \u043C\u0438\u043D\u0443\u0442.",
         "dansH": "\u0427\u0435\u0440\u0435\u0437 {n} \u0447.",
         "dansJ": "\u0427\u0435\u0440\u0435\u0437 {n} \u0434\u043D.",
+        "recapTitre1": "\u23F1 1 \u0441\u0440\u043E\u043A \u0432\u043F\u0435\u0440\u0435\u0434\u0438",
+        "recapTitre": "\u23F1 \u0421\u0440\u043E\u043A\u043E\u0432 \u0432\u043F\u0435\u0440\u0435\u0434\u0438: {n}",
+        "recapRetard": "\u043F\u0440\u043E\u0441\u0440\u043E\u0447\u0435\u043D\u043E",
+        "recapAujourdhui": "\u0441\u0435\u0433\u043E\u0434\u043D\u044F",
+        "recapDemain": "\u0437\u0430\u0432\u0442\u0440\u0430",
+        "recapDans": "\u0447\u0435\u0440\u0435\u0437 {n} \u0434\u043D.",
+        "recapAutre1": "+ \u0435\u0449\u0451 1",
+        "recapAutres": "+ \u0435\u0449\u0451 {n}",
         "binomeTitre": "\u0412\u0441\u0451 \u0435\u0449\u0451 \u043E\u0434\u043D\u0438",
         "binomeCorps": "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u0435\u0441\u044C \u0434\u043E\u043C\u043E\u043C: \u0432\u0434\u0432\u043E\u0451\u043C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0435\u0442\u0430\u0435\u0442 \u0441\u043C\u044B\u0441\u043B. \u0410\u043A\u043A\u0430\u0443\u043D\u0442 \u2192 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F."
       },
@@ -12853,6 +12909,14 @@ var require_i18n = __commonJS({
         "dansMin": "\u8FD8\u6709 {n} \u5206\u949F\u3002",
         "dansH": "\u8FD8\u6709 {n} \u5C0F\u65F6\u3002",
         "dansJ": "\u8FD8\u6709 {n} \u5929\u3002",
+        "recapTitre1": "\u23F1 1 \u9879\u622A\u6B62\u4EFB\u52A1",
+        "recapTitre": "\u23F1 {n} \u9879\u622A\u6B62\u4EFB\u52A1",
+        "recapRetard": "\u5DF2\u903E\u671F",
+        "recapAujourdhui": "\u4ECA\u5929",
+        "recapDemain": "\u660E\u5929",
+        "recapDans": "{n} \u5929\u540E",
+        "recapAutre1": "+ \u53E6\u5916 1 \u9879",
+        "recapAutres": "+ \u53E6\u5916 {n} \u9879",
         "binomeTitre": "\u8FD8\u662F\u4E00\u4E2A\u4EBA",
         "binomeCorps": "\u628A\u5BB6\u5EAD\u5206\u4EAB\u51FA\u53BB\uFF1A\u4E24\u4E2A\u4EBA\u7528\uFF0C\u8FD9\u4E2A\u5E94\u7528\u624D\u6709\u610F\u4E49\u3002\u6211\u7684\u8D26\u6237 \u2192 \u5206\u4EAB\u3002"
       },
@@ -12879,6 +12943,14 @@ var require_i18n = __commonJS({
         "dansMin": "\u062E\u0644\u0627\u0644 {n} \u062F\u0642\u064A\u0642\u0629.",
         "dansH": "\u062E\u0644\u0627\u0644 {n} \u0633\u0627\u0639\u0629.",
         "dansJ": "\u062E\u0644\u0627\u0644 {n} \u064A\u0648\u0645.",
+        "recapTitre1": "\u23F1 \u0645\u0648\u0639\u062F \u0646\u0647\u0627\u0626\u064A \u0648\u0627\u062D\u062F \u0642\u0627\u062F\u0645",
+        "recapTitre": "\u23F1 \u0645\u0648\u0627\u0639\u064A\u062F \u0646\u0647\u0627\u0626\u064A\u0629 \u0642\u0627\u062F\u0645\u0629: {n}",
+        "recapRetard": "\u0645\u062A\u0623\u062E\u0631",
+        "recapAujourdhui": "\u0627\u0644\u064A\u0648\u0645",
+        "recapDemain": "\u063A\u062F\u064B\u0627",
+        "recapDans": "\u0627\u0644\u0645\u062A\u0628\u0642\u064A: {n} \u064A\u0648\u0645",
+        "recapAutre1": "+ 1 \u0623\u062E\u0631\u0649",
+        "recapAutres": "+ {n} \u0623\u062E\u0631\u0649",
         "binomeTitre": "\u0645\u0627 \u0632\u0644\u062A \u0648\u062D\u062F\u0643",
         "binomeCorps": "\u0634\u0627\u0631\u0643 \u0628\u064A\u062A\u0643: \u0645\u0639 \u0627\u062B\u0646\u064A\u0646 \u064A\u062C\u062F \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0639\u0646\u0627\u0647. \u062D\u0633\u0627\u0628\u064A \u2190 \u0645\u0634\u0627\u0631\u0643\u0629."
       },
@@ -12905,6 +12977,14 @@ var require_i18n = __commonJS({
         "dansMin": "\u05D1\u05E2\u05D5\u05D3 {n} \u05D3\u05E7\u05D5\u05EA.",
         "dansH": "\u05D1\u05E2\u05D5\u05D3 {n} \u05E9\u05E2\u05D5\u05EA.",
         "dansJ": "\u05D1\u05E2\u05D5\u05D3 {n} \u05D9\u05DE\u05D9\u05DD.",
+        "recapTitre1": "\u23F1 \u05EA\u05D0\u05E8\u05D9\u05DA \u05D9\u05E2\u05D3 \u05D0\u05D7\u05D3 \u05E4\u05EA\u05D5\u05D7",
+        "recapTitre": "\u23F1 {n} \u05EA\u05D0\u05E8\u05D9\u05DB\u05D9 \u05D9\u05E2\u05D3 \u05E4\u05EA\u05D5\u05D7\u05D9\u05DD",
+        "recapRetard": "\u05D1\u05D0\u05D9\u05D7\u05D5\u05E8",
+        "recapAujourdhui": "\u05D4\u05D9\u05D5\u05DD",
+        "recapDemain": "\u05DE\u05D7\u05E8",
+        "recapDans": "\u05D1\u05E2\u05D5\u05D3 {n} \u05D9\u05DE\u05D9\u05DD",
+        "recapAutre1": "+ \u05E2\u05D5\u05D3 1",
+        "recapAutres": "+ \u05E2\u05D5\u05D3 {n}",
         "binomeTitre": "\u05E2\u05D3\u05D9\u05D9\u05DF \u05DC\u05D1\u05D3",
         "binomeCorps": "\u05E9\u05EA\u05E3 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA \u05E9\u05DC\u05DA: \u05D1\u05E9\u05E0\u05D9\u05D9\u05DD \u05D4\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05DE\u05E7\u05D1\u05DC\u05EA \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA. \u05D4\u05D7\u05E9\u05D1\u05D5\u05DF \u05E9\u05DC\u05D9 \u2190 \u05E9\u05D9\u05EA\u05D5\u05E3."
       },
@@ -12931,6 +13011,14 @@ var require_i18n = __commonJS({
         "dansMin": "{n} \u062F\u0642\u06CC\u0642\u0647\u0654 \u062F\u06CC\u06AF\u0631.",
         "dansH": "{n} \u0633\u0627\u0639\u062A \u062F\u06CC\u06AF\u0631.",
         "dansJ": "{n} \u0631\u0648\u0632 \u062F\u06CC\u06AF\u0631.",
+        "recapTitre1": "\u23F1 1 \u0645\u0647\u0644\u062A \u062F\u0631 \u067E\u06CC\u0634",
+        "recapTitre": "\u23F1 {n} \u0645\u0647\u0644\u062A \u062F\u0631 \u067E\u06CC\u0634",
+        "recapRetard": "\u062F\u06CC\u0631\u06A9\u0631\u062F",
+        "recapAujourdhui": "\u0627\u0645\u0631\u0648\u0632",
+        "recapDemain": "\u0641\u0631\u062F\u0627",
+        "recapDans": "{n} \u0631\u0648\u0632 \u062F\u06CC\u06AF\u0631",
+        "recapAutre1": "+ 1 \u0645\u0648\u0631\u062F \u062F\u06CC\u06AF\u0631",
+        "recapAutres": "+ {n} \u0645\u0648\u0631\u062F \u062F\u06CC\u06AF\u0631",
         "binomeTitre": "\u0647\u0646\u0648\u0632 \u062A\u0646\u0647\u0627\u06CC\u06CC",
         "binomeCorps": "\u062E\u0627\u0646\u0647\u200C\u0627\u062A \u0631\u0627 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC \u06A9\u0646: \u0628\u0627 \u062F\u0648 \u0646\u0641\u0631\u060C \u0628\u0631\u0646\u0627\u0645\u0647 \u0645\u0639\u0646\u0627 \u067E\u06CC\u062F\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F. \u062D\u0633\u0627\u0628 \u0645\u0646 \u2190 \u0647\u0645\u200C\u0631\u0633\u0627\u0646\u06CC."
       }
@@ -13425,7 +13513,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.11";
+var VERSION = "v4.12";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -13574,6 +13662,45 @@ async function dueReminders() {
     log(`\xE9ch\xE9ance palier ${cible} \u2192`, r.text.slice(0, 40));
   }
 }
+var RECAP_MAX = 6;
+function quandCourt(lang, jours) {
+  if (jours < 0) return tr(lang, "recapRetard");
+  if (jours === 0) return tr(lang, "recapAujourdhui");
+  if (jours === 1) return tr(lang, "recapDemain");
+  return tr(lang, "recapDans", { n: jours });
+}
+function recapEcheances(lang, taches) {
+  const lignes = taches.slice(0, RECAP_MAX).map((t) => `\u2022 ${t.text} \u2014 ${quandCourt(lang, t.jours)}`);
+  if (taches.length > RECAP_MAX) {
+    const reste = taches.length - RECAP_MAX;
+    lignes.push(reste === 1 ? tr(lang, "recapAutre1") : tr(lang, "recapAutres", { n: reste }));
+  }
+  return {
+    title: taches.length === 1 ? tr(lang, "recapTitre1") : tr(lang, "recapTitre", { n: taches.length }),
+    body: lignes.join("\n"),
+    url: APP_URL,
+    tag: "cmp-echeances"
+  };
+}
+async function dueRecap() {
+  const { rows } = await client.query(
+    `select household_id, text,
+            (due_at at time zone $1)::date - (now() at time zone $1)::date as jours
+       from tasks
+      where due_at is not null and not deleted and not done
+      order by household_id, due_at`,
+    [TZ]
+  );
+  const parFoyer = /* @__PURE__ */ new Map();
+  for (const r of rows) {
+    if (!parFoyer.has(r.household_id)) parFoyer.set(r.household_id, []);
+    parFoyer.get(r.household_id).push({ text: r.text, jours: Number(r.jours) });
+  }
+  for (const [foyer, taches] of parFoyer) {
+    await sendToHousehold(foyer, null, (lang) => recapEcheances(lang, taches), false);
+  }
+  return parFoyer.size;
+}
 var BON_RAPPEL_MIN = Number(process.env.BON_RAPPEL_MIN || 60);
 var BON_JOUR_DEBUT = Number(process.env.BON_JOUR_DEBUT || 8);
 var BON_JOUR_FIN = Number(process.env.BON_JOUR_FIN || 22);
@@ -13680,6 +13807,14 @@ setInterval(async () => {
     log(`rappel du ${moment} envoy\xE9`);
   } catch (e) {
     log(`rappel du ${moment} : \xE9chec`, e.message);
+  }
+  if (moment === "matin") {
+    try {
+      const n = await dueRecap();
+      log(`r\xE9cap des \xE9ch\xE9ances envoy\xE9 \xE0 ${n} foyer(s)`);
+    } catch (e) {
+      log("r\xE9cap des \xE9ch\xE9ances : \xE9chec", e.message);
+    }
   }
   if (moment === "matin") {
     try {

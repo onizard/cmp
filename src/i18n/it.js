@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} ha spuntato',
+    aujourdhui: 'Oggi alle {h}',
+    hier: 'Ieri alle {h}',
+    le: 'Il {d} alle {h}',
+    encore: { un: 'Ancora 1 novità dopo questa', autre: 'Ancora {n} novità dopo questa' },
+    ok: 'OK',
+  },
   honorer: {
     titre: { un: '🎟️ Buono di {qui}', autre: '🎟️ {n} buoni di {qui}' },
     texte: 'Tocca a te. {qui} confermerà quando sarà fatto.',

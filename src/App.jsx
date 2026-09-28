@@ -18,6 +18,7 @@ import BilanView from './components/BilanView.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
 import Combo from './components/Combo.jsx';
 import BonsAHonorer from './components/BonsAHonorer.jsx';
+import Nouvelles from './components/Nouvelles.jsx';
 import { syncPush } from './lib/push.js';
 
 function NotConfigured() {
@@ -159,6 +160,12 @@ function Home({ account, currentMonth }) {
       />
 
       {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
+
+      {/* Ce que l'autre a coché depuis la dernière fois, une tâche à la fois.
+          Pas pendant le chargement : la liste vide ne dirait rien. */}
+      {!store.loading && (
+        <Nouvelles tasks={store.tasks} names={rewards.names} userId={userId} />
+      )}
 
       {/* Quel que soit l'onglet ouvert : un bon utilisé par l'autre passe
           devant tout le reste. */}

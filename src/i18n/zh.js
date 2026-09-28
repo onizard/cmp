@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} 完成了',
+    aujourdhui: '今天 {h}',
+    hier: '昨天 {h}',
+    le: '{d} {h}',
+    encore: { un: '后面还有 1 条消息', autre: '后面还有 {n} 条消息' },
+    ok: '好的',
+  },
   honorer: {
     titre: { un: '🎟️ {qui} 使用了奖励券', autre: '🎟️ {qui} 使用了 {n} 张奖励券' },
     texte: '轮到你了。完成后由 {qui} 确认。',

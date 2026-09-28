@@ -340,6 +340,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} a coché',
+    aujourdhui: 'Aujourd’hui à {h}',
+    hier: 'Hier à {h}',
+    le: 'Le {d} à {h}',
+    encore: { un: 'Encore 1 nouvelle après celle-ci', autre: 'Encore {n} nouvelles après celle-ci' },
+    ok: 'OK',
+  },
   honorer: {
     titre: { un: '🎟️ {qui} utilise son bon', autre: '🎟️ {qui} utilise {n} bons' },
     texte: 'À toi de jouer. {qui} validera quand ce sera fait.',

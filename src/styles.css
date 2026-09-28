@@ -2195,6 +2195,161 @@ body,
   }
 }
 
+/* --- Nouvelles : ce que l'autre a coché --------------------------------- */
+
+/* Les couleurs de l'application ; la seule touche en plus, c'est la pastille
+   vert menthe de la coche — le vert dit « c'est fait » sans rien ajouter. */
+.nouvelle-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 54;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(23, 40, 76, 0.5);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: honorer-voile 0.25s ease both;
+}
+
+.nouvelle {
+  position: relative;
+  width: min(100%, 340px);
+  padding: 26px 22px 20px;
+  border-radius: 28px;
+  /* Le liseré dégradé de l'application, en haut : une bordure qui suit
+     l'arrondi de la carte. */
+  border: 0 solid transparent;
+  border-top-width: 7px;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    var(--grad) border-box;
+  box-shadow: 0 24px 60px -20px rgba(23, 40, 76, 0.6);
+  color: var(--ink);
+  text-align: center;
+  overflow: visible;
+  animation: nouvelle-entree 0.5s cubic-bezier(0.18, 0.9, 0.3, 1.25) both;
+}
+
+.nouvelle-coche {
+  display: inline-grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6fdcc0 0%, #2fb7a3 100%);
+  color: #fff;
+  box-shadow: 0 0 0 7px rgba(95, 211, 179, 0.2), 0 10px 22px -8px rgba(31, 150, 135, 0.7);
+  animation: nouvelle-coche 0.6s 0.15s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.nouvelle-qui {
+  margin: 16px 0 4px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: #197f71;
+}
+
+.nouvelle-tache {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.45rem;
+  line-height: 1.22;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+
+.nouvelle-quand {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.nouvelle-compte {
+  margin: 12px 0 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.nouvelle .nouvelle-ok {
+  margin-top: 20px;
+}
+
+/* Le texte passe devant les confettis : on lit toujours ce qui a été fait. */
+.nouvelle > :not(.confettis) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Les confettis partent de la coche, s'écartent, puis retombent en pâlissant.
+   Ils ne prennent jamais le clic. */
+.confettis {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.confettis i {
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  margin: -6px 0 0 -4px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confetti 1.6s var(--d) cubic-bezier(0.15, 0.7, 0.3, 1) both;
+}
+
+.confettis i.rond {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(0.3);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(var(--x), var(--y)) rotate(calc(var(--r) * 0.6)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--x) * 1.1), calc(var(--y) + 130px)) rotate(var(--r)) scale(0.9);
+  }
+}
+
+@keyframes nouvelle-entree {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(18px);
+  }
+}
+
+@keyframes nouvelle-coche {
+  from {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nouvelle,
+  .nouvelle-voile,
+  .nouvelle-coche {
+    animation: none;
+  }
+  .confettis {
+    display: none;
+  }
+}
+
 /* --- Bilan : ses propres chiffres --------------------------------------- */
 
 /* Les deux séries du graphique. Les pastels de l'app (#f0919c, #b486cc) sont

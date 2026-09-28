@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} отметил(а)',
+    aujourdhui: 'Сегодня в {h}',
+    hier: 'Вчера в {h}',
+    le: '{d} в {h}',
+    encore: { un: 'Дальше ещё 1 новость', autre: 'Дальше ещё новостей: {n}' },
+    ok: 'ОК',
+  },
   honorer: {
     titre: { un: '🎟️ Купон от {qui}', autre: '🎟️ Купоны от {qui}: {n}' },
     texte: 'Ваш ход. {qui} подтвердит, когда всё будет сделано.',

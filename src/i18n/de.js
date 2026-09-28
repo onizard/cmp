@@ -188,6 +188,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} hat abgehakt',
+    aujourdhui: 'Heute um {h}',
+    hier: 'Gestern um {h}',
+    le: 'Am {d} um {h}',
+    encore: { un: 'Danach noch 1 Neuigkeit', autre: 'Danach noch {n} Neuigkeiten' },
+    ok: 'OK',
+  },
   honorer: {
     titre: { un: '🎟️ Gutschein von {qui}', autre: '🎟️ {n} Gutscheine von {qui}' },
     texte: 'Du bist dran. {qui} bestätigt, wenn es erledigt ist.',

@@ -190,6 +190,14 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  nouvelles: {
+    titre: '{qui} انجام داد',
+    aujourdhui: 'امروز ساعت {h}',
+    hier: 'دیروز ساعت {h}',
+    le: '{d} ساعت {h}',
+    encore: { un: 'بعد از این، 1 خبر دیگر', autre: 'بعد از این، {n} خبر دیگر' },
+    ok: 'باشه',
+  },
   honorer: {
     titre: { un: '🎟️ کوپن {qui}', autre: '🎟️ {n} کوپن از {qui}' },
     texte: 'نوبت توست. {qui} پس از انجام تأیید می‌کند.',
