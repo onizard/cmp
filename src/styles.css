@@ -1888,6 +1888,17 @@ body,
     combo-brille 1.4s ease-out forwards;
 }
 
+/* Le mot, puis le demi-point juste dessous, plus petit. */
+.combo-bloc {
+  display: grid;
+  justify-items: center;
+  gap: 0.1em;
+}
+
+.combo-plus {
+  font-size: clamp(1.9rem, 10vw, 3.2rem);
+}
+
 @keyframes combo-pop {
   0% {
     opacity: 0;

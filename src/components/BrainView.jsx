@@ -18,6 +18,7 @@ import {
   POINT_ADD,
   POINT_OWN,
   POINT_OTHER,
+  COMBO_BONUS,
 } from '../lib/gamify.js';
 
 const RANG_BON = { enAttente: 0, neuf: 1, honore: 2 };
@@ -155,7 +156,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </div>
           <div className="rowline">
             <span>{t('cerveau.baremeCombo')}</span>
-            <b>×2, ×3, ×4…</b>
+            <b>+{formatPoints(COMBO_BONUS)} pt</b>
           </div>
           <p className="setnote">{t('cerveau.baremeComboNote')}</p>
           <p className="setnote">

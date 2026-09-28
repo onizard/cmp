@@ -1,9 +1,10 @@
 /**
  * Le combo du jour.
  *
- * La première tâche cochée dans la journée vaut son prix normal. La deuxième
- * vaut double, la troisième triple, et ainsi de suite : le rang de la tâche
- * dans la journée EST son multiplicateur.
+ * La première tâche cochée dans la journée vaut son prix normal ; à partir
+ * de la deuxième, chacune rapporte un demi-point de plus (voir gamify.js).
+ * Ici, on ne fait que ranger les coches : le rang de chaque tâche dans sa
+ * journée.
  *
  * Le rang n'est pas rangé en base, il se recalcule à chaque lecture. C'est ce
  * qui le garde honnête : décocher la deuxième tâche d'une journée doit faire
@@ -35,8 +36,8 @@ const cochees = (tasks, userId) =>
     );
 
 /**
- * Multiplicateur de chaque tâche cochée par une personne : identifiant → rang
- * dans sa journée. Une tâche sans instant de coche — cochée avant que la
+ * Rang de chaque tâche cochée par une personne dans sa journée :
+ * identifiant → rang. Une tâche sans instant de coche — cochée avant que la
  * colonne n'existe — n'entre pas dans le compte et vaut son prix normal.
  */
 export const comboParTache = (tasks, userId) => {
@@ -53,7 +54,7 @@ export const comboParTache = (tasks, userId) => {
   return rangs;
 };
 
-/** Multiplicateur d'une tâche donnée (1 si elle n'en a pas). */
+/** Rang d'une tâche donnée dans sa journée (1 si elle n'en a pas). */
 export const comboDe = (tasks, userId, taskId) =>
   comboParTache(tasks, userId).get(taskId) || 1;
 

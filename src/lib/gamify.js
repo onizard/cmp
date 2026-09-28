@@ -4,19 +4,29 @@
 //   • cocher une tâche qu'on a ajoutée ..... 1 point
 //   • cocher une tâche ajoutée par l'autre . 1,5 point
 //
-// Puis le combo du jour : la deuxième tâche cochée dans la journée vaut
-// double, la troisième triple, et ainsi de suite. Seuls les points de coche
-// sont multipliés — ajouter une tâche vaut toujours un point, sans quoi il
-// suffirait d'en écrire beaucoup pour s'enrichir.
+// Puis le combo du jour : dès la deuxième tâche cochée dans la journée,
+// chaque coche rapporte un demi-point de plus. Un coup de pouce, pas une
+// course : un multiplicateur qui grimpe (×2, ×3, ×4…) mettait trop de
+// pression, et creusait vite l'écart entre les deux. Ajouter une tâche vaut
+// toujours un point, sans bonus, sans quoi il suffirait d'en écrire beaucoup
+// pour s'enrichir.
+//
+// Les combos d'avant ce changement gardent leur ancien calcul : les points
+// déjà gagnés — et parfois déjà dépensés — restent acquis.
 //
 // Les points se cumulent sans limite : on dépense quand on veut, ou on
 // épargne pour une récompense plus forte.
 
-import { comboParTache } from './combo.js';
+import { comboParTache, jourLocal } from './combo.js';
 
 export const POINT_ADD = 1;
 export const POINT_OWN = 1;
 export const POINT_OTHER = 1.5;
+
+/** Ce que rapporte en plus chaque tâche du combo. */
+export const COMBO_BONUS = 0.5;
+/** Premier jour du combo à un demi-point ; avant, le rang multipliait. */
+export const COMBO_ADDITIF_DEPUIS = '2026-09-28';
 
 /** Nombre de tâches au-delà duquel le cerveau du foyer est « plein ». */
 export const BRAIN_CAP = 15;
@@ -84,9 +94,14 @@ export const pointsBreakdown = (tasks, userId) => {
       if (sienne) own += 1;
       else other += 1;
       coches += base;
-      // Le combo multiplie : le rang n vaut n fois le prix. On compte à part
-      // ce qui dépasse le prix normal, pour pouvoir le montrer.
-      bonus += base * ((rangs.get(t.id) || 1) - 1);
+      // On compte à part ce que le combo ajoute, pour pouvoir le montrer.
+      const rang = rangs.get(t.id) || 1;
+      if (rang > 1) {
+        bonus +=
+          jourLocal(t.doneAt) >= COMBO_ADDITIF_DEPUIS
+            ? COMBO_BONUS
+            : base * (rang - 1);
+      }
     }
   }
   return {

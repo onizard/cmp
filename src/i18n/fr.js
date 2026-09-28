@@ -70,7 +70,7 @@ export default {
 
   taches: { dejaLa: 'Elle est déjà dans la liste.', modifInterdite: 'Seule la personne qui l’a ajoutée peut la modifier ou la supprimer.', faitesTiroir: 'Faites',
     aucuneFaite: 'Rien de fait pour l’instant.',
-    combo: 'Combo ×{n}',
+    combo: 'Combo !', comboPlus: '+{p} pt',
     decocheInterdite: 'Seule la personne qui l’a cochée peut la décocher.',
     ajouter: 'ajoute une tâche',
     boutonAjouter: 'Ajouter',
@@ -123,7 +123,7 @@ export default {
     baremeSienne: 'Cocher sa propre tâche',
     baremeAutre: 'Cocher la tâche de l’autre',
     baremeCombo: 'Combo du jour',
-    baremeComboNote: '2ᵉ tâche du jour : ×2, 3ᵉ : ×3…',
+    baremeComboNote: 'Dès la 2ᵉ tâche cochée dans la journée, chaque tâche rapporte un demi-point de plus.',
     baremeNote:
       'Les points se cumulent sans limite. Dépense-les quand tu veux, ou épargne pour une récompense plus forte.',
     pt: 'pt',

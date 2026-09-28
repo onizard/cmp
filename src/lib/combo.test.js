@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { comboParTache, comboDe, comboProchain, jourLocal } from './combo.js';
-import { pointsBreakdown, POINT_OWN, POINT_OTHER, POINT_ADD } from './gamify.js';
+import { pointsBreakdown, POINT_OWN, POINT_OTHER, POINT_ADD, COMBO_BONUS } from './gamify.js';
 
 const MOI = 'a';
 const AUTRE = 'b';
@@ -159,5 +159,33 @@ describe('le scenario du test : cocher trois, tout decocher, recocher', () => {
       fait('oubliee', jour, 9),
     ];
     expect(comboProchain(tasks, MOI, maintenant)).toBe(2);
+  });
+});
+
+describe('le combo à un demi-point, à partir du 28 septembre 2026', () => {
+  const jour = '2026-09-29';
+
+  it('un demi-point de plus par tâche dès la deuxième, sans escalade', () => {
+    const tasks = [fait('1', jour, 8), fait('2', jour, 9), fait('3', jour, 10), fait('4', jour, 11)];
+    const d = pointsBreakdown(tasks, MOI);
+    expect(COMBO_BONUS).toBe(0.5);
+    expect(d.bonus).toBe(1.5);
+    expect(d.total).toBe(4 * POINT_ADD + 4 * POINT_OWN + 1.5);
+  });
+
+  it('le même demi-point pour une tâche de l’autre', () => {
+    const tasks = [fait('1', jour, 8), fait('2', jour, 9, { createdBy: AUTRE })];
+    const d = pointsBreakdown(tasks, MOI);
+    expect(d.bonus).toBe(0.5);
+    expect(d.total).toBe(POINT_ADD + POINT_OWN + POINT_OTHER + 0.5);
+  });
+
+  it('les combos d’avant gardent leur calcul : les points acquis le restent', () => {
+    const tasks = [
+      fait('1', '2026-09-20', 8), fait('2', '2026-09-20', 9), fait('3', '2026-09-20', 10),
+      fait('4', jour, 8), fait('5', jour, 9), fait('6', jour, 10),
+    ];
+    // Avant : ×2 puis ×3, soit 1 + 2 points en plus. Après : 0,5 + 0,5.
+    expect(pointsBreakdown(tasks, MOI).bonus).toBe(3 + 1);
   });
 });
