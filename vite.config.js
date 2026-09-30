@@ -55,7 +55,7 @@ export default defineConfig({
         importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: `${base}index.html`,
-        navigateFallbackDenylist: [/^\/(rest|auth|realtime)\/v1/],
+        navigateFallbackDenylist: [/^\/(rest|auth|realtime)\/v1/, /^\/confidentialite/],
         runtimeCaching: [
           {
             // Lecture hors ligne : on garde la dernière réponse REST connue.
