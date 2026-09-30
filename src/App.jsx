@@ -141,6 +141,7 @@ function Home({ account, currentMonth }) {
             store={store}
             currentMonth={currentMonth}
             onCombo={annoncerCombo}
+            names={rewards.names}
           />
         ))}
       {tab === 'cerveau' && (

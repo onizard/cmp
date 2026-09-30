@@ -21,7 +21,7 @@ import AddTask from './AddTask.jsx';
  * seulement celles du mois. On l'ouvre quand on veut les revoir, et on peut
  * toujours y décocher ce qu'on a coché par erreur.
  */
-export default function TaskList({ store, currentMonth, onCombo }) {
+export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
   const moisSuivant = addMonths(currentMonth, 1);
@@ -104,6 +104,7 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                   currentMonth={currentMonth}
                   store={store}
                   onCombo={onCombo}
+                  names={names}
                 />
               ))}
             </ul>
@@ -161,6 +162,7 @@ export default function TaskList({ store, currentMonth, onCombo }) {
                               currentMonth={currentMonth}
                               store={store}
                               onCombo={onCombo}
+                  names={names}
                             />
                           ))}
                         </ul>

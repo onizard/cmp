@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'You’re on it · {min} min',
+    badgeAutre: '{qui} is on it · {min} min',
+    bouton: 'I’ll do it (1 h)',
+    annuler: 'Cancel my booking',
+    jusquaMoi: 'Booked for you until {h}. Your other half has been told.',
+    jusquaAutre: '{qui} is on it until {h}: the task is locked for you until then.',
+    bloquee: '{qui} is on it until {h}: you can’t tick it until then.',
+    aujourdhui: 'Already booked today: possible again tomorrow.',
+    uneAutre: 'You’re already on “{tache}”. One at a time.',
+  },
   nouvelles: {
     titre: '{qui} ticked off',
     aujourdhui: 'Today at {h}',

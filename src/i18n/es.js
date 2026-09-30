@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Te encargas tú · {min} min',
+    badgeAutre: '{qui} se encarga · {min} min',
+    bouton: 'Me encargo yo (1 h)',
+    annuler: 'Cancelar mi reserva',
+    jusquaMoi: 'Reservada para ti hasta las {h}. Tu pareja está avisada.',
+    jusquaAutre: '{qui} se encarga hasta las {h}: la tarea está bloqueada para ti hasta entonces.',
+    bloquee: '{qui} se encarga hasta las {h}: no puedes marcarla hasta entonces.',
+    aujourdhui: 'Ya reservada hoy: de nuevo posible mañana.',
+    uneAutre: 'Ya te encargas de «{tache}». Una cada vez.',
+  },
   nouvelles: {
     titre: '{qui} ha marcado',
     aujourdhui: 'Hoy a las {h}',

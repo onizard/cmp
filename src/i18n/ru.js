@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Вы этим занимаетесь · {min} мин',
+    badgeAutre: '{qui} этим занимается · {min} мин',
+    bouton: 'Я займусь (1 ч)',
+    annuler: 'Отменить бронь',
+    jusquaMoi: 'Забронировано за вами до {h}. Партнёр предупреждён.',
+    jusquaAutre: '{qui} этим занимается до {h}: до тех пор задача для вас заблокирована.',
+    bloquee: '{qui} этим занимается до {h}: до тех пор отметить нельзя.',
+    aujourdhui: 'Уже бронировали сегодня: снова можно завтра.',
+    uneAutre: 'Вы уже заняты задачей «{tache}». По одной за раз.',
+  },
   nouvelles: {
     titre: '{qui} отметил(а)',
     aujourdhui: 'Сегодня в {h}',

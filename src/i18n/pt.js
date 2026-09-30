@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Estás a tratar disso · {min} min',
+    badgeAutre: '{qui} está a tratar disso · {min} min',
+    bouton: 'Eu trato disto (1 h)',
+    annuler: 'Cancelar a minha reserva',
+    jusquaMoi: 'Reservada para ti até às {h}. A tua cara-metade foi avisada.',
+    jusquaAutre: '{qui} trata disto até às {h}: a tarefa está bloqueada para ti até lá.',
+    bloquee: '{qui} trata disto até às {h}: não a podes marcar até lá.',
+    aujourdhui: 'Já reservada hoje: possível de novo amanhã.',
+    uneAutre: 'Já estás a tratar de «{tache}». Uma de cada vez.',
+  },
   nouvelles: {
     titre: '{qui} marcou',
     aujourdhui: 'Hoje às {h}',

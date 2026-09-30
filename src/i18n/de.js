@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Du kümmerst dich · {min} Min.',
+    badgeAutre: '{qui} kümmert sich · {min} Min.',
+    bouton: 'Mach ich (1 Std.)',
+    annuler: 'Meine Reservierung aufheben',
+    jusquaMoi: 'Für dich reserviert bis {h}. Dein Gegenüber weiß Bescheid.',
+    jusquaAutre: '{qui} kümmert sich bis {h} darum: bis dahin ist die Aufgabe für dich gesperrt.',
+    bloquee: '{qui} kümmert sich bis {h} darum: bis dahin kannst du sie nicht abhaken.',
+    aujourdhui: 'Heute schon reserviert: morgen wieder möglich.',
+    uneAutre: 'Du kümmerst dich schon um „{tache}“. Eine nach der anderen.',
+  },
   nouvelles: {
     titre: '{qui} hat abgehakt',
     aujourdhui: 'Heute um {h}',

@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Ci pensi tu · {min} min',
+    badgeAutre: 'Ci pensa {qui} · {min} min',
+    bouton: 'Ci penso io (1 h)',
+    annuler: 'Annulla la mia prenotazione',
+    jusquaMoi: 'Prenotata per te fino alle {h}. L’altra metà è avvisata.',
+    jusquaAutre: 'Ci pensa {qui} fino alle {h}: fino ad allora l’attività è bloccata per te.',
+    bloquee: 'Ci pensa {qui} fino alle {h}: fino ad allora non puoi spuntarla.',
+    aujourdhui: 'Già prenotata oggi: di nuovo possibile domani.',
+    uneAutre: 'Stai già facendo «{tache}». Una alla volta.',
+  },
   nouvelles: {
     titre: '{qui} ha spuntato',
     aujourdhui: 'Oggi alle {h}',

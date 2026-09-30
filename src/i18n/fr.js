@@ -340,6 +340,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'Tu t’en occupes · {min} min',
+    badgeAutre: '{qui} s’en occupe · {min} min',
+    bouton: 'Je m’en occupe (1 h)',
+    annuler: 'Annuler ma réservation',
+    jusquaMoi: 'Réservée pour toi jusqu’à {h}. Ton binôme est prévenu·e.',
+    jusquaAutre: '{qui} s’en occupe jusqu’à {h} : la tâche est bloquée pour toi d’ici là.',
+    bloquee: '{qui} s’en occupe jusqu’à {h} : tu ne peux pas la cocher d’ici là.',
+    aujourdhui: 'Déjà réservée aujourd’hui : de nouveau possible demain.',
+    uneAutre: 'Tu t’occupes déjà de « {tache} ». Une seule à la fois.',
+  },
   nouvelles: {
     titre: '{qui} a coché',
     aujourdhui: 'Aujourd’hui à {h}',

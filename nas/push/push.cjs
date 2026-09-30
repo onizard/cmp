@@ -12651,6 +12651,10 @@ var require_i18n = __commonJS({
       fr: {
         "add": "{qui} a ajout\xE9 une t\xE2che",
         "done": "{qui} a coch\xE9 une t\xE2che",
+        "reserve": "\u{1F64B} {qui} s\u2019en occupe",
+        "reserveCorps": "{text} \u2014 r\xE9serv\xE9e pour 1 h, inutile de t\u2019y mettre.",
+        "libere": "{qui} a lib\xE9r\xE9 une t\xE2che",
+        "libereCorps": "{text} \u2014 elle est de nouveau libre.",
         "quelquun": "Quelqu\u2019un",
         "binome": "Ton bin\xF4me",
         "matin": "La plus ancienne t\u2019attend",
@@ -12685,6 +12689,10 @@ var require_i18n = __commonJS({
       en: {
         "add": "{qui} added a task",
         "done": "{qui} ticked a task",
+        "reserve": "\u{1F64B} {qui} is on it",
+        "reserveCorps": "{text} \u2014 booked for 1 h, no need to do it.",
+        "libere": "{qui} released a task",
+        "libereCorps": "{text} \u2014 it\u2019s free again.",
         "quelquun": "Someone",
         "binome": "Your other half",
         "matin": "The oldest one is waiting",
@@ -12719,6 +12727,10 @@ var require_i18n = __commonJS({
       es: {
         "add": "{qui} ha a\xF1adido una tarea",
         "done": "{qui} ha marcado una tarea",
+        "reserve": "\u{1F64B} {qui} se encarga",
+        "reserveCorps": "{text} \u2014 reservada 1 h, no hace falta que la hagas.",
+        "libere": "{qui} ha liberado una tarea",
+        "libereCorps": "{text} \u2014 vuelve a estar libre.",
         "quelquun": "Alguien",
         "binome": "Tu media naranja",
         "matin": "La m\xE1s antigua te espera",
@@ -12753,6 +12765,10 @@ var require_i18n = __commonJS({
       pt: {
         "add": "{qui} adicionou uma tarefa",
         "done": "{qui} marcou uma tarefa",
+        "reserve": "\u{1F64B} {qui} trata disso",
+        "reserveCorps": "{text} \u2014 reservada por 1 h, n\xE3o precisas de a fazer.",
+        "libere": "{qui} libertou uma tarefa",
+        "libereCorps": "{text} \u2014 est\xE1 livre outra vez.",
         "quelquun": "Algu\xE9m",
         "binome": "A tua cara-metade",
         "matin": "A mais antiga espera-te",
@@ -12787,6 +12803,10 @@ var require_i18n = __commonJS({
       de: {
         "add": "{qui} hat eine Aufgabe hinzugef\xFCgt",
         "done": "{qui} hat eine Aufgabe abgehakt",
+        "reserve": "\u{1F64B} {qui} k\xFCmmert sich darum",
+        "reserveCorps": "{text} \u2014 1 Std. reserviert, du musst es nicht machen.",
+        "libere": "{qui} hat eine Aufgabe freigegeben",
+        "libereCorps": "{text} \u2014 sie ist wieder frei.",
         "quelquun": "Jemand",
         "binome": "Deine bessere H\xE4lfte",
         "matin": "Die \xE4lteste wartet auf dich",
@@ -12821,6 +12841,10 @@ var require_i18n = __commonJS({
       it: {
         "add": "{qui} ha aggiunto un compito",
         "done": "{qui} ha spuntato un compito",
+        "reserve": "\u{1F64B} Ci pensa {qui}",
+        "reserveCorps": "{text} \u2014 prenotata per 1 h, non serve che la faccia tu.",
+        "libere": "{qui} ha liberato un\u2019attivit\xE0",
+        "libereCorps": "{text} \u2014 \xE8 di nuovo libera.",
         "quelquun": "Qualcuno",
         "binome": "La tua met\xE0",
         "matin": "Il pi\xF9 vecchio ti aspetta",
@@ -12855,6 +12879,10 @@ var require_i18n = __commonJS({
       ru: {
         "add": "{qui} \u0434\u043E\u0431\u0430\u0432\u0438\u043B(\u0430) \u0437\u0430\u0434\u0430\u0447\u0443",
         "done": "{qui} \u043E\u0442\u043C\u0435\u0442\u0438\u043B(\u0430) \u0437\u0430\u0434\u0430\u0447\u0443",
+        "reserve": "\u{1F64B} {qui} \u044D\u0442\u0438\u043C \u0437\u0430\u043D\u0438\u043C\u0430\u0435\u0442\u0441\u044F",
+        "reserveCorps": "{text} \u2014 \u0437\u0430\u043D\u044F\u0442\u043E \u043D\u0430 1 \u0447, \u0434\u0435\u043B\u0430\u0442\u044C \u043D\u0435 \u043D\u0443\u0436\u043D\u043E.",
+        "libere": "{qui} \u043E\u0441\u0432\u043E\u0431\u043E\u0434\u0438\u043B(\u0430) \u0437\u0430\u0434\u0430\u0447\u0443",
+        "libereCorps": "{text} \u2014 \u043E\u043D\u0430 \u0441\u043D\u043E\u0432\u0430 \u0441\u0432\u043E\u0431\u043E\u0434\u043D\u0430.",
         "quelquun": "\u041A\u0442\u043E-\u0442\u043E",
         "binome": "\u0412\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
         "matin": "\u0421\u0430\u043C\u0430\u044F \u0441\u0442\u0430\u0440\u0430\u044F \u0436\u0434\u0451\u0442 \u0432\u0430\u0441",
@@ -12889,6 +12917,10 @@ var require_i18n = __commonJS({
       zh: {
         "add": "{qui} \u6DFB\u52A0\u4E86\u4E00\u9879\u4EFB\u52A1",
         "done": "{qui} \u52FE\u9009\u4E86\u4E00\u9879\u4EFB\u52A1",
+        "reserve": "\u{1F64B} {qui} \u6765\u505A",
+        "reserveCorps": "{text} \u2014 \u5DF2\u9884\u7559 1 \u5C0F\u65F6\uFF0C\u4F60\u4E0D\u7528\u505A\u4E86\u3002",
+        "libere": "{qui} \u53D6\u6D88\u4E86\u9884\u7559",
+        "libereCorps": "{text} \u2014 \u53C8\u7A7A\u51FA\u6765\u4E86\u3002",
         "quelquun": "\u6709\u4EBA",
         "binome": "\u4F60\u7684\u53E6\u4E00\u534A",
         "matin": "\u7B49\u5F97\u6700\u4E45\u7684\u90A3\u4EF6\u5728\u7B49\u4F60",
@@ -12923,6 +12955,10 @@ var require_i18n = __commonJS({
       ar: {
         "add": "{qui} \u0623\u0636\u0627\u0641 \u0645\u0647\u0645\u0629",
         "done": "{qui} \u0639\u0644\u0651\u0645 \u0645\u0647\u0645\u0629",
+        "reserve": "\u{1F64B} {qui} \u064A\u062A\u0648\u0644\u0651\u0649 \u0627\u0644\u0623\u0645\u0631",
+        "reserveCorps": "{text} \u2014 \u0645\u062D\u062C\u0648\u0632\u0629 \u0644\u0645\u062F\u0629 \u0633\u0627\u0639\u0629\u060C \u0644\u0627 \u062F\u0627\u0639\u064A \u0644\u0623\u0646 \u062A\u0642\u0648\u0645 \u0628\u0647\u0627.",
+        "libere": "{qui} \u0623\u0644\u063A\u0649 \u062D\u062C\u0632 \u0645\u0647\u0645\u0629",
+        "libereCorps": "{text} \u2014 \u0623\u0635\u0628\u062D\u062A \u0645\u062A\u0627\u062D\u0629 \u0645\u0646 \u062C\u062F\u064A\u062F.",
         "quelquun": "\u0623\u062D\u062F\u0647\u0645",
         "binome": "\u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
         "matin": "\u0627\u0644\u0623\u0642\u062F\u0645 \u0641\u064A \u0627\u0646\u062A\u0638\u0627\u0631\u0643",
@@ -12957,6 +12993,10 @@ var require_i18n = __commonJS({
       he: {
         "add": "{qui} \u05D4\u05D5\u05E1\u05D9\u05E3 \u05DE\u05E9\u05D9\u05DE\u05D4",
         "done": "{qui} \u05E1\u05D9\u05DE\u05DF \u05DE\u05E9\u05D9\u05DE\u05D4",
+        "reserve": "\u{1F64B} {qui} \u05DE\u05D8\u05E4\u05DC/\u05EA \u05D1\u05D6\u05D4",
+        "reserveCorps": "{text} \u2014 \u05E9\u05DE\u05D5\u05E8\u05D4 \u05DC\u05E9\u05E2\u05D4, \u05D0\u05D9\u05DF \u05E6\u05D5\u05E8\u05DA \u05E9\u05EA\u05E2\u05E9\u05D4/\u05D9 \u05D0\u05D5\u05EA\u05D4.",
+        "libere": "{qui} \u05E9\u05D7\u05E8\u05E8/\u05D4 \u05DE\u05E9\u05D9\u05DE\u05D4",
+        "libereCorps": "{text} \u2014 \u05D4\u05D9\u05D0 \u05E9\u05D5\u05D1 \u05E4\u05E0\u05D5\u05D9\u05D4.",
         "quelquun": "\u05DE\u05D9\u05E9\u05D4\u05D5",
         "binome": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9",
         "matin": "\u05D4\u05D9\u05E9\u05E0\u05D4 \u05D1\u05D9\u05D5\u05EA\u05E8 \u05DE\u05D7\u05DB\u05D4 \u05DC\u05DA",
@@ -12991,6 +13031,10 @@ var require_i18n = __commonJS({
       fa: {
         "add": "{qui} \u06A9\u0627\u0631\u06CC \u0627\u0641\u0632\u0648\u062F",
         "done": "{qui} \u06A9\u0627\u0631\u06CC \u0631\u0627 \u0639\u0644\u0627\u0645\u062A \u0632\u062F",
+        "reserve": "\u{1F64B} {qui} \u0627\u0646\u062C\u0627\u0645\u0634 \u0645\u06CC\u200C\u062F\u0647\u062F",
+        "reserveCorps": "{text} \u2014 \u0628\u0631\u0627\u06CC 1 \u0633\u0627\u0639\u062A \u0631\u0632\u0631\u0648 \u0634\u062F\u060C \u0644\u0627\u0632\u0645 \u0646\u06CC\u0633\u062A \u0627\u0646\u062C\u0627\u0645\u0634 \u062F\u0647\u06CC.",
+        "libere": "{qui} \u06A9\u0627\u0631\u06CC \u0631\u0627 \u0622\u0632\u0627\u062F \u06A9\u0631\u062F",
+        "libereCorps": "{text} \u2014 \u062F\u0648\u0628\u0627\u0631\u0647 \u0622\u0632\u0627\u062F \u0627\u0633\u062A.",
         "quelquun": "\u06A9\u0633\u06CC",
         "binome": "\u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
         "matin": "\u06A9\u0647\u0646\u0647\u200C\u062A\u0631\u06CC\u0646 \u0645\u0646\u062A\u0638\u0631 \u062A\u0648\u0633\u062A",
@@ -13513,7 +13557,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.12";
+var VERSION = "v4.13";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -13566,6 +13610,15 @@ async function handleEvent(ev) {
   if (!household) return;
   if (kind === "bon") return handleBon(ev);
   const nom = await actorName(household, actor);
+  if (kind === "reserve" || kind === "libere") {
+    await sendToHousehold(household, actor, (lang) => ({
+      title: tr(lang, kind, { qui: nom || tr(lang, "binome") }),
+      body: tr(lang, kind === "reserve" ? "reserveCorps" : "libereCorps", { text: text || "" }),
+      url: APP_URL,
+      tag: `cmp-reserve-${actor}`
+    }));
+    return;
+  }
   await sendToHousehold(household, actor, (lang) => ({
     title: tr(lang, kind === "add" ? "add" : "done", {
       qui: nom || tr(lang, actor ? "binome" : "quelquun")

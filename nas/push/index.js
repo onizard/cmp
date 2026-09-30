@@ -39,7 +39,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.12';
+const VERSION = 'v4.13';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -107,6 +107,17 @@ async function handleEvent(ev) {
   if (!household) return;
   if (kind === 'bon') return handleBon(ev);
   const nom = await actorName(household, actor);
+  // Réservation : « Untel s'en occupe », ou « Untel a libéré… » s'il annule
+  // avant l'heure. Même étiquette : la libération remplace l'annonce.
+  if (kind === 'reserve' || kind === 'libere') {
+    await sendToHousehold(household, actor, (lang) => ({
+      title: tr(lang, kind, { qui: nom || tr(lang, 'binome') }),
+      body: tr(lang, kind === 'reserve' ? 'reserveCorps' : 'libereCorps', { text: text || '' }),
+      url: APP_URL,
+      tag: `cmp-reserve-${actor}`,
+    }));
+    return;
+  }
   await sendToHousehold(household, actor, (lang) => ({
     title: tr(lang, kind === 'add' ? 'add' : 'done', {
       qui: nom || tr(lang, actor ? 'binome' : 'quelquun'),

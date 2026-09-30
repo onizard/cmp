@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'أنت تتولّاها · {min} د',
+    badgeAutre: '{qui} يتولّاها · {min} د',
+    bouton: 'سأقوم بها (ساعة)',
+    annuler: 'إلغاء حجزي',
+    jusquaMoi: 'محجوزة لك حتى {h}. تم إبلاغ شريكك.',
+    jusquaAutre: '{qui} يتولّاها حتى {h}: المهمة مقفلة بالنسبة لك حتى ذلك الحين.',
+    bloquee: '{qui} يتولّاها حتى {h}: لا يمكنك تحديدها قبل ذلك.',
+    aujourdhui: 'سبق حجزها اليوم: ممكن من جديد غدًا.',
+    uneAutre: 'أنت تتولّى «{tache}» بالفعل. مهمة واحدة في كل مرة.',
+  },
   nouvelles: {
     titre: '{qui} أنجز',
     aujourdhui: 'اليوم في {h}',

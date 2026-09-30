@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { useT } from '../i18n/index.js';
+import { useT, langue } from '../i18n/index.js';
 import { carriedFromLabel } from '../lib/visibility.js';
 import { buildDue, splitDue, dueFull, dueLevel } from '../lib/deadline.js';
 import DueBadge, { Chrono } from './DueBadge.jsx';
+import { ReserveBadge, ReserveActions, useMaintenant } from './Reservation.jsx';
+import { reservationActive } from '../lib/reservation.js';
 
-export default function TaskItem({ task, month, currentMonth, store, onCombo, eclat = false }) {
+export default function TaskItem({ task, month, currentMonth, store, onCombo, names = {}, eclat = false }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -15,6 +17,11 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
   const [date, setDate] = useState(start.date);
   const [time, setTime] = useState(start.time);
 
+  // Réservée par l'autre : la case se grise tant que l'heure court. L'horloge
+  // lente redessine la ligne à l'échéance pour la rendre de nouveau cochable.
+  const maintenant = useMaintenant(reservationActive(task));
+  const bloquee =
+    reservationActive(task, maintenant) && task.reservePar !== store.userId;
   const carried = carriedFromLabel(task, month);
   const level = task.done ? null : dueLevel(task.dueAt);
 
@@ -48,7 +55,7 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
   return (
     <li
       data-tache={task.id}
-      className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''} ${eclat ? 'task-eclat' : ''}`}
+      className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''} ${eclat ? 'task-eclat' : ''} ${bloquee ? 'task-bloquee' : ''}`}
     >
       <div className="task-row">
         <button
@@ -59,10 +66,10 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
           aria-label={task.done ? t('taches.decocher') : t('taches.cocher')}
           onClick={() => {
             const combo = store.toggleDone(task, currentMonth);
-            if (combo === false) {
+            if (combo === false || combo === 'reservee') {
               // On explique au lieu de rester inerte : un bouton mort passe
               // pour une panne.
-              setRefus(true);
+              setRefus(combo === false ? 'decoche' : 'reservee');
               setTimeout(() => setRefus(false), 3200);
               return;
             }
@@ -105,12 +112,23 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
           >
             <span className="task-label">{task.text}</span>
             {carried && <span className="carried">{carried}</span>}
-            <DueBadge dueAt={task.dueAt} done={task.done} />
+            <span className="task-badges">
+              <ReserveBadge task={task} userId={store.userId} names={names} />
+              <DueBadge dueAt={task.dueAt} done={task.done} />
+            </span>
           </button>
         )}
       </div>
 
-      {refus && <p className="refus">{t('taches.decocheInterdite')}</p>}
+      {refus === 'decoche' && <p className="refus">{t('taches.decocheInterdite')}</p>}
+      {refus === 'reservee' && (
+        <p className="refus">
+          {t('reserver.bloquee', {
+            qui: names[task.reservePar] || t('cerveau.binome'),
+            h: new Date(task.reserveFin).toLocaleTimeString(langue(), { hour: '2-digit', minute: '2-digit' }),
+          })}
+        </p>
+      )}
 
       {open && !editing && dueOpen && !task.done && (
         <form className="due-form" onSubmit={saveDue}>
@@ -164,6 +182,13 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
           pourquoi plutôt que d'ouvrir un menu vide. */}
       {open && !store.peutModifier(task) && (
         <div className="actions actions-autre">
+          <ReserveActions
+            task={task}
+            store={store}
+            userId={store.userId}
+            names={names}
+            onFait={() => setOpen(false)}
+          />
           <p className="refus refus-doux">{t('taches.modifInterdite')}</p>
           {task.dueAt && (
             <p className="due-recap">
@@ -185,8 +210,16 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, ec
 
       {open && !editing && !dueOpen && store.peutModifier(task) && !task.done && (
         <div className="actions" role="group" aria-label={t('taches.actions')}>
-          {/* L'échéance seule sur sa ligne, puis modifier et supprimer côte à
-              côte : les deux gestes qui touchent à la tâche elle-même. */}
+          {/* D'abord « je m'en occupe », puis l'échéance seule sur sa ligne,
+              puis modifier et supprimer côte à côte : les deux gestes qui
+              touchent à la tâche elle-même. */}
+          <ReserveActions
+            task={task}
+            store={store}
+            userId={store.userId}
+            names={names}
+            onFait={() => setOpen(false)}
+          />
           <button
             className="action action-due"
             type="button"

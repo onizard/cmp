@@ -190,6 +190,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'تو انجامش می‌دهی · {min} دقیقه',
+    badgeAutre: '{qui} انجامش می‌دهد · {min} دقیقه',
+    bouton: 'من انجامش می‌دهم (1 ساعت)',
+    annuler: 'لغو رزرو من',
+    jusquaMoi: 'تا {h} برای تو رزرو شد. به همراهت خبر داده شد.',
+    jusquaAutre: '{qui} تا {h} انجامش می‌دهد: تا آن موقع این کار برای تو قفل است.',
+    bloquee: '{qui} تا {h} انجامش می‌دهد: تا آن موقع نمی‌توانی تیکش بزنی.',
+    aujourdhui: 'امروز قبلاً رزرو شده: فردا دوباره ممکن است.',
+    uneAutre: 'تو الان «{tache}» را انجام می‌دهی. هر بار فقط یکی.',
+  },
   nouvelles: {
     titre: '{qui} انجام داد',
     aujourdhui: 'امروز ساعت {h}',

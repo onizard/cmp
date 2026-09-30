@@ -40,6 +40,10 @@ alter table tasks add column if not exists done_at timestamptz;
 create index if not exists tasks_done_at_idx
   on tasks (done_by, done_at)
   where done_at is not null;
+-- Réservation « je m'en occupe » (règles dans reservation.sql).
+alter table tasks add column if not exists reserve_par uuid;
+alter table tasks add column if not exists reserve_debut timestamptz;
+alter table tasks add column if not exists reserve_fin timestamptz;
 
 -- Gages (gamification) : offerts d'un membre à l'autre.
 create table if not exists gages (

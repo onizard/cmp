@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient.js';
 import { sortForMonth, tasksVisibleIn } from './visibility.js';
 import { comboProchain } from './combo.js';
+import { etatReservation, RESERVATION_MS } from './reservation.js';
 
 // --- Correspondance base <-> modèle client ---
 
@@ -18,6 +19,9 @@ const fromRow = (r) => ({
   createdBy: r.created_by,
   dueAt: r.due_at,
   dueHasTime: r.due_has_time !== false,
+  reservePar: r.reserve_par ?? null,
+  reserveDebut: r.reserve_debut ?? null,
+  reserveFin: r.reserve_fin ?? null,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -53,6 +57,9 @@ const patchToRow = (patch) => {
   // Changer l'échéance remet les rappels à zéro : les paliers déjà franchis
   // ne valent plus rien pour une nouvelle date.
   if ('dueAt' in patch) row.due_stage = 0;
+  if ('reservePar' in patch) row.reserve_par = patch.reservePar;
+  if ('reserveDebut' in patch) row.reserve_debut = patch.reserveDebut;
+  if ('reserveFin' in patch) row.reserve_fin = patch.reserveFin;
   if ('deleted' in patch) row.deleted = patch.deleted;
   return row;
 };
@@ -427,13 +434,18 @@ export function useTasks(householdId, userId) {
   const peutModifier = useCallback((task) => modifiable(task, userId), [userId]);
 
   /**
-   * Coche ou décoche. Renvoie false si la décoche est refusée, sinon le
+   * Coche ou décoche. Renvoie false si la décoche est refusée, 'reservee' si
+   * l'autre a réservé la tâche, sinon le
    * multiplicateur de combo que la coche vient de décrocher (1 = pas de
    * combo), pour que l'écran puisse l'annoncer.
    */
   const toggleDone = useCallback(
     (task, currentMonth) => {
       if (task.done && !peutDecocher(task)) return false;
+      // Réservée par l'autre : elle est à lui tant que l'heure court.
+      if (!task.done && etatReservation(task, tasksRef.current, userId) === 'autre') {
+        return 'reservee';
+      }
       if (task.done) {
         updateTask(task.id, { done: false, doneMonth: null, doneBy: null, doneAt: null });
         return 1;
@@ -462,12 +474,40 @@ export function useTasks(householdId, userId) {
     [updateTask],
   );
 
+  /**
+   * « Je m'en occupe » pour une heure. Renvoie false si les règles s'y
+   * opposent (une autre en cours, déjà réservée aujourd'hui, prise par
+   * l'autre). Le serveur repose les heures avec les siennes.
+   */
+  const reserver = useCallback(
+    (task) => {
+      if (etatReservation(task, tasksRef.current, userId) !== 'libre') return false;
+      const debut = Date.now();
+      return updateTask(task.id, {
+        reservePar: userId,
+        reserveDebut: new Date(debut).toISOString(),
+        reserveFin: new Date(debut + RESERVATION_MS).toISOString(),
+      });
+    },
+    [updateTask, userId],
+  );
+
+  /** Annule sa propre réservation : la tâche redevient libre pour l'autre. */
+  const annulerReservation = useCallback(
+    (task) => {
+      if (etatReservation(task, tasksRef.current, userId) !== 'moi') return false;
+      return updateTask(task.id, { reserveFin: nowIso() });
+    },
+    [updateTask, userId],
+  );
+
   const removeTask = useCallback(
     (id) => updateTask(id, { deleted: true }),
     [updateTask],
   );
 
   return {
+    userId,
     tasks,
     loading,
     online,
@@ -480,5 +520,7 @@ export function useTasks(householdId, userId) {
     peutDecocher,
     peutModifier,
     removeTask,
+    reserver,
+    annulerReservation,
   };
 }

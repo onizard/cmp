@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: 'את/ה מטפל/ת בזה · {min} דק׳',
+    badgeAutre: '{qui} מטפל/ת בזה · {min} דק׳',
+    bouton: 'אני על זה (שעה)',
+    annuler: 'ביטול השמירה שלי',
+    jusquaMoi: 'שמורה לך עד {h}. בן/בת הזוג עודכנו.',
+    jusquaAutre: '{qui} מטפל/ת בזה עד {h}: המשימה נעולה עבורך עד אז.',
+    bloquee: '{qui} מטפל/ת בזה עד {h}: עד אז אי אפשר לסמן אותה.',
+    aujourdhui: 'כבר נשמרה היום: אפשר שוב מחר.',
+    uneAutre: 'את/ה כבר מטפל/ת ב„{tache}”. אחת בכל פעם.',
+  },
   nouvelles: {
     titre: '{qui} סימן/ה',
     aujourdhui: 'היום ב-{h}',

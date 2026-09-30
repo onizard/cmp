@@ -2637,3 +2637,88 @@ body,
   font-size: 0.88rem;
   font-weight: 700;
 }
+
+/* --- Réserver une tâche : « je m'en occupe » --------------------------- */
+
+/* Pastilles sous le texte : la réservation à gauche, l'échéance à droite. */
+.task-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 6px;
+}
+
+.reserve {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  margin-top: 7px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Vert menthe quand c'est moi, comme la coche des nouvelles ; violet quand
+   c'est l'autre, la couleur de l'application. */
+.reserve-moi {
+  color: #197f71;
+  background: #e2f5ef;
+}
+
+.reserve-autre {
+  color: #6f4a9e;
+  background: #efe6f7;
+}
+
+.reserve-bloc {
+  display: flex;
+  flex-basis: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.action-reserve {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #197f71;
+  border-color: #bfe8dc;
+  background: #f1fbf8;
+}
+
+.action-reserve:disabled {
+  color: var(--ink-3);
+  border-color: var(--line);
+  background: var(--paper);
+  cursor: default;
+  opacity: 0.75;
+}
+
+.action-reserve-annuler {
+  color: #197f71;
+}
+
+.reserve-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.reserve-note-autre {
+  color: #6f4a9e;
+  font-weight: 600;
+}
+
+/* Réservée par l'autre : la case pâlit et passe en pointillés — on voit
+   qu'elle ne se coche pas, sans que le texte devienne illisible. */
+.task-bloquee .check-box {
+  border-style: dashed;
+  opacity: 0.45;
+}

@@ -188,6 +188,17 @@ export default {
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
+  reserver: {
+    badgeMoi: '你在做 · {min} 分钟',
+    badgeAutre: '{qui} 在做 · {min} 分钟',
+    bouton: '我来做（1 小时）',
+    annuler: '取消我的预留',
+    jusquaMoi: '已为你预留到 {h}，已通知对方。',
+    jusquaAutre: '{qui} 会做到 {h}：在此之前这项任务对你锁定。',
+    bloquee: '{qui} 会做到 {h}：在此之前你不能勾选。',
+    aujourdhui: '今天已预留过：明天才能再预留。',
+    uneAutre: '你已在做“{tache}”。一次只能一项。',
+  },
   nouvelles: {
     titre: '{qui} 完成了',
     aujourdhui: '今天 {h}',

@@ -22,7 +22,9 @@ create policy ps_own on push_subscriptions for all to authenticated
 grant usage on schema public to anon, authenticated, service_role;
 grant all on push_subscriptions to anon, authenticated, service_role;
 
--- Déclencheur : prévient le service d'envoi via pg_notify
+-- Déclencheur : prévient le service d'envoi via pg_notify.
+-- reservation.sql en donne une version plus complète (réservations) : le
+-- relancer après ce fichier-ci.
 create or replace function cmp_task_event() returns trigger
 language plpgsql as $f$
 declare ev json;
