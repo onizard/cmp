@@ -1,3 +1,4 @@
+import { origineWeb } from '../lib/natif.js';
 import { useEffect, useState } from 'react';
 import { useT } from '../i18n/index.js';
 import {
@@ -13,7 +14,7 @@ export default function ShareInvite({ code, prenom }) {
   const [ouvert, setOuvert] = useState(false);
   const [copie, setCopie] = useState(null);
 
-  const origine = typeof window !== 'undefined' ? window.location.origin : '';
+  const origine = origineWeb();
   const lienFoyer = lienDInvitation(origine, code);
   const lienNu = origine ? `${origine.replace(/\/+$/, '')}/` : null;
 

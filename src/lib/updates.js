@@ -6,6 +6,7 @@
 // • sinon un bandeau propose de l'appliquer tout de suite
 
 import { registerSW } from 'virtual:pwa-register';
+import { estNatif } from './natif.js';
 
 const CHECK_MS = 60_000;
 
@@ -14,6 +15,9 @@ let pending = false;
 
 /** Démarre la surveillance. `onAvailable(true)` quand une version attend. */
 export function initUpdates(onAvailable) {
+  // Dans l'appli des stores, les mises à jour passent par le store : pas de
+  // service worker.
+  if (estNatif) return;
   const updateSW = registerSW({
     immediate: true,
     onNeedRefresh() {

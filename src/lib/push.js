@@ -6,6 +6,7 @@
 // en silence au lieu de repasser l'option sur « off ».
 import { supabase } from '../supabaseClient.js';
 import { t, langue } from '../i18n/index.js';
+import { estNatif } from './natif.js';
 
 const VAPID = import.meta.env.VITE_VAPID_PUBLIC || '';
 
@@ -49,6 +50,9 @@ const writeEndpoint = (v) => {
 
 /** Le navigateur sait-il faire des notifications push ? */
 export const pushSupported = () =>
+  // Les notifications de l'appli des stores passent par le téléphone
+  // lui-même (voir push-natif), pas par le navigateur.
+  !estNatif &&
   typeof window !== 'undefined' &&
   'serviceWorker' in navigator &&
   'PushManager' in window &&

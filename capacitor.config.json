@@ -1,0 +1,21 @@
+{
+  "appId": "fr.breakpharma.cmp",
+  "appName": "Charge mentale partagée",
+  "webDir": "dist",
+  "backgroundColor": "#FBF4EC",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#FBF4EC"
+  },
+  "android": {
+    "backgroundColor": "#FBF4EC"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 600,
+      "launchAutoHide": true,
+      "backgroundColor": "#FBF4EC",
+      "showSpinner": false
+    }
+  }
+}

@@ -5,6 +5,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.natif
 .DS_Store
 .vite
 
@@ -13,3 +14,9 @@ nas/.env
 nas/data
 nas/app
 nas/pgdata
+
+# Capacitor : dossiers générés à la compilation
+android/app/build
+android/.gradle
+ios/App/build
+ios/DerivedData

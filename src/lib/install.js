@@ -5,6 +5,7 @@
 //    sous le coude pour offrir un vrai bouton « Installer » ;
 //  - iOS n'a rien de tout cela. Aucun site ne peut s'installer tout seul :
 //    il faut passer par le menu Partager. On explique donc le geste.
+import { estNatif } from './natif.js';
 import { useEffect, useState } from 'react';
 
 const ua = () =>
@@ -12,6 +13,8 @@ const ua = () =>
 
 /** Déjà posée sur l'écran d'accueil ? */
 export const isStandalone = () => {
+  // L'appli des stores est, par définition, déjà installée.
+  if (estNatif) return true;
   if (typeof window === 'undefined') return false;
   return (
     window.matchMedia('(display-mode: standalone)').matches ||

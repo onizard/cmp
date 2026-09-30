@@ -1,3 +1,4 @@
+import { origineWeb } from './natif.js';
 import { useCallback, useEffect, useState } from 'react';
 import { supabase, isConfigured } from '../supabaseClient.js';
 import { t } from '../i18n/index.js';
@@ -47,8 +48,7 @@ const writeLastHousehold = (id) => {
 };
 
 /** URL de redirection du lien magique (base incluse). */
-const redirectTo = () =>
-  `${window.location.origin}${import.meta.env.BASE_URL}`;
+const redirectTo = () => `${origineWeb()}${import.meta.env.BASE_URL}`;
 
 /**
  * Gère la session, l'appartenance à un foyer, et les actions de connexion /
