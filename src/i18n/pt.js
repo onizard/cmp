@@ -222,6 +222,7 @@ export default {
     ajouterEtOuvrir: 'Adicionar e abrir',
     aide: 'Passas de uma conta para a outra sem voltar a escrever a palavra-passe: nenhuma palavra-passe é guardada, só a sessão já aberta. «Terminar sessão» retira a conta deste aparelho.',
     expire: 'A sessão de {email} expirou: volta a entrar com a palavra-passe.',
+    autreCompte: 'Usar outra conta',
   },
   entreprise: {
     auClavier: '⌨️ Escreve o teu código no teclado, teclado numérico incluído.',

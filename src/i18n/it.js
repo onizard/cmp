@@ -222,6 +222,7 @@ export default {
     ajouterEtOuvrir: 'Aggiungi e apri',
     aide: 'Passi da un account all’altro senza riscrivere la password: nessuna password viene conservata, solo la sessione già aperta. «Esci» toglie l’account da questo dispositivo.',
     expire: 'La sessione di {email} è scaduta: accedi di nuovo con la sua password.',
+    autreCompte: 'Usa un altro account',
   },
   entreprise: {
     auClavier: '⌨️ Digita il tuo codice sulla tastiera, tastierino numerico compreso.',

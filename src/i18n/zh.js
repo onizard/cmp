@@ -222,6 +222,7 @@ export default {
     ajouterEtOuvrir: '添加并打开',
     aide: '无需重新输入密码即可切换账户：不保存任何密码，只保存已打开的会话。“退出登录”会把该账户从此设备移除。',
     expire: '{email} 的会话已过期：请用密码重新登录。',
+    autreCompte: '使用其他账户',
   },
   entreprise: {
     auClavier: '⌨️ 用键盘输入代码，小键盘也可以。',

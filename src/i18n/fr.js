@@ -374,6 +374,7 @@ export default {
     ajouterEtOuvrir: 'Ajouter et ouvrir',
     aide: 'On passe d’un compte à l’autre sans retaper son mot de passe : aucun mot de passe n’est gardé, seulement la connexion déjà ouverte. « Se déconnecter » retire le compte de cet appareil.',
     expire: 'La connexion de {email} a expiré : reconnecte-toi avec son mot de passe.',
+    autreCompte: 'Utiliser un autre compte',
   },
   entreprise: {
     auClavier: '⌨️ Tape ton code au clavier, pavé numérique compris.',

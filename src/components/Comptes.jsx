@@ -18,11 +18,18 @@ const Mallette = () => (
 /**
  * Les comptes rangés sur cet appareil, à choisir d'un toucher — sur l'écran
  * de connexion comme dans Mon compte. `courant` : l'identifiant du compte
- * connecté (aucun sur l'écran de connexion).
+ * connecté (aucun sur l'écran de connexion). `onChange(liste)` : prévenu
+ * quand la liste change.
  */
-export default function Comptes({ courant = null, ajout = true }) {
+export default function Comptes({ courant = null, ajout = true, onChange }) {
   const t = useT();
-  const [comptes, setComptes] = useState(lireComptes);
+  const [comptes, setListe] = useState(lireComptes);
+  // L'écran de connexion suit la liste : un compte retiré ou expiré peut y
+  // faire réapparaître le formulaire.
+  const setComptes = (liste) => {
+    setListe(liste);
+    onChange?.(liste);
+  };
   const [erreur, setErreur] = useState(null);
   const [occupe, setOccupe] = useState(null);
   const [formulaire, setFormulaire] = useState(false);

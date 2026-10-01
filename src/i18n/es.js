@@ -222,6 +222,7 @@ export default {
     ajouterEtOuvrir: 'Añadir y abrir',
     aide: 'Pasas de una cuenta a otra sin volver a escribir la contraseña: no se guarda ninguna contraseña, solo la sesión ya abierta. «Cerrar sesión» quita la cuenta de este dispositivo.',
     expire: 'La sesión de {email} ha caducado: vuelve a entrar con su contraseña.',
+    autreCompte: 'Usar otra cuenta',
   },
   entreprise: {
     auClavier: '⌨️ Escribe tu código con el teclado, teclado numérico incluido.',

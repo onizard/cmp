@@ -222,6 +222,7 @@ export default {
     ajouterEtOuvrir: 'Hinzufügen und öffnen',
     aide: 'Du wechselst zwischen Konten, ohne dein Passwort neu einzugeben: Es wird kein Passwort gespeichert, nur die bereits offene Sitzung. „Abmelden“ entfernt das Konto von diesem Gerät.',
     expire: 'Die Sitzung von {email} ist abgelaufen: Melde dich mit dem Passwort erneut an.',
+    autreCompte: 'Anderes Konto verwenden',
   },
   entreprise: {
     auClavier: '⌨️ Gib deinen Code über die Tastatur ein, auch über den Ziffernblock.',
