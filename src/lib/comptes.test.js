@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { lireComptes, memoriser, oublier } from './comptes.js';
+import { lireComptes, memoriser, oublier, plusieursComptes } from './comptes.js';
 
 const session = (id, refresh, email = `${id}@ex.fr`) => ({
   user: { id, email }, access_token: `a-${refresh}`, refresh_token: refresh,
@@ -30,6 +30,15 @@ describe('comptes rangés', () => {
     expect(c.refresh).toBe('r3');
     expect(c.nom).toBe('Atelier');
     expect(c.type).toBe('pro');
+  });
+
+  it('un seul compte : pas de page de choix ; perso et pro : la page de choix', () => {
+    memoriser({ session: session('perso', 'r1'), type: 'perso' });
+    expect(plusieursComptes()).toBe(false);
+    memoriser({ session: session('pro', 'r2'), type: 'pro' });
+    expect(plusieursComptes()).toBe(true);
+    oublier('pro');
+    expect(plusieursComptes()).toBe(false);
   });
 
   it('oublier retire un seul compte', () => {

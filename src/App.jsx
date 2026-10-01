@@ -22,6 +22,8 @@ import Nouvelles from './components/Nouvelles.jsx';
 import { syncPush } from './lib/push.js';
 import { useEquipe } from './lib/equipe.js';
 import EquipeView from './components/EquipeView.jsx';
+import ChoixCompte from './components/ChoixCompte.jsx';
+import { lireComptes, plusieursComptes } from './lib/comptes.js';
 
 function NotConfigured() {
   return (
@@ -35,6 +37,14 @@ function NotConfigured() {
 export default function App() {
   const account = useAccount();
   const currentMonth = monthKey();
+  // Perso et pro sur le même appareil : on s'ouvre sur le choix du compte.
+  // Un seul compte : droit sur ses tâches.
+  const [choix, setChoix] = useState(plusieursComptes);
+  // Passé par l'écran de connexion, on a déjà choisi.
+  const deconnecte = account.ready && !account.session;
+  useEffect(() => {
+    if (deconnecte) setChoix(false);
+  }, [deconnecte]);
 
   if (!account.isConfigured) return <NotConfigured />;
 
@@ -72,7 +82,15 @@ export default function App() {
     );
   }
 
-  if (!account.household) return <Onboarding account={account} />;
+  // Un compte créé par « Ajouter un compte pro » va droit à l'entreprise.
+  if (!account.household) {
+    const pro = lireComptes().find((c) => c.userId === account.session.user.id)?.type === 'pro';
+    return <Onboarding account={account} pro={pro} />;
+  }
+
+  if (choix) {
+    return <ChoixCompte courant={account.session.user.id} onFini={() => setChoix(false)} />;
+  }
 
   return (
     <>
@@ -82,12 +100,13 @@ export default function App() {
         key={`${account.session.user.id}:${account.household.id}`}
         account={account}
         currentMonth={currentMonth}
+        onChangerCompte={() => setChoix(true)}
       />
     </>
   );
 }
 
-function Home({ account, currentMonth }) {
+function Home({ account, currentMonth, onChangerCompte }) {
   const userId = account.session.user.id;
   const store = useTasks(account.household.id, userId);
   const rewards = useRewards(account.household.id, userId);
@@ -139,6 +158,7 @@ function Home({ account, currentMonth }) {
     <div className={`screen has-tabbar ${entreprise ? 'screen-entreprise' : ''}`}>
       <Header
         accroche={tab === 'liste' ? headline(todoThisMonth) : null}
+        onRetour={tab === 'liste' && plusieursComptes() ? onChangerCompte : undefined}
         online={store.online}
         pending={store.pending}
       />

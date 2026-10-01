@@ -47,6 +47,9 @@ export function memoriser({ session, nom, type }) {
   ecrire([...liste.filter((c) => c.userId !== entree.userId), entree]);
 }
 
+/** Au moins deux comptes rangés : l'appli s'ouvre alors sur leur choix. */
+export const plusieursComptes = () => lireComptes().length >= 2;
+
 export function oublier(userId) {
   ecrire(lireComptes().filter((c) => c.userId !== userId));
 }
@@ -79,5 +82,23 @@ export async function ajouter(email, motDePasse) {
   });
   if (error || !data.session) return error ? error.message : 'indisponible';
   memoriser({ session: data.session });
+  return basculer(data.session.user.id);
+}
+
+/**
+ * Crée un compte pro depuis un compte perso, toujours sans fermer ce dernier.
+ * Renvoie null (le nouveau compte est ouvert), 'dejaInscrit' ou
+ * 'confirmation' (le serveur attend un clic dans le mail), ou un message.
+ */
+export async function creer(email, motDePasse) {
+  const c = clientSansMemoire();
+  if (!c) return 'indisponible';
+  const { data, error } = await c.auth.signUp({
+    email: String(email || '').trim(),
+    password: motDePasse,
+  });
+  if (error) return /already registered/i.test(error.message) ? 'dejaInscrit' : error.message;
+  if (!data.session) return 'confirmation';
+  memoriser({ session: data.session, type: 'pro' });
   return basculer(data.session.user.id);
 }
