@@ -103,7 +103,7 @@ export function useAccount() {
     // venue — et chacun héritait du prénom de l'autre.
     const { data, error: err } = await supabase
       .from('members')
-      .select('household_id, display_name, households(id, name)')
+      .select('household_id, display_name, households(id, name, entreprise)')
       .eq('user_id', session.user.id)
       .order('household_id');
 
@@ -145,7 +145,7 @@ export function useAccount() {
       if (!e) {
         const { data: apres } = await supabase
           .from('members')
-          .select('household_id, display_name, households(id, name)')
+          .select('household_id, display_name, households(id, name, entreprise)')
           .eq('user_id', session.user.id)
           .eq('household_id', attente);
         if (apres && apres.length > 0) {
@@ -286,7 +286,7 @@ export function useAccount() {
     // clic, la personne peut très bien avoir déjà un foyer.
     const { data: deja, error: eDeja } = await supabase
       .from('members')
-      .select('household_id, display_name, households(id, name)')
+      .select('household_id, display_name, households(id, name, entreprise)')
       .eq('user_id', session.user.id)
       .limit(1);
     if (eDeja) {
@@ -319,6 +319,29 @@ export function useAccount() {
     writeLastHousehold(h.id);
     setHousehold(h);
   }, [session]);
+
+  /**
+   * Compte entreprise : un foyer partagé par une équipe, dont chaque membre
+   * signe ses actions avec un code à 4 chiffres. La base crée le foyer, y
+   * inscrit ce compte et range le code responsable, chiffré.
+   */
+  const createEntreprise = useCallback(
+    async (nom, codeResponsable) => {
+      setError(null);
+      const { data: hid, error: e } = await supabase.rpc('cmp_entreprise_creer', {
+        p_nom: nom,
+        p_code_responsable: codeResponsable,
+      });
+      if (e) {
+        setError(e.message);
+        return false;
+      }
+      writeLastHousehold(hid);
+      setHousehold({ id: hid, name: nom || 'Entreprise', entreprise: true });
+      return true;
+    },
+    [],
+  );
 
   const joinHousehold = useCallback(
     async (code) => {
@@ -421,6 +444,7 @@ export function useAccount() {
     setPassword,
     signOut,
     createHousehold,
+    createEntreprise,
     joinHousehold,
     updateDisplayName,
     leaveHousehold,

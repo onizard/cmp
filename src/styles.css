@@ -2819,3 +2819,216 @@ body,
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* --- Mode entreprise ---------------------------------------------------- */
+
+/* Le pavé du code opérateur : au-dessus de tout, gros boutons, pouces. */
+.code-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 58;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(23, 40, 76, 0.5);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: honorer-voile 0.2s ease both;
+}
+
+.code-carte {
+  width: min(100%, 320px);
+  padding: 22px 20px 18px;
+  border-radius: 26px;
+  background: var(--card);
+  box-shadow: 0 24px 60px -20px rgba(23, 40, 76, 0.6);
+  text-align: center;
+  animation: honorer-entree 0.35s cubic-bezier(0.18, 0.9, 0.3, 1.15) both;
+}
+
+.code-titre {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.code-detail {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.code-points {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 18px 0 6px;
+}
+
+.code-points span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--violet);
+  transition: background 0.15s ease;
+}
+
+.code-points span.plein {
+  background: var(--grad);
+  border-color: transparent;
+}
+
+.code-faux .code-points {
+  animation: code-secoue 0.35s ease;
+}
+
+@keyframes code-secoue {
+  20%, 60% { transform: translateX(-7px); }
+  40%, 80% { transform: translateX(7px); }
+}
+
+.code-erreur {
+  min-height: 1.3em;
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.code-pave {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.code-touche {
+  height: 58px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.code-touche:active {
+  background: var(--paper-deep);
+}
+
+.code-efface {
+  font-size: 20px;
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-voile,
+  .code-carte,
+  .code-faux .code-points {
+    animation: none;
+  }
+}
+
+/* « par Julie » / « fait par Marc », sous le texte de la tâche. */
+.op-signature {
+  margin-top: 7px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+/* Le classement de l'équipe : pas de jauge, un détail sous le nom. */
+.classement-equipe li {
+  grid-template-columns: 34px 1fr auto;
+}
+
+.classement-detail {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+/* La gestion de l'équipe, dans Mon compte. */
+.equipe-liste {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.equipe-liste li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.equipe-liste li.inactif > span:first-child {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+.equipe-etat {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.equipe-nom {
+  flex: 1;
+  min-width: 0;
+}
+
+.equipe-bascule {
+  min-height: 0;
+  padding: 4px 0;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.equipe-actions {
+  display: flex;
+  flex-basis: 100%;
+  gap: 8px;
+}
+
+.equipe-actions .field {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.equipe-actions .btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.equipe-ligne {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.equipe-ligne .field {
+  margin: 0;
+}
+
+.equipe-ligne .field:first-child {
+  flex: 1.2;
+  min-width: 0;
+}
+
+.equipe-code {
+  flex: 1;
+  min-width: 0;
+}

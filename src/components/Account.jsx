@@ -17,11 +17,12 @@ import ShareInvite from './ShareInvite.jsx';
 import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
 import { familleDOffice } from '../lib/famille.js';
+import EquipeReglages from './EquipeReglages.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
 
-export default function Account({ account, rewards = null }) {
+export default function Account({ account, rewards = null, equipe = null }) {
   const t = useT();
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
@@ -269,8 +270,18 @@ export default function Account({ account, rewards = null }) {
         </div>
       </section>
 
+      {/* Mode entreprise : l'équipe et ses codes, derrière le code responsable. */}
+      {equipe && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('entreprise.equipe')}</h2>
+          <div className="setcard">
+            <EquipeReglages equipe={equipe} />
+          </div>
+        </section>
+      )}
+
       {/* Le mode famille : d'office à partir de 3 membres, au choix avant. */}
-      {rewards && (
+      {rewards && !equipe && (
         <section className="setgroup">
           <h2 className="setlabel">{t('famille.titre')}</h2>
           <div className="setcard">

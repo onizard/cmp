@@ -20,6 +20,8 @@ import Combo from './components/Combo.jsx';
 import BonsAHonorer from './components/BonsAHonorer.jsx';
 import Nouvelles from './components/Nouvelles.jsx';
 import { syncPush } from './lib/push.js';
+import { useEquipe } from './lib/equipe.js';
+import EquipeView from './components/EquipeView.jsx';
 
 function NotConfigured() {
   return (
@@ -87,6 +89,9 @@ function Home({ account, currentMonth }) {
   const admin = useAdmin();
   const [tab, setTab] = useState('liste');
   const householdId = account.household.id;
+  // Mode entreprise : une équipe sur ce compte, chacun avec son code.
+  const entreprise = Boolean(account.household.entreprise);
+  const equipe = useEquipe(householdId, entreprise);
 
   // L'annonce du combo vit ici, et pas dans la tâche : elle s'affiche au
   // milieu de l'écran, au-dessus de tout. La clé la fait rejouer quand deux
@@ -142,22 +147,29 @@ function Home({ account, currentMonth }) {
             currentMonth={currentMonth}
             onCombo={annoncerCombo}
             names={rewards.names}
+            equipe={entreprise ? equipe : null}
           />
         ))}
-      {tab === 'cerveau' && (
-        <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
-      )}
+      {tab === 'cerveau' &&
+        (entreprise ? (
+          <EquipeView tasks={store.tasks} equipe={equipe} />
+        ) : (
+          <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
+        ))}
       {tab === 'bilan' && (
         <BilanView tasks={store.tasks} claims={rewards.claims} userId={userId} />
       )}
-      {tab === 'compte' && <Account account={account} rewards={rewards} />}
+      {tab === 'compte' && (
+        <Account account={account} rewards={rewards} equipe={entreprise ? equipe : null} />
+      )}
       {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}
 
       <TabBar
         tab={tab}
         onChange={setTab}
-        honourCount={readyCount}
+        honourCount={entreprise ? 0 : readyCount}
         admin={admin.isAdmin}
+        entreprise={entreprise}
       />
 
       {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
