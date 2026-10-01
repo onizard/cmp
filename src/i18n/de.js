@@ -220,7 +220,6 @@ export default {
     oublier: 'Von diesem Gerät entfernen',
     ajouter: 'Konto hinzufügen',
     ajouterEtOuvrir: 'Hinzufügen und öffnen',
-    aide: 'Du wechselst zwischen Konten, ohne dein Passwort neu einzugeben: Es wird kein Passwort gespeichert, nur die bereits offene Sitzung. „Abmelden“ entfernt das Konto von diesem Gerät.',
     expire: 'Die Sitzung von {email} ist abgelaufen: Melde dich mit dem Passwort erneut an.',
     autreCompte: 'Anderes Konto verwenden',
   },

@@ -151,7 +151,6 @@ export default function Comptes({ courant = null, ajout = true, onChange }) {
             {t('comptes.ajouter')}
           </button>
         ))}
-      <p className="setnote">{t('comptes.aide')}</p>
     </div>
   );
 }
