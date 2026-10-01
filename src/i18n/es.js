@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Contraseña actual',
+    actuelFaux: 'La contraseña actual no es correcta.',
+    tropEssais: 'Demasiados intentos: vuelve a probar en un cuarto de hora.',
+    oublie: '¿Olvidaste tu contraseña?',
+    oubliAide: 'Cierra sesión y toca «{lien}»: el enlace que recibirás por correo te dejará elegir otra.',
+    avecMotDePasse: 'Tengo mi contraseña actual',
     changerMotDePasse: 'Cambiar la contraseña',
     motDePasseChange: 'Contraseña cambiada',
     valider: 'Confirmar',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'Más tarde',
   },
   entreprise: {
+    motDePasseAdmin: 'Contraseña de administrador',
+    nouveauCodeResp: 'Nuevo código de responsable (4 a 8 cifras)',
+    changerCodeResp: 'Cambiar el código de responsable',
+    codeRespChange: 'Código de responsable cambiado',
     changerMotDePasse: 'Cambiar la contraseña de administrador',
     relies: 'Teléfonos vinculados a la cuenta',
     reliesVide: 'Ningún compañero se ha unido aún desde su teléfono.',

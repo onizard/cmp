@@ -178,6 +178,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Mot de passe actuel',
+    actuelFaux: 'Mot de passe actuel incorrect.',
+    tropEssais: 'Trop d’essais : réessaie dans un quart d’heure.',
+    oublie: 'Mot de passe oublié ?',
+    oubliAide: 'Déconnecte-toi, puis touche « {lien} » : le lien reçu par mail te laissera en choisir un nouveau.',
+    avecMotDePasse: 'J’ai mon mot de passe actuel',
     changerMotDePasse: 'Changer de mot de passe',
     motDePasseChange: 'Mot de passe changé',
     valider: 'Valider',
@@ -400,6 +406,10 @@ export default {
     plusTard: 'Plus tard',
   },
   entreprise: {
+    motDePasseAdmin: 'Mot de passe administrateur',
+    nouveauCodeResp: 'Nouveau code responsable (4 à 8 chiffres)',
+    changerCodeResp: 'Changer le code responsable',
+    codeRespChange: 'Code responsable changé',
     changerMotDePasse: 'Changer le mot de passe administrateur',
     relies: 'Téléphones reliés au compte',
     reliesVide: 'Aucun équipier n’a encore rejoint le compte depuis son téléphone.',

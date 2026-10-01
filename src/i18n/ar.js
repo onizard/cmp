@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'كلمة المرور الحالية',
+    actuelFaux: 'كلمة المرور الحالية غير صحيحة.',
+    tropEssais: 'محاولات كثيرة: حاول بعد ربع ساعة.',
+    oublie: 'نسيت كلمة المرور؟',
+    oubliAide: 'سجّل الخروج ثم المس «{lien}»: الرابط الذي يصلك بالبريد يتيح لك اختيار كلمة جديدة.',
+    avecMotDePasse: 'أعرف كلمة المرور الحالية',
     changerMotDePasse: 'تغيير كلمة المرور',
     motDePasseChange: 'تم تغيير كلمة المرور',
     valider: 'تأكيد',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'لاحقًا',
   },
   entreprise: {
+    motDePasseAdmin: 'كلمة مرور المسؤول',
+    nouveauCodeResp: 'رمز المسؤول الجديد (من 4 إلى 8 أرقام)',
+    changerCodeResp: 'تغيير رمز المسؤول',
+    codeRespChange: 'تم تغيير رمز المسؤول',
     changerMotDePasse: 'تغيير كلمة مرور المسؤول',
     relies: 'الهواتف المرتبطة بالحساب',
     reliesVide: 'لم ينضم أي زميل إلى الحساب من هاتفه بعد.',

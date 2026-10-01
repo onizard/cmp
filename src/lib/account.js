@@ -55,6 +55,27 @@ const redirectTo = () =>
  * Gère la session, l'appartenance à un foyer, et les actions de connexion /
  * création / rattachement.
  */
+/**
+ * Connecté par le lien du mail il y a moins d'une heure ? (Le jeton le dit :
+ * sa liste « amr » garde comment et quand on s'est connecté.) La base fait
+ * le même calcul ; ici, il sert à ne pas demander un ancien mot de passe
+ * qu'on a justement oublié.
+ */
+export function connexionParLienRecente(session, maintenant = Date.now()) {
+  try {
+    const charge = JSON.parse(
+      atob(String(session?.access_token || '').split('.')[1].replace(/-/g, '+').replace(/_/g, '/')),
+    );
+    return (charge.amr || []).some(
+      (a) =>
+        ['otp', 'magiclink', 'recovery'].includes(a.method) &&
+        a.timestamp * 1000 > maintenant - 60 * 60 * 1000,
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function useAccount() {
   // Dès l'ouverture : on retire le code de l'adresse et on le met de côté,
   // en attendant que la personne ait un compte auquel le rattacher.
@@ -277,18 +298,19 @@ export function useAccount() {
   }, []);
 
   /** Pose ou change le mot de passe du compte déjà connecté. */
-  const setPassword = useCallback(async (password) => {
-    setError(null);
-    if (password.length < 8) {
-      setError(t('auth.motDePasseCourt'));
-      return false;
-    }
-    const { error: err } = await supabase.auth.updateUser({ password });
-    if (err) {
-      setError(err.message);
-      return false;
-    }
-    return true;
+  /**
+   * Un nouveau mot de passe, avec l'ancien : la base le vérifie
+   * (mot-de-passe.sql). Juste après une connexion par le lien du mail
+   * (« Mot de passe oublié »), l'ancien n'est pas demandé — sauf en compte
+   * pro. Renvoie null, 'faux', 'bloque', 'court' ou un message.
+   */
+  const changerMotDePasse = useCallback(async (actuel, nouveau) => {
+    const { data, error: e } = await supabase.rpc('cmp_mot_de_passe', {
+      p_actuel: actuel || null,
+      p_nouveau: nouveau,
+    });
+    if (e) return e.message;
+    return data === 'ok' ? null : data;
   }, []);
 
   // Se déconnecter ferme la connexion pour de bon : le compte quitte la
@@ -477,7 +499,8 @@ export function useAccount() {
     signIn,
     signUp,
     sendMagicLink,
-    setPassword,
+    changerMotDePasse,
+    lienRecent: connexionParLienRecente(session),
     motDePassePro,
     signOut,
     createHousehold,
