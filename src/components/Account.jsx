@@ -18,6 +18,8 @@ import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
 import { familleDOffice } from '../lib/famille.js';
 import EquipeReglages from './EquipeReglages.jsx';
+import Comptes from './Comptes.jsx';
+import { lireComptes } from '../lib/comptes.js';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -272,6 +274,18 @@ export default function Account({ account, rewards = null, equipe = null }) {
           <ShareInvite code={code} prenom={account.displayName} />
         </div>
       </section>
+
+      {/* Perso, pro… : les comptes rangés sur cet appareil, d'un toucher. Un
+          compte pro, celui d'une équipe, n'en ajoute pas : on n'y voit que les
+          comptes déjà là, pour revenir au sien. */}
+      {(!equipe || lireComptes().some((c) => c.userId !== account.session.user.id)) && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('comptes.titre')}</h2>
+          <div className="setcard">
+            <Comptes courant={account.session.user.id} ajout={!equipe} />
+          </div>
+        </section>
+      )}
 
       {/* Mode entreprise : l'équipe et ses codes, derrière le code responsable. */}
       {equipe && (

@@ -23,3 +23,15 @@ export const supabase = isConfigured
       },
     })
   : null;
+
+/**
+ * Un client jetable, sans mémoire : il sert à ouvrir la connexion d'un AUTRE
+ * compte (« Ajouter un compte ») sans fermer celle en cours. Sa session n'est
+ * écrite nulle part ; c'est l'appelant qui la range.
+ */
+export const clientSansMemoire = () =>
+  isConfigured
+    ? createClient(url, anonKey, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      })
+    : null;

@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
+import Comptes from './Comptes.jsx';
+import { lireComptes } from '../lib/comptes.js';
 import { dejaVenu } from '../lib/account.js';
 
 // Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
 // faire renvoyer un lien quand le mot de passe est perdu. Un appareil qui n'a
 // jamais servi ouvre sur la création : qui a déjà un compte est en général
 // déjà connecté.
+//
+// Un appareil qui garde déjà un compte perso et un compte pro n'a plus besoin
+// du formulaire : on n'y montre que les tuiles, et un petit lien pour entrer
+// quand même avec un autre compte.
 export default function Auth({ account }) {
   const t = useT();
   const [mode, setMode] = useState(() => (dejaVenu() ? 'connexion' : 'creation'));
@@ -15,6 +21,11 @@ export default function Auth({ account }) {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [comptes, setComptes] = useState(lireComptes);
+  const [autre, setAutre] = useState(false);
+  const persoEtPro =
+    comptes.some((c) => c.type === 'pro') && comptes.some((c) => c.type !== 'pro');
+  const formulaire = !persoEtPro || autre;
 
   const creation = mode === 'creation';
   const oubli = mode === 'oubli';
@@ -61,78 +72,100 @@ export default function Auth({ account }) {
     <div className="screen">
       <Header />
       <InstallHint />
-      <form className="panel" onSubmit={submit}>
-        <p className="lede">
-          {creation ? t('auth.creation') : oubli ? t('auth.oubli') : t('auth.connexion')}
-        </p>
-        <p className="soft-text">
-          {creation
-            ? t('auth.creationAide')
-            : oubli
-              ? t('auth.oubliAide')
-              : t('auth.connexionAide')}
-        </p>
-
-        <label className="field-label" htmlFor="email">{t('auth.email')}</label>
-        <input
-          id="email"
-          className="field"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t('auth.emailPlaceholder')}
-        />
-
-        {!oubli && (
-          <>
-            <label className="field-label" htmlFor="pass">{t('auth.motDePasse')}</label>
-            <input
-              id="pass"
-              className="field"
-              type="password"
-              autoComplete={creation ? 'new-password' : 'current-password'}
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={t('auth.motDePassePlaceholder')}
-            />
-          </>
-        )}
-
-        {account.error && <p className="error">{account.error}</p>}
-
-        <button className="btn btn-accent btn-block" type="submit" disabled={busy}>
-          {busy
-            ? t('app.instant')
-            : creation
-              ? t('auth.creerMonCompte')
-              : oubli
-                ? t('auth.recevoirLien')
-                : t('auth.seConnecter')}
-        </button>
-
-        <p className="authlinks">
-          {mode === 'connexion' ? (
-            <>
-              <button type="button" onClick={() => go('oubli')}>
-                {t('auth.oublieLien')}
+      {/* Les comptes déjà rangés sur cet appareil : on y entre d'un toucher. */}
+      {mode !== 'oubli' && comptes.length > 0 && (
+        <div className="panel">
+          <p className="lede">{t('comptes.titre')}</p>
+          <Comptes ajout={false} onChange={setComptes} />
+          {!formulaire && (
+            <p className="authlinks">
+              <button
+                type="button"
+                onClick={() => {
+                  setAutre(true);
+                  go('connexion');
+                }}
+              >
+                {t('comptes.autreCompte')}
               </button>
-              <span aria-hidden="true"> · </span>
-              <button type="button" onClick={() => go('creation')}>
-                {t('auth.creerLien')}
-              </button>
-            </>
-          ) : (
-            <button type="button" onClick={() => go('connexion')}>
-              {creation ? t('auth.dejaUnCompte') : t('auth.retourConnexion')}
-            </button>
+            </p>
           )}
-        </p>
-      </form>
+        </div>
+      )}
+      {formulaire && (
+        <form className="panel" onSubmit={submit}>
+          <p className="lede">
+            {creation ? t('auth.creation') : oubli ? t('auth.oubli') : t('auth.connexion')}
+          </p>
+          <p className="soft-text">
+            {creation
+              ? t('auth.creationAide')
+              : oubli
+                ? t('auth.oubliAide')
+                : t('auth.connexionAide')}
+          </p>
+
+          <label className="field-label" htmlFor="email">{t('auth.email')}</label>
+          <input
+            id="email"
+            className="field"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={t('auth.emailPlaceholder')}
+          />
+
+          {!oubli && (
+            <>
+              <label className="field-label" htmlFor="pass">{t('auth.motDePasse')}</label>
+              <input
+                id="pass"
+                className="field"
+                type="password"
+                autoComplete={creation ? 'new-password' : 'current-password'}
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t('auth.motDePassePlaceholder')}
+              />
+            </>
+          )}
+
+          {account.error && <p className="error">{account.error}</p>}
+
+          <button className="btn btn-accent btn-block" type="submit" disabled={busy}>
+            {busy
+              ? t('app.instant')
+              : creation
+                ? t('auth.creerMonCompte')
+                : oubli
+                  ? t('auth.recevoirLien')
+                  : t('auth.seConnecter')}
+          </button>
+
+          <p className="authlinks">
+            {mode === 'connexion' ? (
+              <>
+                <button type="button" onClick={() => go('oubli')}>
+                  {t('auth.oublieLien')}
+                </button>
+                <span aria-hidden="true"> · </span>
+                <button type="button" onClick={() => go('creation')}>
+                  {t('auth.creerLien')}
+                </button>
+              </>
+            ) : (
+              <button type="button" onClick={() => go('connexion')}>
+                {creation ? t('auth.dejaUnCompte') : t('auth.retourConnexion')}
+              </button>
+            )}
+          </p>
+        </form>
+      )}
     </div>
   );
 }

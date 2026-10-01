@@ -80,6 +80,32 @@ body,
   align-items: center;
   text-align: center;
   padding: 10px 2px 2px;
+  position: relative;
+}
+
+/* Changer de compte : la petite flèche en haut à gauche des tâches. */
+.header-retour {
+  position: absolute;
+  top: 8px;
+  inset-inline-start: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.header-retour:active {
+  background: var(--line);
+}
+
+[dir='rtl'] .header-retour svg {
+  transform: scaleX(-1);
 }
 
 .brand-title {
@@ -3069,4 +3095,129 @@ body,
   .screen-entreprise .tabbar {
     max-width: 760px;
   }
+}
+
+/* --- Plusieurs comptes : perso, pro ------------------------------------- */
+
+.comptes-liste {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.compte {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+}
+
+.compte-actif {
+  border-color: #d9c6ec;
+  background: linear-gradient(105deg, #fdf3f5, #f6effb 55%, #f1f3fd);
+  cursor: default;
+}
+
+.compte-logo {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  color: #fff;
+}
+
+.compte-perso {
+  background: var(--grad);
+}
+
+.compte-pro {
+  background: linear-gradient(145deg, #4b5d8f, #2c3a63);
+}
+
+.compte-texte {
+  min-width: 0;
+}
+
+.compte-nom {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compte-email {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Le choix du type de compte : la description passe à la ligne. */
+.compte-choix .compte-email {
+  white-space: normal;
+}
+
+.compte-etat {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet);
+  white-space: nowrap;
+}
+
+.compte-actif .compte-etat {
+  color: var(--ink-3);
+}
+
+.compte-oublier {
+  min-height: 0;
+  padding: 4px 4px 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.compte-ajout {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.compte-ajout .field {
+  margin: 0;
+}
+
+.compte-ajout-boutons {
+  display: flex;
+  gap: 8px;
+}
+
+.compte-ajout-logo {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-inline-end: 8px;
+}
+
+.compte-ajout-logo svg {
+  width: 18px;
+  height: 18px;
+}
+
+.compte-ajout .authlinks {
+  margin: 4px 0 0;
 }
