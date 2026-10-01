@@ -20,3 +20,4 @@ android/app/build
 android/.gradle
 ios/App/build
 ios/DerivedData
+cmp-serveur.tgz

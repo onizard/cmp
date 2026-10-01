@@ -1,0 +1,177 @@
+# CMP — la pile sur le serveur (Hetzner, Ubuntu + Docker).
+#
+# Même pile que sur le NAS (nas/docker-compose.yml), avec trois différences :
+#   * la base démarre sans le schéma CMP (cmp.sql) : il arrive avec les
+#     données, importées du NAS par installer.sh ;
+#   * la passerelle n'écoute que sur le serveur lui-même (127.0.0.1) : seul
+#     le tunnel Cloudflare y accède, aucun port n'est ouvert sur Internet ;
+#   * le service d'envoi des notifications (cmp-push) fait partie de la pile.
+#
+# Toutes les valeurs sensibles sont dans .env (le même que sur le NAS).
+
+x-journaux: &journaux
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: '3'
+
+services:
+  db:
+    <<: *journaux
+    container_name: cmp-db
+    image: supabase/postgres:17.6.1.136
+    restart: unless-stopped
+    # NB : on ne fixe PAS POSTGRES_USER — l'image doit créer son superutilisateur
+    # « supabase_admin » elle-même. Le forcer casse le bootstrap.
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: ${POSTGRES_PORT}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXP: ${JWT_EXPIRY}
+    volumes:
+      # Scripts d'init au NIVEAU RACINE de initdb.d (préfixe « z » → exécutés
+      # APRÈS le migrate.sh de l'image, une fois les rôles créés).
+      - ./db/roles.sql:/docker-entrypoint-initdb.d/z1-roles.sql:ro
+      - ./db/jwt.sql:/docker-entrypoint-initdb.d/z2-jwt.sql:ro
+      - ./db/realtime.sql:/docker-entrypoint-initdb.d/z3-realtime.sql:ro
+      # Données Postgres dans un dossier du projet (réinit = supprimer ./pgdata).
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-h', 'localhost']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  auth:
+    <<: *journaux
+    container_name: cmp-auth
+    image: supabase/gotrue:v2.196.0
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: ${PUBLIC_URL}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      GOTRUE_SITE_URL: ${PUBLIC_URL}/
+      GOTRUE_URI_ALLOW_LIST: ${PUBLIC_URL}/*
+      GOTRUE_DISABLE_SIGNUP: 'false'
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_ISSUER: supabase
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
+      # Connexion par mot de passe : le compte est utilisable tout de suite,
+      # sans aller chercher un mail de confirmation. Le SMTP reste configuré
+      # pour le lien de secours et la récupération de mot de passe.
+      GOTRUE_MAILER_AUTOCONFIRM: 'true'
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT}
+      GOTRUE_SMTP_USER: ${SMTP_USER}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME}
+      GOTRUE_MAILER_URLPATHS_INVITE: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/v1/verify
+
+  rest:
+    <<: *journaux
+    container_name: cmp-rest
+    image: postgrest/postgrest:v14.17
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: 'false'
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+
+  realtime:
+    <<: *journaux
+    # Le nom doit rester ce sous-domaine : Realtime en déduit l'identifiant du tenant.
+    container_name: realtime-dev.cmp-realtime
+    image: supabase/realtime:v2.134.10
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_ENC_KEY: ${REALTIME_DB_ENC_KEY}
+      API_JWT_SECRET: ${JWT_SECRET}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      METRICS_JWT_SECRET: ${JWT_SECRET}
+      ERL_AFLAGS: -proto_dist inet_tcp
+      DNS_NODES: "''"
+      RLIMIT_NOFILE: '10000'
+      APP_NAME: realtime
+      SEED_SELF_HOST: 'true'
+      RUN_JANITOR: 'true'
+      DISABLE_HEALTHCHECK_LOGGING: 'true'
+
+  gateway:
+    <<: *journaux
+    container_name: cmp-gateway
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - auth
+      - rest
+      - realtime
+    ports:
+      - '127.0.0.1:8000:80'
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app:/usr/share/nginx/html:ro
+
+  # Tunnel Cloudflare : rend la passerelle accessible en HTTPS depuis l'extérieur,
+  # sans ouvrir de port.
+  cloudflared:
+    <<: *journaux
+    container_name: cmp-tunnel
+    image: cloudflare/cloudflared:2024.10.0
+    restart: unless-stopped
+    depends_on:
+      - gateway
+    command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
+
+  # Les notifications (rappels, réservations, demandes d'accès pro…).
+  push:
+    <<: *journaux
+    container_name: cmp-push
+    image: node:20-alpine
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      TZ: Europe/Paris
+      REMINDER_HOUR: '20'
+    volumes:
+      - ./push:/app:ro
+    command: node /app/push.cjs

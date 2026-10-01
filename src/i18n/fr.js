@@ -248,7 +248,7 @@ export default {
     rienVendu:
       'Rien n’est vendu, rien n’est transmis. Aucune publicité, aucun traçage, aucun outil de mesure extérieur.',
     heberge:
-      'Tout est hébergé sur un serveur privé, en France, pas chez un géant du nuage.',
+      'Tout est hébergé sur un serveur privé en Allemagne, chez un hébergeur européen, pas chez un géant du nuage.',
     chiffre:
       'Le texte des notifications est chiffré avant de partir : ni Google ni Apple ne peuvent le lire au passage.',
   },

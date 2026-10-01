@@ -132,7 +132,7 @@ export default {
     titre: 'Os teus dados',
     foyerSeul: 'Ninguém fora da tua casa vê as tuas tarefas. A base de dados recusa-o, não é só uma questão de ecrã.',
     rienVendu: 'Nada é vendido, nada é transmitido. Sem publicidade, sem rastreio, sem ferramentas de medição externas.',
-    heberge: 'Tudo está alojado num servidor privado, em França, não num gigante da nuvem.',
+    heberge: 'Tudo está alojado num servidor privado na Alemanha, num fornecedor europeu, não num gigante da nuvem.',
     chiffre: 'O texto das notificações é cifrado antes de sair: nem a Google nem a Apple o conseguem ler pelo caminho.',
   },
   installation: {
