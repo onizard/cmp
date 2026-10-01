@@ -132,7 +132,7 @@ export default {
     titre: 'Your data',
     foyerSeul: 'Nobody outside your household sees your tasks. The database refuses it — it is not just a display matter.',
     rienVendu: 'Nothing is sold, nothing is passed on. No advertising, no tracking, no outside analytics.',
-    heberge: 'Everything is hosted on a private server in France, not with a cloud giant.',
+    heberge: 'Everything is hosted on a private server in Germany, with a European host, not with a cloud giant.',
     chiffre: 'Notification text is encrypted before it leaves: neither Google nor Apple can read it on the way.',
   },
   installation: {
