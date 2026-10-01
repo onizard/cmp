@@ -113,7 +113,6 @@ export default {
   },
   partage: {
     codeFoyer: 'קוד הבית:',
-    toucherPourCopier: 'לגעת כדי להעתיק',
     titre: 'שיתוף', inviter: 'להזמין חבר/ה', partagerAppli: 'שיתוף האפליקציה', copie: 'הקישור הועתק ✓',
     qrAfficher: 'הצגת קוד ה־QR להזמנה', qrMasquer: 'הסתרת קוד ה־QR', qrAlt: 'קוד QR להזמנה',
     partagerCode: 'שיתוף קוד הבית',

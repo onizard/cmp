@@ -3342,6 +3342,10 @@ body,
   unicode-bidi: isolate;
 }
 
+.code-foyer-etat:empty {
+  display: none;
+}
+
 .code-foyer-etat {
   display: block;
   margin-top: 4px;

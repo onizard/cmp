@@ -113,7 +113,6 @@ export default {
   },
   partage: {
     codeFoyer: 'Código da casa:',
-    toucherPourCopier: 'toca para copiar',
     titre: 'Partilhar', inviter: 'Convidar um membro', partagerAppli: 'Partilhar a aplicação', copie: 'Link copiado ✓',
     qrAfficher: 'Mostrar o QR do convite', qrMasquer: 'Ocultar o QR do convite', qrAlt: 'Código QR de convite',
     partagerCode: 'Partilhar o código do lar',

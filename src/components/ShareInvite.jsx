@@ -38,7 +38,8 @@ export default function ShareInvite({ code, prenom }) {
     }
   };
 
-  // « Code foyer : … » : un toucher le copie, tel quel.
+  // « Code foyer : … » : un toucher le copie, tel quel ; « Code copié »
+  // s'affiche alors juste en dessous.
   const copierCode = async () => {
     try {
       await navigator.clipboard.writeText(code);
@@ -75,7 +76,7 @@ export default function ShareInvite({ code, prenom }) {
           <span className="code-foyer-libelle">{t('partage.codeFoyer')}</span>{' '}
           <span className="code-foyer-valeur">{code}</span>
           <span className="code-foyer-etat" role="status">
-            {copie === 'code' ? t('partage.codeCopie') : t('partage.toucherPourCopier')}
+            {copie === 'code' ? t('partage.codeCopie') : ''}
           </span>
         </button>
       )}

@@ -114,7 +114,6 @@ export default {
   },
   partage: {
     codeFoyer: 'کد خانه:',
-    toucherPourCopier: 'برای کپی لمس کن',
     titre: 'هم‌رسانی', inviter: 'دعوت از یک عضو', partagerAppli: 'هم‌رسانی برنامه', copie: 'پیوند رونوشت شد ✓',
     qrAfficher: 'نمایش کد QR دعوت', qrMasquer: 'پنهان کردن کد QR', qrAlt: 'کد QR دعوت',
     partagerCode: 'هم‌رسانی کد خانه',

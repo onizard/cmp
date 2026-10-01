@@ -113,7 +113,6 @@ export default {
   },
   partage: {
     codeFoyer: 'Код семьи:',
-    toucherPourCopier: 'нажми, чтобы скопировать',
     titre: 'Поделиться', inviter: 'Пригласить участника', partagerAppli: 'Поделиться приложением', copie: 'Ссылка скопирована ✓',
     qrAfficher: 'Показать QR приглашения', qrMasquer: 'Скрыть QR приглашения', qrAlt: 'QR-код приглашения',
     partagerCode: 'Поделиться кодом дома',

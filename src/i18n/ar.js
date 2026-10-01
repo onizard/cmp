@@ -113,7 +113,6 @@ export default {
   },
   partage: {
     codeFoyer: 'رمز المنزل:',
-    toucherPourCopier: 'المس للنسخ',
     titre: 'مشاركة', inviter: 'دعوة عضو', partagerAppli: 'مشاركة التطبيق', copie: 'نُسخ الرابط ✓',
     qrAfficher: 'إظهار رمز الدعوة', qrMasquer: 'إخفاء رمز الدعوة', qrAlt: 'رمز QR للدعوة',
     partagerCode: 'مشاركة رمز المنزل',

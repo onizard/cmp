@@ -113,7 +113,6 @@ export default {
   },
   partage: {
     codeFoyer: '家庭代码：',
-    toucherPourCopier: '轻触复制',
     titre: '分享', inviter: '邀请成员', partagerAppli: '分享这个应用', copie: '链接已复制 ✓',
     qrAfficher: '显示邀请二维码', qrMasquer: '隐藏邀请二维码', qrAlt: '邀请二维码',
     partagerCode: '分享家庭代码',

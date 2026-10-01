@@ -217,7 +217,6 @@ export default {
 
   partage: {
     codeFoyer: 'Code foyer :',
-    toucherPourCopier: 'toucher pour copier',
     titre: 'Partager',
     inviter: 'Inviter un membre',
     partagerAppli: 'Partager l’application',
