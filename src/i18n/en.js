@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'What each of you carried. 💛', toi: 'You', binome: 'Your other half', pts: 'pts',
     detail: '{ajoutees} added · {faites} done · {autres} for the other',
+    detailFamille: '{ajoutees} added · {faites} done · {autres} for others',
     bareme: 'scoring', baremeAjouter: 'Adding a task', baremeSienne: 'Ticking your own task',
-    baremeAutre: 'Ticking the other’s task',
+    baremeAutre: 'Ticking the other’s task', baremeAutreFamille: 'Tick someone else’s task',
     baremeCombo: 'Combo of the day',
     baremeComboNote: 'From the 2nd task ticked in a day, each one earns half a point more.',
     baremeNote: 'Points add up without limit. Spend them whenever, or save for a bigger reward.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'The app is not ready yet, try again in a moment.',
   },
   partage: {
-    titre: 'Share', inviter: 'Invite my other half', partagerAppli: 'Share the app', copie: 'Link copied ✓',
+    titre: 'Share', inviter: 'Invite a member', partagerAppli: 'Share the app', copie: 'Link copied ✓',
     qrAfficher: 'Show the invitation QR', qrMasquer: 'Hide the invitation QR', qrAlt: 'Invitation QR code',
     partagerCode: 'Share the household code',
     codeCopie: 'Code copied ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'The house tidied by your other half',
     menage: 'A full house clean done by your other half',
     semaineRepas: 'A week of meals cooked by your other half',
+    dessertChoisi: 'Pick the dessert',
+    chocolatChantilly: 'A hot chocolate with whipped cream',
+    musiqueVoiture: 'Pick the music in the car all week',
+    petitDejAuLit: 'Breakfast served in bed',
+    soireeJeux: 'A games night, with the game of your choice',
+    veillerPlusTard: 'Stay up an hour later',
+    soireePizza: 'A pizza night, toppings of your choice',
+    sortieWeekend: 'Pick the weekend outing',
+    piqueNique: 'A picnic in the park, all together',
+    cinemaPopcorn: 'A trip to the cinema, popcorn included',
+    journeeAuChoix: 'A day where you choose every activity',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} is on it until {h}: you can’t tick it until then.',
     aujourdhui: 'Already booked today: possible again tomorrow.',
     uneAutre: 'You’re already on “{tache}”. One at a time.',
+  },
+  famille: {
+    classement: 'Household ranking',
+    quiHonore: 'Who will honour it?',
+    sansPrenom: 'No name',
   },
   nouvelles: {
     titre: '{qui} ticked off',

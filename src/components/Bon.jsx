@@ -28,6 +28,7 @@ export default function Bon({
   visuel,
   lang,
   autre,
+  choix = null,
   lecture = false,
   onUtiliser,
   onAnnuler,
@@ -38,6 +39,9 @@ export default function Bon({
   // « Utiliser » et cette validation, le bon est en attente : l'autre est
   // prévenu, relancé, et le voit au milieu de son écran.
   const etat = etatBon(bon);
+  // En famille, « Utiliser » demande d'abord à qui : `choix` liste les autres
+  // membres. À deux, `choix` est vide et le bon part directement chez l'autre.
+  const [choisir, setChoisir] = useState(false);
   const utilise = etat === 'honore';
   const enAttente = etat === 'enAttente';
 
@@ -99,9 +103,37 @@ export default function Bon({
         </div>
       )}
 
-      {!lecture && etat === 'neuf' && (
+      {!lecture && etat === 'neuf' && choisir && (
+        <div className="bon-actions bon-choix">
+          <p className="bon-prevenu">{t('famille.quiHonore')}</p>
+          <div className="bon-choix-noms">
+            {choix.map((m) => (
+              <button
+                key={m.id}
+                className="btn btn-small btn-accent"
+                type="button"
+                onClick={() => {
+                  setChoisir(false);
+                  onUtiliser(m.id);
+                }}
+              >
+                {m.nom}
+              </button>
+            ))}
+          </div>
+          <button className="btn btn-small" type="button" onClick={() => setChoisir(false)}>
+            {t('app.annuler')}
+          </button>
+        </div>
+      )}
+
+      {!lecture && etat === 'neuf' && !choisir && (
         <div className="bon-actions">
-          <button className="btn btn-small btn-accent" type="button" onClick={onUtiliser}>
+          <button
+            className="btn btn-small btn-accent"
+            type="button"
+            onClick={() => (choix && choix.length > 1 ? setChoisir(true) : onUtiliser(choix?.[0]?.id))}
+          >
             {t('inventaire.utiliser')}
           </button>
           {onAnnuler && reste > 0 && (

@@ -24,53 +24,88 @@ create table if not exists catalogue_depart (
 -- Aucune politique : ni lue ni ecrite depuis l'application, seulement ici.
 alter table catalogue_depart enable row level security;
 
-insert into catalogue_depart (cle, label, cost, actif) values
-  ('cafeAuLit', 'Un café servi au lit', 10, true),
-  ('filmSoiree', 'Choisir le film de la soirée', 12, true),
-  ('grasseMatinee', 'Une grasse matinée, sans réveil', 18, true),
-  ('massage20', 'Un massage de 20 minutes', 25, true),
-  ('soireeLibre', 'Une soirée entièrement libre', 35, true),
-  ('restoAmoureux', 'Un resto en amoureux, organisé par l''autre', 50, true),
-  ('journeePourSoi', 'Une journée rien que pour soi', 75, true),
-  ('silenceTotal', 'Une heure de silence total', 10, false),
-  ('dernierCarre', 'Le dernier carré de chocolat, sans discuter', 10, true),
-  ('repasChoisi', 'Choisir le repas du soir', 12, true),
-  ('telecommande', 'La télécommande toute la soirée', 12, true),
-  ('siesteProtegee', 'Une sieste que personne ne vient interrompre', 18, true),
-  ('bainCoule', 'Un bain coulé, sans être dérangé·e', 25, true),
-  ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25, true),
-  ('matineeDehors', 'Une matinée dehors, sans horaire', 35, true),
-  ('weekendSansCorvee', 'Un week-end sans aucune corvée', 50, false),
-  ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75, true),
-  ('chocolatChaud', 'Un chocolat chaud à deux, sous un plaid', 10, true),
-  ('baladeADeux', 'Une balade à deux, téléphones éteints', 18, true),
-  ('soireeSurprise', 'Une soirée surprise, organisée par l''autre', 50, true),
-  ('spectacleADeux', 'Un concert ou un spectacle à deux', 50, true),
-  ('vaisselle', 'La vaisselle faite par l''autre', 10, false),
-  ('poubelles', 'Les poubelles sorties par l''autre pendant une semaine', 12, false),
-  ('repasCuisine', 'Le repas du soir cuisiné par l''autre', 18, false),
-  ('courses', 'Les courses faites par l''autre', 25, false),
-  ('linge', 'Le linge lavé, étendu, plié et rangé par l''autre', 25, false),
-  ('rangement', 'La maison rangée par l''autre', 35, false),
-  ('menage', 'Le ménage complet fait par l''autre', 50, false),
-  ('semaineRepas', 'Une semaine de repas cuisinés par l''autre', 75, false)
-on conflict (cle) do update
-  set label = excluded.label, cost = excluded.cost, actif = excluded.actif;
+-- A qui s'adresse chaque recompense : a tous, au couple seulement, ou a la
+-- famille seulement. Un foyer est une famille des qu'il compte 3 membres.
+alter table catalogue_depart add column if not exists public text not null default 'tous';
+alter table catalogue_depart drop constraint if exists catalogue_depart_public_check;
+alter table catalogue_depart add constraint catalogue_depart_public_check
+  check (public in ('tous', 'couple', 'famille'));
 
--- Remplit le catalogue d'un foyer avec ce qui lui manque. Une recompense deja
--- presente — meme cle, ou meme libelle — n'est pas doublee.
+insert into catalogue_depart (cle, label, cost, actif, public) values
+  ('cafeAuLit', 'Un café servi au lit', 10, true, 'couple'),
+  ('filmSoiree', 'Choisir le film de la soirée', 12, true, 'tous'),
+  ('grasseMatinee', 'Une grasse matinée, sans réveil', 18, true, 'tous'),
+  ('massage20', 'Un massage de 20 minutes', 25, true, 'couple'),
+  ('soireeLibre', 'Une soirée entièrement libre', 35, true, 'tous'),
+  ('restoAmoureux', 'Un resto en amoureux, organisé par l''autre', 50, true, 'couple'),
+  ('journeePourSoi', 'Une journée rien que pour soi', 75, true, 'tous'),
+  ('silenceTotal', 'Une heure de silence total', 10, false, 'tous'),
+  ('dernierCarre', 'Le dernier carré de chocolat, sans discuter', 10, true, 'tous'),
+  ('repasChoisi', 'Choisir le repas du soir', 12, true, 'tous'),
+  ('telecommande', 'La télécommande toute la soirée', 12, true, 'tous'),
+  ('siesteProtegee', 'Une sieste que personne ne vient interrompre', 18, true, 'tous'),
+  ('bainCoule', 'Un bain coulé, sans être dérangé·e', 25, true, 'tous'),
+  ('sortieAmis', 'Une sortie entre ami·es, sans rien organiser', 25, true, 'tous'),
+  ('matineeDehors', 'Une matinée dehors, sans horaire', 35, true, 'tous'),
+  ('weekendSansCorvee', 'Un week-end sans aucune corvée', 50, false, 'tous'),
+  ('weekendADeux', 'Un week-end à deux, organisé par l''autre', 75, true, 'couple'),
+  ('chocolatChaud', 'Un chocolat chaud à deux, sous un plaid', 10, true, 'couple'),
+  ('baladeADeux', 'Une balade à deux, téléphones éteints', 18, true, 'couple'),
+  ('soireeSurprise', 'Une soirée surprise, organisée par l''autre', 50, true, 'couple'),
+  ('spectacleADeux', 'Un concert ou un spectacle à deux', 50, true, 'couple'),
+  ('vaisselle', 'La vaisselle faite par l''autre', 10, false, 'tous'),
+  ('poubelles', 'Les poubelles sorties par l''autre pendant une semaine', 12, false, 'tous'),
+  ('repasCuisine', 'Le repas du soir cuisiné par l''autre', 18, false, 'tous'),
+  ('courses', 'Les courses faites par l''autre', 25, false, 'tous'),
+  ('linge', 'Le linge lavé, étendu, plié et rangé par l''autre', 25, false, 'tous'),
+  ('rangement', 'La maison rangée par l''autre', 35, false, 'tous'),
+  ('menage', 'Le ménage complet fait par l''autre', 50, false, 'tous'),
+  ('semaineRepas', 'Une semaine de repas cuisinés par l''autre', 75, false, 'tous'),
+  ('dessertChoisi', 'Choisir le dessert', 10, true, 'famille'),
+  ('chocolatChantilly', 'Un chocolat chaud avec de la chantilly', 10, true, 'famille'),
+  ('musiqueVoiture', 'Choisir la musique en voiture toute la semaine', 12, true, 'famille'),
+  ('petitDejAuLit', 'Un petit-déjeuner servi au lit', 18, true, 'famille'),
+  ('soireeJeux', 'Une soirée jeux, au jeu de son choix', 18, true, 'famille'),
+  ('veillerPlusTard', 'Veiller une heure de plus', 18, true, 'famille'),
+  ('soireePizza', 'Une soirée pizza, garnie à son goût', 25, true, 'famille'),
+  ('sortieWeekend', 'Choisir la sortie du week-end', 35, true, 'famille'),
+  ('piqueNique', 'Un pique-nique au parc, tous ensemble', 35, true, 'famille'),
+  ('cinemaPopcorn', 'Une séance de cinéma, avec le pop-corn', 50, true, 'famille'),
+  ('journeeAuChoix', 'Une journée où l’on choisit toutes les activités', 75, true, 'famille')
+on conflict (cle) do update
+  set label = excluded.label, cost = excluded.cost, actif = excluded.actif,
+      public = excluded.public;
+
+-- Couple ou famille : tout se joue au nombre de membres.
+create or replace function public.mode_foyer(hid uuid)
+returns text
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select case when count(*) >= 3 then 'famille' else 'couple' end
+    from members where household_id = hid
+$$;
+
+-- Remplit le catalogue d'un foyer avec ce qui lui manque, selon qu'il est un
+-- couple ou une famille. Une recompense deja presente — meme cle, ou meme
+-- libelle — n'est pas doublee.
 create or replace function public.catalogue_pour(hid uuid)
 returns integer
 language plpgsql
 security definer
 set search_path = public
 as $$
-declare n integer;
+declare
+  n integer;
+  mode text := public.mode_foyer(hid);
 begin
   insert into rewards (household_id, cle, label, cost)
   select hid, c.cle, c.label, c.cost
     from catalogue_depart c
    where c.actif
+     and c.public in ('tous', mode)
      and not exists (
        select 1 from rewards r
         where r.household_id = hid and not r.deleted
@@ -100,6 +135,44 @@ create trigger households_catalogue
   after insert on households
   for each row execute function public.foyer_nouveau_catalogue();
 
+-- Ajuste le catalogue d'un foyer a ce qu'il est devenu : on retire ce qui ne
+-- s'adresse pas a lui (deleted, pas efface : les bons deja achetes restent
+-- valables et traduits), puis on complete.
+create or replace function public.catalogue_ajuste(hid uuid)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare mode text := public.mode_foyer(hid);
+begin
+  update rewards r set deleted = true
+    from catalogue_depart c
+   where r.household_id = hid and not r.deleted and r.cle = c.cle
+     and c.public not in ('tous', mode);
+  return public.catalogue_pour(hid);
+end
+$$;
+
+-- Le 3e membre arrive : le foyer devient une famille, son catalogue suit. Et
+-- dans l'autre sens s'il repart.
+create or replace function public.membre_catalogue()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform public.catalogue_ajuste(coalesce(new.household_id, old.household_id));
+  return null;
+end
+$$;
+
+drop trigger if exists members_catalogue on members;
+create trigger members_catalogue
+  after insert or delete on members
+  for each row execute function public.membre_catalogue();
+
 -- --- Mise a niveau des foyers existants -----------------------------------
 
 -- Les lignes encore sans cle la retrouvent par leur libelle, ancien ou actuel.
@@ -126,13 +199,14 @@ update rewards r set label = c.label
 
 -- Chaque foyer recoit ce qui lui manque — y compris ceux qui n'avaient rien.
 \echo '--- recompenses ajoutees, tous foyers confondus ---'
-select coalesce(sum(public.catalogue_pour(h.id)), 0) as ajoutees from households h;
+select coalesce(sum(public.catalogue_ajuste(h.id)), 0) as ajoutees from households h;
 
 notify pgrst, 'reload schema';
 
-\echo '--- nombre de recompenses par foyer (19 attendu ; plus, si le foyer en avait ajoute a la main) ---'
-select n as recompenses, count(*) as foyers
-  from (select (select count(*) from rewards r
-                 where r.household_id = h.id and not r.deleted) as n
-          from households h) x
- group by n order by n;
+\echo '--- recompenses par foyer : 19 pour un couple, 22 pour une famille (plus, si le foyer en avait ajoute a la main) ---'
+select public.mode_foyer(h.id) as mode,
+       (select count(*) from rewards r
+         where r.household_id = h.id and not r.deleted) as recompenses,
+       count(*) as foyers
+  from households h
+ group by 1, 2 order by 1, 2;

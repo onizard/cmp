@@ -4,6 +4,7 @@ import Brain from './Brain.jsx';
 import Bon from './Bon.jsx';
 import Defilant from './Defilant.jsx';
 import { libelleRecompense, libelleBon } from '../lib/libelle.js';
+import { estFamille, classement } from '../lib/famille.js';
 import {
   pointsAvailable,
   pointsBreakdown,
@@ -44,6 +45,17 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // Le dessin se lit sur 100 points, puis repart du bas dans une autre teinte.
   // Le compteur, lui, n'a toujours aucune limite.
   const jaugeDe = (pts) => jauge(pts);
+
+  // En famille (3 membres ou plus) : un classement au lieu du face-à-face, et
+  // chaque bon désigne qui l'honorera.
+  const famille = estFamille(store.members);
+  const nomDe = (id) =>
+    store.names[id] || (id === userId ? t('cerveau.toi') : t('famille.sansPrenom'));
+  const rangs = famille ? classement(store.members, tasks, store.claims, store.names) : [];
+  const autresMembres = famille
+    ? store.members.filter((id) => id !== userId).map((id) => ({ id, nom: nomDe(id) }))
+    : null;
+  const MEDAILLES = ['🥇', '🥈', '🥉'];
 
   // L'inventaire : MES bons, les non utilisés d'abord, du plus récent au plus
   // ancien. Aucune limite — c'est une collection.
@@ -104,6 +116,32 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     <main className="brain-view">
       <p className="brain-lede">{t('cerveau.lede')}</p>
 
+      {famille ? (
+        <section className="classement" aria-label={t('famille.classement')}>
+          <h2 className="setlabel">{t('famille.classement')}</h2>
+          <ol>
+            {rangs.map((l) => (
+              <li key={l.id} className={l.id === userId ? 'moi' : ''}>
+                <span className="classement-rang" aria-label={`#${l.rang}`}>
+                  {MEDAILLES[l.rang - 1] || l.rang}
+                </span>
+                <span className="classement-vase">
+                  <Brain {...jaugeDe(l.points)} />
+                </span>
+                <span className="classement-nom">
+                  {nomDe(l.id)}
+                  {l.id === userId && store.names[userId] ? (
+                    <span className="classement-toi"> · {t('cerveau.toi')}</span>
+                  ) : null}
+                </span>
+                <span className="pts">
+                  <b>{formatPoints(l.points)}</b> {t('cerveau.pts')}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : (
       <div className="brains">
         <div className="person">
           <div className="vase">
@@ -124,9 +162,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </div>
         </div>
       </div>
+      )}
 
       <p className="detail-line">
-        {t('cerveau.detail', {
+        {t(famille ? 'cerveau.detailFamille' : 'cerveau.detail', {
           ajoutees: detail.added,
           faites: detail.own,
           autres: detail.other,
@@ -151,7 +190,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             <b>{formatPoints(POINT_OWN)} pt</b>
           </div>
           <div className="rowline">
-            <span>{t('cerveau.baremeAutre')}</span>
+            <span>{t(famille ? 'cerveau.baremeAutreFamille' : 'cerveau.baremeAutre')}</span>
             <b>{formatPoints(POINT_OTHER)} pts</b>
           </div>
           <div className="rowline">
@@ -289,8 +328,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 libelle={libelleBon(c, store.rewards)}
                 visuel={visuelDe(c)}
                 lang={langue()}
-                autre={otherName}
-                onUtiliser={() => store.useClaim(c.id)}
+                autre={c.pour ? nomDe(c.pour) : otherName}
+                choix={autresMembres}
+                onUtiliser={(pour) => store.useClaim(c.id, pour || null)}
                 onAnnuler={() => store.annulerAchat(c.id)}
                 onValider={() => store.validerBon(c.id)}
               />

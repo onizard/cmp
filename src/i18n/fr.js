@@ -118,10 +118,11 @@ export default {
     binome: 'Ton binôme',
     pts: 'pts',
     detail: '{ajoutees} ajoutée(s) · {faites} faite(s) · {autres} pour l’autre',
+    detailFamille: '{ajoutees} ajoutée(s) · {faites} faite(s) · {autres} pour les autres',
     bareme: 'barème',
     baremeAjouter: 'Ajouter une tâche',
     baremeSienne: 'Cocher sa propre tâche',
-    baremeAutre: 'Cocher la tâche de l’autre',
+    baremeAutre: 'Cocher la tâche de l’autre', baremeAutreFamille: 'Cocher la tâche de quelqu’un d’autre',
     baremeCombo: 'Combo du jour',
     baremeComboNote: 'Dès la 2ᵉ tâche cochée dans la journée, chaque tâche rapporte un demi-point de plus.',
     baremeNote:
@@ -213,7 +214,7 @@ export default {
 
   partage: {
     titre: 'Partager',
-    inviter: 'Inviter ma moitié',
+    inviter: 'Inviter un membre',
     partagerAppli: 'Partager l’application',
     copie: 'Lien copié ✓',
     qrAfficher: 'Afficher le QR d’invitation',
@@ -337,6 +338,17 @@ export default {
     rangement: 'La maison rangée par l\'autre',
     menage: 'Le ménage complet fait par l\'autre',
     semaineRepas: 'Une semaine de repas cuisinés par l\'autre',
+    dessertChoisi: 'Choisir le dessert',
+    chocolatChantilly: 'Un chocolat chaud avec de la chantilly',
+    musiqueVoiture: 'Choisir la musique en voiture toute la semaine',
+    petitDejAuLit: 'Un petit-déjeuner servi au lit',
+    soireeJeux: 'Une soirée jeux, au jeu de son choix',
+    veillerPlusTard: 'Veiller une heure de plus',
+    soireePizza: 'Une soirée pizza, garnie à son goût',
+    sortieWeekend: 'Choisir la sortie du week-end',
+    piqueNique: 'Un pique-nique au parc, tous ensemble',
+    cinemaPopcorn: 'Une séance de cinéma, avec le pop-corn',
+    journeeAuChoix: 'Une journée où l’on choisit toutes les activités',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -350,6 +362,11 @@ export default {
     bloquee: '{qui} s’en occupe jusqu’à {h} : tu ne peux pas la cocher d’ici là.',
     aujourdhui: 'Déjà réservée aujourd’hui : de nouveau possible demain.',
     uneAutre: 'Tu t’occupes déjà de « {tache} ». Une seule à la fois.',
+  },
+  famille: {
+    classement: 'Le classement du foyer',
+    quiHonore: 'Qui va l’honorer ?',
+    sansPrenom: 'Sans prénom',
   },
   nouvelles: {
     titre: '{qui} a coché',

@@ -2732,3 +2732,90 @@ body,
   border-style: dashed;
   opacity: 0.45;
 }
+
+/* --- Mode famille ------------------------------------------------------- */
+
+/* Le classement : une ligne par membre, médaille, petite jauge, prénom et
+   points. On se repère d'un coup d'œil sur sa propre ligne. */
+.classement ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.classement li {
+  display: grid;
+  grid-template-columns: 34px 46px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.classement li.moi {
+  border-color: #d9c6ec;
+  background: linear-gradient(105deg, #fdf3f5, #f6effb 55%, #f1f3fd);
+}
+
+.classement-rang {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 22px;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+.classement-vase {
+  width: 46px;
+  height: 46px;
+}
+
+.classement-nom {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.classement-toi {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.classement .pts {
+  white-space: nowrap;
+}
+
+/* Le choix de la personne qui honorera le bon. */
+.bon-choix {
+  flex-wrap: wrap;
+}
+
+.bon-choix .bon-prevenu {
+  flex-basis: 100%;
+}
+
+.bon-choix-noms {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-basis: 100%;
+}
+
+/* Un prénom par ligne, en entier : le bon est étroit. */
+.bon-choix-noms .btn {
+  flex: none;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -563,7 +563,18 @@ const CATALOGUE = {
     "linge": "Le linge lavé, étendu, plié et rangé par l'autre",
     "rangement": "La maison rangée par l'autre",
     "menage": "Le ménage complet fait par l'autre",
-    "semaineRepas": "Une semaine de repas cuisinés par l'autre"
+    "semaineRepas": "Une semaine de repas cuisinés par l'autre",
+    "dessertChoisi": "Choisir le dessert",
+    "chocolatChantilly": "Un chocolat chaud avec de la chantilly",
+    "musiqueVoiture": "Choisir la musique en voiture toute la semaine",
+    "petitDejAuLit": "Un petit-déjeuner servi au lit",
+    "soireeJeux": "Une soirée jeux, au jeu de son choix",
+    "veillerPlusTard": "Veiller une heure de plus",
+    "soireePizza": "Une soirée pizza, garnie à son goût",
+    "sortieWeekend": "Choisir la sortie du week-end",
+    "piqueNique": "Un pique-nique au parc, tous ensemble",
+    "cinemaPopcorn": "Une séance de cinéma, avec le pop-corn",
+    "journeeAuChoix": "Une journée où l’on choisit toutes les activités"
   },
   "en": {
     "cafeAuLit": "Coffee served in bed",
@@ -594,7 +605,18 @@ const CATALOGUE = {
     "linge": "The laundry washed, hung, folded and put away by your other half",
     "rangement": "The house tidied by your other half",
     "menage": "A full house clean done by your other half",
-    "semaineRepas": "A week of meals cooked by your other half"
+    "semaineRepas": "A week of meals cooked by your other half",
+    "dessertChoisi": "Pick the dessert",
+    "chocolatChantilly": "A hot chocolate with whipped cream",
+    "musiqueVoiture": "Pick the music in the car all week",
+    "petitDejAuLit": "Breakfast served in bed",
+    "soireeJeux": "A games night, with the game of your choice",
+    "veillerPlusTard": "Stay up an hour later",
+    "soireePizza": "A pizza night, toppings of your choice",
+    "sortieWeekend": "Pick the weekend outing",
+    "piqueNique": "A picnic in the park, all together",
+    "cinemaPopcorn": "A trip to the cinema, popcorn included",
+    "journeeAuChoix": "A day where you choose every activity"
   },
   "es": {
     "cafeAuLit": "Un café servido en la cama",
@@ -625,7 +647,18 @@ const CATALOGUE = {
     "linge": "La ropa lavada, tendida, doblada y guardada por tu media naranja",
     "rangement": "La casa ordenada por tu media naranja",
     "menage": "La limpieza completa, hecha por tu media naranja",
-    "semaineRepas": "Una semana de comidas cocinadas por tu media naranja"
+    "semaineRepas": "Una semana de comidas cocinadas por tu media naranja",
+    "dessertChoisi": "Elegir el postre",
+    "chocolatChantilly": "Un chocolate caliente con nata montada",
+    "musiqueVoiture": "Elegir la música en el coche toda la semana",
+    "petitDejAuLit": "Un desayuno servido en la cama",
+    "soireeJeux": "Una noche de juegos, con el juego que elijas",
+    "veillerPlusTard": "Acostarse una hora más tarde",
+    "soireePizza": "Una noche de pizza, con los ingredientes que quieras",
+    "sortieWeekend": "Elegir la salida del fin de semana",
+    "piqueNique": "Un pícnic en el parque, todos juntos",
+    "cinemaPopcorn": "Una sesión de cine, con palomitas",
+    "journeeAuChoix": "Un día en el que eliges todas las actividades"
   },
   "pt": {
     "cafeAuLit": "Um café servido na cama",
@@ -656,7 +689,18 @@ const CATALOGUE = {
     "linge": "A roupa lavada, estendida, dobrada e arrumada pela tua cara-metade",
     "rangement": "A casa arrumada pela tua cara-metade",
     "menage": "A limpeza completa feita pela tua cara-metade",
-    "semaineRepas": "Uma semana de refeições cozinhadas pela tua cara-metade"
+    "semaineRepas": "Uma semana de refeições cozinhadas pela tua cara-metade",
+    "dessertChoisi": "Escolher a sobremesa",
+    "chocolatChantilly": "Um chocolate quente com chantilly",
+    "musiqueVoiture": "Escolher a música no carro a semana toda",
+    "petitDejAuLit": "Um pequeno-almoço servido na cama",
+    "soireeJeux": "Uma noite de jogos, com o jogo à tua escolha",
+    "veillerPlusTard": "Deitar-se uma hora mais tarde",
+    "soireePizza": "Uma noite de pizza, com os ingredientes que quiseres",
+    "sortieWeekend": "Escolher o passeio do fim de semana",
+    "piqueNique": "Um piquenique no parque, todos juntos",
+    "cinemaPopcorn": "Uma ida ao cinema, com pipocas",
+    "journeeAuChoix": "Um dia em que escolhes todas as atividades"
   },
   "de": {
     "cafeAuLit": "Kaffee ans Bett gebracht",
@@ -687,7 +731,18 @@ const CATALOGUE = {
     "linge": "Die Wäsche gewaschen, aufgehängt, gefaltet und eingeräumt von deiner besseren Hälfte",
     "rangement": "Die Wohnung räumt deine bessere Hälfte auf",
     "menage": "Den kompletten Hausputz macht deine bessere Hälfte",
-    "semaineRepas": "Eine Woche lang kocht deine bessere Hälfte"
+    "semaineRepas": "Eine Woche lang kocht deine bessere Hälfte",
+    "dessertChoisi": "Den Nachtisch aussuchen",
+    "chocolatChantilly": "Eine heiße Schokolade mit Sahne",
+    "musiqueVoiture": "Die ganze Woche die Musik im Auto aussuchen",
+    "petitDejAuLit": "Frühstück ans Bett gebracht",
+    "soireeJeux": "Ein Spieleabend mit dem Spiel deiner Wahl",
+    "veillerPlusTard": "Eine Stunde länger aufbleiben",
+    "soireePizza": "Ein Pizzaabend, belegt nach deinem Geschmack",
+    "sortieWeekend": "Den Ausflug am Wochenende aussuchen",
+    "piqueNique": "Ein Picknick im Park, alle zusammen",
+    "cinemaPopcorn": "Ein Kinobesuch, mit Popcorn",
+    "journeeAuChoix": "Ein Tag, an dem du alle Aktivitäten bestimmst"
   },
   "it": {
     "cafeAuLit": "Un caffè servito a letto",
@@ -718,7 +773,18 @@ const CATALOGUE = {
     "linge": "Il bucato lavato, steso, piegato e riposto dalla tua metà",
     "rangement": "La casa riordinata dalla tua metà",
     "menage": "Le pulizie complete fatte dalla tua metà",
-    "semaineRepas": "Una settimana di pasti cucinati dalla tua metà"
+    "semaineRepas": "Una settimana di pasti cucinati dalla tua metà",
+    "dessertChoisi": "Scegliere il dolce",
+    "chocolatChantilly": "Una cioccolata calda con la panna",
+    "musiqueVoiture": "Scegliere la musica in macchina per tutta la settimana",
+    "petitDejAuLit": "Una colazione servita a letto",
+    "soireeJeux": "Una serata di giochi, con il gioco che preferisci",
+    "veillerPlusTard": "Restare alzati un’ora in più",
+    "soireePizza": "Una serata pizza, farcita come piace a te",
+    "sortieWeekend": "Scegliere la gita del weekend",
+    "piqueNique": "Un picnic al parco, tutti insieme",
+    "cinemaPopcorn": "Un film al cinema, con i popcorn",
+    "journeeAuChoix": "Una giornata in cui scegli tutte le attività"
   },
   "ru": {
     "cafeAuLit": "Кофе в постель",
@@ -749,7 +815,18 @@ const CATALOGUE = {
     "linge": "Бельё стирает, развешивает, складывает и убирает ваша половина",
     "rangement": "Порядок в доме наводит ваша половина",
     "menage": "Генеральную уборку делает ваша половина",
-    "semaineRepas": "Неделю готовит ваша половина"
+    "semaineRepas": "Неделю готовит ваша половина",
+    "dessertChoisi": "Выбрать десерт",
+    "chocolatChantilly": "Горячий шоколад со взбитыми сливками",
+    "musiqueVoiture": "Выбирать музыку в машине всю неделю",
+    "petitDejAuLit": "Завтрак в постель",
+    "soireeJeux": "Вечер настольных игр — игру выбираете вы",
+    "veillerPlusTard": "Лечь спать на час позже",
+    "soireePizza": "Вечер пиццы — начинку выбираете вы",
+    "sortieWeekend": "Выбрать, куда пойти на выходных",
+    "piqueNique": "Пикник в парке, всем вместе",
+    "cinemaPopcorn": "Поход в кино — с попкорном",
+    "journeeAuChoix": "День, когда все занятия выбираете вы"
   },
   "zh": {
     "cafeAuLit": "端到床边的一杯咖啡",
@@ -780,7 +857,18 @@ const CATALOGUE = {
     "linge": "另一半洗衣、晾衣、叠衣、收好",
     "rangement": "另一半整理房间",
     "menage": "另一半做全屋大扫除",
-    "semaineRepas": "另一半做一周的饭"
+    "semaineRepas": "另一半做一周的饭",
+    "dessertChoisi": "决定吃什么甜点",
+    "chocolatChantilly": "一杯加奶油的热巧克力",
+    "musiqueVoiture": "一整周在车上选音乐",
+    "petitDejAuLit": "端到床边的早餐",
+    "soireeJeux": "一个游戏之夜，玩你选的游戏",
+    "veillerPlusTard": "晚睡一个小时",
+    "soireePizza": "披萨之夜，配料由你定",
+    "sortieWeekend": "决定周末去哪儿玩",
+    "piqueNique": "大家一起去公园野餐",
+    "cinemaPopcorn": "去电影院看场电影，还有爆米花",
+    "journeeAuChoix": "一整天的活动都由你来定"
   },
   "ar": {
     "cafeAuLit": "قهوة تُقدَّم في السرير",
@@ -811,7 +899,18 @@ const CATALOGUE = {
     "linge": "الغسيل يغسله نصفك الآخر وينشره ويطويه ويرتّبه",
     "rangement": "ترتيب البيت يتولاه نصفك الآخر",
     "menage": "التنظيف الكامل للبيت يتولاه نصفك الآخر",
-    "semaineRepas": "أسبوع من الوجبات يطبخها نصفك الآخر"
+    "semaineRepas": "أسبوع من الوجبات يطبخها نصفك الآخر",
+    "dessertChoisi": "اختيار التحلية",
+    "chocolatChantilly": "شوكولاتة ساخنة مع الكريمة المخفوقة",
+    "musiqueVoiture": "اختيار الموسيقى في السيارة طوال الأسبوع",
+    "petitDejAuLit": "فطور يُقدَّم في السرير",
+    "soireeJeux": "سهرة ألعاب، باللعبة التي تختارها",
+    "veillerPlusTard": "السهر ساعة إضافية",
+    "soireePizza": "سهرة بيتزا، بالمكونات التي تحبها",
+    "sortieWeekend": "اختيار نزهة نهاية الأسبوع",
+    "piqueNique": "نزهة وطعام في الحديقة، معًا جميعًا",
+    "cinemaPopcorn": "عرض سينمائي، مع الفشار",
+    "journeeAuChoix": "يوم تختار فيه كل الأنشطة"
   },
   "he": {
     "cafeAuLit": "קפה שמוגש למיטה",
@@ -842,7 +941,18 @@ const CATALOGUE = {
     "linge": "החצי השני מכבס, תולה, מקפל ומסדר את הכביסה",
     "rangement": "החצי השני מסדר את הבית",
     "menage": "החצי השני עושה ניקיון יסודי",
-    "semaineRepas": "שבוע של ארוחות שהחצי השני מבשל"
+    "semaineRepas": "שבוע של ארוחות שהחצי השני מבשל",
+    "dessertChoisi": "לבחור את הקינוח",
+    "chocolatChantilly": "שוקו חם עם קצפת",
+    "musiqueVoiture": "לבחור את המוזיקה באוטו כל השבוע",
+    "petitDejAuLit": "ארוחת בוקר שמוגשת למיטה",
+    "soireeJeux": "ערב משחקים, במשחק לבחירתך",
+    "veillerPlusTard": "להישאר ער שעה נוספת",
+    "soireePizza": "ערב פיצה, עם תוספות לבחירתך",
+    "sortieWeekend": "לבחור את הבילוי של סוף השבוע",
+    "piqueNique": "פיקניק בפארק, כולם יחד",
+    "cinemaPopcorn": "הקרנה בקולנוע, עם פופקורן",
+    "journeeAuChoix": "יום שבו כל הפעילויות לבחירתך"
   },
   "fa": {
     "cafeAuLit": "قهوه‌ای که در رختخواب سرو شود",
@@ -873,7 +983,18 @@ const CATALOGUE = {
     "linge": "لباس‌ها را نیمهٔ دیگرت می‌شوید، پهن می‌کند، تا می‌کند و جا می‌گذارد",
     "rangement": "خانه را نیمهٔ دیگرت مرتب می‌کند",
     "menage": "نظافت کامل خانه را نیمهٔ دیگرت انجام می‌دهد",
-    "semaineRepas": "یک هفته آشپزی با نیمهٔ دیگرت"
+    "semaineRepas": "یک هفته آشپزی با نیمهٔ دیگرت",
+    "dessertChoisi": "انتخاب دسر",
+    "chocolatChantilly": "شکلات داغ با خامهٔ زده",
+    "musiqueVoiture": "انتخاب موسیقی ماشین در تمام هفته",
+    "petitDejAuLit": "صبحانه‌ای که در رختخواب سرو شود",
+    "soireeJeux": "یک شب بازی، با بازی دلخواه تو",
+    "veillerPlusTard": "یک ساعت دیرتر خوابیدن",
+    "soireePizza": "یک شب پیتزا، با مواد دلخواه تو",
+    "sortieWeekend": "انتخاب برنامهٔ بیرون رفتن آخر هفته",
+    "piqueNique": "یک پیک‌نیک در پارک، همه با هم",
+    "cinemaPopcorn": "یک سانس سینما، با پاپ‌کورن",
+    "journeeAuChoix": "روزی که همهٔ برنامه‌ها را تو انتخاب می‌کنی"
   }
 };
 

@@ -198,10 +198,21 @@ export const etatBon = (bon) => {
 /**
  * Les bons que l'AUTRE a utilisés et qui attendent qu'on les honore, du plus
  * ancien au plus récent : c'est ce qui s'affiche au milieu de l'écran.
+ *
+ * En famille, un bon désigne qui l'honore : il ne s'affiche que chez cette
+ * personne. Un bon sans destinataire (couple, ou appli pas encore à jour)
+ * s'affiche chez tout le monde sauf son détenteur.
  */
 export const bonsAHonorer = (claims, userId) =>
   (claims || [])
-    .filter((c) => !c.deleted && c.userId && c.userId !== userId && etatBon(c) === 'enAttente')
+    .filter(
+      (c) =>
+        !c.deleted &&
+        c.userId &&
+        c.userId !== userId &&
+        (!c.pour || c.pour === userId) &&
+        etatBon(c) === 'enAttente',
+    )
     .slice()
     .sort((a, b) => String(a.usedAt).localeCompare(String(b.usedAt)));
 

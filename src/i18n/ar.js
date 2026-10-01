@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'ما حمله كل واحد. 💛', toi: 'أنت', binome: 'نصفك الآخر', pts: 'نقطة',
     detail: '{ajoutees} مضافة · {faites} منجزة · {autres} للآخر',
+    detailFamille: '{ajoutees} مضافة · {faites} منجزة · {autres} للآخرين',
     bareme: 'النقاط', baremeAjouter: 'إضافة مهمة', baremeSienne: 'تحديد مهمتك',
-    baremeAutre: 'تحديد مهمة الآخر',
+    baremeAutre: 'تحديد مهمة الآخر', baremeAutreFamille: 'تحديد مهمة شخص آخر',
     baremeCombo: 'كومبو اليوم',
     baremeComboNote: 'ابتداءً من المهمة الثانية في اليوم، تمنح كل مهمة نصف نقطة إضافية.',
     baremeNote: 'تتراكم النقاط بلا حد. أنفقها متى شئت، أو ادّخرها لمكافأة أكبر.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'التطبيق غير جاهز بعد، حاول بعد لحظة.',
   },
   partage: {
-    titre: 'مشاركة', inviter: 'دعوة نصفي الآخر', partagerAppli: 'مشاركة التطبيق', copie: 'نُسخ الرابط ✓',
+    titre: 'مشاركة', inviter: 'دعوة عضو', partagerAppli: 'مشاركة التطبيق', copie: 'نُسخ الرابط ✓',
     qrAfficher: 'إظهار رمز الدعوة', qrMasquer: 'إخفاء رمز الدعوة', qrAlt: 'رمز QR للدعوة',
     partagerCode: 'مشاركة رمز المنزل',
     codeCopie: 'تم نسخ الرمز ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'ترتيب البيت يتولاه نصفك الآخر',
     menage: 'التنظيف الكامل للبيت يتولاه نصفك الآخر',
     semaineRepas: 'أسبوع من الوجبات يطبخها نصفك الآخر',
+    dessertChoisi: 'اختيار التحلية',
+    chocolatChantilly: 'شوكولاتة ساخنة مع الكريمة المخفوقة',
+    musiqueVoiture: 'اختيار الموسيقى في السيارة طوال الأسبوع',
+    petitDejAuLit: 'فطور يُقدَّم في السرير',
+    soireeJeux: 'سهرة ألعاب، باللعبة التي تختارها',
+    veillerPlusTard: 'السهر ساعة إضافية',
+    soireePizza: 'سهرة بيتزا، بالمكونات التي تحبها',
+    sortieWeekend: 'اختيار نزهة نهاية الأسبوع',
+    piqueNique: 'نزهة وطعام في الحديقة، معًا جميعًا',
+    cinemaPopcorn: 'عرض سينمائي، مع الفشار',
+    journeeAuChoix: 'يوم تختار فيه كل الأنشطة',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} يتولّاها حتى {h}: لا يمكنك تحديدها قبل ذلك.',
     aujourdhui: 'سبق حجزها اليوم: ممكن من جديد غدًا.',
     uneAutre: 'أنت تتولّى «{tache}» بالفعل. مهمة واحدة في كل مرة.',
+  },
+  famille: {
+    classement: 'ترتيب أفراد البيت',
+    quiHonore: 'من سيفي بهذه القسيمة؟',
+    sansPrenom: 'بلا اسم',
   },
   nouvelles: {
     titre: '{qui} أنجز',
