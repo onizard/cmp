@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'הסיסמה הנוכחית',
+    actuelFaux: 'הסיסמה הנוכחית שגויה.',
+    tropEssais: 'יותר מדי ניסיונות: אפשר לנסות שוב בעוד רבע שעה.',
+    oublie: 'שכחת את הסיסמה?',
+    oubliAide: 'צריך להתנתק ולגעת ב„{lien}”: הקישור שיגיע במייל יאפשר לבחור סיסמה חדשה.',
+    avecMotDePasse: 'יש לי את הסיסמה הנוכחית',
     changerMotDePasse: 'שינוי סיסמה',
     motDePasseChange: 'הסיסמה שונתה',
     valider: 'אישור',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'אחר כך',
   },
   entreprise: {
+    motDePasseAdmin: 'סיסמת המנהל/ת',
+    nouveauCodeResp: 'קוד אחראי/ת חדש (4 עד 8 ספרות)',
+    changerCodeResp: 'שינוי קוד האחראי/ת',
+    codeRespChange: 'קוד האחראי/ת שונה',
     changerMotDePasse: 'שינוי סיסמת המנהל/ת',
     relies: 'טלפונים המקושרים לחשבון',
     reliesVide: 'אף אחד מהצוות עוד לא הצטרף מהטלפון.',

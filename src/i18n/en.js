@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Current password',
+    actuelFaux: 'Current password is incorrect.',
+    tropEssais: 'Too many attempts: try again in 15 minutes.',
+    oublie: 'Forgot your password?',
+    oubliAide: 'Sign out, then tap “{lien}”: the link sent by email will let you choose a new one.',
+    avecMotDePasse: 'I have my current password',
     changerMotDePasse: 'Change password',
     motDePasseChange: 'Password changed',
     valider: 'Confirm',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'Later',
   },
   entreprise: {
+    motDePasseAdmin: 'Admin password',
+    nouveauCodeResp: 'New manager code (4 to 8 digits)',
+    changerCodeResp: 'Change the manager code',
+    codeRespChange: 'Manager code changed',
     changerMotDePasse: 'Change the admin password',
     relies: 'Phones linked to the account',
     reliesVide: 'No teammate has joined the account from their phone yet.',

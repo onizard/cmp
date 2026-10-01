@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Aktuelles Passwort',
+    actuelFaux: 'Das aktuelle Passwort ist falsch.',
+    tropEssais: 'Zu viele Versuche: versuch es in einer Viertelstunde wieder.',
+    oublie: 'Passwort vergessen?',
+    oubliAide: 'Melde dich ab und tippe auf „{lien}“: Mit dem Link aus der E-Mail kannst du ein neues wählen.',
+    avecMotDePasse: 'Ich kenne mein aktuelles Passwort',
     changerMotDePasse: 'Passwort ändern',
     motDePasseChange: 'Passwort geändert',
     valider: 'Bestätigen',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'Später',
   },
   entreprise: {
+    motDePasseAdmin: 'Admin-Passwort',
+    nouveauCodeResp: 'Neuer Leitungscode (4 bis 8 Ziffern)',
+    changerCodeResp: 'Leitungscode ändern',
+    codeRespChange: 'Leitungscode geändert',
     changerMotDePasse: 'Admin-Passwort ändern',
     relies: 'Mit dem Konto verbundene Handys',
     reliesVide: 'Noch niemand aus dem Team ist per Handy beigetreten.',

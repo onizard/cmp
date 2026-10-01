@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Password attuale',
+    actuelFaux: 'La password attuale non è corretta.',
+    tropEssais: 'Troppi tentativi: riprova tra un quarto d’ora.',
+    oublie: 'Password dimenticata?',
+    oubliAide: 'Esci, poi tocca «{lien}»: il link ricevuto via e-mail ti farà sceglierne una nuova.',
+    avecMotDePasse: 'Ho la mia password attuale',
     changerMotDePasse: 'Cambia password',
     motDePasseChange: 'Password cambiata',
     valider: 'Conferma',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'Più tardi',
   },
   entreprise: {
+    motDePasseAdmin: 'Password di amministratore',
+    nouveauCodeResp: 'Nuovo codice responsabile (da 4 a 8 cifre)',
+    changerCodeResp: 'Cambia il codice responsabile',
+    codeRespChange: 'Codice responsabile cambiato',
     changerMotDePasse: 'Cambia la password di amministratore',
     relies: 'Telefoni collegati all’account',
     reliesVide: 'Nessun collega si è ancora unito dal proprio telefono.',

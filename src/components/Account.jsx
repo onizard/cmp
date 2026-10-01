@@ -43,9 +43,14 @@ export default function Account({ account, rewards = null, equipe = null, acces 
   // Le mot de passe se change depuis le profil : un bouton, puis une case.
   const [passOuvert, setPassOuvert] = useState(false);
   const [pass, setPass] = useState('');
-  // Compte pro : toute l'équipe y est connectée, seul l'administrateur en
-  // change le mot de passe, avec son code responsable.
-  const [codeResp, setCodeResp] = useState('');
+  // D'abord l'ancien mot de passe. Secours d'un compte pro : le code
+  // responsable. Secours d'un compte perso : le lien du mail, après lequel
+  // l'ancien n'est plus demandé pendant une heure.
+  const [actuel, setActuel] = useState('');
+  const [secours, setSecours] = useState(false);
+  const [oubliAide, setOubliAide] = useState(false);
+  const demandeActuel = Boolean(equipe) || !account.lienRecent;
+  const actuelPret = !demandeActuel || (secours ? actuel.length >= 4 : actuel.length > 0);
   const [passSaved, setPassSaved] = useState(false);
   const [passError, setPassError] = useState(null);
 
@@ -99,25 +104,36 @@ export default function Account({ account, rewards = null, equipe = null, acces 
     setTimeout(() => setSaved(false), 1800);
   };
 
+  const fermerMotDePasse = () => {
+    setPassOuvert(false);
+    setPass('');
+    setActuel('');
+    setSecours(false);
+    setOubliAide(false);
+    setPassError(null);
+  };
+
   const savePassword = async () => {
     setPassError(null);
-    if (equipe) {
-      const r = await account.motDePassePro(codeResp, pass);
-      if (r) {
-        setPassError(r === 'faux' ? t('entreprise.codeRespFaux') : r === 'court' ? t('auth.motDePasseCourt') : r);
-        if (r === 'faux') setCodeResp('');
-        return;
-      }
-    } else {
-      const ok = await account.setPassword(pass);
-      if (!ok) {
-        setPassError(account.error || t('compte.motDePasseErreur'));
-        return;
-      }
+    const r = secours
+      ? await account.motDePassePro(actuel, pass)
+      : await account.changerMotDePasse(demandeActuel ? actuel : null, pass);
+    if (r) {
+      setPassError(
+        r === 'faux'
+          ? secours
+            ? t('entreprise.codeRespFaux')
+            : t('compte.actuelFaux')
+          : r === 'bloque'
+            ? t('compte.tropEssais')
+            : r === 'court'
+              ? t('auth.motDePasseCourt')
+              : r,
+      );
+      if (r === 'faux') setActuel('');
+      return;
     }
-    setPass('');
-    setCodeResp('');
-    setPassOuvert(false);
+    fermerMotDePasse();
     setPassSaved(true);
     setTimeout(() => setPassSaved(false), 2600);
   };
@@ -200,23 +216,26 @@ export default function Account({ account, rewards = null, equipe = null, acces 
               className="mdp-case"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (pass.length >= 8 && (!equipe || codeResp.length >= 4)) savePassword();
+                if (pass.length >= 8 && actuelPret) savePassword();
               }}
             >
-              {equipe && (
+              {demandeActuel && (
                 <>
-                  <label className="field-label" htmlFor="pass-resp">{t('entreprise.codeResp')}</label>
+                  <label className="field-label" htmlFor="pass-actuel">
+                    {secours ? t('entreprise.codeResp') : t('compte.motDePasseActuel')}
+                  </label>
                   <input
-                    id="pass-resp"
+                    id="pass-actuel"
+                    key={secours ? 'code' : 'mdp'}
                     className="field"
                     type="password"
-                    inputMode="numeric"
-                    autoComplete="off"
+                    inputMode={secours ? 'numeric' : undefined}
+                    autoComplete={secours ? 'off' : 'current-password'}
                     autoFocus
-                    value={codeResp}
+                    value={actuel}
                     onChange={(e) => {
                       setPassError(null);
-                      setCodeResp(e.target.value.replace(/\D/g, '').slice(0, 8));
+                      setActuel(secours ? e.target.value.replace(/\D/g, '').slice(0, 8) : e.target.value);
                     }}
                   />
                 </>
@@ -228,7 +247,7 @@ export default function Account({ account, rewards = null, equipe = null, acces 
                 type="password"
                 autoComplete="new-password"
                 minLength={8}
-                autoFocus={!equipe}
+                autoFocus={!demandeActuel}
                 value={pass}
                 placeholder={t('auth.motDePassePlaceholder')}
                 onChange={(e) => {
@@ -238,26 +257,29 @@ export default function Account({ account, rewards = null, equipe = null, acces 
               />
               {passError && <p className="error">{passError}</p>}
               <div className="mdp-boutons">
-                <button
-                  className="btn btn-accent"
-                  type="submit"
-                  disabled={pass.length < 8 || (equipe && codeResp.length < 4)}
-                >
+                <button className="btn btn-accent" type="submit" disabled={pass.length < 8 || !actuelPret}>
                   {t('compte.valider')}
                 </button>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={() => {
-                    setPassOuvert(false);
-                    setPass('');
-                    setCodeResp('');
-                    setPassError(null);
-                  }}
-                >
+                <button className="btn" type="button" onClick={fermerMotDePasse}>
                   {t('app.annuler')}
                 </button>
               </div>
+              {demandeActuel && (
+                <p className="authlinks mdp-oubli">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPassError(null);
+                      setActuel('');
+                      if (equipe) setSecours(!secours);
+                      else setOubliAide(!oubliAide);
+                    }}
+                  >
+                    {equipe && secours ? t('compte.avecMotDePasse') : t('compte.oublie')}
+                  </button>
+                </p>
+              )}
+              {oubliAide && <p className="setnote">{t('compte.oubliAide', { lien: t('auth.oublieLien') })}</p>}
             </form>
           ) : (
             <button className="btn btn-block mdp-bouton" type="button" onClick={() => setPassOuvert(true)}>

@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Текущий пароль',
+    actuelFaux: 'Текущий пароль неверен.',
+    tropEssais: 'Слишком много попыток: попробуй через четверть часа.',
+    oublie: 'Забыл пароль?',
+    oubliAide: 'Выйди и нажми «{lien}»: по ссылке из письма можно будет выбрать новый.',
+    avecMotDePasse: 'Я знаю текущий пароль',
     changerMotDePasse: 'Сменить пароль',
     motDePasseChange: 'Пароль изменён',
     valider: 'Подтвердить',
@@ -248,6 +254,10 @@ export default {
     plusTard: 'Позже',
   },
   entreprise: {
+    motDePasseAdmin: 'Пароль администратора',
+    nouveauCodeResp: 'Новый код руководителя (4–8 цифр)',
+    changerCodeResp: 'Сменить код руководителя',
+    codeRespChange: 'Код руководителя изменён',
     changerMotDePasse: 'Сменить пароль администратора',
     relies: 'Телефоны, привязанные к аккаунту',
     reliesVide: 'Пока никто из команды не подключился со своего телефона.',
