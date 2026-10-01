@@ -91,6 +91,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'رمز عبور فعلی',
+    actuelFaux: 'رمز عبور فعلی درست نیست.',
+    tropEssais: 'تلاش‌ها زیاد شد: یک ربع دیگر دوباره امتحان کن.',
+    oublie: 'رمز عبور را فراموش کرده‌ای؟',
+    oubliAide: 'از حساب خارج شو و «{lien}» را بزن: با پیوندی که با ایمیل می‌رسد رمز تازه‌ای انتخاب می‌کنی.',
+    avecMotDePasse: 'رمز عبور فعلی را دارم',
     changerMotDePasse: 'تغییر رمز عبور',
     motDePasseChange: 'رمز عبور تغییر کرد',
     valider: 'تأیید',
@@ -114,7 +120,6 @@ export default {
   },
   partage: {
     codeFoyer: 'کد خانه:',
-    toucherPourCopier: 'برای کپی لمس کن',
     titre: 'هم‌رسانی', inviter: 'دعوت از یک عضو', partagerAppli: 'هم‌رسانی برنامه', copie: 'پیوند رونوشت شد ✓',
     qrAfficher: 'نمایش کد QR دعوت', qrMasquer: 'پنهان کردن کد QR', qrAlt: 'کد QR دعوت',
     partagerCode: 'هم‌رسانی کد خانه',
@@ -251,6 +256,10 @@ export default {
     plusTard: 'بعداً',
   },
   entreprise: {
+    motDePasseAdmin: 'رمز عبور مدیر',
+    nouveauCodeResp: 'کد مسئول تازه (۴ تا ۸ رقم)',
+    changerCodeResp: 'تغییر کد مسئول',
+    codeRespChange: 'کد مسئول تغییر کرد',
     changerMotDePasse: 'تغییر رمز عبور مدیر',
     relies: 'تلفن‌های متصل به حساب',
     reliesVide: 'هنوز هیچ هم‌تیمی از تلفنش به حساب نپیوسته است.',

@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: '当前密码',
+    actuelFaux: '当前密码不正确。',
+    tropEssais: '尝试次数过多：请一刻钟后再试。',
+    oublie: '忘记密码？',
+    oubliAide: '先退出登录，再点「{lien}」：通过邮件收到的链接即可设置新密码。',
+    avecMotDePasse: '我记得当前密码',
     changerMotDePasse: '修改密码',
     motDePasseChange: '密码已修改',
     valider: '确认',
@@ -113,7 +119,6 @@ export default {
   },
   partage: {
     codeFoyer: '家庭代码：',
-    toucherPourCopier: '轻触复制',
     titre: '分享', inviter: '邀请成员', partagerAppli: '分享这个应用', copie: '链接已复制 ✓',
     qrAfficher: '显示邀请二维码', qrMasquer: '隐藏邀请二维码', qrAlt: '邀请二维码',
     partagerCode: '分享家庭代码',
@@ -249,6 +254,10 @@ export default {
     plusTard: '稍后',
   },
   entreprise: {
+    motDePasseAdmin: '管理员密码',
+    nouveauCodeResp: '新的负责人代码（4 到 8 位数字）',
+    changerCodeResp: '修改负责人代码',
+    codeRespChange: '负责人代码已修改',
     changerMotDePasse: '修改管理员密码',
     relies: '已关联此账户的手机',
     reliesVide: '还没有队员从手机加入此账户。',

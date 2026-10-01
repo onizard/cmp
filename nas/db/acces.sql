@@ -391,9 +391,10 @@ grant execute on function public.cmp_acces_retirer(uuid, text) to authenticated;
 --
 -- Toute l'equipe est connectee au compte pro : n'importe qui pourrait en
 -- changer le mot de passe depuis Mon compte. On le reserve a
--- l'administrateur : il passe par cette fonction, qui demande le code
--- responsable, et le changement direct (par le service d'authentification)
--- est refuse pour un compte pro. Les equipiers connectes le restent.
+-- l'administrateur : avec l'ancien mot de passe (mot-de-passe.sql) ou, s'il
+-- l'a oublie, avec le code responsable, par cette fonction. Le changement
+-- direct est refuse (garde dans mot-de-passe.sql). Les equipiers connectes
+-- le restent.
 
 create or replace function public.cmp_entreprise_mot_de_passe(p_responsable text, p_nouveau text)
 returns text
@@ -428,30 +429,6 @@ begin
   return 'ok';
 end
 $$;
-
-create or replace function public.entreprise_garde_mot_de_passe()
-returns trigger
-language plpgsql
-security definer
-set search_path = public
-as $$
-begin
-  if new.encrypted_password is distinct from old.encrypted_password
-     and coalesce(current_setting('cmp.op', true), '') <> '1'
-     and exists (select 1 from members m
-                   join households h on h.id = m.household_id and h.entreprise
-                  where m.user_id = new.id) then
-    raise exception using errcode = '42501',
-      message = 'Compte pro : le mot de passe se change avec le code responsable.';
-  end if;
-  return new;
-end
-$$;
-
-drop trigger if exists auth_users_mot_de_passe_pro on auth.users;
-create trigger auth_users_mot_de_passe_pro
-  before update of encrypted_password on auth.users
-  for each row execute function public.entreprise_garde_mot_de_passe();
 
 revoke all on function public.cmp_entreprise_mot_de_passe(text, text) from public;
 grant execute on function public.cmp_entreprise_mot_de_passe(text, text) to authenticated;

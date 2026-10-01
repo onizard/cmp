@@ -90,6 +90,12 @@ export default {
   },
 
   compte: {
+    motDePasseActuel: 'Palavra-passe atual',
+    actuelFaux: 'A palavra-passe atual está errada.',
+    tropEssais: 'Demasiadas tentativas: tenta de novo daqui a um quarto de hora.',
+    oublie: 'Esqueceste a palavra-passe?',
+    oubliAide: 'Termina a sessão e toca em «{lien}»: o link recebido por e-mail deixa-te escolher outra.',
+    avecMotDePasse: 'Tenho a minha palavra-passe atual',
     changerMotDePasse: 'Mudar a palavra-passe',
     motDePasseChange: 'Palavra-passe alterada',
     valider: 'Confirmar',
@@ -113,7 +119,6 @@ export default {
   },
   partage: {
     codeFoyer: 'Código da casa:',
-    toucherPourCopier: 'toca para copiar',
     titre: 'Partilhar', inviter: 'Convidar um membro', partagerAppli: 'Partilhar a aplicação', copie: 'Link copiado ✓',
     qrAfficher: 'Mostrar o QR do convite', qrMasquer: 'Ocultar o QR do convite', qrAlt: 'Código QR de convite',
     partagerCode: 'Partilhar o código do lar',
@@ -249,6 +254,10 @@ export default {
     plusTard: 'Mais tarde',
   },
   entreprise: {
+    motDePasseAdmin: 'Palavra-passe de administrador',
+    nouveauCodeResp: 'Novo código de responsável (4 a 8 algarismos)',
+    changerCodeResp: 'Mudar o código de responsável',
+    codeRespChange: 'Código de responsável alterado',
     changerMotDePasse: 'Mudar a palavra-passe de administrador',
     relies: 'Telemóveis ligados à conta',
     reliesVide: 'Nenhum colega entrou ainda na conta pelo telemóvel.',
