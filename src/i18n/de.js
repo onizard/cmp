@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'Was jede und jeder getragen hat. 💛', toi: 'Du', binome: 'Deine bessere Hälfte', pts: 'Pkt.',
     detail: '{ajoutees} hinzugefügt · {faites} erledigt · {autres} für die andere Person',
+    detailFamille: '{ajoutees} hinzugefügt · {faites} erledigt · {autres} für andere',
     bareme: 'Punkte', baremeAjouter: 'Eine Aufgabe hinzufügen', baremeSienne: 'Die eigene Aufgabe abhaken',
-    baremeAutre: 'Die Aufgabe der anderen Person abhaken',
+    baremeAutre: 'Die Aufgabe der anderen Person abhaken', baremeAutreFamille: 'Die Aufgabe von jemand anderem abhaken',
     baremeCombo: 'Combo des Tages',
     baremeComboNote: 'Ab der 2. erledigten Aufgabe am Tag bringt jede einen halben Punkt mehr.',
     baremeNote: 'Punkte sammeln sich ohne Grenze. Gib sie aus, wann du willst, oder spare für eine größere Belohnung.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'Die App ist noch nicht bereit, versuch es gleich noch einmal.',
   },
   partage: {
-    titre: 'Teilen', inviter: 'Meine bessere Hälfte einladen', partagerAppli: 'Die App teilen', copie: 'Link kopiert ✓',
+    titre: 'Teilen', inviter: 'Ein Mitglied einladen', partagerAppli: 'Die App teilen', copie: 'Link kopiert ✓',
     qrAfficher: 'Einladungs-QR anzeigen', qrMasquer: 'Einladungs-QR ausblenden', qrAlt: 'QR-Code der Einladung',
     partagerCode: 'Haushaltscode teilen',
     codeCopie: 'Code kopiert ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'Die Wohnung räumt deine bessere Hälfte auf',
     menage: 'Den kompletten Hausputz macht deine bessere Hälfte',
     semaineRepas: 'Eine Woche lang kocht deine bessere Hälfte',
+    dessertChoisi: 'Den Nachtisch aussuchen',
+    chocolatChantilly: 'Eine heiße Schokolade mit Sahne',
+    musiqueVoiture: 'Die ganze Woche die Musik im Auto aussuchen',
+    petitDejAuLit: 'Frühstück ans Bett gebracht',
+    soireeJeux: 'Ein Spieleabend mit dem Spiel deiner Wahl',
+    veillerPlusTard: 'Eine Stunde länger aufbleiben',
+    soireePizza: 'Ein Pizzaabend, belegt nach deinem Geschmack',
+    sortieWeekend: 'Den Ausflug am Wochenende aussuchen',
+    piqueNique: 'Ein Picknick im Park, alle zusammen',
+    cinemaPopcorn: 'Ein Kinobesuch, mit Popcorn',
+    journeeAuChoix: 'Ein Tag, an dem du alle Aktivitäten bestimmst',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} kümmert sich bis {h} darum: bis dahin kannst du sie nicht abhaken.',
     aujourdhui: 'Heute schon reserviert: morgen wieder möglich.',
     uneAutre: 'Du kümmerst dich schon um „{tache}“. Eine nach der anderen.',
+  },
+  famille: {
+    classement: 'Die Rangliste des Haushalts',
+    quiHonore: 'Wer löst ihn ein?',
+    sansPrenom: 'Ohne Namen',
   },
   nouvelles: {
     titre: '{qui} hat abgehakt',

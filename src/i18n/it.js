@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'Quel che ciascuno ha portato. 💛', toi: 'Tu', binome: 'La tua metà', pts: 'pt',
     detail: '{ajoutees} aggiunte · {faites} fatte · {autres} per l’altro',
+    detailFamille: '{ajoutees} aggiunta/e · {faites} fatta/e · {autres} per gli altri',
     bareme: 'punteggio', baremeAjouter: 'Aggiungere un compito', baremeSienne: 'Spuntare il proprio compito',
-    baremeAutre: 'Spuntare il compito dell’altro',
+    baremeAutre: 'Spuntare il compito dell’altro', baremeAutreFamille: 'Spuntare l’attività di qualcun altro',
     baremeCombo: 'Combo del giorno',
     baremeComboNote: 'Dalla 2ª attività spuntata nella giornata, ognuna vale mezzo punto in più.',
     baremeNote: 'I punti si accumulano senza limite. Spendili quando vuoi, o risparmia per una ricompensa più grande.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'L’applicazione non è ancora pronta, riprova tra un istante.',
   },
   partage: {
-    titre: 'Condividi', inviter: 'Invita la mia metà', partagerAppli: 'Condividi l’applicazione', copie: 'Link copiato ✓',
+    titre: 'Condividi', inviter: 'Invita un membro', partagerAppli: 'Condividi l’applicazione', copie: 'Link copiato ✓',
     qrAfficher: 'Mostra il QR di invito', qrMasquer: 'Nascondi il QR di invito', qrAlt: 'Codice QR di invito',
     partagerCode: 'Condividi il codice di casa',
     codeCopie: 'Codice copiato ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'La casa riordinata dalla tua metà',
     menage: 'Le pulizie complete fatte dalla tua metà',
     semaineRepas: 'Una settimana di pasti cucinati dalla tua metà',
+    dessertChoisi: 'Scegliere il dolce',
+    chocolatChantilly: 'Una cioccolata calda con la panna',
+    musiqueVoiture: 'Scegliere la musica in macchina per tutta la settimana',
+    petitDejAuLit: 'Una colazione servita a letto',
+    soireeJeux: 'Una serata di giochi, con il gioco che preferisci',
+    veillerPlusTard: 'Restare alzati un’ora in più',
+    soireePizza: 'Una serata pizza, farcita come piace a te',
+    sortieWeekend: 'Scegliere la gita del weekend',
+    piqueNique: 'Un picnic al parco, tutti insieme',
+    cinemaPopcorn: 'Un film al cinema, con i popcorn',
+    journeeAuChoix: 'Una giornata in cui scegli tutte le attività',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: 'Ci pensa {qui} fino alle {h}: fino ad allora non puoi spuntarla.',
     aujourdhui: 'Già prenotata oggi: di nuovo possibile domani.',
     uneAutre: 'Stai già facendo «{tache}». Una alla volta.',
+  },
+  famille: {
+    classement: 'La classifica della casa',
+    quiHonore: 'Chi lo onorerà?',
+    sansPrenom: 'Senza nome',
   },
   nouvelles: {
     titre: '{qui} ha spuntato',

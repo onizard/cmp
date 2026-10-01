@@ -23,6 +23,8 @@ const claimFrom = (r) => ({
   usedAt: r.used_at || null,
   // Validé par son détenteur : l'autre a bien honoré le bon.
   realiseAt: r.realise_at || null,
+  // En famille : la personne désignée pour honorer le bon.
+  pour: r.pour || null,
   label: r.label,
   cost: Number(r.cost),
   deleted: r.deleted,
@@ -59,6 +61,8 @@ export function useRewards(householdId, userId) {
   );
   const [names, setNames] = useState({});
   const [otherUser, setOtherUser] = useState(null);
+  // Tous les membres du foyer, moi compris, dans l'ordre d'arrivée.
+  const [members, setMembers] = useState([]);
   const rRef = useRef(rewards);
   const cRef = useRef(claims);
 
@@ -98,6 +102,7 @@ export function useRewards(householdId, userId) {
         map[m.user_id] = m.display_name || '';
       });
       setNames(map);
+      setMembers(mem.map((m) => m.user_id));
       setOtherUser(mem.map((m) => m.user_id).find((id) => id !== userId) ?? null);
     }
   }, [householdId, userId, saveRewards, saveClaims]);
@@ -157,18 +162,23 @@ export function useRewards(householdId, userId) {
     [userId],
   );
 
-  /** Poinçonne un bon : il a servi, il ne sert plus qu'au souvenir. */
+  /**
+   * Utilise un bon. En famille, `pour` désigne la personne qui l'honorera :
+   * elle seule est prévenue. À deux, pas besoin — c'est l'autre.
+   */
   const useClaim = useCallback(
-    async (id) => {
+    async (id, pour = null) => {
       if (!estAMoi(id)) return;
       const quand = new Date().toISOString();
       saveClaims(
-        cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand } : c)),
+        cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand, pour } : c)),
       );
-      if (supabase)
-        await supabase.from('claims').update({ used_at: quand }).eq('id', id);
+      if (!supabase) return;
+      const maj = pour ? { used_at: quand, pour } : { used_at: quand };
+      const { error } = await supabase.from('claims').update(maj).eq('id', id);
+      if (error) refresh();
     },
-    [saveClaims, estAMoi],
+    [saveClaims, estAMoi, refresh],
   );
 
   /**
@@ -248,6 +258,7 @@ export function useRewards(householdId, userId) {
     claims,
     names,
     otherUser,
+    members,
     refresh,
     claimReward,
     claimCustom,

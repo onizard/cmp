@@ -39,7 +39,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.13';
+const VERSION = 'v4.14';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -78,6 +78,34 @@ async function sendToHousehold(householdId, exceptUser, composer, eveningOnly = 
       const payload =
         typeof composer === 'function' ? composer(row.langue) : composer;
       await webpush.sendNotification(sub, JSON.stringify(payload));
+      log('envoyé →', row.endpoint.slice(0, 40) + '…');
+    } catch (e) {
+      const code = e.statusCode;
+      if (code === 404 || code === 410) {
+        await client.query('delete from push_subscriptions where id = $1', [row.id]);
+        log('abonnement expiré, supprimé');
+      } else {
+        log('échec envoi', code, e.message);
+      }
+    }
+  }
+}
+
+/**
+ * Envoie à une seule personne du foyer : celle qu'un bon désigne. Mêmes
+ * règles que sendToHousehold, abonnements périmés compris.
+ */
+async function sendToUser(householdId, userId, composer) {
+  const { rows } = await client.query(
+    `select id, endpoint, p256dh, auth, langue
+       from push_subscriptions
+      where household_id = $1 and user_id = $2`,
+    [householdId, userId],
+  );
+  for (const row of rows) {
+    const sub = { endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } };
+    try {
+      await webpush.sendNotification(sub, JSON.stringify(composer(row.langue)));
       log('envoyé →', row.endpoint.slice(0, 40) + '…');
     } catch (e) {
       const code = e.statusCode;
@@ -311,16 +339,23 @@ function depuis(lang, minutes) {
 }
 
 const BON_SQL = `
-  select c.id, c.household_id, c.user_id, c.label,
+  select c.id, c.household_id, c.user_id, c.label, c.pour,
          r.cle,
          extract(epoch from (now() - c.used_at)) / 60 as minutes
     from claims c
     left join rewards r on r.id = c.reward_id
    where c.used_at is not null and c.realise_at is null and not c.deleted`;
 
+// En famille, le bon désigne qui l'honore : lui seul est prévenu et relancé.
+// Sans destinataire (un couple, ou une appli pas encore à jour), tout le foyer
+// sauf le détenteur, comme avant.
 async function envoyerBon(b, relance) {
   const nom = await actorName(b.household_id, b.user_id);
-  await sendToHousehold(b.household_id, b.user_id, (lang) => {
+  const envoyer = (composer) =>
+    b.pour
+      ? sendToUser(b.household_id, b.pour, composer)
+      : sendToHousehold(b.household_id, b.user_id, composer);
+  await envoyer((lang) => {
     const qui = nom || tr(lang, 'binome');
     const label = libelle(lang, b.cle, b.label);
     return relance

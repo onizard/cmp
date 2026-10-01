@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'Кто сколько вынес. 💛', toi: 'Вы', binome: 'Ваша половина', pts: 'очк.',
     detail: '{ajoutees} добавлено · {faites} сделано · {autres} за другого',
+    detailFamille: '{ajoutees} добавлено · {faites} сделано · {autres} за других',
     bareme: 'начисление', baremeAjouter: 'Добавить задачу', baremeSienne: 'Отметить свою задачу',
-    baremeAutre: 'Отметить задачу другого',
+    baremeAutre: 'Отметить задачу другого', baremeAutreFamille: 'Отметить чужую задачу',
     baremeCombo: 'Комбо дня',
     baremeComboNote: 'Начиная со 2-й задачи за день, каждая приносит на полбалла больше.',
     baremeNote: 'Очки копятся без предела. Тратьте когда угодно или копите на награду побольше.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'Приложение ещё не готово, попробуйте через мгновение.',
   },
   partage: {
-    titre: 'Поделиться', inviter: 'Пригласить свою половину', partagerAppli: 'Поделиться приложением', copie: 'Ссылка скопирована ✓',
+    titre: 'Поделиться', inviter: 'Пригласить участника', partagerAppli: 'Поделиться приложением', copie: 'Ссылка скопирована ✓',
     qrAfficher: 'Показать QR приглашения', qrMasquer: 'Скрыть QR приглашения', qrAlt: 'QR-код приглашения',
     partagerCode: 'Поделиться кодом дома',
     codeCopie: 'Код скопирован ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'Порядок в доме наводит ваша половина',
     menage: 'Генеральную уборку делает ваша половина',
     semaineRepas: 'Неделю готовит ваша половина',
+    dessertChoisi: 'Выбрать десерт',
+    chocolatChantilly: 'Горячий шоколад со взбитыми сливками',
+    musiqueVoiture: 'Выбирать музыку в машине всю неделю',
+    petitDejAuLit: 'Завтрак в постель',
+    soireeJeux: 'Вечер настольных игр — игру выбираете вы',
+    veillerPlusTard: 'Лечь спать на час позже',
+    soireePizza: 'Вечер пиццы — начинку выбираете вы',
+    sortieWeekend: 'Выбрать, куда пойти на выходных',
+    piqueNique: 'Пикник в парке, всем вместе',
+    cinemaPopcorn: 'Поход в кино — с попкорном',
+    journeeAuChoix: 'День, когда все занятия выбираете вы',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} этим занимается до {h}: до тех пор отметить нельзя.',
     aujourdhui: 'Уже бронировали сегодня: снова можно завтра.',
     uneAutre: 'Вы уже заняты задачей «{tache}». По одной за раз.',
+  },
+  famille: {
+    classement: 'Рейтинг семьи',
+    quiHonore: 'Кто его выполнит?',
+    sansPrenom: 'Без имени',
   },
   nouvelles: {
     titre: '{qui} отметил(а)',

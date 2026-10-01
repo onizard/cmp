@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'מה כל אחד נשא. 💛', toi: 'את/ה', binome: 'החצי השני', pts: 'נק׳',
     detail: '{ajoutees} נוספו · {faites} בוצעו · {autres} עבור השני',
+    detailFamille: '{ajoutees} נוספו · {faites} בוצעו · {autres} בשביל אחרים',
     bareme: 'ניקוד', baremeAjouter: 'הוספת משימה', baremeSienne: 'סימון משימה משלך',
-    baremeAutre: 'סימון משימה של השני',
+    baremeAutre: 'סימון משימה של השני', baremeAutreFamille: 'לסמן משימה של מישהו אחר',
     baremeCombo: 'קומבו היומי',
     baremeComboNote: 'מהמשימה השנייה ביום, כל משימה מזכה בחצי נקודה נוספת.',
     baremeNote: 'הנקודות נצברות בלי הגבלה. בזבז מתי שתרצה, או חסוך לפרס גדול יותר.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'האפליקציה עדיין לא מוכנה, נסה שוב בעוד רגע.',
   },
   partage: {
-    titre: 'שיתוף', inviter: 'להזמין את החצי השני', partagerAppli: 'שיתוף האפליקציה', copie: 'הקישור הועתק ✓',
+    titre: 'שיתוף', inviter: 'להזמין חבר/ה', partagerAppli: 'שיתוף האפליקציה', copie: 'הקישור הועתק ✓',
     qrAfficher: 'הצגת קוד ה־QR להזמנה', qrMasquer: 'הסתרת קוד ה־QR', qrAlt: 'קוד QR להזמנה',
     partagerCode: 'שיתוף קוד הבית',
     codeCopie: 'הקוד הועתק ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'החצי השני מסדר את הבית',
     menage: 'החצי השני עושה ניקיון יסודי',
     semaineRepas: 'שבוע של ארוחות שהחצי השני מבשל',
+    dessertChoisi: 'לבחור את הקינוח',
+    chocolatChantilly: 'שוקו חם עם קצפת',
+    musiqueVoiture: 'לבחור את המוזיקה באוטו כל השבוע',
+    petitDejAuLit: 'ארוחת בוקר שמוגשת למיטה',
+    soireeJeux: 'ערב משחקים, במשחק לבחירתך',
+    veillerPlusTard: 'להישאר ער שעה נוספת',
+    soireePizza: 'ערב פיצה, עם תוספות לבחירתך',
+    sortieWeekend: 'לבחור את הבילוי של סוף השבוע',
+    piqueNique: 'פיקניק בפארק, כולם יחד',
+    cinemaPopcorn: 'הקרנה בקולנוע, עם פופקורן',
+    journeeAuChoix: 'יום שבו כל הפעילויות לבחירתך',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} מטפל/ת בזה עד {h}: עד אז אי אפשר לסמן אותה.',
     aujourdhui: 'כבר נשמרה היום: אפשר שוב מחר.',
     uneAutre: 'את/ה כבר מטפל/ת ב„{tache}”. אחת בכל פעם.',
+  },
+  famille: {
+    classement: 'הדירוג של הבית',
+    quiHonore: 'מי יממש את השובר?',
+    sansPrenom: 'ללא שם',
   },
   nouvelles: {
     titre: '{qui} סימן/ה',

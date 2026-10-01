@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: '各自承担了多少。💛', toi: '你', binome: '你的另一半', pts: '分',
     detail: '新增 {ajoutees} · 完成 {faites} · 替对方 {autres}',
+    detailFamille: '{ajoutees} 项已添加 · {faites} 项已完成 · {autres} 项替别人做',
     bareme: '计分', baremeAjouter: '添加一项任务', baremeSienne: '勾选自己的任务',
-    baremeAutre: '勾选对方的任务',
+    baremeAutre: '勾选对方的任务', baremeAutreFamille: '勾选别人的任务',
     baremeCombo: '当日连击',
     baremeComboNote: '当天从第 2 项起，每完成一项多得半分。',
     baremeNote: '积分无上限地累积。随时兑换，或攒着换更好的奖励。',
@@ -108,7 +109,7 @@ export default {
     pasPrete: '应用尚未就绪，请稍后再试。',
   },
   partage: {
-    titre: '分享', inviter: '邀请我的另一半', partagerAppli: '分享这个应用', copie: '链接已复制 ✓',
+    titre: '分享', inviter: '邀请成员', partagerAppli: '分享这个应用', copie: '链接已复制 ✓',
     qrAfficher: '显示邀请二维码', qrMasquer: '隐藏邀请二维码', qrAlt: '邀请二维码',
     partagerCode: '分享家庭代码',
     codeCopie: '代码已复制 ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: '另一半整理房间',
     menage: '另一半做全屋大扫除',
     semaineRepas: '另一半做一周的饭',
+    dessertChoisi: '决定吃什么甜点',
+    chocolatChantilly: '一杯加奶油的热巧克力',
+    musiqueVoiture: '一整周在车上选音乐',
+    petitDejAuLit: '端到床边的早餐',
+    soireeJeux: '一个游戏之夜，玩你选的游戏',
+    veillerPlusTard: '晚睡一个小时',
+    soireePizza: '披萨之夜，配料由你定',
+    sortieWeekend: '决定周末去哪儿玩',
+    piqueNique: '大家一起去公园野餐',
+    cinemaPopcorn: '去电影院看场电影，还有爆米花',
+    journeeAuChoix: '一整天的活动都由你来定',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} 会做到 {h}：在此之前你不能勾选。',
     aujourdhui: '今天已预留过：明天才能再预留。',
     uneAutre: '你已在做“{tache}”。一次只能一项。',
+  },
+  famille: {
+    classement: '家庭排行榜',
+    quiHonore: '由谁来兑现？',
+    sansPrenom: '未填名字',
   },
   nouvelles: {
     titre: '{qui} 完成了',

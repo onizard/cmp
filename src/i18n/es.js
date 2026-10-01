@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'Lo que cada cual ha llevado. 💛', toi: 'Tú', binome: 'Tu media naranja', pts: 'pts',
     detail: '{ajoutees} añadidas · {faites} hechas · {autres} para la otra persona',
+    detailFamille: '{ajoutees} añadida(s) · {faites} hecha(s) · {autres} para los demás',
     bareme: 'puntuación', baremeAjouter: 'Añadir una tarea', baremeSienne: 'Marcar tu propia tarea',
-    baremeAutre: 'Marcar la tarea del otro',
+    baremeAutre: 'Marcar la tarea del otro', baremeAutreFamille: 'Marcar la tarea de otra persona',
     baremeCombo: 'Combo del día',
     baremeComboNote: 'Desde la 2.ª tarea marcada en el día, cada una suma medio punto más.',
     baremeNote: 'Los puntos se acumulan sin límite. Gástalos cuando quieras o ahorra para una recompensa mayor.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'La aplicación aún no está lista, inténtalo en un momento.',
   },
   partage: {
-    titre: 'Compartir', inviter: 'Invitar a mi media naranja', partagerAppli: 'Compartir la aplicación', copie: 'Enlace copiado ✓',
+    titre: 'Compartir', inviter: 'Invitar a un miembro', partagerAppli: 'Compartir la aplicación', copie: 'Enlace copiado ✓',
     qrAfficher: 'Mostrar el QR de invitación', qrMasquer: 'Ocultar el QR de invitación', qrAlt: 'Código QR de invitación',
     partagerCode: 'Compartir el código del hogar',
     codeCopie: 'Código copiado ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'La casa ordenada por tu media naranja',
     menage: 'La limpieza completa, hecha por tu media naranja',
     semaineRepas: 'Una semana de comidas cocinadas por tu media naranja',
+    dessertChoisi: 'Elegir el postre',
+    chocolatChantilly: 'Un chocolate caliente con nata montada',
+    musiqueVoiture: 'Elegir la música en el coche toda la semana',
+    petitDejAuLit: 'Un desayuno servido en la cama',
+    soireeJeux: 'Una noche de juegos, con el juego que elijas',
+    veillerPlusTard: 'Acostarse una hora más tarde',
+    soireePizza: 'Una noche de pizza, con los ingredientes que quieras',
+    sortieWeekend: 'Elegir la salida del fin de semana',
+    piqueNique: 'Un pícnic en el parque, todos juntos',
+    cinemaPopcorn: 'Una sesión de cine, con palomitas',
+    journeeAuChoix: 'Un día en el que eliges todas las actividades',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} se encarga hasta las {h}: no puedes marcarla hasta entonces.',
     aujourdhui: 'Ya reservada hoy: de nuevo posible mañana.',
     uneAutre: 'Ya te encargas de «{tache}». Una cada vez.',
+  },
+  famille: {
+    classement: 'La clasificación del hogar',
+    quiHonore: '¿Quién lo cumplirá?',
+    sansPrenom: 'Sin nombre',
   },
   nouvelles: {
     titre: '{qui} ha marcado',

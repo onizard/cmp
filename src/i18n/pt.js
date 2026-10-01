@@ -48,8 +48,9 @@ export default {
   cerveau: {
     lede: 'O que cada um carregou. 💛', toi: 'Tu', binome: 'A tua cara-metade', pts: 'pts',
     detail: '{ajoutees} adicionadas · {faites} feitas · {autres} para o outro',
+    detailFamille: '{ajoutees} adicionada(s) · {faites} feita(s) · {autres} para os outros',
     bareme: 'pontuação', baremeAjouter: 'Adicionar uma tarefa', baremeSienne: 'Marcar a tua própria tarefa',
-    baremeAutre: 'Marcar a tarefa do outro',
+    baremeAutre: 'Marcar a tarefa do outro', baremeAutreFamille: 'Marcar a tarefa de outra pessoa',
     baremeCombo: 'Combo do dia',
     baremeComboNote: 'A partir da 2.ª tarefa marcada no dia, cada uma vale mais meio ponto.',
     baremeNote: 'Os pontos acumulam-se sem limite. Gasta-os quando quiseres, ou poupa para uma recompensa maior.',
@@ -108,7 +109,7 @@ export default {
     pasPrete: 'A aplicação ainda não está pronta, tenta daqui a pouco.',
   },
   partage: {
-    titre: 'Partilhar', inviter: 'Convidar a minha cara-metade', partagerAppli: 'Partilhar a aplicação', copie: 'Link copiado ✓',
+    titre: 'Partilhar', inviter: 'Convidar um membro', partagerAppli: 'Partilhar a aplicação', copie: 'Link copiado ✓',
     qrAfficher: 'Mostrar o QR do convite', qrMasquer: 'Ocultar o QR do convite', qrAlt: 'Código QR de convite',
     partagerCode: 'Partilhar o código do lar',
     codeCopie: 'Código copiado ✓',
@@ -185,6 +186,17 @@ export default {
     rangement: 'A casa arrumada pela tua cara-metade',
     menage: 'A limpeza completa feita pela tua cara-metade',
     semaineRepas: 'Uma semana de refeições cozinhadas pela tua cara-metade',
+    dessertChoisi: 'Escolher a sobremesa',
+    chocolatChantilly: 'Um chocolate quente com chantilly',
+    musiqueVoiture: 'Escolher a música no carro a semana toda',
+    petitDejAuLit: 'Um pequeno-almoço servido na cama',
+    soireeJeux: 'Uma noite de jogos, com o jogo à tua escolha',
+    veillerPlusTard: 'Deitar-se uma hora mais tarde',
+    soireePizza: 'Uma noite de pizza, com os ingredientes que quiseres',
+    sortieWeekend: 'Escolher o passeio do fim de semana',
+    piqueNique: 'Um piquenique no parque, todos juntos',
+    cinemaPopcorn: 'Uma ida ao cinema, com pipocas',
+    journeeAuChoix: 'Um dia em que escolhes todas as atividades',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -198,6 +210,11 @@ export default {
     bloquee: '{qui} trata disto até às {h}: não a podes marcar até lá.',
     aujourdhui: 'Já reservada hoje: possível de novo amanhã.',
     uneAutre: 'Já estás a tratar de «{tache}». Uma de cada vez.',
+  },
+  famille: {
+    classement: 'A classificação da casa',
+    quiHonore: 'Quem o vai cumprir?',
+    sansPrenom: 'Sem nome',
   },
   nouvelles: {
     titre: '{qui} marcou',

@@ -49,8 +49,9 @@ export default {
   cerveau: {
     lede: 'هر کس چه بر دوش کشیده. 💛', toi: 'تو', binome: 'نیمهٔ دیگرت', pts: 'امتیاز',
     detail: '{ajoutees} افزوده · {faites} انجام‌شده · {autres} برای آن یکی',
+    detailFamille: '{ajoutees} افزوده · {faites} انجام‌شده · {autres} برای دیگران',
     bareme: 'امتیازدهی', baremeAjouter: 'افزودن یک کار', baremeSienne: 'علامت زدن کار خودت',
-    baremeAutre: 'علامت زدن کار آن یکی',
+    baremeAutre: 'علامت زدن کار آن یکی', baremeAutreFamille: 'تیک زدن کار کسی دیگر',
     baremeCombo: 'کمبوی روز',
     baremeComboNote: 'از دومین کار انجام‌شده در روز، هر کار نیم امتیاز بیشتر می‌دهد.',
     baremeNote: 'امتیازها بی‌حد جمع می‌شوند. هر وقت خواستی خرجشان کن، یا برای پاداشی بزرگ‌تر نگهشان دار.',
@@ -109,7 +110,7 @@ export default {
     pasPrete: 'برنامه هنوز آماده نیست، لحظه‌ای دیگر دوباره تلاش کن.',
   },
   partage: {
-    titre: 'هم‌رسانی', inviter: 'دعوت نیمهٔ دیگرم', partagerAppli: 'هم‌رسانی برنامه', copie: 'پیوند رونوشت شد ✓',
+    titre: 'هم‌رسانی', inviter: 'دعوت از یک عضو', partagerAppli: 'هم‌رسانی برنامه', copie: 'پیوند رونوشت شد ✓',
     qrAfficher: 'نمایش کد QR دعوت', qrMasquer: 'پنهان کردن کد QR', qrAlt: 'کد QR دعوت',
     partagerCode: 'هم‌رسانی کد خانه',
     codeCopie: 'کد رونوشت شد ✓',
@@ -187,6 +188,17 @@ export default {
     rangement: 'خانه را نیمهٔ دیگرت مرتب می‌کند',
     menage: 'نظافت کامل خانه را نیمهٔ دیگرت انجام می‌دهد',
     semaineRepas: 'یک هفته آشپزی با نیمهٔ دیگرت',
+    dessertChoisi: 'انتخاب دسر',
+    chocolatChantilly: 'شکلات داغ با خامهٔ زده',
+    musiqueVoiture: 'انتخاب موسیقی ماشین در تمام هفته',
+    petitDejAuLit: 'صبحانه‌ای که در رختخواب سرو شود',
+    soireeJeux: 'یک شب بازی، با بازی دلخواه تو',
+    veillerPlusTard: 'یک ساعت دیرتر خوابیدن',
+    soireePizza: 'یک شب پیتزا، با مواد دلخواه تو',
+    sortieWeekend: 'انتخاب برنامهٔ بیرون رفتن آخر هفته',
+    piqueNique: 'یک پیک‌نیک در پارک، همه با هم',
+    cinemaPopcorn: 'یک سانس سینما، با پاپ‌کورن',
+    journeeAuChoix: 'روزی که همهٔ برنامه‌ها را تو انتخاب می‌کنی',
   },
 
   // Le bon que l'autre vient d'utiliser, au milieu de l'écran.
@@ -200,6 +212,11 @@ export default {
     bloquee: '{qui} تا {h} انجامش می‌دهد: تا آن موقع نمی‌توانی تیکش بزنی.',
     aujourdhui: 'امروز قبلاً رزرو شده: فردا دوباره ممکن است.',
     uneAutre: 'تو الان «{tache}» را انجام می‌دهی. هر بار فقط یکی.',
+  },
+  famille: {
+    classement: 'رده‌بندی خانه',
+    quiHonore: 'چه کسی آن را انجام می‌دهد؟',
+    sansPrenom: 'بی‌نام',
   },
   nouvelles: {
     titre: '{qui} انجام داد',

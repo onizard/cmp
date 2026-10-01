@@ -13199,7 +13199,18 @@ var require_i18n = __commonJS({
         "linge": "Le linge lav\xE9, \xE9tendu, pli\xE9 et rang\xE9 par l'autre",
         "rangement": "La maison rang\xE9e par l'autre",
         "menage": "Le m\xE9nage complet fait par l'autre",
-        "semaineRepas": "Une semaine de repas cuisin\xE9s par l'autre"
+        "semaineRepas": "Une semaine de repas cuisin\xE9s par l'autre",
+        "dessertChoisi": "Choisir le dessert",
+        "chocolatChantilly": "Un chocolat chaud avec de la chantilly",
+        "musiqueVoiture": "Choisir la musique en voiture toute la semaine",
+        "petitDejAuLit": "Un petit-d\xE9jeuner servi au lit",
+        "soireeJeux": "Une soir\xE9e jeux, au jeu de son choix",
+        "veillerPlusTard": "Veiller une heure de plus",
+        "soireePizza": "Une soir\xE9e pizza, garnie \xE0 son go\xFBt",
+        "sortieWeekend": "Choisir la sortie du week-end",
+        "piqueNique": "Un pique-nique au parc, tous ensemble",
+        "cinemaPopcorn": "Une s\xE9ance de cin\xE9ma, avec le pop-corn",
+        "journeeAuChoix": "Une journ\xE9e o\xF9 l\u2019on choisit toutes les activit\xE9s"
       },
       "en": {
         "cafeAuLit": "Coffee served in bed",
@@ -13230,7 +13241,18 @@ var require_i18n = __commonJS({
         "linge": "The laundry washed, hung, folded and put away by your other half",
         "rangement": "The house tidied by your other half",
         "menage": "A full house clean done by your other half",
-        "semaineRepas": "A week of meals cooked by your other half"
+        "semaineRepas": "A week of meals cooked by your other half",
+        "dessertChoisi": "Pick the dessert",
+        "chocolatChantilly": "A hot chocolate with whipped cream",
+        "musiqueVoiture": "Pick the music in the car all week",
+        "petitDejAuLit": "Breakfast served in bed",
+        "soireeJeux": "A games night, with the game of your choice",
+        "veillerPlusTard": "Stay up an hour later",
+        "soireePizza": "A pizza night, toppings of your choice",
+        "sortieWeekend": "Pick the weekend outing",
+        "piqueNique": "A picnic in the park, all together",
+        "cinemaPopcorn": "A trip to the cinema, popcorn included",
+        "journeeAuChoix": "A day where you choose every activity"
       },
       "es": {
         "cafeAuLit": "Un caf\xE9 servido en la cama",
@@ -13261,7 +13283,18 @@ var require_i18n = __commonJS({
         "linge": "La ropa lavada, tendida, doblada y guardada por tu media naranja",
         "rangement": "La casa ordenada por tu media naranja",
         "menage": "La limpieza completa, hecha por tu media naranja",
-        "semaineRepas": "Una semana de comidas cocinadas por tu media naranja"
+        "semaineRepas": "Una semana de comidas cocinadas por tu media naranja",
+        "dessertChoisi": "Elegir el postre",
+        "chocolatChantilly": "Un chocolate caliente con nata montada",
+        "musiqueVoiture": "Elegir la m\xFAsica en el coche toda la semana",
+        "petitDejAuLit": "Un desayuno servido en la cama",
+        "soireeJeux": "Una noche de juegos, con el juego que elijas",
+        "veillerPlusTard": "Acostarse una hora m\xE1s tarde",
+        "soireePizza": "Una noche de pizza, con los ingredientes que quieras",
+        "sortieWeekend": "Elegir la salida del fin de semana",
+        "piqueNique": "Un p\xEDcnic en el parque, todos juntos",
+        "cinemaPopcorn": "Una sesi\xF3n de cine, con palomitas",
+        "journeeAuChoix": "Un d\xEDa en el que eliges todas las actividades"
       },
       "pt": {
         "cafeAuLit": "Um caf\xE9 servido na cama",
@@ -13292,7 +13325,18 @@ var require_i18n = __commonJS({
         "linge": "A roupa lavada, estendida, dobrada e arrumada pela tua cara-metade",
         "rangement": "A casa arrumada pela tua cara-metade",
         "menage": "A limpeza completa feita pela tua cara-metade",
-        "semaineRepas": "Uma semana de refei\xE7\xF5es cozinhadas pela tua cara-metade"
+        "semaineRepas": "Uma semana de refei\xE7\xF5es cozinhadas pela tua cara-metade",
+        "dessertChoisi": "Escolher a sobremesa",
+        "chocolatChantilly": "Um chocolate quente com chantilly",
+        "musiqueVoiture": "Escolher a m\xFAsica no carro a semana toda",
+        "petitDejAuLit": "Um pequeno-almo\xE7o servido na cama",
+        "soireeJeux": "Uma noite de jogos, com o jogo \xE0 tua escolha",
+        "veillerPlusTard": "Deitar-se uma hora mais tarde",
+        "soireePizza": "Uma noite de pizza, com os ingredientes que quiseres",
+        "sortieWeekend": "Escolher o passeio do fim de semana",
+        "piqueNique": "Um piquenique no parque, todos juntos",
+        "cinemaPopcorn": "Uma ida ao cinema, com pipocas",
+        "journeeAuChoix": "Um dia em que escolhes todas as atividades"
       },
       "de": {
         "cafeAuLit": "Kaffee ans Bett gebracht",
@@ -13323,7 +13367,18 @@ var require_i18n = __commonJS({
         "linge": "Die W\xE4sche gewaschen, aufgeh\xE4ngt, gefaltet und einger\xE4umt von deiner besseren H\xE4lfte",
         "rangement": "Die Wohnung r\xE4umt deine bessere H\xE4lfte auf",
         "menage": "Den kompletten Hausputz macht deine bessere H\xE4lfte",
-        "semaineRepas": "Eine Woche lang kocht deine bessere H\xE4lfte"
+        "semaineRepas": "Eine Woche lang kocht deine bessere H\xE4lfte",
+        "dessertChoisi": "Den Nachtisch aussuchen",
+        "chocolatChantilly": "Eine hei\xDFe Schokolade mit Sahne",
+        "musiqueVoiture": "Die ganze Woche die Musik im Auto aussuchen",
+        "petitDejAuLit": "Fr\xFChst\xFCck ans Bett gebracht",
+        "soireeJeux": "Ein Spieleabend mit dem Spiel deiner Wahl",
+        "veillerPlusTard": "Eine Stunde l\xE4nger aufbleiben",
+        "soireePizza": "Ein Pizzaabend, belegt nach deinem Geschmack",
+        "sortieWeekend": "Den Ausflug am Wochenende aussuchen",
+        "piqueNique": "Ein Picknick im Park, alle zusammen",
+        "cinemaPopcorn": "Ein Kinobesuch, mit Popcorn",
+        "journeeAuChoix": "Ein Tag, an dem du alle Aktivit\xE4ten bestimmst"
       },
       "it": {
         "cafeAuLit": "Un caff\xE8 servito a letto",
@@ -13354,7 +13409,18 @@ var require_i18n = __commonJS({
         "linge": "Il bucato lavato, steso, piegato e riposto dalla tua met\xE0",
         "rangement": "La casa riordinata dalla tua met\xE0",
         "menage": "Le pulizie complete fatte dalla tua met\xE0",
-        "semaineRepas": "Una settimana di pasti cucinati dalla tua met\xE0"
+        "semaineRepas": "Una settimana di pasti cucinati dalla tua met\xE0",
+        "dessertChoisi": "Scegliere il dolce",
+        "chocolatChantilly": "Una cioccolata calda con la panna",
+        "musiqueVoiture": "Scegliere la musica in macchina per tutta la settimana",
+        "petitDejAuLit": "Una colazione servita a letto",
+        "soireeJeux": "Una serata di giochi, con il gioco che preferisci",
+        "veillerPlusTard": "Restare alzati un\u2019ora in pi\xF9",
+        "soireePizza": "Una serata pizza, farcita come piace a te",
+        "sortieWeekend": "Scegliere la gita del weekend",
+        "piqueNique": "Un picnic al parco, tutti insieme",
+        "cinemaPopcorn": "Un film al cinema, con i popcorn",
+        "journeeAuChoix": "Una giornata in cui scegli tutte le attivit\xE0"
       },
       "ru": {
         "cafeAuLit": "\u041A\u043E\u0444\u0435 \u0432 \u043F\u043E\u0441\u0442\u0435\u043B\u044C",
@@ -13385,7 +13451,18 @@ var require_i18n = __commonJS({
         "linge": "\u0411\u0435\u043B\u044C\u0451 \u0441\u0442\u0438\u0440\u0430\u0435\u0442, \u0440\u0430\u0437\u0432\u0435\u0448\u0438\u0432\u0430\u0435\u0442, \u0441\u043A\u043B\u0430\u0434\u044B\u0432\u0430\u0435\u0442 \u0438 \u0443\u0431\u0438\u0440\u0430\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
         "rangement": "\u041F\u043E\u0440\u044F\u0434\u043E\u043A \u0432 \u0434\u043E\u043C\u0435 \u043D\u0430\u0432\u043E\u0434\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
         "menage": "\u0413\u0435\u043D\u0435\u0440\u0430\u043B\u044C\u043D\u0443\u044E \u0443\u0431\u043E\u0440\u043A\u0443 \u0434\u0435\u043B\u0430\u0435\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
-        "semaineRepas": "\u041D\u0435\u0434\u0435\u043B\u044E \u0433\u043E\u0442\u043E\u0432\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430"
+        "semaineRepas": "\u041D\u0435\u0434\u0435\u043B\u044E \u0433\u043E\u0442\u043E\u0432\u0438\u0442 \u0432\u0430\u0448\u0430 \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430",
+        "dessertChoisi": "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u0434\u0435\u0441\u0435\u0440\u0442",
+        "chocolatChantilly": "\u0413\u043E\u0440\u044F\u0447\u0438\u0439 \u0448\u043E\u043A\u043E\u043B\u0430\u0434 \u0441\u043E \u0432\u0437\u0431\u0438\u0442\u044B\u043C\u0438 \u0441\u043B\u0438\u0432\u043A\u0430\u043C\u0438",
+        "musiqueVoiture": "\u0412\u044B\u0431\u0438\u0440\u0430\u0442\u044C \u043C\u0443\u0437\u044B\u043A\u0443 \u0432 \u043C\u0430\u0448\u0438\u043D\u0435 \u0432\u0441\u044E \u043D\u0435\u0434\u0435\u043B\u044E",
+        "petitDejAuLit": "\u0417\u0430\u0432\u0442\u0440\u0430\u043A \u0432 \u043F\u043E\u0441\u0442\u0435\u043B\u044C",
+        "soireeJeux": "\u0412\u0435\u0447\u0435\u0440 \u043D\u0430\u0441\u0442\u043E\u043B\u044C\u043D\u044B\u0445 \u0438\u0433\u0440 \u2014 \u0438\u0433\u0440\u0443 \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442\u0435 \u0432\u044B",
+        "veillerPlusTard": "\u041B\u0435\u0447\u044C \u0441\u043F\u0430\u0442\u044C \u043D\u0430 \u0447\u0430\u0441 \u043F\u043E\u0437\u0436\u0435",
+        "soireePizza": "\u0412\u0435\u0447\u0435\u0440 \u043F\u0438\u0446\u0446\u044B \u2014 \u043D\u0430\u0447\u0438\u043D\u043A\u0443 \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442\u0435 \u0432\u044B",
+        "sortieWeekend": "\u0412\u044B\u0431\u0440\u0430\u0442\u044C, \u043A\u0443\u0434\u0430 \u043F\u043E\u0439\u0442\u0438 \u043D\u0430 \u0432\u044B\u0445\u043E\u0434\u043D\u044B\u0445",
+        "piqueNique": "\u041F\u0438\u043A\u043D\u0438\u043A \u0432 \u043F\u0430\u0440\u043A\u0435, \u0432\u0441\u0435\u043C \u0432\u043C\u0435\u0441\u0442\u0435",
+        "cinemaPopcorn": "\u041F\u043E\u0445\u043E\u0434 \u0432 \u043A\u0438\u043D\u043E \u2014 \u0441 \u043F\u043E\u043F\u043A\u043E\u0440\u043D\u043E\u043C",
+        "journeeAuChoix": "\u0414\u0435\u043D\u044C, \u043A\u043E\u0433\u0434\u0430 \u0432\u0441\u0435 \u0437\u0430\u043D\u044F\u0442\u0438\u044F \u0432\u044B\u0431\u0438\u0440\u0430\u0435\u0442\u0435 \u0432\u044B"
       },
       "zh": {
         "cafeAuLit": "\u7AEF\u5230\u5E8A\u8FB9\u7684\u4E00\u676F\u5496\u5561",
@@ -13416,7 +13493,18 @@ var require_i18n = __commonJS({
         "linge": "\u53E6\u4E00\u534A\u6D17\u8863\u3001\u667E\u8863\u3001\u53E0\u8863\u3001\u6536\u597D",
         "rangement": "\u53E6\u4E00\u534A\u6574\u7406\u623F\u95F4",
         "menage": "\u53E6\u4E00\u534A\u505A\u5168\u5C4B\u5927\u626B\u9664",
-        "semaineRepas": "\u53E6\u4E00\u534A\u505A\u4E00\u5468\u7684\u996D"
+        "semaineRepas": "\u53E6\u4E00\u534A\u505A\u4E00\u5468\u7684\u996D",
+        "dessertChoisi": "\u51B3\u5B9A\u5403\u4EC0\u4E48\u751C\u70B9",
+        "chocolatChantilly": "\u4E00\u676F\u52A0\u5976\u6CB9\u7684\u70ED\u5DE7\u514B\u529B",
+        "musiqueVoiture": "\u4E00\u6574\u5468\u5728\u8F66\u4E0A\u9009\u97F3\u4E50",
+        "petitDejAuLit": "\u7AEF\u5230\u5E8A\u8FB9\u7684\u65E9\u9910",
+        "soireeJeux": "\u4E00\u4E2A\u6E38\u620F\u4E4B\u591C\uFF0C\u73A9\u4F60\u9009\u7684\u6E38\u620F",
+        "veillerPlusTard": "\u665A\u7761\u4E00\u4E2A\u5C0F\u65F6",
+        "soireePizza": "\u62AB\u8428\u4E4B\u591C\uFF0C\u914D\u6599\u7531\u4F60\u5B9A",
+        "sortieWeekend": "\u51B3\u5B9A\u5468\u672B\u53BB\u54EA\u513F\u73A9",
+        "piqueNique": "\u5927\u5BB6\u4E00\u8D77\u53BB\u516C\u56ED\u91CE\u9910",
+        "cinemaPopcorn": "\u53BB\u7535\u5F71\u9662\u770B\u573A\u7535\u5F71\uFF0C\u8FD8\u6709\u7206\u7C73\u82B1",
+        "journeeAuChoix": "\u4E00\u6574\u5929\u7684\u6D3B\u52A8\u90FD\u7531\u4F60\u6765\u5B9A"
       },
       "ar": {
         "cafeAuLit": "\u0642\u0647\u0648\u0629 \u062A\u064F\u0642\u062F\u064E\u0651\u0645 \u0641\u064A \u0627\u0644\u0633\u0631\u064A\u0631",
@@ -13447,7 +13535,18 @@ var require_i18n = __commonJS({
         "linge": "\u0627\u0644\u063A\u0633\u064A\u0644 \u064A\u063A\u0633\u0644\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631 \u0648\u064A\u0646\u0634\u0631\u0647 \u0648\u064A\u0637\u0648\u064A\u0647 \u0648\u064A\u0631\u062A\u0651\u0628\u0647",
         "rangement": "\u062A\u0631\u062A\u064A\u0628 \u0627\u0644\u0628\u064A\u062A \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
         "menage": "\u0627\u0644\u062A\u0646\u0638\u064A\u0641 \u0627\u0644\u0643\u0627\u0645\u0644 \u0644\u0644\u0628\u064A\u062A \u064A\u062A\u0648\u0644\u0627\u0647 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
-        "semaineRepas": "\u0623\u0633\u0628\u0648\u0639 \u0645\u0646 \u0627\u0644\u0648\u062C\u0628\u0627\u062A \u064A\u0637\u0628\u062E\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631"
+        "semaineRepas": "\u0623\u0633\u0628\u0648\u0639 \u0645\u0646 \u0627\u0644\u0648\u062C\u0628\u0627\u062A \u064A\u0637\u0628\u062E\u0647\u0627 \u0646\u0635\u0641\u0643 \u0627\u0644\u0622\u062E\u0631",
+        "dessertChoisi": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u062A\u062D\u0644\u064A\u0629",
+        "chocolatChantilly": "\u0634\u0648\u0643\u0648\u0644\u0627\u062A\u0629 \u0633\u0627\u062E\u0646\u0629 \u0645\u0639 \u0627\u0644\u0643\u0631\u064A\u0645\u0629 \u0627\u0644\u0645\u062E\u0641\u0648\u0642\u0629",
+        "musiqueVoiture": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0645\u0648\u0633\u064A\u0642\u0649 \u0641\u064A \u0627\u0644\u0633\u064A\u0627\u0631\u0629 \u0637\u0648\u0627\u0644 \u0627\u0644\u0623\u0633\u0628\u0648\u0639",
+        "petitDejAuLit": "\u0641\u0637\u0648\u0631 \u064A\u064F\u0642\u062F\u064E\u0651\u0645 \u0641\u064A \u0627\u0644\u0633\u0631\u064A\u0631",
+        "soireeJeux": "\u0633\u0647\u0631\u0629 \u0623\u0644\u0639\u0627\u0628\u060C \u0628\u0627\u0644\u0644\u0639\u0628\u0629 \u0627\u0644\u062A\u064A \u062A\u062E\u062A\u0627\u0631\u0647\u0627",
+        "veillerPlusTard": "\u0627\u0644\u0633\u0647\u0631 \u0633\u0627\u0639\u0629 \u0625\u0636\u0627\u0641\u064A\u0629",
+        "soireePizza": "\u0633\u0647\u0631\u0629 \u0628\u064A\u062A\u0632\u0627\u060C \u0628\u0627\u0644\u0645\u0643\u0648\u0646\u0627\u062A \u0627\u0644\u062A\u064A \u062A\u062D\u0628\u0647\u0627",
+        "sortieWeekend": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0646\u0632\u0647\u0629 \u0646\u0647\u0627\u064A\u0629 \u0627\u0644\u0623\u0633\u0628\u0648\u0639",
+        "piqueNique": "\u0646\u0632\u0647\u0629 \u0648\u0637\u0639\u0627\u0645 \u0641\u064A \u0627\u0644\u062D\u062F\u064A\u0642\u0629\u060C \u0645\u0639\u064B\u0627 \u062C\u0645\u064A\u0639\u064B\u0627",
+        "cinemaPopcorn": "\u0639\u0631\u0636 \u0633\u064A\u0646\u0645\u0627\u0626\u064A\u060C \u0645\u0639 \u0627\u0644\u0641\u0634\u0627\u0631",
+        "journeeAuChoix": "\u064A\u0648\u0645 \u062A\u062E\u062A\u0627\u0631 \u0641\u064A\u0647 \u0643\u0644 \u0627\u0644\u0623\u0646\u0634\u0637\u0629"
       },
       "he": {
         "cafeAuLit": "\u05E7\u05E4\u05D4 \u05E9\u05DE\u05D5\u05D2\u05E9 \u05DC\u05DE\u05D9\u05D8\u05D4",
@@ -13478,7 +13577,18 @@ var require_i18n = __commonJS({
         "linge": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05DB\u05D1\u05E1, \u05EA\u05D5\u05DC\u05D4, \u05DE\u05E7\u05E4\u05DC \u05D5\u05DE\u05E1\u05D3\u05E8 \u05D0\u05EA \u05D4\u05DB\u05D1\u05D9\u05E1\u05D4",
         "rangement": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05E1\u05D3\u05E8 \u05D0\u05EA \u05D4\u05D1\u05D9\u05EA",
         "menage": "\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05E2\u05D5\u05E9\u05D4 \u05E0\u05D9\u05E7\u05D9\u05D5\u05DF \u05D9\u05E1\u05D5\u05D3\u05D9",
-        "semaineRepas": "\u05E9\u05D1\u05D5\u05E2 \u05E9\u05DC \u05D0\u05E8\u05D5\u05D7\u05D5\u05EA \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D1\u05E9\u05DC"
+        "semaineRepas": "\u05E9\u05D1\u05D5\u05E2 \u05E9\u05DC \u05D0\u05E8\u05D5\u05D7\u05D5\u05EA \u05E9\u05D4\u05D7\u05E6\u05D9 \u05D4\u05E9\u05E0\u05D9 \u05DE\u05D1\u05E9\u05DC",
+        "dessertChoisi": "\u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05EA \u05D4\u05E7\u05D9\u05E0\u05D5\u05D7",
+        "chocolatChantilly": "\u05E9\u05D5\u05E7\u05D5 \u05D7\u05DD \u05E2\u05DD \u05E7\u05E6\u05E4\u05EA",
+        "musiqueVoiture": "\u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05EA \u05D4\u05DE\u05D5\u05D6\u05D9\u05E7\u05D4 \u05D1\u05D0\u05D5\u05D8\u05D5 \u05DB\u05DC \u05D4\u05E9\u05D1\u05D5\u05E2",
+        "petitDejAuLit": "\u05D0\u05E8\u05D5\u05D7\u05EA \u05D1\u05D5\u05E7\u05E8 \u05E9\u05DE\u05D5\u05D2\u05E9\u05EA \u05DC\u05DE\u05D9\u05D8\u05D4",
+        "soireeJeux": "\u05E2\u05E8\u05D1 \u05DE\u05E9\u05D7\u05E7\u05D9\u05DD, \u05D1\u05DE\u05E9\u05D7\u05E7 \u05DC\u05D1\u05D7\u05D9\u05E8\u05EA\u05DA",
+        "veillerPlusTard": "\u05DC\u05D4\u05D9\u05E9\u05D0\u05E8 \u05E2\u05E8 \u05E9\u05E2\u05D4 \u05E0\u05D5\u05E1\u05E4\u05EA",
+        "soireePizza": "\u05E2\u05E8\u05D1 \u05E4\u05D9\u05E6\u05D4, \u05E2\u05DD \u05EA\u05D5\u05E1\u05E4\u05D5\u05EA \u05DC\u05D1\u05D7\u05D9\u05E8\u05EA\u05DA",
+        "sortieWeekend": "\u05DC\u05D1\u05D7\u05D5\u05E8 \u05D0\u05EA \u05D4\u05D1\u05D9\u05DC\u05D5\u05D9 \u05E9\u05DC \u05E1\u05D5\u05E3 \u05D4\u05E9\u05D1\u05D5\u05E2",
+        "piqueNique": "\u05E4\u05D9\u05E7\u05E0\u05D9\u05E7 \u05D1\u05E4\u05D0\u05E8\u05E7, \u05DB\u05D5\u05DC\u05DD \u05D9\u05D7\u05D3",
+        "cinemaPopcorn": "\u05D4\u05E7\u05E8\u05E0\u05D4 \u05D1\u05E7\u05D5\u05DC\u05E0\u05D5\u05E2, \u05E2\u05DD \u05E4\u05D5\u05E4\u05E7\u05D5\u05E8\u05DF",
+        "journeeAuChoix": "\u05D9\u05D5\u05DD \u05E9\u05D1\u05D5 \u05DB\u05DC \u05D4\u05E4\u05E2\u05D9\u05DC\u05D5\u05D9\u05D5\u05EA \u05DC\u05D1\u05D7\u05D9\u05E8\u05EA\u05DA"
       },
       "fa": {
         "cafeAuLit": "\u0642\u0647\u0648\u0647\u200C\u0627\u06CC \u06A9\u0647 \u062F\u0631 \u0631\u062E\u062A\u062E\u0648\u0627\u0628 \u0633\u0631\u0648 \u0634\u0648\u062F",
@@ -13509,7 +13619,18 @@ var require_i18n = __commonJS({
         "linge": "\u0644\u0628\u0627\u0633\u200C\u0647\u0627 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u06CC\u200C\u0634\u0648\u06CC\u062F\u060C \u067E\u0647\u0646 \u0645\u06CC\u200C\u06A9\u0646\u062F\u060C \u062A\u0627 \u0645\u06CC\u200C\u06A9\u0646\u062F \u0648 \u062C\u0627 \u0645\u06CC\u200C\u06AF\u0630\u0627\u0631\u062F",
         "rangement": "\u062E\u0627\u0646\u0647 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0645\u0631\u062A\u0628 \u0645\u06CC\u200C\u06A9\u0646\u062F",
         "menage": "\u0646\u0638\u0627\u0641\u062A \u06A9\u0627\u0645\u0644 \u062E\u0627\u0646\u0647 \u0631\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u062F\u0647\u062F",
-        "semaineRepas": "\u06CC\u06A9 \u0647\u0641\u062A\u0647 \u0622\u0634\u067E\u0632\u06CC \u0628\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A"
+        "semaineRepas": "\u06CC\u06A9 \u0647\u0641\u062A\u0647 \u0622\u0634\u067E\u0632\u06CC \u0628\u0627 \u0646\u06CC\u0645\u0647\u0654 \u062F\u06CC\u06AF\u0631\u062A",
+        "dessertChoisi": "\u0627\u0646\u062A\u062E\u0627\u0628 \u062F\u0633\u0631",
+        "chocolatChantilly": "\u0634\u06A9\u0644\u0627\u062A \u062F\u0627\u063A \u0628\u0627 \u062E\u0627\u0645\u0647\u0654 \u0632\u062F\u0647",
+        "musiqueVoiture": "\u0627\u0646\u062A\u062E\u0627\u0628 \u0645\u0648\u0633\u06CC\u0642\u06CC \u0645\u0627\u0634\u06CC\u0646 \u062F\u0631 \u062A\u0645\u0627\u0645 \u0647\u0641\u062A\u0647",
+        "petitDejAuLit": "\u0635\u0628\u062D\u0627\u0646\u0647\u200C\u0627\u06CC \u06A9\u0647 \u062F\u0631 \u0631\u062E\u062A\u062E\u0648\u0627\u0628 \u0633\u0631\u0648 \u0634\u0648\u062F",
+        "soireeJeux": "\u06CC\u06A9 \u0634\u0628 \u0628\u0627\u0632\u06CC\u060C \u0628\u0627 \u0628\u0627\u0632\u06CC \u062F\u0644\u062E\u0648\u0627\u0647 \u062A\u0648",
+        "veillerPlusTard": "\u06CC\u06A9 \u0633\u0627\u0639\u062A \u062F\u06CC\u0631\u062A\u0631 \u062E\u0648\u0627\u0628\u06CC\u062F\u0646",
+        "soireePizza": "\u06CC\u06A9 \u0634\u0628 \u067E\u06CC\u062A\u0632\u0627\u060C \u0628\u0627 \u0645\u0648\u0627\u062F \u062F\u0644\u062E\u0648\u0627\u0647 \u062A\u0648",
+        "sortieWeekend": "\u0627\u0646\u062A\u062E\u0627\u0628 \u0628\u0631\u0646\u0627\u0645\u0647\u0654 \u0628\u06CC\u0631\u0648\u0646 \u0631\u0641\u062A\u0646 \u0622\u062E\u0631 \u0647\u0641\u062A\u0647",
+        "piqueNique": "\u06CC\u06A9 \u067E\u06CC\u06A9\u200C\u0646\u06CC\u06A9 \u062F\u0631 \u067E\u0627\u0631\u06A9\u060C \u0647\u0645\u0647 \u0628\u0627 \u0647\u0645",
+        "cinemaPopcorn": "\u06CC\u06A9 \u0633\u0627\u0646\u0633 \u0633\u06CC\u0646\u0645\u0627\u060C \u0628\u0627 \u067E\u0627\u067E\u200C\u06A9\u0648\u0631\u0646",
+        "journeeAuChoix": "\u0631\u0648\u0632\u06CC \u06A9\u0647 \u0647\u0645\u0647\u0654 \u0628\u0631\u0646\u0627\u0645\u0647\u200C\u0647\u0627 \u0631\u0627 \u062A\u0648 \u0627\u0646\u062A\u062E\u0627\u0628 \u0645\u06CC\u200C\u06A9\u0646\u06CC"
       }
     };
     var REPLI = "fr";
@@ -13557,7 +13678,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.13";
+var VERSION = "v4.14";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -13584,6 +13705,29 @@ async function sendToHousehold(householdId, exceptUser, composer, eveningOnly = 
     try {
       const payload = typeof composer === "function" ? composer(row.langue) : composer;
       await webpush.sendNotification(sub, JSON.stringify(payload));
+      log("envoy\xE9 \u2192", row.endpoint.slice(0, 40) + "\u2026");
+    } catch (e) {
+      const code = e.statusCode;
+      if (code === 404 || code === 410) {
+        await client.query("delete from push_subscriptions where id = $1", [row.id]);
+        log("abonnement expir\xE9, supprim\xE9");
+      } else {
+        log("\xE9chec envoi", code, e.message);
+      }
+    }
+  }
+}
+async function sendToUser(householdId, userId, composer) {
+  const { rows } = await client.query(
+    `select id, endpoint, p256dh, auth, langue
+       from push_subscriptions
+      where household_id = $1 and user_id = $2`,
+    [householdId, userId]
+  );
+  for (const row of rows) {
+    const sub = { endpoint: row.endpoint, keys: { p256dh: row.p256dh, auth: row.auth } };
+    try {
+      await webpush.sendNotification(sub, JSON.stringify(composer(row.langue)));
       log("envoy\xE9 \u2192", row.endpoint.slice(0, 40) + "\u2026");
     } catch (e) {
       const code = e.statusCode;
@@ -13763,7 +13907,7 @@ function depuis(lang, minutes) {
   return tr(lang, "dureeJ", { n: Math.floor(minutes / 1440) });
 }
 var BON_SQL = `
-  select c.id, c.household_id, c.user_id, c.label,
+  select c.id, c.household_id, c.user_id, c.label, c.pour,
          r.cle,
          extract(epoch from (now() - c.used_at)) / 60 as minutes
     from claims c
@@ -13771,7 +13915,8 @@ var BON_SQL = `
    where c.used_at is not null and c.realise_at is null and not c.deleted`;
 async function envoyerBon(b, relance) {
   const nom = await actorName(b.household_id, b.user_id);
-  await sendToHousehold(b.household_id, b.user_id, (lang) => {
+  const envoyer = (composer) => b.pour ? sendToUser(b.household_id, b.pour, composer) : sendToHousehold(b.household_id, b.user_id, composer);
+  await envoyer((lang) => {
     const qui = nom || tr(lang, "binome");
     const label = libelle(lang, b.cle, b.label);
     return relance ? {
