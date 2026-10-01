@@ -1,13 +1,16 @@
-// Le mode famille : dès 3 membres, le foyer n'est plus un couple.
-//
-// Rien à activer : l'appli s'adapte au nombre de personnes. La base fait de
-// même pour le catalogue de récompenses (nas/db/catalogue.sql).
+// Le mode famille : dès 3 membres, le foyer n'est plus un couple — ou plus
+// tôt, si le foyer l'a choisi (interrupteur dans Mon compte, households.famille).
+// La base suit la même règle pour le catalogue (nas/db/catalogue.sql).
 import { pointsAvailable } from './gamify.js';
 
 export const SEUIL_FAMILLE = 3;
 
+/** Famille d'office : le nombre de membres suffit, l'interrupteur n'y peut rien. */
+export const familleDOffice = (members) => (members || []).length >= SEUIL_FAMILLE;
+
 /** Le foyer est-il une famille ? */
-export const estFamille = (members) => (members || []).length >= SEUIL_FAMILLE;
+export const estFamille = (members, activee = false) =>
+  Boolean(activee) || familleDOffice(members);
 
 /**
  * Le classement des points disponibles, du plus riche au moins riche. Les

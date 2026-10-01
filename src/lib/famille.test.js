@@ -11,6 +11,11 @@ describe('mode famille', () => {
     expect(estFamille(undefined)).toBe(false);
   });
 
+  it('s’active aussi à deux, si le foyer le choisit', () => {
+    expect(estFamille(['a', 'b'], true)).toBe(true);
+    expect(estFamille(['a', 'b', 'c'], false)).toBe(true);
+  });
+
   it('classe par points disponibles, ex aequo au même rang', () => {
     // Ajouter + cocher sa tâche : 2 points chacune.
     const tasks = [fait('1', 'a'), fait('2', 'b'), fait('3', 'b'), fait('4', 'c')];

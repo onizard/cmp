@@ -76,7 +76,10 @@ on conflict (cle) do update
   set label = excluded.label, cost = excluded.cost, actif = excluded.actif,
       public = excluded.public;
 
--- Couple ou famille : tout se joue au nombre de membres.
+-- Couple ou famille : famille des 3 membres, ou plus tot si le foyer l'a
+-- choisi (interrupteur « Mode famille » dans Mon compte).
+alter table households add column if not exists famille boolean not null default false;
+
 create or replace function public.mode_foyer(hid uuid)
 returns text
 language sql
@@ -84,8 +87,10 @@ stable
 security definer
 set search_path = public
 as $$
-  select case when count(*) >= 3 then 'famille' else 'couple' end
-    from members where household_id = hid
+  select case
+           when coalesce((select h.famille from households h where h.id = hid), false)
+             or (select count(*) from members m where m.household_id = hid) >= 3
+           then 'famille' else 'couple' end
 $$;
 
 -- Remplit le catalogue d'un foyer avec ce qui lui manque, selon qu'il est un
@@ -172,6 +177,26 @@ drop trigger if exists members_catalogue on members;
 create trigger members_catalogue
   after insert or delete on members
   for each row execute function public.membre_catalogue();
+
+-- L'interrupteur « Mode famille » : le catalogue suit aussitot.
+create or replace function public.foyer_mode_catalogue()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.famille is distinct from old.famille then
+    perform public.catalogue_ajuste(new.id);
+  end if;
+  return new;
+end
+$$;
+
+drop trigger if exists households_mode_catalogue on households;
+create trigger households_mode_catalogue
+  after update of famille on households
+  for each row execute function public.foyer_mode_catalogue();
 
 -- --- Mise a niveau des foyers existants -----------------------------------
 

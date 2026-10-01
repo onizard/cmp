@@ -150,7 +150,7 @@ function Home({ account, currentMonth }) {
       {tab === 'bilan' && (
         <BilanView tasks={store.tasks} claims={rewards.claims} userId={userId} />
       )}
-      {tab === 'compte' && <Account account={account} />}
+      {tab === 'compte' && <Account account={account} rewards={rewards} />}
       {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}
 
       <TabBar
