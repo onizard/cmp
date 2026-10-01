@@ -3032,3 +3032,41 @@ body,
   flex: 1;
   min-width: 0;
 }
+
+/* Sur ordinateur (souris, clavier) : on tape son code au clavier. Le pavé
+   reste, plus discret, pour qui préfère cliquer. */
+.code-carte:focus {
+  outline: none;
+}
+
+.code-astuce {
+  display: none;
+  margin: -4px 0 12px;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .code-astuce {
+    display: block;
+  }
+
+  .code-touche {
+    height: 44px;
+    font-size: 19px;
+    border-radius: 12px;
+  }
+
+  .code-pave {
+    gap: 8px;
+  }
+}
+
+/* Mode entreprise sur ordinateur : la colonne s'élargit, la barre d'onglets
+   suit. Sur téléphone et tablette en portrait, rien ne change. */
+@media (min-width: 900px) {
+  .screen-entreprise,
+  .screen-entreprise .tabbar {
+    max-width: 760px;
+  }
+}

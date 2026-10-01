@@ -212,6 +212,7 @@ export default {
     uneAutre: 'You’re already on “{tache}”. One at a time.',
   },
   entreprise: {
+    auClavier: '⌨️ Type your code on the keyboard, number pad included.',
     onglet: 'Team',
     classement: 'Team ranking',
     equipeVide: 'Nobody in the team yet: add its members in Account.',

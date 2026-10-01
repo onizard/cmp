@@ -212,6 +212,7 @@ export default {
     uneAutre: 'Stai già facendo «{tache}». Una alla volta.',
   },
   entreprise: {
+    auClavier: '⌨️ Digita il tuo codice sulla tastiera, tastierino numerico compreso.',
     onglet: 'Squadra',
     classement: 'La classifica della squadra',
     equipeVide: 'Ancora nessuno nella squadra: aggiungi i membri in Il mio account.',

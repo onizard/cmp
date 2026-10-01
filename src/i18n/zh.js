@@ -212,6 +212,7 @@ export default {
     uneAutre: '你已在做“{tache}”。一次只能一项。',
   },
   entreprise: {
+    auClavier: '⌨️ 用键盘输入代码，小键盘也可以。',
     onglet: '团队',
     classement: '团队排行榜',
     equipeVide: '团队里还没有人：请在“我的账户”中添加成员。',

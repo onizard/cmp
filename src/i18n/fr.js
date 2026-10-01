@@ -364,6 +364,7 @@ export default {
     uneAutre: 'Tu t’occupes déjà de « {tache} ». Une seule à la fois.',
   },
   entreprise: {
+    auClavier: '⌨️ Tape ton code au clavier, pavé numérique compris.',
     onglet: 'Équipe',
     classement: 'Le classement de l’équipe',
     equipeVide: 'Personne dans l’équipe pour l’instant : ajoute ses membres dans Mon compte.',

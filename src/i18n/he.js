@@ -212,6 +212,7 @@ export default {
     uneAutre: 'את/ה כבר מטפל/ת ב„{tache}”. אחת בכל פעם.',
   },
   entreprise: {
+    auClavier: '⌨️ הקלידו את הקוד במקלדת, גם במקלדת הספרות.',
     onglet: 'צוות',
     classement: 'הדירוג של הצוות',
     equipeVide: 'עדיין אין אף אחד בצוות: הוסיפו חברים בחשבון שלי.',

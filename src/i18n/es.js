@@ -212,6 +212,7 @@ export default {
     uneAutre: 'Ya te encargas de «{tache}». Una cada vez.',
   },
   entreprise: {
+    auClavier: '⌨️ Escribe tu código con el teclado, teclado numérico incluido.',
     onglet: 'Equipo',
     classement: 'La clasificación del equipo',
     equipeVide: 'Todavía no hay nadie en el equipo: añade a sus miembros en Mi cuenta.',

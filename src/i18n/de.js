@@ -212,6 +212,7 @@ export default {
     uneAutre: 'Du kümmerst dich schon um „{tache}“. Eine nach der anderen.',
   },
   entreprise: {
+    auClavier: '⌨️ Gib deinen Code über die Tastatur ein, auch über den Ziffernblock.',
     onglet: 'Team',
     classement: 'Die Rangliste des Teams',
     equipeVide: 'Noch niemand im Team: füge die Mitglieder unter Mein Konto hinzu.',

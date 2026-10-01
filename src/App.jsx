@@ -131,7 +131,7 @@ function Home({ account, currentMonth }) {
   const readyCount = affordable(rewards.rewards, myPoints).length;
 
   return (
-    <div className="screen has-tabbar">
+    <div className={`screen has-tabbar ${entreprise ? 'screen-entreprise' : ''}`}>
       <Header
         accroche={tab === 'liste' ? headline(todoThisMonth) : null}
         online={store.online}
