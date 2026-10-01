@@ -364,6 +364,9 @@ export default {
     uneAutre: 'Tu t’occupes déjà de « {tache} ». Une seule à la fois.',
   },
   famille: {
+    titre: 'Mode famille',
+    aide: 'Le classement de tout le foyer, des bons qu’on attribue à quelqu’un, et des récompenses à partager en famille plutôt qu’en couple. Le réglage vaut pour tout le foyer.',
+    dOffice: 'Activé d’office : vous êtes {n} dans le foyer.',
     classement: 'Le classement du foyer',
     quiHonore: 'Qui va l’honorer ?',
     sansPrenom: 'Sans prénom',

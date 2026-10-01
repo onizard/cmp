@@ -212,6 +212,9 @@ export default {
     uneAutre: 'Du kümmerst dich schon um „{tache}“. Eine nach der anderen.',
   },
   famille: {
+    titre: 'Familienmodus',
+    aide: 'Eine Rangliste für den ganzen Haushalt, Gutscheine, die man jemandem zuweist, und Belohnungen für die Familie statt fürs Paar. Die Einstellung gilt für den ganzen Haushalt.',
+    dOffice: 'Automatisch aktiv: Ihr seid {n} im Haushalt.',
     classement: 'Die Rangliste des Haushalts',
     quiHonore: 'Wer löst ihn ein?',
     sansPrenom: 'Ohne Namen',

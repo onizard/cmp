@@ -212,6 +212,9 @@ export default {
     uneAutre: 'Stai già facendo «{tache}». Una alla volta.',
   },
   famille: {
+    titre: 'Modalità famiglia',
+    aide: 'La classifica di tutta la casa, buoni da assegnare a qualcuno e premi da condividere in famiglia anziché in coppia. L’impostazione vale per tutta la casa.',
+    dOffice: 'Attiva d’ufficio: siete in {n} in casa.',
     classement: 'La classifica della casa',
     quiHonore: 'Chi lo onorerà?',
     sansPrenom: 'Senza nome',

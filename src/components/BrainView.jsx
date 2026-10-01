@@ -48,7 +48,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
   // En famille (3 membres ou plus) : un classement au lieu du face-à-face, et
   // chaque bon désigne qui l'honorera.
-  const famille = estFamille(store.members);
+  const famille = estFamille(store.members, store.familleActivee);
   const nomDe = (id) =>
     store.names[id] || (id === userId ? t('cerveau.toi') : t('famille.sansPrenom'));
   const rangs = famille ? classement(store.members, tasks, store.claims, store.names) : [];

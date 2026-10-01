@@ -212,6 +212,9 @@ export default {
     uneAutre: 'You’re already on “{tache}”. One at a time.',
   },
   famille: {
+    titre: 'Family mode',
+    aide: 'A ranking for the whole household, vouchers you assign to someone, and rewards to share as a family rather than as a couple. The setting applies to the whole household.',
+    dOffice: 'On automatically: there are {n} of you in the household.',
     classement: 'Household ranking',
     quiHonore: 'Who will honour it?',
     sansPrenom: 'No name',

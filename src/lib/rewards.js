@@ -63,6 +63,8 @@ export function useRewards(householdId, userId) {
   const [otherUser, setOtherUser] = useState(null);
   // Tous les membres du foyer, moi compris, dans l'ordre d'arrivée.
   const [members, setMembers] = useState([]);
+  // Le foyer a-t-il choisi le mode famille (même à deux) ?
+  const [familleActivee, setFamilleActivee] = useState(false);
   const rRef = useRef(rewards);
   const cRef = useRef(claims);
 
@@ -86,14 +88,17 @@ export function useRewards(householdId, userId) {
 
   const refresh = useCallback(async () => {
     if (!supabase || !householdId) return;
-    const [{ data: rw }, { data: cl }, { data: mem }] = await Promise.all([
+    const [{ data: rw }, { data: cl }, { data: mem }, { data: foyer }] = await Promise.all([
       supabase.from('rewards').select('*').eq('household_id', householdId),
       supabase.from('claims').select('*').eq('household_id', householdId),
       supabase
         .from('members')
         .select('user_id, display_name')
         .eq('household_id', householdId),
+      // Sans la colonne (base pas encore à jour), l'erreur laisse `foyer` vide.
+      supabase.from('households').select('famille').eq('id', householdId).maybeSingle(),
     ]);
+    if (foyer) setFamilleActivee(Boolean(foyer.famille));
     if (rw) saveRewards(rw.map(rewardFrom));
     if (cl) saveClaims(cl.map(claimFrom));
     if (mem) {
@@ -122,6 +127,24 @@ export function useRewards(householdId, userId) {
       document.removeEventListener('visibilitychange', auRetour);
     };
   }, [householdId, refresh]);
+
+  /**
+   * L'interrupteur « Mode famille ». La base ajuste aussitôt le catalogue ;
+   * on relit tout pour l'afficher.
+   */
+  const activerFamille = useCallback(
+    async (on) => {
+      setFamilleActivee(Boolean(on));
+      if (!supabase) return;
+      const { error } = await supabase
+        .from('households')
+        .update({ famille: Boolean(on) })
+        .eq('id', householdId);
+      refresh();
+      return !error;
+    },
+    [householdId, refresh],
+  );
 
   /** Dépense ses points pour une récompense (on fige son nom et son coût). */
   const claimReward = useCallback(
@@ -259,6 +282,8 @@ export function useRewards(householdId, userId) {
     names,
     otherUser,
     members,
+    familleActivee,
+    activerFamille,
     refresh,
     claimReward,
     claimCustom,

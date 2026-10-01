@@ -212,6 +212,9 @@ export default {
     uneAutre: 'Já estás a tratar de «{tache}». Uma de cada vez.',
   },
   famille: {
+    titre: 'Modo família',
+    aide: 'A classificação de toda a casa, vales atribuídos a alguém e recompensas para partilhar em família em vez de em casal. A definição vale para toda a casa.',
+    dOffice: 'Ativado automaticamente: são {n} na casa.',
     classement: 'A classificação da casa',
     quiHonore: 'Quem o vai cumprir?',
     sansPrenom: 'Sem nome',

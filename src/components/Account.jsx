@@ -16,11 +16,12 @@ import InstallHint from './InstallHint.jsx';
 import ShareInvite from './ShareInvite.jsx';
 import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
+import { familleDOffice } from '../lib/famille.js';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
 
-export default function Account({ account }) {
+export default function Account({ account, rewards = null }) {
   const t = useT();
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
@@ -267,6 +268,32 @@ export default function Account({ account }) {
           <ShareInvite code={code} prenom={account.displayName} />
         </div>
       </section>
+
+      {/* Le mode famille : d'office à partir de 3 membres, au choix avant. */}
+      {rewards && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('famille.titre')}</h2>
+          <div className="setcard">
+            <div className="rowline">
+              <span>{t('famille.titre')}</span>
+              <button
+                type="button"
+                className="switch"
+                role="switch"
+                aria-checked={rewards.familleActivee || familleDOffice(rewards.members)}
+                aria-label={t('famille.titre')}
+                disabled={familleDOffice(rewards.members)}
+                onClick={() => rewards.activerFamille(!rewards.familleActivee)}
+              />
+            </div>
+            <p className="setnote">
+              {familleDOffice(rewards.members)
+                ? t('famille.dOffice', { n: rewards.members.length })
+                : t('famille.aide')}
+            </p>
+          </div>
+        </section>
+      )}
 
       <section className="setgroup">
         <h2 className="setlabel">{t('donnees.titre')}</h2>

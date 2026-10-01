@@ -212,6 +212,9 @@ export default {
     uneAutre: '你已在做“{tache}”。一次只能一项。',
   },
   famille: {
+    titre: '家庭模式',
+    aide: '全家的排行榜、可指定由谁兑现的券，以及适合全家而非情侣分享的奖励。此设置对整个家庭生效。',
+    dOffice: '已自动开启：家里有 {n} 位成员。',
     classement: '家庭排行榜',
     quiHonore: '由谁来兑现？',
     sansPrenom: '未填名字',
