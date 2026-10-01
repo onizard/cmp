@@ -18,6 +18,11 @@ security definer
 set search_path = public
 as $$
 begin
+  -- Mode entreprise : l'operation a deja ete verifiee par le code operateur,
+  -- dans une fonction de entreprise.sql (drapeau local a la transaction).
+  if current_setting('cmp.op', true) = '1' then
+    return new;
+  end if;
   -- Seul le passage de « fait » a « a faire » est concerne. Renommer la tache,
   -- lui poser une echeance ou la supprimer reste libre.
   if not (old.done and not new.done) then

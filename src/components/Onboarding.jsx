@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
+import { codeResponsableValide } from '../lib/equipe.js';
 
 export default function Onboarding({ account }) {
   const t = useT();
@@ -13,6 +14,32 @@ export default function Onboarding({ account }) {
     await account.createHousehold();
     setBusy(false);
   };
+
+  // Compte entreprise : une équipe sur ce compte, chacun avec son code. Le
+  // choix est définitif, d'où un bloc à part, qu'on ouvre exprès.
+  const [entrepriseOuverte, setEntrepriseOuverte] = useState(false);
+  const [nomEntreprise, setNomEntreprise] = useState('');
+  const [codeResp, setCodeResp] = useState('');
+  const [codeResp2, setCodeResp2] = useState('');
+  const [erreurEntreprise, setErreurEntreprise] = useState(null);
+
+  const creerEntreprise = async (e) => {
+    e.preventDefault();
+    if (!codeResponsableValide(codeResp)) {
+      setErreurEntreprise(t('entreprise.codeRespFormat'));
+      return;
+    }
+    if (codeResp !== codeResp2) {
+      setErreurEntreprise(t('entreprise.codesDifferents'));
+      return;
+    }
+    setErreurEntreprise(null);
+    setBusy(true);
+    await account.createEntreprise(nomEntreprise.trim(), codeResp);
+    setBusy(false);
+  };
+
+  const chiffres = (setter) => (e) => setter(e.target.value.replace(/\D/g, '').slice(0, 8));
 
   const join = async (e) => {
     e.preventDefault();
@@ -58,6 +85,61 @@ export default function Onboarding({ account }) {
         <button className="btn" type="button" onClick={create} disabled={busy}>
           {t('foyer.creer')}
         </button>
+      </div>
+
+      <div className="panel">
+        {!entrepriseOuverte ? (
+          <>
+            <p className="soft-text">{t('entreprise.creerAide')}</p>
+            <button className="btn" type="button" onClick={() => setEntrepriseOuverte(true)}>
+              {t('entreprise.creerTitre')}
+            </button>
+          </>
+        ) : (
+          <form onSubmit={creerEntreprise}>
+            <p className="lede">{t('entreprise.creerTitre')}</p>
+            <p className="soft-text">{t('entreprise.creerAide')}</p>
+            <label className="field-label" htmlFor="ent-nom">{t('entreprise.nom')}</label>
+            <input
+              id="ent-nom"
+              className="field"
+              type="text"
+              maxLength={60}
+              value={nomEntreprise}
+              onChange={(e) => setNomEntreprise(e.target.value)}
+              required
+            />
+            <label className="field-label" htmlFor="ent-code">{t('entreprise.codeResp')}</label>
+            <input
+              id="ent-code"
+              className="field"
+              type="password"
+              inputMode="numeric"
+              autoComplete="new-password"
+              value={codeResp}
+              onChange={chiffres(setCodeResp)}
+              required
+            />
+            <label className="field-label" htmlFor="ent-code2">{t('entreprise.codeRespConfirm')}</label>
+            <input
+              id="ent-code2"
+              className="field"
+              type="password"
+              inputMode="numeric"
+              autoComplete="new-password"
+              value={codeResp2}
+              onChange={chiffres(setCodeResp2)}
+              required
+            />
+            <p className="soft-text">{t('entreprise.codeRespAide')}</p>
+            {(erreurEntreprise || account.error) && (
+              <p className="error">{erreurEntreprise || account.error}</p>
+            )}
+            <button className="btn btn-accent btn-block" type="submit" disabled={busy}>
+              {busy ? t('app.instant') : t('entreprise.creer')}
+            </button>
+          </form>
+        )}
       </div>
 
       <p className="signout-line">

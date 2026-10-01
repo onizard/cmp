@@ -9,6 +9,8 @@ import {
 } from '../lib/visibility.js';
 import TaskItem from './TaskItem.jsx';
 import AddTask from './AddTask.jsx';
+import CodeOperateur from './CodeOperateur.jsx';
+import { doublonAFaire } from '../lib/store.js';
 
 /**
  * La liste, c'est le mois en cours : rien avant, rien après.
@@ -19,7 +21,7 @@ import AddTask from './AddTask.jsx';
  * ne garde que celles du mois ; on peut toujours y décocher ce qu'on a coché
  * par erreur. Rien n'est effacé : les points et le bilan comptent tout.
  */
-export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
+export default function TaskList({ store, currentMonth, onCombo, names = {}, equipe = null }) {
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
@@ -39,7 +41,39 @@ export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
     return () => clearTimeout(fin);
   }, [eclat]);
 
+  // Mode entreprise : l'action attend un code opérateur. `demande` tient la
+  // fenêtre ouverte : son titre, le texte de la tâche, et ce qu'il faut faire
+  // une fois le code saisi.
+  const [demande, setDemande] = useState(null);
+  const signer = equipe
+    ? (titre, detail, faire) => setDemande({ titre, detail, faire })
+    : null;
+  const valider = async (code) => {
+    const r = await demande.faire(code);
+    if (r && r.erreur) {
+      if (r.erreur === 'code') return t('entreprise.codeInconnu');
+      if (r.erreur === 'horsLigne') return t('entreprise.horsLigne');
+      return r.erreur;
+    }
+    setDemande(null);
+    return null;
+  };
+
   const ajouter = (mois, text) => {
+    if (equipe) {
+      // Le doublon se dit tout de suite, sans demander de code pour rien.
+      const deja = doublonAFaire(store.tasks, mois, text.trim());
+      if (deja) {
+        setEclat({ mois, id: deja.id, cle: Date.now() });
+        return { doublon: deja.id };
+      }
+      signer(t('entreprise.quiCree'), text.trim(), async (code) => {
+        const r = await store.creerOp(mois, text, code);
+        if (r.id) setEclat({ mois, id: r.id, cle: Date.now() });
+        return r;
+      });
+      return { id: null };
+    }
     const r = store.addTask(mois, text);
     const id = r && (r.id || r.doublon);
     if (id) setEclat({ mois, id, cle: Date.now() });
@@ -85,6 +119,8 @@ export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
                   store={store}
                   onCombo={onCombo}
                   names={names}
+                  signer={signer}
+                  noms={equipe ? equipe.noms : {}}
                 />
               ))}
             </ul>
@@ -120,12 +156,22 @@ export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
                 store={store}
                 onCombo={onCombo}
                 names={names}
+                signer={signer}
+                noms={equipe ? equipe.noms : {}}
               />
             ))}
           </ul>
           {tiroir}
         </div>
       </section>
+      {demande && (
+        <CodeOperateur
+          titre={demande.titre}
+          detail={demande.detail}
+          onValider={valider}
+          onFermer={() => setDemande(null)}
+        />
+      )}
     </main>
   );
 }

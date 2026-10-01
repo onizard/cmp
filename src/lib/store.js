@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient.js';
 import { sortForMonth, tasksVisibleIn } from './visibility.js';
 import { comboProchain } from './combo.js';
 import { etatReservation, RESERVATION_MS } from './reservation.js';
+import { tachesParOperateur } from './equipe.js';
 
 // --- Correspondance base <-> modèle client ---
 
@@ -19,6 +20,9 @@ const fromRow = (r) => ({
   createdBy: r.created_by,
   dueAt: r.due_at,
   dueHasTime: r.due_has_time !== false,
+  // Mode entreprise : l'opérateur qui a créé, celui qui a coché.
+  createdOp: r.created_op ?? null,
+  doneOp: r.done_op ?? null,
   reservePar: r.reserve_par ?? null,
   reserveDebut: r.reserve_debut ?? null,
   reserveFin: r.reserve_fin ?? null,
@@ -492,6 +496,92 @@ export function useTasks(householdId, userId) {
     [updateTask, userId],
   );
 
+  // --- Mode entreprise : chaque action est signée d'un code opérateur ----
+  //
+  // Rien ne passe par la file d'attente : la base doit vérifier le code avant
+  // d'écrire, donc il faut être en ligne. Chaque fonction renvoie
+  // { erreur: 'code' | 'horsLigne' | message } ou le résultat.
+
+  const appelOp = useCallback(async (fn, params) => {
+    if (!supabase || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+      return { erreur: 'horsLigne' };
+    }
+    const { data, error } = await supabase.rpc(fn, params);
+    if (error) return { erreur: error.message };
+    if (!data) return { erreur: 'code' };
+    return { op: data };
+  }, []);
+
+  /** Crée une tâche au nom de l'opérateur qui a donné son code. */
+  const creerOp = useCallback(
+    async (month, text, code) => {
+      const trimmed = String(text || '').trim();
+      if (!trimmed) return { erreur: 'vide' };
+      const existante = doublonAFaire(tasksRef.current, month, trimmed);
+      if (existante) return { doublon: existante.id };
+      const position =
+        tasksRef.current
+          .filter((t) => t.month === month && !t.deleted)
+          .reduce((max, t) => Math.max(max, t.position), -1) + 1;
+      const id = uuid();
+      const r = await appelOp('cmp_op_creer', {
+        hid: householdId, p_code: code, p_id: id, p_mois: month, p_texte: trimmed, p_position: position,
+      });
+      if (r.erreur) return r;
+      persist([
+        ...tasksRef.current,
+        {
+          id, householdId, text: trimmed, month, position,
+          done: false, doneMonth: null, doneBy: null, doneAt: null,
+          createdBy: userId ?? null, createdOp: r.op, doneOp: null,
+          dueAt: null, dueHasTime: true, deleted: false,
+          createdAt: nowIso(), updatedAt: nowIso(),
+        },
+      ]);
+      return { id, op: r.op };
+    },
+    [householdId, userId, persist, appelOp],
+  );
+
+  /**
+   * Coche (ou décoche) au nom de l'opérateur. Renvoie aussi le rang de combo
+   * que la coche décroche pour lui, pour l'annoncer.
+   */
+  const cocherOp = useCallback(
+    async (task, code, currentMonth) => {
+      const fait = !task.done;
+      const r = await appelOp('cmp_op_cocher', {
+        p_id: task.id, p_code: code, p_fait: fait, p_mois: currentMonth,
+      });
+      if (r.erreur) return r;
+      const combo = fait ? comboProchain(tachesParOperateur(tasksRef.current), r.op) : 1;
+      applyLocal(
+        task.id,
+        fait
+          ? { done: true, doneMonth: currentMonth, doneBy: userId ?? null, doneAt: nowIso(), doneOp: r.op }
+          : { done: false, doneMonth: null, doneBy: null, doneAt: null, doneOp: null },
+      );
+      return { op: r.op, combo };
+    },
+    [appelOp, applyLocal, userId],
+  );
+
+  /** Modifie ou supprime : texte, échéance, suppression. */
+  const modifierOp = useCallback(
+    async (task, code, patch) => {
+      const champs = {};
+      if ('text' in patch) champs.text = patch.text;
+      if ('deleted' in patch) champs.deleted = patch.deleted;
+      if ('dueAt' in patch) champs.due_at = patch.dueAt;
+      if ('dueHasTime' in patch) champs.due_has_time = patch.dueHasTime;
+      const r = await appelOp('cmp_op_modifier', { p_id: task.id, p_code: code, p_champs: champs });
+      if (r.erreur) return r;
+      applyLocal(task.id, patch);
+      return { op: r.op };
+    },
+    [appelOp, applyLocal],
+  );
+
   /** Annule sa propre réservation : la tâche redevient libre pour l'autre. */
   const annulerReservation = useCallback(
     (task) => {
@@ -522,5 +612,8 @@ export function useTasks(householdId, userId) {
     removeTask,
     reserver,
     annulerReservation,
+    creerOp,
+    cocherOp,
+    modifierOp,
   };
 }

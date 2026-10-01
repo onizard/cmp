@@ -40,12 +40,14 @@ const UserIcon = () => (
   </svg>
 );
 
-export default function TabBar({ tab, onChange, honourCount = 0, admin = false }) {
+export default function TabBar({ tab, onChange, honourCount = 0, admin = false, entreprise = false }) {
   const t = useT();
+  // En entreprise : l'onglet des points devient celui de l'équipe, et le
+  // bilan personnel s'efface — sur un compte partagé, il ne dirait rien.
   const tabs = [
     { id: 'liste', label: t('tabs.taches'), Icon: ListIcon },
-    { id: 'cerveau', label: t('tabs.cerveau'), Icon: BrainIcon },
-    { id: 'bilan', label: t('tabs.bilan'), Icon: TrendIcon },
+    { id: 'cerveau', label: entreprise ? t('entreprise.onglet') : t('tabs.cerveau'), Icon: BrainIcon },
+    ...(entreprise ? [] : [{ id: 'bilan', label: t('tabs.bilan'), Icon: TrendIcon }]),
     { id: 'compte', label: t('tabs.compte'), Icon: UserIcon },
   ];
   // L'onglet n'apparaît que pour un administrateur. Ce n'est qu'un confort :
