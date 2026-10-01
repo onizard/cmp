@@ -11,9 +11,9 @@ import { dejaVenu } from '../lib/account.js';
 // jamais servi ouvre sur la création : qui a déjà un compte est en général
 // déjà connecté.
 //
-// Un appareil qui garde déjà un compte perso et un compte pro n'a plus besoin
-// du formulaire : on n'y montre que les tuiles, et un petit lien pour entrer
-// quand même avec un autre compte.
+// Un appareil qui garde déjà un compte n'a plus besoin du formulaire : on
+// n'y montre que les tuiles, et un petit lien pour entrer quand même avec un
+// autre compte.
 export default function Auth({ account }) {
   const t = useT();
   const [mode, setMode] = useState(() => (dejaVenu() ? 'connexion' : 'creation'));
@@ -23,9 +23,7 @@ export default function Auth({ account }) {
   const [sent, setSent] = useState(false);
   const [comptes, setComptes] = useState(lireComptes);
   const [autre, setAutre] = useState(false);
-  const persoEtPro =
-    comptes.some((c) => c.type === 'pro') && comptes.some((c) => c.type !== 'pro');
-  const formulaire = !persoEtPro || autre;
+  const formulaire = comptes.length === 0 || autre;
 
   const creation = mode === 'creation';
   const oubli = mode === 'oubli';
