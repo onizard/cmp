@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useT } from '../i18n/index.js';
 import { codeOperateurValide } from '../lib/equipe.js';
 
@@ -18,6 +18,37 @@ export default function EquipeReglages({ equipe }) {
   const [nom, setNom] = useState('');
   const [code, setCode] = useState('');
   const [nouveauCode, setNouveauCode] = useState({});
+  // Les téléphones qui ont rejoint le compte pro, et celui qu'on s'apprête
+  // à retirer (on confirme d'abord).
+  const [relies, setRelies] = useState(null);
+  const [aRetirer, setARetirer] = useState(null);
+
+  useEffect(() => {
+    if (!responsable) {
+      setRelies(null);
+      return undefined;
+    }
+    let vivant = true;
+    equipe.relies(responsable).then((r) => {
+      if (vivant) setRelies(Array.isArray(r) ? r : []);
+    });
+    return () => {
+      vivant = false;
+    };
+  }, [responsable, equipe.relies]);
+
+  const retirer = async (id) => {
+    setOccupe(true);
+    const m = await equipe.retirer(responsable, id);
+    setOccupe(false);
+    setARetirer(null);
+    if (m) {
+      setErreur(message(m));
+      if (m === 'faux') setResponsable(null);
+      return;
+    }
+    setRelies((l) => (l || []).filter((x) => x.id !== id));
+  };
 
   const message = (m) =>
     m === 'faux'
@@ -166,6 +197,38 @@ export default function EquipeReglages({ equipe }) {
           {t('entreprise.ajouterBouton')}
         </button>
       </form>
+      {/* Les téléphones reliés : ceux qui ont rejoint par une demande. */}
+      <div className="equipe-relies">
+        <p className="field-label">{t('entreprise.relies')}</p>
+        {relies && relies.length === 0 && <p className="setnote">{t('entreprise.reliesVide')}</p>}
+        {relies && relies.length > 0 && (
+          <ul className="equipe-liste">
+            {relies.map((r) => (
+              <li key={r.id}>
+                <span className="equipe-nom">
+                  {r.qui}
+                  <span className="equipe-email">{r.email}</span>
+                </span>
+                {aRetirer === r.id ? (
+                  <span className="equipe-confirme">
+                    <button className="link equipe-retirer" type="button" disabled={occupe} onClick={() => retirer(r.id)}>
+                      {t('entreprise.retirerOui')}
+                    </button>
+                    <button className="link" type="button" onClick={() => setARetirer(null)}>
+                      {t('app.annuler')}
+                    </button>
+                  </span>
+                ) : (
+                  <button className="link equipe-bascule" type="button" onClick={() => setARetirer(r.id)}>
+                    {t('entreprise.retirer')}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       {erreur && <p className="error">{erreur}</p>}
       <button className="link" type="button" onClick={() => setResponsable(null)}>
         {t('entreprise.verrouiller')}
