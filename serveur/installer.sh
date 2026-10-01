@@ -54,6 +54,11 @@ if [ "${#cle}" != 16 ]; then
   fi
 fi
 mkdir -p sauvegardes
+# Hetzner bloque l'envoi de mail sur les ports 25 et 465 des nouveaux
+# serveurs (contre le spam) : le 587 (STARTTLS) passe, et Resend l'accepte.
+if grep -q '^SMTP_PORT=465$' .env; then
+  sed -i 's/^SMTP_PORT=465$/SMTP_PORT=587/' .env
+fi
 
 PSQL="docker exec -i -e PGOPTIONS=--client-min-messages=warning cmp-db psql -h localhost -U supabase_admin -d postgres"
 attendre() { # attendre <secondes> <commande…>
