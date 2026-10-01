@@ -39,6 +39,11 @@ declare
   moi constant uuid := auth.uid();
   fuseau constant text := 'Europe/Paris';
 begin
+  -- Mode entreprise : l'operation a deja ete verifiee par le code operateur,
+  -- dans une fonction de entreprise.sql (drapeau local a la transaction).
+  if current_setting('cmp.op', true) = '1' then
+    return new;
+  end if;
   -- Une tache reservee par l'autre est bloquee : on ne la coche pas a sa
   -- place tant que sa reservation court.
   if moi is not null and new.done and not old.done

@@ -17,6 +17,11 @@ security definer
 set search_path = public
 as $$
 begin
+  -- Mode entreprise : l'operation a deja ete verifiee par le code operateur,
+  -- dans une fonction de entreprise.sql (drapeau local a la transaction).
+  if current_setting('cmp.op', true) = '1' then
+    return new;
+  end if;
   if auth.uid() is null or old.created_by is null or old.created_by = auth.uid() then
     return new;
   end if;
