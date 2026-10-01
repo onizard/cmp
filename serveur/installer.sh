@@ -55,7 +55,7 @@ if [ "${#cle}" != 16 ]; then
 fi
 mkdir -p sauvegardes
 
-PSQL="docker exec -i cmp-db psql -h localhost -U supabase_admin -d postgres"
+PSQL="docker exec -i -e PGOPTIONS=--client-min-messages=warning cmp-db psql -h localhost -U supabase_admin -d postgres"
 attendre() { # attendre <secondes> <commande…>
   n=$1; shift
   while ! "$@" >/dev/null 2>&1; do
