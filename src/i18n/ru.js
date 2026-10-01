@@ -254,6 +254,8 @@ export default {
     plusTard: 'Позже',
   },
   entreprise: {
+    supprimer: 'Удалить',
+    supprimerOui: 'Да, удалить',
     motDePasseAdmin: 'Пароль администратора',
     nouveauCodeResp: 'Новый код руководителя (4–8 цифр)',
     changerCodeResp: 'Сменить код руководителя',

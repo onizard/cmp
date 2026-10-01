@@ -20,6 +20,11 @@ export default function EquipeReglages({ equipe }) {
   const [nouveauCode, setNouveauCode] = useState({});
   // Les téléphones qui ont rejoint le compte pro, et celui qu'on s'apprête
   // à retirer (on confirme d'abord).
+  // Un membre supprimé disparaît des listes. En base, il reste, désactivé :
+  // son code ne marche plus (et peut resservir), ses tâches passées gardent
+  // son prénom.
+  const membres = equipe.membres.filter((m) => m.actif);
+  const [aSupprimer, setASupprimer] = useState(null);
   const [relies, setRelies] = useState(null);
   const [aRetirer, setARetirer] = useState(null);
   // Un nouveau code responsable : avec le mot de passe du compte, que seul
@@ -197,11 +202,10 @@ export default function EquipeReglages({ equipe }) {
       <>
         <form className="equipe-verrou" onSubmit={deverrouiller}>
           <ul className="equipe-liste">
-            {equipe.membres.length === 0 && <li className="setnote">{t('entreprise.equipeVide')}</li>}
-            {equipe.membres.map((m) => (
-              <li key={m.id} className={m.actif ? '' : 'inactif'}>
+            {membres.length === 0 && <li className="setnote">{t('entreprise.equipeVide')}</li>}
+            {membres.map((m) => (
+              <li key={m.id}>
                 <span>{m.nom}</span>
-                {!m.actif && <span className="equipe-etat">{t('entreprise.inactif')}</span>}
               </li>
             ))}
           </ul>
@@ -232,18 +236,31 @@ export default function EquipeReglages({ equipe }) {
   return (
     <div className="equipe-gestion">
       <ul className="equipe-liste">
-        {equipe.membres.map((m) => (
-          <li key={m.id} className={m.actif ? '' : 'inactif'}>
+        {membres.map((m) => (
+          <li key={m.id}>
             <span className="equipe-nom">{m.nom}</span>
-            {!m.actif && <span className="equipe-etat">{t('entreprise.inactif')}</span>}
-            <button
-              className="link equipe-bascule"
-              type="button"
-              disabled={occupe}
-              onClick={() => enregistrer({ id: m.id, nom: m.nom, actif: !m.actif })}
-            >
-              {m.actif ? t('entreprise.desactiver') : t('entreprise.reactiver')}
-            </button>
+            {aSupprimer === m.id ? (
+              <span className="equipe-confirme">
+                <button
+                  className="link equipe-retirer"
+                  type="button"
+                  disabled={occupe}
+                  onClick={async () => {
+                    await enregistrer({ id: m.id, nom: m.nom, actif: false });
+                    setASupprimer(null);
+                  }}
+                >
+                  {t('entreprise.supprimerOui')}
+                </button>
+                <button className="link" type="button" onClick={() => setASupprimer(null)}>
+                  {t('app.annuler')}
+                </button>
+              </span>
+            ) : (
+              <button className="link equipe-bascule" type="button" onClick={() => setASupprimer(m.id)}>
+                {t('entreprise.supprimer')}
+              </button>
+            )}
             <div className="equipe-actions">
               <input
                 className="field"

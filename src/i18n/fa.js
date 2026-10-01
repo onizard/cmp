@@ -256,6 +256,8 @@ export default {
     plusTard: 'بعداً',
   },
   entreprise: {
+    supprimer: 'حذف',
+    supprimerOui: 'بله، حذف شود',
     motDePasseAdmin: 'رمز عبور مدیر',
     nouveauCodeResp: 'کد مسئول تازه (۴ تا ۸ رقم)',
     changerCodeResp: 'تغییر کد مسئول',

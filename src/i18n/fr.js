@@ -406,6 +406,8 @@ export default {
     plusTard: 'Plus tard',
   },
   entreprise: {
+    supprimer: 'Supprimer',
+    supprimerOui: 'Oui, supprimer',
     motDePasseAdmin: 'Mot de passe administrateur',
     nouveauCodeResp: 'Nouveau code responsable (4 à 8 chiffres)',
     changerCodeResp: 'Changer le code responsable',
