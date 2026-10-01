@@ -254,6 +254,8 @@ export default {
     plusTard: 'אחר כך',
   },
   entreprise: {
+    supprimer: 'מחיקה',
+    supprimerOui: 'כן, למחוק',
     motDePasseAdmin: 'סיסמת המנהל/ת',
     nouveauCodeResp: 'קוד אחראי/ת חדש (4 עד 8 ספרות)',
     changerCodeResp: 'שינוי קוד האחראי/ת',

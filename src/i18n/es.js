@@ -254,6 +254,8 @@ export default {
     plusTard: 'Más tarde',
   },
   entreprise: {
+    supprimer: 'Eliminar',
+    supprimerOui: 'Sí, eliminar',
     motDePasseAdmin: 'Contraseña de administrador',
     nouveauCodeResp: 'Nuevo código de responsable (4 a 8 cifras)',
     changerCodeResp: 'Cambiar el código de responsable',
