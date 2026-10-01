@@ -167,6 +167,19 @@ export async function disablePush() {
 }
 
 /**
+ * Met les notifications en pause sur cet appareil : le serveur ne l'a plus
+ * dans sa liste, mais le choix de l'utilisateur reste mémorisé. syncPush les
+ * rétablit dès que la pause n'a plus lieu d'être. Sert quand on est seul·e
+ * dans un foyer famille ou entreprise : il n'y a personne à prévenir.
+ */
+export async function pausePush() {
+  const sub = await currentSubscription();
+  if (!sub || !supabase) return;
+  await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);
+  writeEndpoint(null);
+}
+
+/**
  * Remet l'abonnement d'aplomb sans rien demander à l'utilisateur.
  * Appelée au démarrage et à chaque retour sur l'application : c'est elle qui
  * empêche l'option de retomber sur « off » après une mise à jour.

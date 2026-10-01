@@ -46,6 +46,12 @@ export default function Account({ account, rewards = null, equipe = null }) {
   const [soirOn, setSoirOn] = useState(wantsEvening);
   const [binomeOn, setBinomeOn] = useState(wantsBinome);
   const seul = account.seul === true;
+  // Famille ou entreprise, seul·e dans le foyer : personne à prévenir, rien
+  // à recevoir. Les notifications reviennent dès qu'une autre personne a
+  // rejoint le foyer. (En couple, seul, on garde le rappel « invite ta
+  // moitié ».)
+  const sansNotifications =
+    rewards?.members?.length === 1 && (Boolean(equipe) || Boolean(rewards.familleActivee));
   const [notifBusy, setNotifBusy] = useState(false);
   const [notifError, setNotifError] = useState(null);
 
@@ -207,6 +213,7 @@ export default function Account({ account, rewards = null, equipe = null }) {
 
       <InstallHint />
 
+      {!sansNotifications && (
       <section className="setgroup">
         <h2 className="setlabel">{t('notifications.titre')}</h2>
         <div className="setcard">
@@ -262,6 +269,7 @@ export default function Account({ account, rewards = null, equipe = null }) {
           )}
         </div>
       </section>
+      )}
 
       <section className="setgroup">
         <h2 className="setlabel">{t('partage.titre')}</h2>

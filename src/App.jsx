@@ -19,7 +19,7 @@ import UpdateBanner from './components/UpdateBanner.jsx';
 import Combo from './components/Combo.jsx';
 import BonsAHonorer from './components/BonsAHonorer.jsx';
 import Nouvelles from './components/Nouvelles.jsx';
-import { syncPush } from './lib/push.js';
+import { syncPush, pausePush } from './lib/push.js';
 import { useEquipe } from './lib/equipe.js';
 import EquipeView from './components/EquipeView.jsx';
 
@@ -106,9 +106,19 @@ function Home({ account, currentMonth }) {
   // Une mise à jour, un cache vidé ou une réinstallation peuvent emporter
   // l'abonnement aux notifications. On le rétablit en silence au démarrage et
   // à chaque retour sur l'application, pour que l'option reste sur « on ».
+  // Seul·e dans un foyer famille ou entreprise : personne à prévenir. Les
+  // notifications sont mises en pause (le choix reste mémorisé) et l'option
+  // disparaît de Mon compte ; elles reprennent dès qu'une autre personne
+  // rejoint le foyer.
+  // (La liste des membres est relue toutes les 30 s : l'arrivée de quelqu'un
+  // lève la pause sans attendre un redémarrage.)
+  const sansNotifications =
+    rewards.members.length === 1 && (entreprise || rewards.familleActivee);
+
   useEffect(() => {
     const heal = () => {
-      syncPush(userId, householdId).catch(() => {});
+      if (sansNotifications) pausePush().catch(() => {});
+      else syncPush(userId, householdId).catch(() => {});
     };
     heal();
     const onVisible = () => {
@@ -116,7 +126,7 @@ function Home({ account, currentMonth }) {
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => document.removeEventListener('visibilitychange', onVisible);
-  }, [userId, householdId]);
+  }, [userId, householdId, sansNotifications]);
 
   const todoThisMonth = useMemo(
     () =>
