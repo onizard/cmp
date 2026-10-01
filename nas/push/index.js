@@ -39,7 +39,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.14';
+const VERSION = 'v4.15';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -412,6 +412,7 @@ const BINOME_JOURS = 7;
 async function binomeReminder() {
   // Un abonnement dont le foyer n'a qu'un seul membre, qui veut le rappel,
   // qui n'a pas atteint le plafond, et qu'on n'a pas sollicite cette semaine.
+  // Jamais en mode famille ni en mode entreprise.
   const { rows } = await client.query(
     `select p.id, p.endpoint, p.p256dh, p.auth, p.langue
        from push_subscriptions p
@@ -419,7 +420,11 @@ async function binomeReminder() {
         and p.invite_envois < $1
         and (p.invite_dernier is null or p.invite_dernier < now() - ($2 || ' days')::interval)
         and p.created_at < now() - interval '2 days'
-        and (select count(*) from members m where m.household_id = p.household_id) = 1`,
+        and (select count(*) from members m where m.household_id = p.household_id) = 1
+        -- En famille ou en entreprise, pas de « invite ta moitié » : une
+        -- famille s'agrandit à son rythme, une équipe partage un seul compte.
+        and not exists (select 1 from households h
+                         where h.id = p.household_id and (h.famille or h.entreprise))`,
     [BINOME_MAX, BINOME_JOURS],
   );
   for (const r of rows) {

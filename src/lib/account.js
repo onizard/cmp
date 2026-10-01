@@ -1,5 +1,6 @@
 import { origineWeb } from './natif.js';
 import { useCallback, useEffect, useState } from 'react';
+import { memoriser, oublier } from './comptes.js';
 import { supabase, isConfigured } from '../supabaseClient.js';
 import { t } from '../i18n/index.js';
 import {
@@ -85,6 +86,9 @@ export function useAccount() {
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
+      // Les jetons tournent : on tient à jour ceux du compte rangé, pour que
+      // le retour sur ce compte, plus tard, reparte du bon.
+      if (s) memoriser({ session: s });
       if (!s) {
         setHousehold(null);
         setLoading(false);
@@ -173,6 +177,18 @@ export function useAccount() {
       loadHousehold();
     }
   }, [session, loadHousehold]);
+
+  // Le compte rangé sur cet appareil connaît son espace : son nom, et s'il
+  // est perso ou pro — c'est ce que montre le sélecteur de comptes.
+  useEffect(() => {
+    if (session && household) {
+      memoriser({
+        session,
+        nom: household.name || '',
+        type: household.entreprise ? 'pro' : 'perso',
+      });
+    }
+  }, [session, household]);
 
   // Combien sont-ils dans ce foyer ? La politique de sécurité laisse compter
   // les membres du sien, pas ceux des autres.
@@ -275,10 +291,13 @@ export function useAccount() {
     return true;
   }, []);
 
+  // Se déconnecter ferme la connexion pour de bon : le compte quitte la
+  // liste des comptes rangés sur cet appareil.
   const signOut = useCallback(async () => {
     writeLastHousehold(null);
+    if (session) oublier(session.user.id);
     await supabase?.auth.signOut();
-  }, []);
+  }, [session]);
 
   const createHousehold = useCallback(async () => {
     setError(null);
@@ -404,15 +423,17 @@ export function useAccount() {
     }
     // Plus rien ne doit survivre sur l'appareil non plus.
     try {
+      // …sauf les autres comptes rangés sur cet appareil : seul celui-ci part.
       Object.keys(localStorage)
-        .filter((k) => k.startsWith('cmp'))
+        .filter((k) => k.startsWith('cmp') && k !== 'cmp.comptes')
         .forEach((k) => localStorage.removeItem(k));
+      if (session) oublier(session.user.id);
     } catch {
       /* ignore */
     }
     await supabase.auth.signOut();
     return null;
-  }, []);
+  }, [session]);
 
   const leaveHousehold = useCallback(async () => {
     if (!supabase || !session || !household) return;

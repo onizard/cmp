@@ -3,7 +3,10 @@ import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import { codeResponsableValide } from '../lib/equipe.js';
 
-export default function Onboarding({ account }) {
+// `pro` : un compte ajouté comme compte pro, qui va droit à l'entreprise.
+// Pas de « Se déconnecter » ici : on est en train de créer son compte. Avec
+// plusieurs comptes, la flèche (`onRetour`) ramène à leur choix.
+export default function Onboarding({ account, pro = false, onRetour }) {
   const t = useT();
   // Un code reçu par lien arrive déjà rempli : il n'y a plus qu'à confirmer.
   const [code, setCode] = useState(account.invitation || '');
@@ -17,7 +20,7 @@ export default function Onboarding({ account }) {
 
   // Compte entreprise : une équipe sur ce compte, chacun avec son code. Le
   // choix est définitif, d'où un bloc à part, qu'on ouvre exprès.
-  const [entrepriseOuverte, setEntrepriseOuverte] = useState(false);
+  const [entrepriseOuverte, setEntrepriseOuverte] = useState(pro);
   const [nomEntreprise, setNomEntreprise] = useState('');
   const [codeResp, setCodeResp] = useState('');
   const [codeResp2, setCodeResp2] = useState('');
@@ -50,42 +53,47 @@ export default function Onboarding({ account }) {
 
   return (
     <div className="screen">
-      <Header />
-      <div className="panel">
-        <p className="lede">{t('foyer.rejoindre')}</p>
-        <p className="soft-text">
-          {account.invitation ? t('foyer.inviteReconnue') : t('foyer.rejoindreAide')}
-        </p>
-        <form onSubmit={join}>
-          <label className="field-label" htmlFor="code">
-            {t('foyer.code')}
-          </label>
-          <input
-            id="code"
-            className="field"
-            type="text"
-            autoComplete="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder={t('foyer.codePlaceholder')}
-          />
-          {account.error && <p className="error">{account.error}</p>}
-          <button className="btn btn-accent" type="submit" disabled={busy}>
-            {busy ? t('app.instant') : t('foyer.bouton')}
-          </button>
-        </form>
-      </div>
+      <Header onRetour={onRetour} />
+      {/* Un compte pro n'a ni foyer à rejoindre ni foyer à créer. */}
+      {!pro && (
+        <>
+          <div className="panel">
+            <p className="lede">{t('foyer.rejoindre')}</p>
+            <p className="soft-text">
+              {account.invitation ? t('foyer.inviteReconnue') : t('foyer.rejoindreAide')}
+            </p>
+            <form onSubmit={join}>
+              <label className="field-label" htmlFor="code">
+                {t('foyer.code')}
+              </label>
+              <input
+                id="code"
+                className="field"
+                type="text"
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder={t('foyer.codePlaceholder')}
+              />
+              {account.error && <p className="error">{account.error}</p>}
+              <button className="btn btn-accent" type="submit" disabled={busy}>
+                {busy ? t('app.instant') : t('foyer.bouton')}
+              </button>
+            </form>
+          </div>
 
-      <div className="panel">
-        <p className="soft-text">
-          {t('foyer.premiereFois')}
-        </p>
-        <button className="btn" type="button" onClick={create} disabled={busy}>
-          {t('foyer.creer')}
-        </button>
-      </div>
+          <div className="panel">
+            <p className="soft-text">
+              {t('foyer.premiereFois')}
+            </p>
+            <button className="btn" type="button" onClick={create} disabled={busy}>
+              {t('foyer.creer')}
+            </button>
+          </div>
+        </>
+      )}
 
       <div className="panel">
         {!entrepriseOuverte ? (
@@ -141,12 +149,6 @@ export default function Onboarding({ account }) {
           </form>
         )}
       </div>
-
-      <p className="signout-line">
-        <button className="link" type="button" onClick={account.signOut}>
-          {t('auth.deconnexion')}
-        </button>
-      </p>
     </div>
   );
 }
