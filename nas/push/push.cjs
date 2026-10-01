@@ -13678,7 +13678,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.14";
+var VERSION = "v4.15";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -13965,7 +13965,11 @@ async function binomeReminder() {
         and p.invite_envois < $1
         and (p.invite_dernier is null or p.invite_dernier < now() - ($2 || ' days')::interval)
         and p.created_at < now() - interval '2 days'
-        and (select count(*) from members m where m.household_id = p.household_id) = 1`,
+        and (select count(*) from members m where m.household_id = p.household_id) = 1
+        -- En famille ou en entreprise, pas de \xAB invite ta moiti\xE9 \xBB : une
+        -- famille s'agrandit \xE0 son rythme, une \xE9quipe partage un seul compte.
+        and not exists (select 1 from households h
+                         where h.id = p.household_id and (h.famille or h.entreprise))`,
     [BINOME_MAX, BINOME_JOURS]
   );
   for (const r of rows) {

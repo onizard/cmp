@@ -46,6 +46,9 @@ export default function Account({ account, rewards = null, equipe = null }) {
   const [soirOn, setSoirOn] = useState(wantsEvening);
   const [binomeOn, setBinomeOn] = useState(wantsBinome);
   const seul = account.seul === true;
+  // Le rappel « invite ta moitié » n'a de sens qu'en couple : une famille
+  // s'agrandit à son rythme, une équipe partage un seul compte.
+  const rappelInvitation = seul && !equipe && !rewards?.familleActivee;
   const [notifBusy, setNotifBusy] = useState(false);
   const [notifError, setNotifError] = useState(null);
 
@@ -238,7 +241,7 @@ export default function Account({ account, rewards = null, equipe = null }) {
                 />
               </div>
               <p className="setnote">{t('notifications.rappelAide')}</p>
-              {seul && (
+              {rappelInvitation && (
                 <>
                   <div className="rowline">
                     <span>{t('notifications.binome')}</span>
