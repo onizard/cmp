@@ -82,14 +82,20 @@ export default function App() {
     );
   }
 
+  if (choix) {
+    return <ChoixCompte courant={account.session.user.id} onFini={() => setChoix(false)} />;
+  }
+
   // Un compte créé par « Ajouter un compte pro » va droit à l'entreprise.
   if (!account.household) {
     const pro = lireComptes().find((c) => c.userId === account.session.user.id)?.type === 'pro';
-    return <Onboarding account={account} pro={pro} />;
-  }
-
-  if (choix) {
-    return <ChoixCompte courant={account.session.user.id} onFini={() => setChoix(false)} />;
+    return (
+      <Onboarding
+        account={account}
+        pro={pro}
+        onRetour={plusieursComptes() ? () => setChoix(true) : undefined}
+      />
+    );
   }
 
   return (

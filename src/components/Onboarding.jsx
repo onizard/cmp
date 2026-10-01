@@ -4,7 +4,9 @@ import Header from './Header.jsx';
 import { codeResponsableValide } from '../lib/equipe.js';
 
 // `pro` : un compte ajouté comme compte pro, qui va droit à l'entreprise.
-export default function Onboarding({ account, pro = false }) {
+// Pas de « Se déconnecter » ici : on est en train de créer son compte. Avec
+// plusieurs comptes, la flèche (`onRetour`) ramène à leur choix.
+export default function Onboarding({ account, pro = false, onRetour }) {
   const t = useT();
   // Un code reçu par lien arrive déjà rempli : il n'y a plus qu'à confirmer.
   const [code, setCode] = useState(account.invitation || '');
@@ -51,7 +53,7 @@ export default function Onboarding({ account, pro = false }) {
 
   return (
     <div className="screen">
-      <Header />
+      <Header onRetour={onRetour} />
       {/* Un compte pro n'a ni foyer à rejoindre ni foyer à créer. */}
       {!pro && (
         <>
@@ -147,12 +149,6 @@ export default function Onboarding({ account, pro = false }) {
           </form>
         )}
       </div>
-
-      <p className="signout-line">
-        <button className="link" type="button" onClick={account.signOut}>
-          {t('auth.deconnexion')}
-        </button>
-      </p>
     </div>
   );
 }
