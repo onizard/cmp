@@ -132,7 +132,7 @@ export default {
     titre: 'Deine Daten',
     foyerSeul: 'Niemand außerhalb deines Haushalts sieht deine Aufgaben. Die Datenbank verweigert es — das ist nicht nur Anzeige.',
     rienVendu: 'Nichts wird verkauft, nichts weitergegeben. Keine Werbung, kein Tracking, keine fremden Messwerkzeuge.',
-    heberge: 'Alles liegt auf einem privaten Server in Frankreich, nicht bei einem Cloud-Riesen.',
+    heberge: 'Alles liegt auf einem privaten Server in Deutschland, bei einem europäischen Anbieter, nicht bei einem Cloud-Riesen.',
     chiffre: 'Der Text der Benachrichtigungen wird vor dem Versand verschlüsselt: weder Google noch Apple können ihn unterwegs lesen.',
   },
   installation: {

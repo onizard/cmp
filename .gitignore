@@ -13,3 +13,4 @@ nas/.env
 nas/data
 nas/app
 nas/pgdata
+cmp-serveur.tgz

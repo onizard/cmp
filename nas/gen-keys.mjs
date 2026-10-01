@@ -59,7 +59,12 @@ const env = {
 
   // Realtime
   SECRET_KEY_BASE: val('SECRET_KEY_BASE', crypto.randomBytes(32).toString('hex')),
-  REALTIME_DB_ENC_KEY: val('REALTIME_DB_ENC_KEY', 'supabaserealtimekey'),
+  // Realtime chiffre en AES-128 : exactement 16 caractères, sinon il plante
+  // au démarrage (« Bad key size »).
+  REALTIME_DB_ENC_KEY:
+    existing.REALTIME_DB_ENC_KEY?.length === 16
+      ? existing.REALTIME_DB_ENC_KEY
+      : crypto.randomBytes(8).toString('hex'),
 
   // URL publique servie par le tunnel Cloudflare (à personnaliser)
   PUBLIC_URL: val('PUBLIC_URL', 'https://cmp.exemple.fr'),
