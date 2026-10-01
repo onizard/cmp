@@ -292,12 +292,27 @@ export function useAccount() {
   }, []);
 
   // Se déconnecter ferme la connexion pour de bon : le compte quitte la
-  // liste des comptes rangés sur cet appareil.
+  // liste des comptes rangés sur cet appareil. Sur CET appareil seulement :
+  // un compte pro est partagé par toute l'équipe, qui reste connectée.
   const signOut = useCallback(async () => {
     writeLastHousehold(null);
     if (session) oublier(session.user.id);
-    await supabase?.auth.signOut();
+    await supabase?.auth.signOut({ scope: 'local' });
   }, [session]);
+
+  /**
+   * Compte pro : le mot de passe ne se change qu'avec le code responsable,
+   * vérifié par la base (acces.sql). Renvoie null, 'faux', 'court' ou un
+   * message.
+   */
+  const motDePassePro = useCallback(async (codeResponsable, nouveau) => {
+    const { data, error: e } = await supabase.rpc('cmp_entreprise_mot_de_passe', {
+      p_responsable: codeResponsable,
+      p_nouveau: nouveau,
+    });
+    if (e) return e.message;
+    return data === 'ok' ? null : data;
+  }, []);
 
   const createHousehold = useCallback(async () => {
     setError(null);
@@ -463,6 +478,7 @@ export function useAccount() {
     signUp,
     sendMagicLink,
     setPassword,
+    motDePassePro,
     signOut,
     createHousehold,
     createEntreprise,

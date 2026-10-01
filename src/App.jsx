@@ -23,6 +23,9 @@ import { syncPush } from './lib/push.js';
 import { useEquipe } from './lib/equipe.js';
 import EquipeView from './components/EquipeView.jsx';
 import ChoixCompte from './components/ChoixCompte.jsx';
+import AccesDecision from './components/AccesDecision.jsx';
+import AccesAnnonce from './components/AccesAnnonce.jsx';
+import { useAcces, lireDecision } from './lib/acces.js';
 import { lireComptes, plusieursComptes } from './lib/comptes.js';
 
 function NotConfigured() {
@@ -45,8 +48,24 @@ export default function App() {
   useEffect(() => {
     if (deconnecte) setChoix(false);
   }, [deconnecte]);
+  // Le lien du mail d'un administrateur : accepter ou refuser un équipier.
+  // Connecté ou non, il passe avant tout le reste.
+  const [decision, setDecision] = useState(lireDecision);
 
   if (!account.isConfigured) return <NotConfigured />;
+
+  if (decision) {
+    return (
+      <AccesDecision
+        id={decision.id}
+        cle={decision.cle}
+        onFini={() => {
+          window.history.replaceState(null, '', window.location.pathname);
+          setDecision(null);
+        }}
+      />
+    );
+  }
 
   // On patiente uniquement au tout premier chargement : ensuite, un
   // rafraîchissement en arrière-plan ne doit plus vider l'écran.
@@ -122,6 +141,9 @@ function Home({ account, currentMonth, onChangerCompte }) {
   // Mode entreprise : une équipe sur ce compte, chacun avec son code.
   const entreprise = Boolean(account.household.entreprise);
   const equipe = useEquipe(householdId, entreprise);
+  // Rejoindre un compte pro : la demande se suit d'ici, quel que soit
+  // l'onglet, pour annoncer la réponse dès qu'elle arrive.
+  const acces = useAcces(userId);
 
   // L'annonce du combo vit ici, et pas dans la tâche : elle s'affiche au
   // milieu de l'écran, au-dessus de tout. La clé la fait rejouer quand deux
@@ -191,7 +213,12 @@ function Home({ account, currentMonth, onChangerCompte }) {
         <BilanView tasks={store.tasks} claims={rewards.claims} userId={userId} />
       )}
       {tab === 'compte' && (
-        <Account account={account} rewards={rewards} equipe={entreprise ? equipe : null} />
+        <Account
+          account={account}
+          rewards={rewards}
+          equipe={entreprise ? equipe : null}
+          acces={acces}
+        />
       )}
       {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}
 
@@ -204,6 +231,8 @@ function Home({ account, currentMonth, onChangerCompte }) {
       />
 
       {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
+
+      <AccesAnnonce annonce={acces.annonce} onFini={acces.finAnnonce} />
 
       {/* Ce que l'autre a coché depuis la dernière fois, une tâche à la fois.
           Pas pendant le chargement : la liste vide ne dirait rien. */}

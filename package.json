@@ -21,7 +21,6 @@
     "@capacitor/splash-screen": "^8.0.2",
     "@capacitor/status-bar": "^8.0.3",
     "@supabase/supabase-js": "^2.45.4",
-    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -29,6 +28,7 @@
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.5.2",
     "@vitejs/plugin-react": "^4.3.1",
+    "nodemailer": "^6.10.1",
     "pg": "^8.23.0",
     "sharp": "^0.33.5",
     "vite": "^5.4.8",

@@ -82,6 +82,30 @@ export function useEquipe(householdId, actif) {
     [householdId, refresh],
   );
 
+  /** Les téléphones reliés au compte pro (lib/acces.js), ou 'faux'. */
+  const relies = useCallback(
+    async (responsable) => {
+      const { data, error } = await supabase.rpc('cmp_acces_relies', {
+        hid: householdId,
+        p_responsable: responsable,
+      });
+      if (error) return error.message;
+      if (!data || data.erreur) return (data && data.erreur) || 'faux';
+      return data.relies || [];
+    },
+    [householdId],
+  );
+
+  /** Retire l'accès d'un téléphone relié. Renvoie null si c'est fait. */
+  const retirer = useCallback(async (responsable, id) => {
+    const { data, error } = await supabase.rpc('cmp_acces_retirer', {
+      p_id: id,
+      p_responsable: responsable,
+    });
+    if (error) return error.message;
+    return data === 'ok' ? null : data;
+  }, []);
+
   const noms = Object.fromEntries(membres.map((m) => [m.id, m.nom]));
-  return { membres, noms, refresh, verifierResponsable, enregistrer };
+  return { membres, noms, refresh, verifierResponsable, enregistrer, relies, retirer };
 }
