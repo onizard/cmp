@@ -211,6 +211,18 @@ export default {
     aujourdhui: 'Already booked today: possible again tomorrow.',
     uneAutre: 'You’re already on “{tache}”. One at a time.',
   },
+  comptes: {
+    titre: 'My accounts',
+    perso: 'Personal',
+    pro: 'Work',
+    actif: 'signed in',
+    ouvrir: 'Open',
+    oublier: 'Remove from this device',
+    ajouter: 'Add an account',
+    ajouterEtOuvrir: 'Add and open',
+    aide: 'Switch accounts without retyping your password: no password is kept, only the session that is already open. “Sign out” removes the account from this device.',
+    expire: 'The session for {email} has expired: sign in again with its password.',
+  },
   entreprise: {
     auClavier: '⌨️ Type your code on the keyboard, number pad included.',
     onglet: 'Team',

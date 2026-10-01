@@ -77,7 +77,12 @@ export default function App() {
   return (
     <>
       <UpdateBanner />
-      <Home account={account} currentMonth={currentMonth} />
+      {/* Changer de compte change d'espace : tout l'écran repart de zéro. */}
+      <Home
+        key={`${account.session.user.id}:${account.household.id}`}
+        account={account}
+        currentMonth={currentMonth}
+      />
     </>
   );
 }

@@ -211,6 +211,18 @@ export default {
     aujourdhui: 'Già prenotata oggi: di nuovo possibile domani.',
     uneAutre: 'Stai già facendo «{tache}». Una alla volta.',
   },
+  comptes: {
+    titre: 'I miei account',
+    perso: 'Personale',
+    pro: 'Lavoro',
+    actif: 'connesso',
+    ouvrir: 'Apri',
+    oublier: 'Togli da questo dispositivo',
+    ajouter: 'Aggiungi un account',
+    ajouterEtOuvrir: 'Aggiungi e apri',
+    aide: 'Passi da un account all’altro senza riscrivere la password: nessuna password viene conservata, solo la sessione già aperta. «Esci» toglie l’account da questo dispositivo.',
+    expire: 'La sessione di {email} è scaduta: accedi di nuovo con la sua password.',
+  },
   entreprise: {
     auClavier: '⌨️ Digita il tuo codice sulla tastiera, tastierino numerico compreso.',
     onglet: 'Squadra',

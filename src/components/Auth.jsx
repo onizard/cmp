@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
+import Comptes from './Comptes.jsx';
+import { lireComptes } from '../lib/comptes.js';
 import { dejaVenu } from '../lib/account.js';
 
 // Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
@@ -61,6 +63,13 @@ export default function Auth({ account }) {
     <div className="screen">
       <Header />
       <InstallHint />
+      {/* Les comptes déjà rangés sur cet appareil : on y entre d'un toucher. */}
+      {mode !== 'oubli' && lireComptes().length > 0 && (
+        <div className="panel">
+          <p className="lede">{t('comptes.titre')}</p>
+          <Comptes ajout={false} />
+        </div>
+      )}
       <form className="panel" onSubmit={submit}>
         <p className="lede">
           {creation ? t('auth.creation') : oubli ? t('auth.oubli') : t('auth.connexion')}

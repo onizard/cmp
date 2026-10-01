@@ -211,6 +211,18 @@ export default {
     aujourdhui: 'Heute schon reserviert: morgen wieder möglich.',
     uneAutre: 'Du kümmerst dich schon um „{tache}“. Eine nach der anderen.',
   },
+  comptes: {
+    titre: 'Meine Konten',
+    perso: 'Privat',
+    pro: 'Beruflich',
+    actif: 'angemeldet',
+    ouvrir: 'Öffnen',
+    oublier: 'Von diesem Gerät entfernen',
+    ajouter: 'Konto hinzufügen',
+    ajouterEtOuvrir: 'Hinzufügen und öffnen',
+    aide: 'Du wechselst zwischen Konten, ohne dein Passwort neu einzugeben: Es wird kein Passwort gespeichert, nur die bereits offene Sitzung. „Abmelden“ entfernt das Konto von diesem Gerät.',
+    expire: 'Die Sitzung von {email} ist abgelaufen: Melde dich mit dem Passwort erneut an.',
+  },
   entreprise: {
     auClavier: '⌨️ Gib deinen Code über die Tastatur ein, auch über den Ziffernblock.',
     onglet: 'Team',

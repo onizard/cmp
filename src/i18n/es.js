@@ -211,6 +211,18 @@ export default {
     aujourdhui: 'Ya reservada hoy: de nuevo posible mañana.',
     uneAutre: 'Ya te encargas de «{tache}». Una cada vez.',
   },
+  comptes: {
+    titre: 'Mis cuentas',
+    perso: 'Personal',
+    pro: 'Trabajo',
+    actif: 'conectada',
+    ouvrir: 'Abrir',
+    oublier: 'Quitar de este dispositivo',
+    ajouter: 'Añadir una cuenta',
+    ajouterEtOuvrir: 'Añadir y abrir',
+    aide: 'Pasas de una cuenta a otra sin volver a escribir la contraseña: no se guarda ninguna contraseña, solo la sesión ya abierta. «Cerrar sesión» quita la cuenta de este dispositivo.',
+    expire: 'La sesión de {email} ha caducado: vuelve a entrar con su contraseña.',
+  },
   entreprise: {
     auClavier: '⌨️ Escribe tu código con el teclado, teclado numérico incluido.',
     onglet: 'Equipo',

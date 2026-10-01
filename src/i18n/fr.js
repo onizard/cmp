@@ -363,6 +363,18 @@ export default {
     aujourdhui: 'Déjà réservée aujourd’hui : de nouveau possible demain.',
     uneAutre: 'Tu t’occupes déjà de « {tache} ». Une seule à la fois.',
   },
+  comptes: {
+    titre: 'Mes comptes',
+    perso: 'Perso',
+    pro: 'Pro',
+    actif: 'connecté',
+    ouvrir: 'Ouvrir',
+    oublier: 'Retirer de cet appareil',
+    ajouter: 'Ajouter un compte',
+    ajouterEtOuvrir: 'Ajouter et ouvrir',
+    aide: 'On passe d’un compte à l’autre sans retaper son mot de passe : aucun mot de passe n’est gardé, seulement la connexion déjà ouverte. « Se déconnecter » retire le compte de cet appareil.',
+    expire: 'La connexion de {email} a expiré : reconnecte-toi avec son mot de passe.',
+  },
   entreprise: {
     auClavier: '⌨️ Tape ton code au clavier, pavé numérique compris.',
     onglet: 'Équipe',

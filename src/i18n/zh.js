@@ -211,6 +211,18 @@ export default {
     aujourdhui: '今天已预留过：明天才能再预留。',
     uneAutre: '你已在做“{tache}”。一次只能一项。',
   },
+  comptes: {
+    titre: '我的账户',
+    perso: '个人',
+    pro: '工作',
+    actif: '已登录',
+    ouvrir: '打开',
+    oublier: '从此设备移除',
+    ajouter: '添加账户',
+    ajouterEtOuvrir: '添加并打开',
+    aide: '无需重新输入密码即可切换账户：不保存任何密码，只保存已打开的会话。“退出登录”会把该账户从此设备移除。',
+    expire: '{email} 的会话已过期：请用密码重新登录。',
+  },
   entreprise: {
     auClavier: '⌨️ 用键盘输入代码，小键盘也可以。',
     onglet: '团队',

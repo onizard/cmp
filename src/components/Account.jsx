@@ -18,6 +18,7 @@ import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
 import { familleDOffice } from '../lib/famille.js';
 import EquipeReglages from './EquipeReglages.jsx';
+import Comptes from './Comptes.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -270,6 +271,14 @@ export default function Account({ account, rewards = null, equipe = null }) {
         <h2 className="setlabel">{t('partage.titre')}</h2>
         <div className="setcard">
           <ShareInvite code={code} prenom={account.displayName} />
+        </div>
+      </section>
+
+      {/* Perso, pro… : les comptes rangés sur cet appareil, d'un toucher. */}
+      <section className="setgroup">
+        <h2 className="setlabel">{t('comptes.titre')}</h2>
+        <div className="setcard">
+          <Comptes courant={account.session.user.id} />
         </div>
       </section>
 

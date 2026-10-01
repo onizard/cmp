@@ -211,6 +211,18 @@ export default {
     aujourdhui: 'Já reservada hoje: possível de novo amanhã.',
     uneAutre: 'Já estás a tratar de «{tache}». Uma de cada vez.',
   },
+  comptes: {
+    titre: 'As minhas contas',
+    perso: 'Pessoal',
+    pro: 'Trabalho',
+    actif: 'ligada',
+    ouvrir: 'Abrir',
+    oublier: 'Retirar deste aparelho',
+    ajouter: 'Adicionar uma conta',
+    ajouterEtOuvrir: 'Adicionar e abrir',
+    aide: 'Passas de uma conta para a outra sem voltar a escrever a palavra-passe: nenhuma palavra-passe é guardada, só a sessão já aberta. «Terminar sessão» retira a conta deste aparelho.',
+    expire: 'A sessão de {email} expirou: volta a entrar com a palavra-passe.',
+  },
   entreprise: {
     auClavier: '⌨️ Escreve o teu código no teclado, teclado numérico incluído.',
     onglet: 'Equipa',
