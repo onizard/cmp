@@ -12,6 +12,7 @@ import {
   monthRange,
   monthName,
   toutesLesFaites,
+  faitesDuMois,
 } from './visibility.js';
 
 const task = (over = {}) => ({
@@ -278,5 +279,27 @@ describe('toutesLesFaites', () => {
       'sansInstant',
       'avecInstant',
     ]);
+  });
+});
+
+describe('faitesDuMois', () => {
+  const t = (id, extra) => ({ id, text: id, deleted: false, done: true, ...extra });
+
+  it('ne garde que les tâches cochées ce mois-ci', () => {
+    const tasks = [
+      t('octobre', { doneMonth: '2026-10', doneAt: '2026-10-01T08:00:00' }),
+      t('septembre', { doneMonth: '2026-09', doneAt: '2026-09-30T20:00:00' }),
+      { id: 'a-faire', text: 'a', deleted: false, done: false, month: '2026-10' },
+      t('supprimee', { doneMonth: '2026-10', deleted: true }),
+    ];
+    expect(faitesDuMois(tasks, '2026-10').map((x) => x.id)).toEqual(['octobre']);
+  });
+
+  it('sans mois enregistré, se fie à l’instant de la coche', () => {
+    const tasks = [
+      t('ancienne', { doneAt: '2026-10-02T09:00:00' }),
+      t('tres-ancienne', { updatedAt: '2026-08-15T09:00:00' }),
+    ];
+    expect(faitesDuMois(tasks, '2026-10').map((x) => x.id)).toEqual(['ancienne']);
   });
 });

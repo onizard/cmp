@@ -1,33 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useT } from '../i18n/index.js';
 import {
-  addMonths,
-  displayedMonths,
-  groupByYear,
   monthName,
   tasksVisibleIn,
   sortForMonth,
   monthSummary,
-  toutesLesFaites,
+  faitesDuMois,
 } from '../lib/visibility.js';
 import TaskItem from './TaskItem.jsx';
 import AddTask from './AddTask.jsx';
 
 /**
- * La liste ne montre que ce qui reste à porter.
+ * La liste, c'est le mois en cours : rien avant, rien après.
  *
- * Une tâche cochée a rendu son service : elle quitte le mois et rejoint un
- * tiroir unique, au bas du mois en cours, qui les rassemble toutes — pas
- * seulement celles du mois. On l'ouvre quand on veut les revoir, et on peut
- * toujours y décocher ce qu'on a coché par erreur.
+ * Ce qui n'a pas été fait les mois passés est reporté ici ; pour prévoir à
+ * l'avance, on l'ajoute au mois même. La carte est toujours ouverte. Une
+ * tâche cochée quitte la liste et rejoint le tiroir « Faites », au bas, qui
+ * ne garde que celles du mois ; on peut toujours y décocher ce qu'on a coché
+ * par erreur. Rien n'est effacé : les points et le bilan comptent tout.
  */
 export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
-  const moisSuivant = addMonths(currentMonth, 1);
-
-  const [openYears, setOpenYears] = useState(() => new Set([currentYear]));
-  const [openMonths, setOpenMonths] = useState(() => new Set([currentMonth]));
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
   // La tâche qu'on vient d'ajouter, ou celle qui existait déjà : on descend
   // jusqu'à elle et elle brille un instant. Sans ça, une tâche ajoutée en tête
@@ -52,32 +46,18 @@ export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
     return r;
   };
 
-  const toggle = (set, setter, key) => {
-    const next = new Set(set);
-    if (next.has(key)) next.delete(key);
-    else next.add(key);
-    setter(next);
-  };
+  const faites = useMemo(
+    () => faitesDuMois(store.tasks, currentMonth),
+    [store.tasks, currentMonth],
+  );
 
-  const faites = useMemo(() => toutesLesFaites(store.tasks), [store.tasks]);
-
-  // Chaque mois avec ses tâches à faire. Le résumé, lui, se calcule sur TOUT
-  // ce que le mois contient : sans les cochées, un mois entièrement bouclé
-  // afficherait « rien » au lieu de « terminé ».
-  const moisRendus = useMemo(() => {
-    const out = new Map();
-    for (const m of displayedMonths(store.tasks, currentMonth)) {
-      const tout = sortForMonth(tasksVisibleIn(store.tasks, m, currentMonth));
-      const aFaire = tout.filter((x) => !x.done);
-      const toujours = m === currentMonth || m === moisSuivant;
-      if (aFaire.length > 0 || toujours) {
-        out.set(m, { aFaire, resume: monthSummary(tout) });
-      }
-    }
-    return out;
-  }, [store.tasks, currentMonth, moisSuivant]);
-
-  const years = groupByYear([...moisRendus.keys()]);
+  // Les tâches à faire du mois — reportées comprises. Le résumé, lui, se
+  // calcule sur TOUT ce que le mois contient : sans les cochées, un mois
+  // entièrement bouclé afficherait « rien » au lieu de « terminé ».
+  const { aFaire, resume } = useMemo(() => {
+    const tout = sortForMonth(tasksVisibleIn(store.tasks, currentMonth, currentMonth));
+    return { aFaire: tout.filter((x) => !x.done), resume: monthSummary(tout) };
+  }, [store.tasks, currentMonth]);
 
   const tiroir = (
     <div className="tiroir">
@@ -114,67 +94,38 @@ export default function TaskList({ store, currentMonth, onCombo, names = {} }) {
     </div>
   );
 
+  const m = currentMonth;
   return (
     <main className="list">
-      {years.map(({ year, months: yMonths }) => {
-        const yearOpen = openYears.has(year);
-        return (
-          <section className="year" key={year}>
-            <button
-              className="year-head"
-              type="button"
-              aria-expanded={yearOpen}
-              onClick={() => toggle(openYears, setOpenYears, year)}
-            >
-              <span className="year-num">{year}</span>
-            </button>
-            {yearOpen &&
-              yMonths.map((m) => {
-                const { aFaire, resume } = moisRendus.get(m);
-                const monthOpen = openMonths.has(m);
-                return (
-                  <section
-                    className={`month ${monthOpen ? 'open' : 'closed'}`}
-                    key={m}
-                    data-mois={m}
-                  >
-                    <button
-                      className="month-head"
-                      type="button"
-                      aria-expanded={monthOpen}
-                      onClick={() => toggle(openMonths, setOpenMonths, m)}
-                    >
-                      <span className="month-name">{monthName(m)}</span>
-                      <span className="month-count">{resume}</span>
-                    </button>
-                    {monthOpen && (
-                      <div className="month-body">
-                        {/* En tete : ajouter est le geste le plus frequent,
-                            il ne doit pas se meriter au bas d'une liste. */}
-                        <AddTask onAdd={(text) => ajouter(m, text)} />
-                        <ul className="tasks">
-                          {aFaire.map((task) => (
-                            <TaskItem
-                              key={task.id}
-                              task={task}
-                              eclat={eclat && eclat.id === task.id && eclat.mois === m}
-                              month={m}
-                              currentMonth={currentMonth}
-                              store={store}
-                              onCombo={onCombo}
-                  names={names}
-                            />
-                          ))}
-                        </ul>
-                        {m === currentMonth && tiroir}
-                      </div>
-                    )}
-                  </section>
-                );
-              })}
-          </section>
-        );
-      })}
+      <div className="year-head year-fixe">
+        <span className="year-num">{currentYear}</span>
+      </div>
+      <section className="month open month-fixe" data-mois={m}>
+        <div className="month-head">
+          <span className="month-name">{monthName(m)}</span>
+          <span className="month-count">{resume}</span>
+        </div>
+        <div className="month-body">
+          {/* En tete : ajouter est le geste le plus frequent, il ne doit pas
+              se meriter au bas d'une liste. */}
+          <AddTask onAdd={(text) => ajouter(m, text)} />
+          <ul className="tasks">
+            {aFaire.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                eclat={eclat && eclat.id === task.id && eclat.mois === m}
+                month={m}
+                currentMonth={currentMonth}
+                store={store}
+                onCombo={onCombo}
+                names={names}
+              />
+            ))}
+          </ul>
+          {tiroir}
+        </div>
+      </section>
     </main>
   );
 }
