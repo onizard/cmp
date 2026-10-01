@@ -1540,6 +1540,16 @@ body,
   transform: rotate(-135deg);
 }
 
+/* Un seul mois, toujours ouvert : ni chevron, ni main au survol. */
+.year-fixe,
+.month-fixe .month-head {
+  cursor: default;
+}
+
+.month-fixe .month-head::after {
+  content: none;
+}
+
 [dir='rtl'] .codebox,
 [dir='rtl'] .code-repli span {
   direction: ltr;

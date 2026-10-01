@@ -151,6 +151,26 @@ export const toutesLesFaites = (tasks) =>
       });
     });
 
+/** Mois (AAAA-MM) d'un instant ISO, à l'heure du téléphone. */
+const moisDe = (iso) => {
+  const d = new Date(iso || '');
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
+
+/**
+ * Les tâches faites ce mois-ci seulement : un mois bouclé ne suit pas le
+ * suivant. Elles ne sont pas effacées pour autant — les points et le bilan
+ * en ont besoin —, juste plus montrées.
+ *
+ * Le mois d'une coche est celui enregistré au moment de cocher (doneMonth) ;
+ * à défaut, celui de l'instant de la coche, puis de la dernière modification.
+ */
+export const faitesDuMois = (tasks, currentMonth) =>
+  toutesLesFaites(tasks).filter(
+    (x) => (x.doneMonth || moisDe(x.doneAt) || moisDe(x.updatedAt)) === currentMonth,
+  );
+
 // --- Textes calculés ---
 
 /** Phrase d'accroche selon le nombre de choses à faire ce mois-ci. */
