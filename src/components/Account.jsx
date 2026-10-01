@@ -24,7 +24,7 @@ import { lireComptes } from '../lib/comptes.js';
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
 
-export default function Account({ account, rewards = null, equipe = null }) {
+export default function Account({ account, rewards = null, equipe = null, acces = null }) {
   const t = useT();
   const [name, setName] = useState(account.displayName || '');
   const [saved, setSaved] = useState(false);
@@ -40,7 +40,12 @@ export default function Account({ account, rewards = null, equipe = null }) {
 
   // On part du choix mémorisé : l'interrupteur affiche tout de suite le bon
   // état, même si le navigateur met un instant à retrouver son abonnement.
+  // Le mot de passe se change depuis le profil : un bouton, puis une case.
+  const [passOuvert, setPassOuvert] = useState(false);
   const [pass, setPass] = useState('');
+  // Compte pro : toute l'équipe y est connectée, seul l'administrateur en
+  // change le mot de passe, avec son code responsable.
+  const [codeResp, setCodeResp] = useState('');
   const [passSaved, setPassSaved] = useState(false);
   const [passError, setPassError] = useState(null);
 
@@ -96,14 +101,25 @@ export default function Account({ account, rewards = null, equipe = null }) {
 
   const savePassword = async () => {
     setPassError(null);
-    const ok = await account.setPassword(pass);
-    if (!ok) {
-      setPassError(account.error || t('compte.motDePasseErreur'));
-      return;
+    if (equipe) {
+      const r = await account.motDePassePro(codeResp, pass);
+      if (r) {
+        setPassError(r === 'faux' ? t('entreprise.codeRespFaux') : r === 'court' ? t('auth.motDePasseCourt') : r);
+        if (r === 'faux') setCodeResp('');
+        return;
+      }
+    } else {
+      const ok = await account.setPassword(pass);
+      if (!ok) {
+        setPassError(account.error || t('compte.motDePasseErreur'));
+        return;
+      }
     }
     setPass('');
+    setCodeResp('');
+    setPassOuvert(false);
     setPassSaved(true);
-    setTimeout(() => setPassSaved(false), 2200);
+    setTimeout(() => setPassSaved(false), 2600);
   };
 
   const toggleNotif = async () => {
@@ -166,47 +182,92 @@ export default function Account({ account, rewards = null, equipe = null }) {
               setName(e.target.value);
             }}
           />
+          {(dirty || saved) && (
+            <button
+              className="btn btn-accent btn-block"
+              type="button"
+              disabled={!dirty}
+              onClick={saveName}
+            >
+              {saved ? t('app.enregistre') : t('app.enregistrer')}
+            </button>
+          )}
+          {nameError && <p className="error">{nameError}</p>}
           <label className="field-label" htmlFor="mail">{t('compte.email')}</label>
           <input id="mail" className="field" value={email} disabled />
-          <button
-            className="btn btn-accent btn-block"
-            type="button"
-            disabled={!dirty}
-            onClick={saveName}
-          >
-            {saved ? t('app.enregistre') : t('app.enregistrer')}
-          </button>
-          {nameError && <p className="error">{nameError}</p>}
-        </div>
-      </section>
-
-      <section className="setgroup">
-        <h2 className="setlabel">{t('compte.motDePasse')}</h2>
-        <div className="setcard">
-          <p className="setnote">{t('compte.motDePasseAide')}</p>
-          <label className="field-label" htmlFor="pass">{t('compte.nouveauMotDePasse')}</label>
-          <input
-            id="pass"
-            className="field"
-            type="password"
-            autoComplete="new-password"
-            minLength={8}
-            value={pass}
-            placeholder={t('auth.motDePassePlaceholder')}
-            onChange={(e) => {
-              setPassError(null);
-              setPass(e.target.value);
-            }}
-          />
-          <button
-            className="btn btn-accent btn-block"
-            type="button"
-            disabled={pass.length < 8}
-            onClick={savePassword}
-          >
-            {passSaved ? t('app.enregistre') : t('compte.enregistrerMotDePasse')}
-          </button>
-          {passError && <p className="error">{passError}</p>}
+          {passOuvert ? (
+            <form
+              className="mdp-case"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (pass.length >= 8 && (!equipe || codeResp.length >= 4)) savePassword();
+              }}
+            >
+              {equipe && (
+                <>
+                  <label className="field-label" htmlFor="pass-resp">{t('entreprise.codeResp')}</label>
+                  <input
+                    id="pass-resp"
+                    className="field"
+                    type="password"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    autoFocus
+                    value={codeResp}
+                    onChange={(e) => {
+                      setPassError(null);
+                      setCodeResp(e.target.value.replace(/\D/g, '').slice(0, 8));
+                    }}
+                  />
+                </>
+              )}
+              <label className="field-label" htmlFor="pass">{t('compte.nouveauMotDePasse')}</label>
+              <input
+                id="pass"
+                className="field"
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                autoFocus={!equipe}
+                value={pass}
+                placeholder={t('auth.motDePassePlaceholder')}
+                onChange={(e) => {
+                  setPassError(null);
+                  setPass(e.target.value);
+                }}
+              />
+              {passError && <p className="error">{passError}</p>}
+              <div className="mdp-boutons">
+                <button
+                  className="btn btn-accent"
+                  type="submit"
+                  disabled={pass.length < 8 || (equipe && codeResp.length < 4)}
+                >
+                  {t('compte.valider')}
+                </button>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => {
+                    setPassOuvert(false);
+                    setPass('');
+                    setCodeResp('');
+                    setPassError(null);
+                  }}
+                >
+                  {t('app.annuler')}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <button className="btn btn-block mdp-bouton" type="button" onClick={() => setPassOuvert(true)}>
+              {passSaved
+                ? `✓ ${t('compte.motDePasseChange')}`
+                : equipe
+                  ? t('entreprise.changerMotDePasse')
+                  : t('compte.changerMotDePasse')}
+            </button>
+          )}
         </div>
       </section>
 
@@ -282,7 +343,7 @@ export default function Account({ account, rewards = null, equipe = null }) {
         <section className="setgroup">
           <h2 className="setlabel">{t('comptes.titre')}</h2>
           <div className="setcard">
-            <Comptes courant={account.session.user.id} ajout={!equipe} />
+            <Comptes courant={account.session.user.id} ajout={!equipe} acces={acces} />
           </div>
         </section>
       )}

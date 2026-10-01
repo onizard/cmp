@@ -70,22 +70,6 @@ export async function basculer(userId) {
 }
 
 /**
- * Ajoute un compte sans fermer celui en cours : on se connecte avec un client
- * jetable, on range la connexion obtenue, puis on bascule dessus.
- */
-export async function ajouter(email, motDePasse) {
-  const c = clientSansMemoire();
-  if (!c) return 'indisponible';
-  const { data, error } = await c.auth.signInWithPassword({
-    email: String(email || '').trim(),
-    password: motDePasse,
-  });
-  if (error || !data.session) return error ? error.message : 'indisponible';
-  memoriser({ session: data.session });
-  return basculer(data.session.user.id);
-}
-
-/**
  * Crée un compte pro depuis un compte perso, toujours sans fermer ce dernier.
  * Renvoie null (le nouveau compte est ouvert), 'dejaInscrit' ou
  * 'confirmation' (le serveur attend un clic dans le mail), ou un message.

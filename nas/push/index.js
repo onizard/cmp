@@ -6,6 +6,7 @@
 
 const { Client } = require('pg');
 const webpush = require('web-push');
+const nodemailer = require('nodemailer');
 const { tr, libelle } = require('./i18n.cjs');
 
 // Accepte les deux conventions de nommage, pour pouvoir réutiliser
@@ -39,7 +40,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.15';
+const VERSION = 'v4.16';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -132,6 +133,11 @@ async function actorName(householdId, userId) {
 
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
+  // Rejoindre un compte pro (acces.sql) : le mail a l'administrateur, la
+  // connexion a usage unique, la reponse a l'equipier.
+  if (kind === 'acces') return envoyerMailAcces(ev.id);
+  if (kind === 'acces_jeton') return fabriquerJeton(ev.id);
+  if (kind === 'acces_reponse') return annoncerReponse(ev.id);
   if (!household) return;
   if (kind === 'bon') return handleBon(ev);
   const nom = await actorName(household, actor);
@@ -496,6 +502,180 @@ setInterval(() => {
   bonReminders().catch((e) => log('bons : échec', e.message));
 }, 60_000);
 
+// --- Rejoindre un compte pro ---------------------------------------------
+//
+// L'equipier demande, l'administrateur recoit un mail ; s'il accepte avec le
+// code de liaison, on fabrique pour l'equipier une connexion a usage unique
+// au compte pro (un lien magique jamais envoye par mail, cle d'administration
+// du service d'authentification). Le mot de passe ne circule jamais.
+
+const AUTH_URL = process.env.GOTRUE_URL || 'http://auth:9999';
+const BASE_URL = APP_URL.replace(/\/+$/, '');
+
+let transport = null;
+function courrier() {
+  if (transport) return transport;
+  if (!process.env.SMTP_HOST) return null;
+  const port = Number(process.env.SMTP_PORT || 465);
+  transport = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    secure: port === 465,
+    auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
+  });
+  return transport;
+}
+
+const echappe = (x) =>
+  String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+/** Le mail a l'administrateur : qui demande, deux boutons. */
+function mailAcces(d) {
+  const lang = d.langue || 'fr';
+  const qui = d.demandeur_nom || String(d.demandeur_email || '').split('@')[0];
+  const lien = (r) => `${BASE_URL}/?acces=${d.id}&cle=${d.cle}&r=${r}`;
+  const sujet = tr(lang, 'mailSujet', { qui, nom: d.nom });
+  const corpsTexte = tr(lang, 'mailCorps', { qui, email: d.demandeur_email, nom: d.nom });
+  const corpsHtml = tr(lang, 'mailCorps', {
+    qui: `<b>${echappe(qui)}</b>`,
+    email: echappe(d.demandeur_email),
+    nom: `<b>${echappe(d.nom)}</b>`,
+  });
+  const degrade = 'linear-gradient(90deg,#f28b97,#b58ad6,#8fa2ea)';
+  const dir = ['ar', 'he', 'fa'].includes(lang) ? 'rtl' : 'ltr';
+  const html = `<!doctype html><html dir="${dir}"><body style="margin:0;background:#f6f1ea;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1c2a4a">
+<div style="max-width:480px;margin:20px auto;background:#fffdf9;border:1px solid #ebdfcf;border-radius:20px;overflow:hidden">
+<div style="height:6px;background:#b58ad6;background:${degrade}"></div>
+<div style="padding:24px 22px">
+<p style="font-size:16px;line-height:1.5;margin:0 0 18px">${corpsHtml}</p>
+<a href="${lien('oui')}" style="display:block;text-align:center;padding:14px;border-radius:999px;background:#b58ad6;background:${degrade};color:#fff;font-weight:700;text-decoration:none;margin-bottom:10px">${echappe(tr(lang, 'mailAccepter'))}</a>
+<a href="${lien('non')}" style="display:block;text-align:center;padding:13px;border-radius:999px;border:1.5px solid #ebdfcf;color:#1c2a4a;font-weight:700;text-decoration:none">${echappe(tr(lang, 'mailRefuser'))}</a>
+<p style="font-size:13px;color:#7a8299;line-height:1.5;margin:18px 0 0">${echappe(tr(lang, 'mailNote'))}</p>
+</div></div></body></html>`;
+  const texte = `${corpsTexte}\n\n${tr(lang, 'mailAccepter')} : ${lien('oui')}\n${tr(lang, 'mailRefuser')} : ${lien('non')}\n\n${tr(lang, 'mailNote')}`;
+  return { sujet, html, texte };
+}
+
+async function envoyerMailAcces(id) {
+  if (!client) return;
+  const { rows } = await client.query(
+    `select d.id, d.cle, d.langue, d.email_pro, d.demandeur_email, d.demandeur_nom, h.name as nom
+       from acces_demandes d join households h on h.id = d.household_id
+      where d.id = $1 and d.statut = 'attente' and d.mail_envoye_at is null`,
+    [id],
+  );
+  const d = rows[0];
+  if (!d) return;
+  const t = courrier();
+  if (!t) {
+    log('acces : pas de SMTP_HOST, mail non envoyé');
+    return;
+  }
+  const m = mailAcces(d);
+  const nom = process.env.SMTP_SENDER_NAME || 'CMP';
+  try {
+    await t.sendMail({
+      from: `"${nom}" <${process.env.SMTP_ADMIN_EMAIL}>`,
+      to: d.email_pro,
+      subject: m.sujet,
+      text: m.texte,
+      html: m.html,
+    });
+    await client.query('update acces_demandes set mail_envoye_at = now() where id = $1', [id]);
+    log('acces : mail envoyé à', d.email_pro);
+  } catch (e) {
+    await client.query('update acces_demandes set mail_essais = mail_essais + 1 where id = $1', [id]);
+    log('acces : échec du mail', e.message);
+  }
+}
+
+async function fabriquerJeton(id) {
+  if (!client) return;
+  const { rows } = await client.query(
+    `select email_pro from acces_demandes where id = $1 and statut = 'acceptee'`,
+    [id],
+  );
+  if (!rows[0]) return;
+  const cle = process.env.SERVICE_ROLE_KEY;
+  if (!cle) {
+    log('acces : SERVICE_ROLE_KEY manquante, connexion non fabriquée');
+    return;
+  }
+  try {
+    const r = await fetch(`${AUTH_URL}/admin/generate_link`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${cle}`, apikey: cle },
+      body: JSON.stringify({ type: 'magiclink', email: rows[0].email_pro }),
+    });
+    const b = await r.json().catch(() => ({}));
+    const jeton = b.hashed_token || (b.properties && b.properties.hashed_token);
+    if (!r.ok || !jeton) {
+      log('acces : connexion refusée par l’authentification', r.status, b.msg || b.message || '');
+      return;
+    }
+    await client.query(
+      `update acces_demandes set jeton = $2, jeton_at = now() where id = $1 and statut = 'acceptee'`,
+      [id, jeton],
+    );
+    log('acces : connexion prête pour la demande', id);
+  } catch (e) {
+    log('acces : authentification injoignable', e.message);
+  }
+}
+
+/** Tous les appareils d'une personne, quel que soit son foyer. */
+async function sendToPerson(userId, composer) {
+  const { rows } = await client.query(
+    'select distinct household_id from push_subscriptions where user_id = $1',
+    [userId],
+  );
+  for (const r of rows) await sendToUser(r.household_id, userId, composer);
+}
+
+async function annoncerReponse(id) {
+  if (!client) return;
+  const { rows } = await client.query(
+    `select d.demandeur, d.statut, h.name as nom
+       from acces_demandes d join households h on h.id = d.household_id
+      where d.id = $1`,
+    [id],
+  );
+  const d = rows[0];
+  if (!d) return;
+  const cles = { acceptee: 'accesAccepte', refusee: 'accesRefuse', bloquee: 'accesBloque' };
+  const cle = cles[d.statut];
+  if (!cle) return;
+  await sendToPerson(d.demandeur, (lang) => ({
+    title: tr(lang, cle, { nom: d.nom }),
+    body: tr(lang, `${cle}Corps`),
+    url: APP_URL,
+    tag: `cmp-acces-${id}`,
+  }));
+}
+
+// Rattrapage : un mail ou une connexion restes en plan (service arrete,
+// SMTP en panne). Silencieux tant que acces.sql n'est pas passe.
+async function rattraperAcces() {
+  if (!client) return;
+  try {
+    const mails = await client.query(
+      `select id from acces_demandes
+        where statut = 'attente' and mail_envoye_at is null and mail_essais < 5
+          and created_at > now() - interval '1 day'`,
+    );
+    for (const r of mails.rows) await envoyerMailAcces(r.id);
+    const jetons = await client.query(
+      `select id from acces_demandes
+        where statut = 'acceptee' and jeton_voulu_at is not null
+          and (jeton_at is null or jeton_at < jeton_voulu_at)`,
+    );
+    for (const r of jetons.rows) await fabriquerJeton(r.id);
+  } catch (e) {
+    if (!/acces_demandes/.test(e.message)) log('acces : rattrapage', e.message);
+  }
+}
+setInterval(() => rattraperAcces().catch(() => {}), 5 * 60 * 1000);
+
 // Une seule connexion à la fois. Sans ce garde-fou, chaque erreur programmait
 // sa propre reprise : après une coupure, plusieurs clients écoutaient « cmp_push »
 // en parallèle et chaque notification partait en double.
@@ -536,6 +716,7 @@ async function connect() {
   await c.query('LISTEN cmp_push');
   client = c;
   log('connecté à Postgres, en écoute sur « cmp_push »');
+  rattraperAcces().catch(() => {});
 }
 
 async function start() {
