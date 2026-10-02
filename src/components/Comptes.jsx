@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useT, langue } from '../i18n/index.js';
-import { lireComptes, basculer, creer, oublier } from '../lib/comptes.js';
+import { lireComptes, basculer, ajouter, creer } from '../lib/comptes.js';
 
 // Les deux petits logos : une maison pour le perso, une mallette pour le pro.
 export const Maison = () => (
@@ -37,8 +37,10 @@ export default function Comptes({ courant = null, ajout = true, onChange, choix 
   const [erreur, setErreur] = useState(null);
   const [occupe, setOccupe] = useState(null);
   // Le formulaire : fermé, 'rejoindre' (le compte pro de son entreprise,
-  // sur simple demande) ou 'creer' (un nouveau compte pro, pour qui monte
-  // son équipe).
+  // sur simple demande), 'connecter' (avec son mot de passe : pour
+  // l'administrateur) ou 'creer' (un nouveau compte pro, pour qui monte son
+  // équipe). Un compte ne quitte le téléphone que par « Se déconnecter » :
+  // pas de lien « retirer », trop facile à toucher par erreur.
   const [formulaire, setFormulaire] = useState(null);
   const [email, setEmail] = useState('');
   const [mdp, setMdp] = useState('');
@@ -83,11 +85,18 @@ export default function Comptes({ courant = null, ajout = true, onChange, choix 
       else fermer();
       return;
     }
-    if (mdp.length < 8) {
+    if (formulaire === 'creer' && mdp.length < 8) {
       setErreur(t('auth.motDePasseCourt'));
       return;
     }
     setOccupe('ajout');
+    if (formulaire === 'connecter') {
+      const r = await ajouter(email, mdp);
+      setOccupe(null);
+      if (r) setErreur(/invalid login/i.test(r) ? t('auth.identifiantsFaux') : r);
+      else fermer();
+      return;
+    }
     const r = await creer(email, mdp);
     setOccupe(null);
     if (r === 'dejaInscrit') {
@@ -132,18 +141,6 @@ export default function Comptes({ courant = null, ajout = true, onChange, choix 
                       : t('comptes.ouvrir')}
                 </span>
               </button>
-              {c.userId !== courant && !choix && (
-                <button
-                  type="button"
-                  className="link compte-oublier"
-                  onClick={() => {
-                    oublier(c.userId);
-                    setComptes(lireComptes());
-                  }}
-                >
-                  {t('comptes.oublier')}
-                </button>
-              )}
             </li>
           ))}
         </ul>
@@ -190,20 +187,20 @@ export default function Comptes({ courant = null, ajout = true, onChange, choix 
             <input
               className="field"
               type="email"
-              autoComplete={formulaire === 'creer' ? 'username' : 'off'}
+              autoComplete={formulaire === 'rejoindre' ? 'off' : 'username'}
               required
               placeholder={formulaire === 'creer' ? t('comptes.emailPro') : t('comptes.emailEntreprise')}
               aria-label={formulaire === 'creer' ? t('comptes.emailPro') : t('comptes.emailEntreprise')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {formulaire === 'creer' && (
+            {formulaire !== 'rejoindre' && (
               <input
                 className="field"
                 type="password"
-                autoComplete="new-password"
+                autoComplete={formulaire === 'creer' ? 'new-password' : 'current-password'}
                 required
-                placeholder={t('auth.motDePassePlaceholder')}
+                placeholder={formulaire === 'creer' ? t('auth.motDePassePlaceholder') : t('auth.motDePasse')}
                 aria-label={t('auth.motDePasse')}
                 value={mdp}
                 onChange={(e) => setMdp(e.target.value)}
@@ -214,22 +211,33 @@ export default function Comptes({ courant = null, ajout = true, onChange, choix 
                 ? t('app.instant')
                 : formulaire === 'creer'
                   ? t('comptes.creerPro')
-                  : t('comptes.envoyerDemande')}
+                  : formulaire === 'connecter'
+                    ? t('comptes.ouvrirPro')
+                    : t('comptes.envoyerDemande')}
             </button>
             <button className="btn btn-block" type="button" onClick={fermer}>
               {t('app.annuler')}
             </button>
-            <p className="authlinks">
-              <button
-                type="button"
-                onClick={() => {
-                  setErreur(null);
-                  setFormulaire(formulaire === 'creer' ? 'rejoindre' : 'creer');
-                }}
-              >
-                {formulaire === 'creer' ? t('comptes.rejoindrePro') : t('comptes.nouveauPro')}
-              </button>
-            </p>
+            {/* Les deux autres façons, en liens. */}
+            {['rejoindre', 'connecter', 'creer']
+              .filter((m) => m !== formulaire)
+              .map((m) => (
+                <p className="authlinks" key={m}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setErreur(null);
+                      setFormulaire(m);
+                    }}
+                  >
+                    {m === 'rejoindre'
+                      ? t('comptes.rejoindrePro')
+                      : m === 'connecter'
+                        ? t('comptes.avecMotDePasse')
+                        : t('comptes.nouveauPro')}
+                  </button>
+                </p>
+              ))}
           </form>
         ) : (
           <button className="btn btn-block" type="button" onClick={() => setFormulaire('rejoindre')}>

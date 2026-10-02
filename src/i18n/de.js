@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'Deine Anfrage an {nom} wurde abgebrochen: zu viele falsche Codes.',
     accesExpiree: 'Deine Anfrage an {nom} ist abgelaufen.',
     plusTard: 'Später',
+    avecMotDePasse: 'Ich habe das Passwort des Geschäftskontos',
   },
   entreprise: {
     ancienCodeResp: 'Bisheriger Code',

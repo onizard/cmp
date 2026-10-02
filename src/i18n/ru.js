@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'Запрос к {nom} отменён: слишком много неверных кодов.',
     accesExpiree: 'Срок запроса к {nom} истёк.',
     plusTard: 'Позже',
+    avecMotDePasse: 'У меня есть пароль рабочего аккаунта',
   },
   entreprise: {
     ancienCodeResp: 'Текущий код',

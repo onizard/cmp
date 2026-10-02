@@ -252,6 +252,7 @@ export default {
     accesBloquee: '{nom} کو تمہاری درخواست منسوخ ہو گئی: بہت زیادہ غلط کوڈ۔',
     accesExpiree: '{nom} کو تمہاری درخواست کی مدت ختم ہو گئی۔',
     plusTard: 'بعد میں',
+    avecMotDePasse: 'میرے پاس کام کے اکاؤنٹ کا پاس ورڈ ہے',
   },
   entreprise: {
     ancienCodeResp: 'موجودہ کوڈ',

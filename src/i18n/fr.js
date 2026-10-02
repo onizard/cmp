@@ -404,6 +404,7 @@ export default {
     accesBloquee: 'Ta demande à {nom} est annulée : trop de codes faux.',
     accesExpiree: 'Ta demande à {nom} a expiré.',
     plusTard: 'Plus tard',
+    avecMotDePasse: 'J’ai le mot de passe du compte pro',
   },
   entreprise: {
     ancienCodeResp: 'Ancien code',
