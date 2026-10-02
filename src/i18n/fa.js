@@ -254,6 +254,7 @@ export default {
     accesBloquee: 'درخواستت به {nom} لغو شد: کدهای اشتباه زیاد.',
     accesExpiree: 'درخواستت به {nom} منقضی شد.',
     plusTard: 'بعداً',
+    avecMotDePasse: 'رمز عبور حساب کاری را دارم',
   },
   entreprise: {
     ancienCodeResp: 'کد فعلی',

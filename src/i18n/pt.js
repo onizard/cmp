@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'O teu pedido a {nom} foi anulado: demasiados códigos errados.',
     accesExpiree: 'O teu pedido a {nom} expirou.',
     plusTard: 'Mais tarde',
+    avecMotDePasse: 'Tenho a palavra-passe da conta profissional',
   },
   entreprise: {
     ancienCodeResp: 'Código atual',

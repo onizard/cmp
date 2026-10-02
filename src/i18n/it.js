@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'La tua richiesta a {nom} è annullata: troppi codici errati.',
     accesExpiree: 'La tua richiesta a {nom} è scaduta.',
     plusTard: 'Più tardi',
+    avecMotDePasse: 'Ho la password dell’account di lavoro',
   },
   entreprise: {
     ancienCodeResp: 'Codice attuale',

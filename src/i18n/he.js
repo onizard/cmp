@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'הבקשה אל {nom} בוטלה: יותר מדי קודים שגויים.',
     accesExpiree: 'הבקשה אל {nom} פגה.',
     plusTard: 'אחר כך',
+    avecMotDePasse: 'יש לי את הסיסמה של חשבון העבודה',
   },
   entreprise: {
     ancienCodeResp: 'הקוד הנוכחי',

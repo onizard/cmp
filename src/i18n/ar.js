@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'أُلغي طلبك إلى {nom}: رموز خاطئة كثيرة.',
     accesExpiree: 'انتهت صلاحية طلبك إلى {nom}.',
     plusTard: 'لاحقًا',
+    avecMotDePasse: 'لدي كلمة مرور حساب العمل',
   },
   entreprise: {
     ancienCodeResp: 'الرمز الحالي',

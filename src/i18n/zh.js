@@ -252,6 +252,7 @@ export default {
     accesBloquee: '你向 {nom} 的申请已取消：错误代码过多。',
     accesExpiree: '你向 {nom} 的申请已过期。',
     plusTard: '稍后',
+    avecMotDePasse: '我有工作账户的密码',
   },
   entreprise: {
     ancienCodeResp: '当前代码',

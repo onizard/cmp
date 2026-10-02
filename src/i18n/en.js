@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'Your request to {nom} was cancelled: too many wrong codes.',
     accesExpiree: 'Your request to {nom} expired.',
     plusTard: 'Later',
+    avecMotDePasse: 'I have the work account’s password',
   },
   entreprise: {
     ancienCodeResp: 'Current code',

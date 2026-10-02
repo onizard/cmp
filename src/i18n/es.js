@@ -252,6 +252,7 @@ export default {
     accesBloquee: 'Tu solicitud a {nom} se anuló: demasiados códigos erróneos.',
     accesExpiree: 'Tu solicitud a {nom} caducó.',
     plusTard: 'Más tarde',
+    avecMotDePasse: 'Tengo la contraseña de la cuenta profesional',
   },
   entreprise: {
     ancienCodeResp: 'Código actual',
