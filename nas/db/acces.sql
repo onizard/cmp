@@ -335,6 +335,9 @@ begin
   if not public.entreprise_responsable(hid, p_responsable) then
     return json_build_object('erreur', 'faux');
   end if;
+  -- Une ligne par personne : qui s'est reliee plusieurs fois (nouveau
+  -- telephone, appli reinstallee) n'apparait qu'une fois, avec sa liaison la
+  -- plus recente ; « Retirer » coupe alors toutes ses liaisons.
   return json_build_object('relies', coalesce((
     select json_agg(json_build_object(
              'id', d.id,
@@ -342,8 +345,10 @@ begin
              'email', d.demandeur_email,
              'depuis', coalesce(d.utilise_at, d.decided_at))
            order by coalesce(d.utilise_at, d.decided_at) desc)
-      from acces_demandes d
-     where d.household_id = hid and d.statut in ('acceptee', 'recuperee')), '[]'::json));
+      from (select distinct on (a.demandeur) a.*
+              from acces_demandes a
+             where a.household_id = hid and a.statut in ('acceptee', 'recuperee')
+             order by a.demandeur, coalesce(a.utilise_at, a.decided_at) desc) d), '[]'::json));
 end
 $$;
 
@@ -355,27 +360,37 @@ set search_path = public
 as $$
 declare
   d acces_demandes;
+  r acces_demandes;
 begin
-  select * into d from acces_demandes where id = p_id for update;
+  select * into d from acces_demandes where id = p_id;
   if not found or not public.is_member(d.household_id) then
     return 'introuvable';
   end if;
   if not public.entreprise_responsable(d.household_id, p_responsable) then
     return 'faux';
   end if;
-  -- La connexion notee par le telephone et, au cas ou il ne l'aurait pas
-  -- notee, toute connexion par lien ouverte pour lui (ni l'administrateur
-  -- ni les tablettes ne se connectent ainsi : eux tapent le mot de passe).
-  delete from auth.sessions s
-   where s.user_id = d.cible
-     and (s.id = d.session_id
-          or (d.jeton_voulu_at is not null
-              and s.created_at between d.jeton_voulu_at - interval '1 minute'
-                                   and coalesce(d.utilise_at, now()) + interval '5 minutes'
-              and exists (select 1 from auth.mfa_amr_claims a
-                           where a.session_id = s.id
-                             and a.authentication_method in ('otp', 'magiclink'))));
-  update acces_demandes set statut = 'retiree', jeton = null, decided_at = now() where id = d.id;
+  -- Toutes les liaisons de cette personne a ce compte, pas seulement la
+  -- ligne touchee : la liste n'en montre qu'une par personne.
+  for r in
+    select * from acces_demandes a
+     where a.household_id = d.household_id and a.demandeur = d.demandeur
+       and (a.id = d.id or a.statut in ('acceptee', 'recuperee'))
+     for update
+  loop
+    -- La connexion notee par le telephone et, au cas ou il ne l'aurait pas
+    -- notee, toute connexion par lien ouverte pour lui (ni l'administrateur
+    -- ni les tablettes ne se connectent ainsi : eux tapent le mot de passe).
+    delete from auth.sessions s
+     where s.user_id = r.cible
+       and (s.id = r.session_id
+            or (r.jeton_voulu_at is not null
+                and s.created_at between r.jeton_voulu_at - interval '1 minute'
+                                     and coalesce(r.utilise_at, now()) + interval '5 minutes'
+                and exists (select 1 from auth.mfa_amr_claims a
+                             where a.session_id = s.id
+                               and a.authentication_method in ('otp', 'magiclink'))));
+    update acces_demandes set statut = 'retiree', jeton = null, decided_at = now() where id = r.id;
+  end loop;
   return 'ok';
 end
 $$;
