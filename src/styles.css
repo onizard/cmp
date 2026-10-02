@@ -3072,6 +3072,18 @@ body,
   min-width: 0;
 }
 
+/* Les codes de l'équipe : des cases texte masquées, pas des mots de passe.
+   Le gestionnaire de mots de passe du téléphone n'y glisse donc plus
+   l'e-mail et le mot de passe du compte, et ne propose plus de les garder. */
+.code-masque {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+.code-masque::placeholder {
+  -webkit-text-security: none;
+}
+
 /* Sur ordinateur (souris, clavier) : on tape son code au clavier. Le pavé
    reste, plus discret, pour qui préfère cliquer. */
 .code-carte:focus {

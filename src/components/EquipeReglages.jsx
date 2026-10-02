@@ -60,10 +60,16 @@ export default function EquipeReglages({ equipe }) {
     <form className="mdp-case equipe-resp" onSubmit={changerResponsable}>
       <input
         id="resp-ancien"
-        className="field"
-        type="password"
+        className="field code-masque"
+        type="text"
         inputMode="numeric"
         autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        data-lpignore="true"
+        data-1p-ignore="true"
+        data-bwignore="true"
         autoFocus
         placeholder={t('entreprise.ancienCodeResp')}
         aria-label={t('entreprise.ancienCodeResp')}
@@ -75,10 +81,16 @@ export default function EquipeReglages({ equipe }) {
       />
       <input
         id="resp-nouveau"
-        className="field"
-        type="password"
+        className="field code-masque"
+        type="text"
         inputMode="numeric"
         autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        data-lpignore="true"
+        data-1p-ignore="true"
+        data-bwignore="true"
         placeholder={t('entreprise.nouveauCodeResp')}
         aria-label={t('entreprise.nouveauCodeResp')}
         value={nouveauResp.nouveau}
@@ -205,10 +217,16 @@ export default function EquipeReglages({ equipe }) {
           <div className="equipe-ligne">
             <input
               id="code-resp"
-              className="field"
-              type="password"
+              className="field code-masque"
+              type="text"
               inputMode="numeric"
               autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              data-lpignore="true"
+              data-1p-ignore="true"
+              data-bwignore="true"
               value={saisie}
               onChange={(e) => setSaisie(e.target.value.replace(/\D/g, '').slice(0, 8))}
             />
@@ -255,10 +273,16 @@ export default function EquipeReglages({ equipe }) {
             )}
             <div className="equipe-actions">
               <input
-                className="field"
-                type="password"
+                className="field code-masque"
+                type="text"
                 inputMode="numeric"
                 autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-bwignore="true"
                 placeholder={t('entreprise.nouveauCode')}
                 aria-label={`${t('entreprise.nouveauCode')} — ${m.nom}`}
                 value={nouveauCode[m.id] || ''}
@@ -289,7 +313,11 @@ export default function EquipeReglages({ equipe }) {
           <input
             className="field"
             type="text"
+            name="cmp-nouveau-membre"
             autoComplete="off"
+            data-lpignore="true"
+            data-1p-ignore="true"
+            data-bwignore="true"
             maxLength={40}
             placeholder={t('entreprise.prenom')}
             aria-label={t('entreprise.prenom')}
@@ -297,10 +325,16 @@ export default function EquipeReglages({ equipe }) {
             onChange={(e) => setNom(e.target.value)}
           />
           <input
-            className="field equipe-code"
-            type="password"
+            className="field equipe-code code-masque"
+            type="text"
             inputMode="numeric"
             autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            data-lpignore="true"
+            data-1p-ignore="true"
+            data-bwignore="true"
             placeholder={t('entreprise.code')}
             aria-label={t('entreprise.code')}
             value={code}
