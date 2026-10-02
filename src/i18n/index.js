@@ -24,6 +24,8 @@ import ar from './ar.js';
 import fa from './fa.js';
 import he from './he.js';
 import ur from './ur.js';
+import ja from './ja.js';
+import ko from './ko.js';
 
 export const LANGUES = [
   { code: 'fr', nom: 'Français', dir: 'ltr', dict: fr },
@@ -34,6 +36,8 @@ export const LANGUES = [
   { code: 'it', nom: 'Italiano', dir: 'ltr', dict: it },
   { code: 'ru', nom: 'Русский', dir: 'ltr', dict: ru },
   { code: 'zh', nom: '中文', dir: 'ltr', dict: zh },
+  { code: 'ja', nom: '日本語', dir: 'ltr', dict: ja },
+  { code: 'ko', nom: '한국어', dir: 'ltr', dict: ko },
   { code: 'ar', nom: 'العربية', dir: 'rtl', dict: ar },
   { code: 'fa', nom: 'فارسی', dir: 'rtl', dict: fa },
   { code: 'he', nom: 'עברית', dir: 'rtl', dict: he },

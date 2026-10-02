@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LANGUES, langue, definirLangue, useT } from '../i18n/index.js';
 
 /**
@@ -11,6 +11,7 @@ export default function LangPicker() {
   const [ouvert, setOuvert] = useState(false);
   const courante = langue();
   const active = LANGUES.find((l) => l.code === courante) || LANGUES[0];
+  const choisie = useRef(null);
 
   // Échap referme, comme un toucher à côté.
   useEffect(() => {
@@ -19,6 +20,8 @@ export default function LangPicker() {
       if (e.key === 'Escape') setOuvert(false);
     };
     window.addEventListener('keydown', touche);
+    // La liste défile : la langue en cours reste visible à l'ouverture.
+    choisie.current?.scrollIntoView?.({ block: 'nearest' });
     return () => window.removeEventListener('keydown', touche);
   }, [ouvert]);
 
@@ -50,6 +53,7 @@ export default function LangPicker() {
                 <li key={l.code}>
                   <button
                     type="button"
+                    ref={l.code === courante ? choisie : undefined}
                     lang={l.code}
                     dir={l.dir}
                     aria-pressed={l.code === courante}
