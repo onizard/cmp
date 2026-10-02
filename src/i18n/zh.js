@@ -254,6 +254,7 @@ export default {
     plusTard: '稍后',
   },
   entreprise: {
+    ancienCodeResp: '当前负责人代码',
     supprimer: '删除',
     supprimerOui: '确认删除',
     motDePasseAdmin: '管理员密码',

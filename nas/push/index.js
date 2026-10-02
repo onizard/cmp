@@ -40,7 +40,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.16';
+const VERSION = 'v4.17';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -542,7 +542,7 @@ function mailAcces(d) {
     nom: `<b>${echappe(d.nom)}</b>`,
   });
   const degrade = 'linear-gradient(90deg,#f28b97,#b58ad6,#8fa2ea)';
-  const dir = ['ar', 'he', 'fa'].includes(lang) ? 'rtl' : 'ltr';
+  const dir = ['ar', 'he', 'fa', 'ur'].includes(lang) ? 'rtl' : 'ltr';
   const html = `<!doctype html><html dir="${dir}"><body style="margin:0;background:#f6f1ea;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1c2a4a">
 <div style="max-width:480px;margin:20px auto;background:#fffdf9;border:1px solid #ebdfcf;border-radius:20px;overflow:hidden">
 <div style="height:6px;background:#b58ad6;background:${degrade}"></div>

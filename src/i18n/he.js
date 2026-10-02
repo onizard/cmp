@@ -254,6 +254,7 @@ export default {
     plusTard: 'אחר כך',
   },
   entreprise: {
+    ancienCodeResp: 'קוד האחראי/ת הנוכחי',
     supprimer: 'מחיקה',
     supprimerOui: 'כן, למחוק',
     motDePasseAdmin: 'סיסמת המנהל/ת',
