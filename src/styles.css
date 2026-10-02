@@ -1589,33 +1589,46 @@ body,
   direction: ltr;
 }
 
-/* --- Choix de la langue --- */
+/* --- Choix de la langue : un bouton, puis une petite fenêtre --- */
 
-.langues {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.lang-bouton {
+  margin-top: 4px;
 }
 
-.langue {
-  flex: 1 1 auto;
-  min-width: 88px;
+.lang-carte {
+  display: flex;
+  flex-direction: column;
+  max-height: min(80vh, 640px);
+}
+
+.lang-liste {
+  list-style: none;
+  margin: 14px 0 12px;
+  padding: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 6px;
+}
+
+.lang-choix {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--display);
   font-weight: 600;
-  font-size: 14px;
-  color: var(--ink);
-  background: var(--paper-deep);
-  border: 1.5px solid transparent;
-  border-radius: 12px;
-  padding: 10px 8px;
-  min-height: 42px;
+  font-size: 16px;
+  text-align: start;
   cursor: pointer;
 }
 
-.langue.actif {
-  /* Seule sur sa ligne, toute la largeur : sa place ne depend pas du nombre
-     de langues ni de la longueur des noms. */
-  flex: 1 0 100%;
+.lang-choix.actif {
   background: var(--grad);
   border-color: transparent;
   color: #fff;
