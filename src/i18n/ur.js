@@ -254,11 +254,11 @@ export default {
     plusTard: 'بعد میں',
   },
   entreprise: {
-    ancienCodeResp: 'موجودہ ذمہ دار کوڈ',
+    ancienCodeResp: 'موجودہ کوڈ',
     supprimer: 'حذف کرو',
     supprimerOui: 'ہاں، حذف کرو',
     motDePasseAdmin: 'منتظم کا پاس ورڈ',
-    nouveauCodeResp: 'نیا ذمہ دار کوڈ (4 سے 8 ہندسے)',
+    nouveauCodeResp: 'نیا کوڈ (4 سے 8 ہندسے)',
     changerCodeResp: 'ذمہ دار کوڈ بدلو',
     codeRespChange: 'ذمہ دار کوڈ بدل گیا',
     changerMotDePasse: 'منتظم کا پاس ورڈ بدلو',

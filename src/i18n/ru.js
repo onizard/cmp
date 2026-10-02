@@ -254,11 +254,11 @@ export default {
     plusTard: 'Позже',
   },
   entreprise: {
-    ancienCodeResp: 'Текущий код руководителя',
+    ancienCodeResp: 'Текущий код',
     supprimer: 'Удалить',
     supprimerOui: 'Да, удалить',
     motDePasseAdmin: 'Пароль администратора',
-    nouveauCodeResp: 'Новый код руководителя (4–8 цифр)',
+    nouveauCodeResp: 'Новый код (4–8 цифр)',
     changerCodeResp: 'Сменить код руководителя',
     codeRespChange: 'Код руководителя изменён',
     changerMotDePasse: 'Сменить пароль администратора',

@@ -254,11 +254,11 @@ export default {
     plusTard: 'لاحقًا',
   },
   entreprise: {
-    ancienCodeResp: 'رمز المسؤول الحالي',
+    ancienCodeResp: 'الرمز الحالي',
     supprimer: 'حذف',
     supprimerOui: 'نعم، احذف',
     motDePasseAdmin: 'كلمة مرور المسؤول',
-    nouveauCodeResp: 'رمز المسؤول الجديد (من 4 إلى 8 أرقام)',
+    nouveauCodeResp: 'الرمز الجديد (من 4 إلى 8 أرقام)',
     changerCodeResp: 'تغيير رمز المسؤول',
     codeRespChange: 'تم تغيير رمز المسؤول',
     changerMotDePasse: 'تغيير كلمة مرور المسؤول',
