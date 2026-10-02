@@ -9,9 +9,12 @@
 --     recu par mail (« Mot de passe oublie ») ; dans l'heure qui suit, il en
 --     choisit un nouveau sans l'ancien ;
 --   * compte pro : le code responsable remplace le mot de passe oublie
---     (cmp_entreprise_mot_de_passe, acces.sql), et le mot de passe permet de
---     changer le code responsable oublie. Un compte pro n'a pas le secours du
---     lien : ses equipiers y sont connectes par un lien, eux aussi.
+--     (cmp_entreprise_mot_de_passe, acces.sql). Le code responsable, lui, se
+--     change avec l'ancien (cmp_entreprise_code_responsable_changer) ; le
+--     mot de passe peut encore le remplacer s'il est oublie
+--     (cmp_entreprise_code_responsable, que l'appli ne propose plus). Un
+--     compte pro n'a pas le secours du lien : ses equipiers y sont
+--     connectes par un lien, eux aussi.
 --
 -- Cinq essais faux en quinze minutes bloquent un moment : on ne devine pas
 -- un mot de passe en les essayant tous.
@@ -145,6 +148,43 @@ begin
 end
 $$;
 
+-- Compte pro : un nouveau code responsable, avec l'ancien (celui qu'on
+-- tape déjà pour gérer l'équipe). Un code faux compte comme un essai ; dix
+-- en cinq minutes bloquent un moment. Renvoie 'ok', 'faux', 'format' ou
+-- 'pas-entreprise'.
+create or replace function public.cmp_entreprise_code_responsable_changer(p_ancien text, p_nouveau text)
+returns text
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  moi constant uuid := auth.uid();
+  hid uuid;
+begin
+  if moi is null then
+    raise exception using errcode = '42501', message = 'Connexion requise.';
+  end if;
+  select m.household_id into hid
+    from members m join households h on h.id = m.household_id and h.entreprise
+   where m.user_id = moi
+   limit 1;
+  if hid is null then
+    return 'pas-entreprise';
+  end if;
+  if coalesce(p_nouveau, '') !~ '^[0-9]{4,8}$' then
+    return 'format';
+  end if;
+  if not public.entreprise_responsable(hid, p_ancien) then
+    return 'faux';
+  end if;
+  update entreprise_secrets
+     set code_responsable = crypt(p_nouveau, gen_salt('bf'))
+   where household_id = hid;
+  return 'ok';
+end
+$$;
+
 -- La garde : un mot de passe ne change que par les fonctions ci-dessus (ou
 -- par cmp_entreprise_mot_de_passe, avec le code responsable).
 create or replace function public.garde_mot_de_passe()
@@ -177,6 +217,8 @@ revoke all on function public.cmp_mot_de_passe(text, text) from public;
 revoke all on function public.cmp_entreprise_code_responsable(text, text) from public;
 grant execute on function public.cmp_mot_de_passe(text, text) to authenticated;
 grant execute on function public.cmp_entreprise_code_responsable(text, text) to authenticated;
+revoke all on function public.cmp_entreprise_code_responsable_changer(text, text) from public;
+grant execute on function public.cmp_entreprise_code_responsable_changer(text, text) to authenticated;
 
 notify pgrst, 'reload schema';
 select 'mot de passe ok' as etat;

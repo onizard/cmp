@@ -256,10 +256,11 @@ export default {
     plusTard: 'بعداً',
   },
   entreprise: {
+    ancienCodeResp: 'کد فعلی',
     supprimer: 'حذف',
     supprimerOui: 'بله، حذف شود',
     motDePasseAdmin: 'رمز عبور مدیر',
-    nouveauCodeResp: 'کد مسئول تازه (۴ تا ۸ رقم)',
+    nouveauCodeResp: 'کد تازه (۴ تا ۸ رقم)',
     changerCodeResp: 'تغییر کد مسئول',
     codeRespChange: 'کد مسئول تغییر کرد',
     changerMotDePasse: 'تغییر رمز عبور مدیر',

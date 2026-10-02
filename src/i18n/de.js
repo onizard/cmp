@@ -254,10 +254,11 @@ export default {
     plusTard: 'Später',
   },
   entreprise: {
+    ancienCodeResp: 'Bisheriger Code',
     supprimer: 'Löschen',
     supprimerOui: 'Ja, löschen',
     motDePasseAdmin: 'Admin-Passwort',
-    nouveauCodeResp: 'Neuer Leitungscode (4 bis 8 Ziffern)',
+    nouveauCodeResp: 'Neuer Code (4 bis 8 Ziffern)',
     changerCodeResp: 'Leitungscode ändern',
     codeRespChange: 'Leitungscode geändert',
     changerMotDePasse: 'Admin-Passwort ändern',

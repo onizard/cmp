@@ -27,32 +27,25 @@ export default function EquipeReglages({ equipe }) {
   const [aSupprimer, setASupprimer] = useState(null);
   const [relies, setRelies] = useState(null);
   const [aRetirer, setARetirer] = useState(null);
-  // Un nouveau code responsable : avec le mot de passe du compte, que seul
-  // l'administrateur connaît. Utile aussi quand on a oublié l'ancien code.
+  // Un nouveau code responsable : l'ancien, puis le nouveau, une seule fois.
   const [nouveauResp, setNouveauResp] = useState(null);
   const [respChange, setRespChange] = useState(false);
 
   const changerResponsable = async (e) => {
     e.preventDefault();
-    const { motDePasse, code1, code2 } = nouveauResp;
-    if (code1 !== code2) {
-      setErreur(t('entreprise.codesDifferents'));
-      return;
-    }
+    const { ancien, nouveau } = nouveauResp;
     setOccupe(true);
-    const m = await equipe.changerCodeResponsable(motDePasse, code1);
+    const m = await equipe.changerCodeResponsable(ancien, nouveau);
     setOccupe(false);
     if (m) {
       setErreur(
         m === 'faux'
-          ? t('compte.actuelFaux')
-          : m === 'bloque'
-            ? t('compte.tropEssais')
-            : m === 'format'
-              ? t('entreprise.codeRespFormat')
-              : m,
+          ? t('entreprise.codeRespFaux')
+          : m === 'format'
+            ? t('entreprise.codeRespFormat')
+            : m,
       );
-      setNouveauResp({ ...nouveauResp, motDePasse: '' });
+      if (m === 'faux') setNouveauResp({ ...nouveauResp, ancien: '' });
       return;
     }
     setErreur(null);
@@ -65,44 +58,40 @@ export default function EquipeReglages({ equipe }) {
   const chiffres8 = (v) => v.replace(/\D/g, '').slice(0, 8);
   const formulaireResponsable = nouveauResp && (
     <form className="mdp-case equipe-resp" onSubmit={changerResponsable}>
-      <label className="field-label" htmlFor="resp-mdp">{t('entreprise.motDePasseAdmin')}</label>
       <input
-        id="resp-mdp"
+        id="resp-ancien"
         className="field"
         type="password"
-        autoComplete="current-password"
+        inputMode="numeric"
+        autoComplete="off"
         autoFocus
-        value={nouveauResp.motDePasse}
+        placeholder={t('entreprise.ancienCodeResp')}
+        aria-label={t('entreprise.ancienCodeResp')}
+        value={nouveauResp.ancien}
         onChange={(e) => {
           setErreur(null);
-          setNouveauResp({ ...nouveauResp, motDePasse: e.target.value });
+          setNouveauResp({ ...nouveauResp, ancien: chiffres8(e.target.value) });
         }}
       />
-      <label className="field-label" htmlFor="resp-1">{t('entreprise.nouveauCodeResp')}</label>
       <input
-        id="resp-1"
+        id="resp-nouveau"
         className="field"
         type="password"
         inputMode="numeric"
         autoComplete="off"
-        value={nouveauResp.code1}
-        onChange={(e) => setNouveauResp({ ...nouveauResp, code1: chiffres8(e.target.value) })}
-      />
-      <label className="field-label" htmlFor="resp-2">{t('entreprise.codeRespConfirm')}</label>
-      <input
-        id="resp-2"
-        className="field"
-        type="password"
-        inputMode="numeric"
-        autoComplete="off"
-        value={nouveauResp.code2}
-        onChange={(e) => setNouveauResp({ ...nouveauResp, code2: chiffres8(e.target.value) })}
+        placeholder={t('entreprise.nouveauCodeResp')}
+        aria-label={t('entreprise.nouveauCodeResp')}
+        value={nouveauResp.nouveau}
+        onChange={(e) => {
+          setErreur(null);
+          setNouveauResp({ ...nouveauResp, nouveau: chiffres8(e.target.value) });
+        }}
       />
       <div className="mdp-boutons">
         <button
           className="btn btn-accent"
           type="submit"
-          disabled={occupe || !nouveauResp.motDePasse || nouveauResp.code1.length < 4 || !nouveauResp.code2}
+          disabled={occupe || nouveauResp.ancien.length < 4 || nouveauResp.nouveau.length < 4}
         >
           {t('compte.valider')}
         </button>
@@ -120,12 +109,15 @@ export default function EquipeReglages({ equipe }) {
     </form>
   );
 
+  // Un bouton ; les deux cases n'apparaissent qu'en le touchant.
   const lienResponsable = !nouveauResp && (
-    <p className="authlinks equipe-resp-lien">
-      <button type="button" onClick={() => setNouveauResp({ motDePasse: '', code1: '', code2: '' })}>
-        {respChange ? `✓ ${t('entreprise.codeRespChange')}` : t('entreprise.changerCodeResp')}
-      </button>
-    </p>
+    <button
+      className="btn btn-block equipe-resp-bouton"
+      type="button"
+      onClick={() => setNouveauResp({ ancien: '', nouveau: '' })}
+    >
+      {respChange ? `✓ ${t('entreprise.codeRespChange')}` : t('entreprise.changerCodeResp')}
+    </button>
   );
 
   useEffect(() => {
