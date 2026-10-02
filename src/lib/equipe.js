@@ -107,12 +107,12 @@ export function useEquipe(householdId, actif) {
   }, []);
 
   /**
-   * Un nouveau code responsable, avec le mot de passe du compte (vérifié par
-   * la base). Renvoie null, 'faux', 'bloque', 'format' ou un message.
+   * Un nouveau code responsable, avec l'ancien (vérifié par la base, qui
+   * compte les essais). Renvoie null, 'faux', 'format' ou un message.
    */
-  const changerCodeResponsable = useCallback(async (motDePasse, nouveau) => {
-    const { data, error } = await supabase.rpc('cmp_entreprise_code_responsable', {
-      p_actuel: motDePasse,
+  const changerCodeResponsable = useCallback(async (ancien, nouveau) => {
+    const { data, error } = await supabase.rpc('cmp_entreprise_code_responsable_changer', {
+      p_ancien: ancien,
       p_nouveau: nouveau,
     });
     if (error) return error.message;

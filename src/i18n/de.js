@@ -254,6 +254,7 @@ export default {
     plusTard: 'Später',
   },
   entreprise: {
+    ancienCodeResp: 'Bisheriger Leitungscode',
     supprimer: 'Löschen',
     supprimerOui: 'Ja, löschen',
     motDePasseAdmin: 'Admin-Passwort',

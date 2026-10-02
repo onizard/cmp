@@ -4,10 +4,11 @@
 // retombe sur le français quand une traduction manque — jamais sur une clé
 // nue affichée à l'écran.
 //
-// Les langues qui s'écrivent de droite à gauche (hébreu, arabe) demandent plus
-// qu'une traduction : la mise en page entière se retourne. C'est `dir` qui le
-// pilote, posé sur <html>, et la feuille de style s'appuie sur des propriétés
-// logiques (inline-start / inline-end) plutôt que sur gauche et droite.
+// Les langues qui s'écrivent de droite à gauche (hébreu, arabe, persan,
+// ourdou) demandent plus qu'une traduction : la mise en page entière se
+// retourne. C'est `dir` qui le pilote, posé sur <html>, et la feuille de
+// style s'appuie sur des propriétés logiques (inline-start / inline-end)
+// plutôt que sur gauche et droite.
 
 import { useEffect, useState } from 'react';
 
@@ -22,6 +23,7 @@ import zh from './zh.js';
 import ar from './ar.js';
 import fa from './fa.js';
 import he from './he.js';
+import ur from './ur.js';
 
 export const LANGUES = [
   { code: 'fr', nom: 'Français', dir: 'ltr', dict: fr },
@@ -35,6 +37,7 @@ export const LANGUES = [
   { code: 'ar', nom: 'العربية', dir: 'rtl', dict: ar },
   { code: 'fa', nom: 'فارسی', dir: 'rtl', dict: fa },
   { code: 'he', nom: 'עברית', dir: 'rtl', dict: he },
+  { code: 'ur', nom: 'اردو', dir: 'rtl', dict: ur },
 ];
 
 // Le dictionnaire de référence est le français, mais quelqu'un dont la langue

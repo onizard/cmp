@@ -256,6 +256,7 @@ export default {
     plusTard: 'بعداً',
   },
   entreprise: {
+    ancienCodeResp: 'کد مسئول فعلی',
     supprimer: 'حذف',
     supprimerOui: 'بله، حذف شود',
     motDePasseAdmin: 'رمز عبور مدیر',
