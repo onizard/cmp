@@ -254,11 +254,11 @@ export default {
     plusTard: '稍后',
   },
   entreprise: {
-    ancienCodeResp: '当前负责人代码',
+    ancienCodeResp: '当前代码',
     supprimer: '删除',
     supprimerOui: '确认删除',
     motDePasseAdmin: '管理员密码',
-    nouveauCodeResp: '新的负责人代码（4 到 8 位数字）',
+    nouveauCodeResp: '新代码（4 到 8 位数字）',
     changerCodeResp: '修改负责人代码',
     codeRespChange: '负责人代码已修改',
     changerMotDePasse: '修改管理员密码',

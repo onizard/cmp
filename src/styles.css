@@ -3383,3 +3383,7 @@ body,
   color: var(--danger);
   font-weight: 700;
 }
+
+.equipe-resp-bouton {
+  margin-top: 12px;
+}

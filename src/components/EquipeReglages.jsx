@@ -58,7 +58,6 @@ export default function EquipeReglages({ equipe }) {
   const chiffres8 = (v) => v.replace(/\D/g, '').slice(0, 8);
   const formulaireResponsable = nouveauResp && (
     <form className="mdp-case equipe-resp" onSubmit={changerResponsable}>
-      <label className="field-label" htmlFor="resp-ancien">{t('entreprise.ancienCodeResp')}</label>
       <input
         id="resp-ancien"
         className="field"
@@ -66,19 +65,22 @@ export default function EquipeReglages({ equipe }) {
         inputMode="numeric"
         autoComplete="off"
         autoFocus
+        placeholder={t('entreprise.ancienCodeResp')}
+        aria-label={t('entreprise.ancienCodeResp')}
         value={nouveauResp.ancien}
         onChange={(e) => {
           setErreur(null);
           setNouveauResp({ ...nouveauResp, ancien: chiffres8(e.target.value) });
         }}
       />
-      <label className="field-label" htmlFor="resp-nouveau">{t('entreprise.nouveauCodeResp')}</label>
       <input
         id="resp-nouveau"
         className="field"
         type="password"
         inputMode="numeric"
         autoComplete="off"
+        placeholder={t('entreprise.nouveauCodeResp')}
+        aria-label={t('entreprise.nouveauCodeResp')}
         value={nouveauResp.nouveau}
         onChange={(e) => {
           setErreur(null);
@@ -107,12 +109,15 @@ export default function EquipeReglages({ equipe }) {
     </form>
   );
 
+  // Un bouton ; les deux cases n'apparaissent qu'en le touchant.
   const lienResponsable = !nouveauResp && (
-    <p className="authlinks equipe-resp-lien">
-      <button type="button" onClick={() => setNouveauResp({ ancien: '', nouveau: '' })}>
-        {respChange ? `✓ ${t('entreprise.codeRespChange')}` : t('entreprise.changerCodeResp')}
-      </button>
-    </p>
+    <button
+      className="btn btn-block equipe-resp-bouton"
+      type="button"
+      onClick={() => setNouveauResp({ ancien: '', nouveau: '' })}
+    >
+      {respChange ? `✓ ${t('entreprise.codeRespChange')}` : t('entreprise.changerCodeResp')}
+    </button>
   );
 
   useEffect(() => {
