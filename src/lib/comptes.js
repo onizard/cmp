@@ -74,7 +74,7 @@ export async function basculer(userId) {
  * sans fermer le compte en cours : client jetable, on range la connexion,
  * puis on bascule dessus. Renvoie null, ou le message d'erreur.
  */
-export async function ajouter(email, motDePasse) {
+export async function ajouter(email, motDePasse, type = 'pro') {
   const c = clientSansMemoire();
   if (!c) return 'indisponible';
   const { data, error } = await c.auth.signInWithPassword({
@@ -82,16 +82,16 @@ export async function ajouter(email, motDePasse) {
     password: motDePasse,
   });
   if (error || !data.session) return error ? error.message : 'indisponible';
-  memoriser({ session: data.session, type: 'pro' });
+  memoriser({ session: data.session, type });
   return basculer(data.session.user.id);
 }
 
 /**
- * Crée un compte pro depuis un compte perso, toujours sans fermer ce dernier.
+ * Crée un compte (pro par défaut) sans fermer celui en cours, toujours sans fermer ce dernier.
  * Renvoie null (le nouveau compte est ouvert), 'dejaInscrit' ou
  * 'confirmation' (le serveur attend un clic dans le mail), ou un message.
  */
-export async function creer(email, motDePasse) {
+export async function creer(email, motDePasse, type = 'pro') {
   const c = clientSansMemoire();
   if (!c) return 'indisponible';
   const { data, error } = await c.auth.signUp({
@@ -100,6 +100,6 @@ export async function creer(email, motDePasse) {
   });
   if (error) return /already registered/i.test(error.message) ? 'dejaInscrit' : error.message;
   if (!data.session) return 'confirmation';
-  memoriser({ session: data.session, type: 'pro' });
+  memoriser({ session: data.session, type });
   return basculer(data.session.user.id);
 }

@@ -3400,3 +3400,20 @@ body,
 .equipe-resp-bouton {
   margin-top: 12px;
 }
+
+/* Mes comptes : « Retirer » demande confirmation, sur place. */
+.compte-retirer-sur {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 6px 8px 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.compte-retirer-sur .link {
+  min-height: 0;
+  padding: 4px 0;
+  font-size: 13.5px;
+}
