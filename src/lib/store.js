@@ -26,6 +26,8 @@ const fromRow = (r) => ({
   reservePar: r.reserve_par ?? null,
   reserveDebut: r.reserve_debut ?? null,
   reserveFin: r.reserve_fin ?? null,
+  // Mode entreprise : le membre de l'équipe qui a réservé.
+  reserveOp: r.reserve_op ?? null,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -582,6 +584,48 @@ export function useTasks(householdId, userId) {
     [appelOp, applyLocal],
   );
 
+  /**
+   * Mode entreprise : « je m'en occupe » au nom du membre qui donne son code.
+   * La base applique les règles et renvoie un refus plutôt qu'une erreur :
+   * { refus: 'autre' | 'aujourdhui' | 'uneAutre' | 'fini', qui, fin, tache }.
+   */
+  const reserverOp = useCallback(
+    async (task, code) => {
+      if (!supabase || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+        return { erreur: 'horsLigne' };
+      }
+      const { data, error } = await supabase.rpc('cmp_op_reserver', { p_id: task.id, p_code: code });
+      if (error) return { erreur: error.message };
+      if (!data || !data.op) return { erreur: 'code' };
+      if (data.refus) return { op: data.op, refus: data.refus, qui: data.qui, fin: data.fin, tache: data.tache };
+      const debut = Date.now();
+      applyLocal(task.id, {
+        reservePar: userId ?? null,
+        reserveOp: data.op,
+        reserveDebut: new Date(debut).toISOString(),
+        reserveFin: new Date(debut + RESERVATION_MS).toISOString(),
+      });
+      return { op: data.op };
+    },
+    [applyLocal, userId],
+  );
+
+  /** Mode entreprise : libère avant l'heure, seulement par qui a réservé. */
+  const libererOp = useCallback(
+    async (task, code) => {
+      if (!supabase || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+        return { erreur: 'horsLigne' };
+      }
+      const { data, error } = await supabase.rpc('cmp_op_liberer', { p_id: task.id, p_code: code });
+      if (error) return { erreur: error.message };
+      if (!data || !data.op) return { erreur: 'code' };
+      if (data.refus) return { op: data.op, refus: data.refus };
+      applyLocal(task.id, { reserveFin: nowIso() });
+      return { op: data.op };
+    },
+    [applyLocal],
+  );
+
   /** Annule sa propre réservation : la tâche redevient libre pour l'autre. */
   const annulerReservation = useCallback(
     (task) => {
@@ -615,5 +659,7 @@ export function useTasks(householdId, userId) {
     creerOp,
     cocherOp,
     modifierOp,
+    reserverOp,
+    libererOp,
   };
 }
