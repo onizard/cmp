@@ -3,7 +3,7 @@ import { useT, langue } from '../i18n/index.js';
 import { carriedFromLabel } from '../lib/visibility.js';
 import { buildDue, splitDue, dueFull, dueLevel } from '../lib/deadline.js';
 import DueBadge, { Chrono } from './DueBadge.jsx';
-import { ReserveBadge, ReserveActions, useMaintenant } from './Reservation.jsx';
+import { ReserveBadge, ReserveActions, ReserveActionsOp, useMaintenant } from './Reservation.jsx';
 import { reservationActive } from '../lib/reservation.js';
 
 export default function TaskItem({ task, month, currentMonth, store, onCombo, names = {}, eclat = false, signer = null, noms = {} }) {
@@ -77,6 +77,15 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, na
         task.text,
         async (code) => {
           const r = await store.cocherOp(task, code, currentMonth);
+          // Réservée par un collègue : lui seul la coche tant que l'heure court.
+          if (r.erreur && r.erreur.includes('cmp:reservee')) {
+            return {
+              erreur: t('reserver.bloqueeEquipe', {
+                qui: noms[task.reserveOp] || '?',
+                h: new Date(task.reserveFin).toLocaleTimeString(langue(), { hour: '2-digit', minute: '2-digit' }),
+              }),
+            };
+          }
           if (!r.erreur && r.combo > 1) onCombo(r.combo);
           return r;
         },
@@ -155,7 +164,7 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, na
             {carried && <span className="carried">{carried}</span>}
             <span className="task-badges">
               {signature && <span className="op-signature">{signature}</span>}
-              <ReserveBadge task={task} userId={store.userId} names={names} />
+              <ReserveBadge task={task} userId={store.userId} names={names} noms={entreprise ? noms : null} />
               <DueBadge dueAt={task.dueAt} done={task.done} />
             </span>
           </button>
@@ -257,7 +266,15 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, na
           {/* D'abord « je m'en occupe », puis l'échéance seule sur sa ligne,
               puis modifier et supprimer côte à côte : les deux gestes qui
               touchent à la tâche elle-même. */}
-          {!entreprise && (
+          {entreprise ? (
+            <ReserveActionsOp
+              task={task}
+              store={store}
+              noms={noms}
+              signer={signer}
+              onFait={() => setOpen(false)}
+            />
+          ) : (
             <ReserveActions
               task={task}
               store={store}

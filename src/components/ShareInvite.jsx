@@ -7,16 +7,10 @@ import {
   messageDecouverte,
 } from '../lib/invite.js';
 
-export default function ShareInvite({ code, prenom }) {
-  const t = useT();
+// Un seul bouton : la feuille du téléphone mène déjà à WhatsApp, aux SMS,
+// au mail, au presse-papier. Là où elle n'existe pas, on copie.
+function usePartage() {
   const [copie, setCopie] = useState(null);
-
-  const origine = origineWeb();
-  const lienFoyer = lienDInvitation(origine, code);
-  const lienNu = origine ? `${origine.replace(/\/+$/, '')}/` : null;
-
-  // Un seul bouton : la feuille du téléphone mène déjà à WhatsApp, aux SMS,
-  // au mail, au presse-papier. Là où elle n'existe pas, on copie.
   const partager = async (quoi, texte, url) => {
     if (url === null) return;
     const charge = url
@@ -38,6 +32,36 @@ export default function ShareInvite({ code, prenom }) {
       setCopie(null);
     }
   };
+  return { copie, setCopie, partager };
+}
+
+const lienDeLAppli = () => {
+  const origine = origineWeb();
+  return origine ? `${origine.replace(/\/+$/, '')}/` : null;
+};
+
+/** Le bouton « Partager l'appli » seul : pour un compte entreprise, en bas
+ *  des paramètres, sans invitation ni code foyer. */
+export function PartagerAppli() {
+  const t = useT();
+  const { copie, partager } = usePartage();
+  return (
+    <button
+      className="btn btn-block partager-appli"
+      type="button"
+      onClick={() => partager('appli', messageDecouverte(), lienDeLAppli())}
+    >
+      {copie === 'appli' ? t('partage.copie') : t('partage.partagerAppli')}
+    </button>
+  );
+}
+
+export default function ShareInvite({ code, prenom }) {
+  const t = useT();
+  const { copie, setCopie, partager } = usePartage();
+
+  const origine = origineWeb();
+  const lienFoyer = lienDInvitation(origine, code);
 
   // « Code foyer : … » : un toucher le copie, tel quel ; « Code copié »
   // s'affiche alors juste en dessous.
@@ -67,7 +91,7 @@ export default function ShareInvite({ code, prenom }) {
       <button
         className="btn btn-block"
         type="button"
-        onClick={() => partager('appli', messageDecouverte(), lienNu)}
+        onClick={() => partager('appli', messageDecouverte(), lienDeLAppli())}
       >
         {copie === 'appli' ? t('partage.copie') : t('partage.partagerAppli')}
       </button>
