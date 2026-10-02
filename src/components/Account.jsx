@@ -13,7 +13,7 @@ import {
   wantsEvening,
 } from '../lib/push.js';
 import InstallHint from './InstallHint.jsx';
-import ShareInvite from './ShareInvite.jsx';
+import ShareInvite, { PartagerAppli } from './ShareInvite.jsx';
 import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
 import { familleDOffice } from '../lib/famille.js';
@@ -350,12 +350,16 @@ export default function Account({ account, rewards = null, equipe = null, acces 
         </div>
       </section>
 
-      <section className="setgroup">
-        <h2 className="setlabel">{t('partage.titre')}</h2>
-        <div className="setcard">
-          <ShareInvite code={code} prenom={account.displayName} />
-        </div>
-      </section>
+      {/* Entreprise : ni invitation ni code foyer (l'équipe passe par le
+          responsable) ; « Partager l'appli » reste, seul, en bas. */}
+      {!equipe && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('partage.titre')}</h2>
+          <div className="setcard">
+            <ShareInvite code={code} prenom={account.displayName} />
+          </div>
+        </section>
+      )}
 
       {/* Perso, pro… : les comptes rangés sur cet appareil, d'un toucher.
           Chacun se retire après confirmation ; un bouton ajoute celui qui
@@ -414,6 +418,8 @@ export default function Account({ account, rewards = null, equipe = null, acces 
           </ul>
         </div>
       </section>
+
+      {equipe && <PartagerAppli />}
 
       <LangPicker />
 
