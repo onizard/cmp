@@ -156,12 +156,20 @@ export default function Account({ account, rewards = null, equipe = null, acces 
     setNotifBusy(false);
   };
 
+  // Compte entreprise : supprimer efface toute l'équipe, il faut le code
+  // responsable (vérifié par la base).
+  const [codeSuppr, setCodeSuppr] = useState('');
   const supprimer = async () => {
     setSuppressionErreur(null);
     setSuppression(true);
-    const err = await account.supprimerLeCompte();
+    const err = await account.supprimerLeCompte(equipe ? codeSuppr : null);
     if (!err) return; // la session se ferme, l'application repart toute seule
     setSuppression(false);
+    if (err.code) {
+      setCodeSuppr('');
+      setSuppressionErreur(t('entreprise.codeRespFaux'));
+      return;
+    }
     setSuppressionErreur(`${t('suppression.erreur')} ${err}`);
   };
 
@@ -427,6 +435,9 @@ export default function Account({ account, rewards = null, equipe = null, acces 
         {t('auth.deconnexion')}
       </button>
 
+      {/* Un compte entreprise ne quitte jamais son foyer (la base le refuse
+          aussi). */}
+      {!equipe && (
       <p className="miniquit">
         {confirmLeave ? (
           <>
@@ -441,6 +452,7 @@ export default function Account({ account, rewards = null, equipe = null, acces 
           </button>
         )}
       </p>
+      )}
 
       {CONTACT && (
         <p className="contact">
@@ -457,12 +469,32 @@ export default function Account({ account, rewards = null, equipe = null, acces 
         {zoneRouge ? (
           <>
             <h2 className="danger-titre">{t('suppression.titre')}</h2>
-            <p className="danger-texte">{t('suppression.avertissement')}</p>
+            <p className="danger-texte">
+              {equipe ? t('suppression.avertissementEntreprise') : t('suppression.avertissement')}
+            </p>
+            {equipe && (
+              <input
+                className="field code-masque danger-code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                placeholder={t('entreprise.codeResp')}
+                aria-label={t('entreprise.codeResp')}
+                value={codeSuppr}
+                onChange={(e) => setCodeSuppr(e.target.value.replace(/\D/g, '').slice(0, 8))}
+              />
+            )}
             {suppressionErreur && <p className="error">{suppressionErreur}</p>}
             <button
               className="btn btn-block btn-danger"
               type="button"
-              disabled={suppressionEnCours}
+              disabled={suppressionEnCours || (equipe && codeSuppr.length < 4)}
               onClick={supprimer}
             >
               {suppressionEnCours ? t('app.instant') : t('suppression.oui')}
@@ -471,7 +503,11 @@ export default function Account({ account, rewards = null, equipe = null, acces 
               className="btn btn-block"
               type="button"
               disabled={suppressionEnCours}
-              onClick={() => setZoneRouge(false)}
+              onClick={() => {
+                setZoneRouge(false);
+                setCodeSuppr('');
+                setSuppressionErreur(null);
+              }}
             >
               {t('suppression.non')}
             </button>

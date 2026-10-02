@@ -172,6 +172,7 @@ export default {
     titre: 'Supprimer mon compte',
     bouton: 'Supprimer définitivement mon compte',
     avertissement: 'Ton compte, tes points, tes bons et tes réglages disparaissent. Si tu es seul·e dans ton foyer, ses tâches partent avec. Si vous êtes deux, elles restent à l’autre. C’est immédiat et sans retour.',
+    avertissementEntreprise: 'Le compte de l’entreprise, toute l’équipe et toutes ses tâches disparaissent, sur tous les téléphones reliés. C’est immédiat et sans retour. Tape le code responsable pour confirmer.',
     oui: 'Oui, tout supprimer',
     non: 'Je me suis trompé·e',
     erreur: 'La suppression n’a pas abouti.',

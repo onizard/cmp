@@ -448,10 +448,16 @@ export function useAccount() {
    * La fonction serveur ne prend aucun paramètre : elle ne peut agir que sur
    * l'appelant. Les tâches d'un foyer partagé restent à l'autre.
    */
-  const supprimerLeCompte = useCallback(async () => {
+  const supprimerLeCompte = useCallback(async (codeResponsable = null) => {
     setError(null);
     if (!supabase) return 'Hors ligne.';
-    const { error: err } = await supabase.rpc('cmp_supprimer_mon_compte');
+    // Compte entreprise : la base exige le code responsable, et répond
+    // { erreur: 'code' } s'il manque ou s'il est faux.
+    const { data, error: err } = await supabase.rpc(
+      'cmp_supprimer_mon_compte',
+      codeResponsable ? { p_code_responsable: codeResponsable } : {},
+    );
+    if (!err && data && data.erreur === 'code') return { code: true };
     // On renvoie le message plutôt qu'un booléen : l'état React n'est pas
     // encore à jour au retour de l'await, l'appelant lirait l'ancien.
     if (err) {

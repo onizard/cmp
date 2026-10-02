@@ -7,7 +7,23 @@
 --      appartiennent aussi a l'autre. On efface seulement le lien vers la
 --      personne qui part. Le foyer n'est supprime que s'il devient vide.
 
-create or replace function public.cmp_supprimer_mon_compte()
+--
+-- Compte entreprise : le compte est partage par toute l'equipe (tous les
+-- telephones relies ouvrent le meme compte). Le supprimer efface le foyer,
+-- l'equipe et toutes les taches : il faut donc le code responsable, verifie
+-- ici. Un code faux est compte contre les codes devines (pas d'erreur levee,
+-- sinon l'essai serait annule avec elle).
+--
+-- Et un compte entreprise ne quitte jamais son foyer : la garde vit sur
+-- members, pour qu'aucune version de l'appli ne puisse le faire.
+--
+-- A passer apres entreprise.sql. A relancer sans risque : idempotent.
+
+-- L'ancienne version, sans parametre : remplacee par celle qui suit (le code
+-- a une valeur par defaut, l'appel sans parametre marche toujours).
+drop function if exists public.cmp_supprimer_mon_compte();
+
+create or replace function public.cmp_supprimer_mon_compte(p_code_responsable text default null)
 returns json
 language plpgsql
 security definer
@@ -27,6 +43,18 @@ begin
   select coalesce(array_agg(household_id), '{}'::uuid[])
     into foyers
     from members where user_id = moi;
+
+  -- Compte entreprise : rien ne part sans le code responsable.
+  foreach h in array foyers loop
+    if exists (select 1 from households where id = h and entreprise) then
+      if not public.entreprise_responsable(h, p_code_responsable) then
+        return json_build_object('erreur', 'code');
+      end if;
+    end if;
+  end loop;
+
+  -- Les gardes de entreprise.sql laissent passer ce qui a ete verifie ici.
+  perform set_config('cmp.op', '1', true);
 
   -- Les taches restent au foyer, mais perdent leur lien vers la personne :
   -- sans cela, la suppression du compte echouerait sur la cle etrangere.
@@ -49,12 +77,37 @@ begin
   end loop;
 
   delete from auth.users where id = moi;
+  perform set_config('cmp.op', '', true);
 
   return json_build_object('foyers_supprimes', detruits);
 end
 $$;
 
-grant execute on function public.cmp_supprimer_mon_compte() to authenticated;
+grant execute on function public.cmp_supprimer_mon_compte(text) to authenticated;
+
+-- Un compte entreprise ne quitte pas son foyer.
+create or replace function public.entreprise_ne_quitte_pas()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null or current_setting('cmp.op', true) = '1' then
+    return old;
+  end if;
+  if exists (select 1 from households h where h.id = old.household_id and h.entreprise) then
+    raise exception using errcode = '42501',
+      message = 'Un compte entreprise ne quitte pas son foyer.';
+  end if;
+  return old;
+end
+$$;
+
+drop trigger if exists members_entreprise on public.members;
+create trigger members_entreprise
+  before delete on public.members
+  for each row execute function public.entreprise_ne_quitte_pas();
 
 notify pgrst, 'reload schema';
 

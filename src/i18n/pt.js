@@ -84,6 +84,7 @@ export default {
     titre: 'Eliminar a minha conta',
     bouton: 'Eliminar definitivamente a minha conta',
     avertissement: 'A tua conta, os teus pontos, os teus vales e as tuas definições desaparecem. Se estás sozinho na tua casa, as tarefas vão também. Se são dois, ficam com a outra pessoa. É imediato e sem retorno.',
+    avertissementEntreprise: 'A conta da empresa, toda a equipa e todas as suas tarefas desaparecem, em todos os telemóveis ligados. É imediato e sem volta. Escreve o código de responsável para confirmar.',
     oui: 'Sim, apagar tudo',
     non: 'Enganei-me',
     erreur: 'A eliminação não foi concluída.',

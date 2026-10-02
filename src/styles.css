@@ -1875,6 +1875,13 @@ body,
   text-align: start;
 }
 
+/* Compte entreprise : le code responsable avant de tout supprimer. */
+.danger-code {
+  display: block;
+  width: 100%;
+  margin: 0 0 12px;
+}
+
 .btn-danger {
   background: var(--due-depasse);
   border-color: transparent;
