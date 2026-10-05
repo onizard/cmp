@@ -424,10 +424,7 @@ export default {
     tonCode: 'Ton code',
   },
   couple: {
-    titre: 'Récompenses de couple',
-    aide: 'Tape ton code pour les voir.',
-    sansCode: 'Choisis ton code dans Mon compte pour les ouvrir.',
-    ouvrir: 'Ouvrir',
+    sansCode: 'Choisis ton code dans Mon compte pour voir aussi les récompenses de couple.',
   },
   comptes: {
     titre: 'Mes comptes',

@@ -272,10 +272,7 @@ export default {
     tonCode: '你的代码',
   },
   couple: {
-    titre: '情侣奖励',
-    aide: '输入你的代码即可查看。',
-    sansCode: '请先在“我的账户”中设置代码，才能打开。',
-    ouvrir: '打开',
+    sansCode: '在“我的账户”中设置代码，也能看到情侣奖励。',
   },
   comptes: {
     titre: '我的账户',

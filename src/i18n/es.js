@@ -272,10 +272,7 @@ export default {
     tonCode: 'Tu código',
   },
   couple: {
-    titre: 'Recompensas de pareja',
-    aide: 'Escribe tu código para verlas.',
-    sansCode: 'Elige tu código en Mi cuenta para abrirlas.',
-    ouvrir: 'Abrir',
+    sansCode: 'Elige tu código en Mi cuenta para ver también las recompensas de pareja.',
   },
   comptes: {
     titre: 'Mis cuentas',

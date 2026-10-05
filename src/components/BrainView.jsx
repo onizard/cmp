@@ -85,17 +85,19 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       },
     });
   };
-  // Ouvertes par le code de ce parent : sans code choisi, elles restent closes.
-  const coupleOuvert = qui === userId && avecCode.has(userId) && ouverts.has(userId);
-  const ouvrirCouple = () => garde(userId, () => {});
+  // Les récompenses de couple : pour un parent, mêlées aux autres. Sur un
+  // téléphone partagé avec des enfants, seulement s'il est entré avec son
+  // code (sans code choisi, elles restent cachées).
+  const coupleOuvert =
+    qui === userId && (!selecteur || (avecCode.has(userId) && ouverts.has(userId)));
   // Toucher un prénom : son code d'abord (s'il en a un), puis tout s'ouvre.
   const entrer = (id) => garde(id, () => setQui(id));
 
   const familleTot = estFamille(membres, store.familleActivee);
-  const sansCouple = store.rewards.filter((r) => !(familleTot && r.couple));
-  const recompensesCouple = familleTot && !pourProche ? sortRewards(store.rewards.filter((r) => r.couple)) : [];
-  const catalogue = sortRewards(sansCouple);
-  const next = nextReward(sansCouple, myPts);
+  const visibles = store.rewards.filter((r) => !(familleTot && r.couple && !coupleOuvert));
+  const coupleCache = familleTot && qui === userId && !coupleOuvert && store.rewards.some((r) => r.couple && !r.deleted);
+  const catalogue = sortRewards(visibles);
+  const next = nextReward(visibles, myPts);
 
   // Le dessin se lit sur 100 points, puis repart du bas dans une autre teinte.
   // Le compteur, lui, n'a toujours aucune limite.
@@ -338,38 +340,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </Defilant>
         )}
 
-        {recompensesCouple.length > 0 && (
-          <section className="couple-bloc">
-            <h3 className="couple-titre">
-              <span aria-hidden="true">{coupleOuvert ? '🔓' : '🔒'}</span> {t('couple.titre')}
-            </h3>
-            {coupleOuvert ? (
-              <ul className="gage-list">
-                {recompensesCouple.map((r) => {
-                  const ok = myPts >= r.cost;
-                  return (
-                    <li key={r.id} className={`reward ${ok ? 'ok' : ''}`}>
-                      <span className="reward-cost">{formatPoints(r.cost)}</span>
-                      <span className="reward-label">{libelleRecompense(r)}</span>
-                      <button className="btn btn-small btn-accent" type="button" disabled={!ok} onClick={() => prendre(r)}>
-                        {t('recompenses.prendre')}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <>
-                <p className="setnote">{avecCode.has(userId) ? t('couple.aide') : t('couple.sansCode')}</p>
-                {avecCode.has(userId) && (
-                  <button className="btn btn-block" type="button" onClick={ouvrirCouple}>
-                    {t('couple.ouvrir')}
-                  </button>
-                )}
-              </>
-            )}
-          </section>
-        )}
+        {coupleCache && <p className="setnote">{t('couple.sansCode')}</p>}
 
         <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
           <h3 className="wish-title">{t('recompenses.surMesure')}</h3>

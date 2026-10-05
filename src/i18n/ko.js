@@ -272,10 +272,7 @@ export default {
     tonCode: '내 코드',
   },
   couple: {
-    titre: '커플 보상',
-    aide: '코드를 입력하면 보여요.',
-    sansCode: '열려면 내 계정에서 코드를 정하세요.',
-    ouvrir: '열기',
+    sansCode: '내 계정에서 코드를 정하면 커플 보상도 보여요.',
   },
   comptes: {
     titre: '내 계정들',

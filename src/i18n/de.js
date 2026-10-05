@@ -272,10 +272,7 @@ export default {
     tonCode: 'Dein Code',
   },
   couple: {
-    titre: 'Paar-Belohnungen',
-    aide: 'Gib deinen Code ein, um sie zu sehen.',
-    sansCode: 'Wähle deinen Code unter Mein Konto, um sie zu öffnen.',
-    ouvrir: 'Öffnen',
+    sansCode: 'Wähle deinen Code unter Mein Konto, um auch die Paar-Belohnungen zu sehen.',
   },
   comptes: {
     titre: 'Meine Konten',
