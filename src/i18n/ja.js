@@ -254,6 +254,7 @@ export default {
     pourQui: '誰のポイント？',
   },
   codes: {
+    choisirMembre: '自分の名前をタップして、ごほうびを開きましょう。',
     titre: '{nom}のコード',
     faux: 'コードが違います。',
     format: 'コードは4桁です。',

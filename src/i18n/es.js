@@ -254,6 +254,7 @@ export default {
     pourQui: '¿Los puntos de quién?',
   },
   codes: {
+    choisirMembre: 'Toca tu nombre para abrir tus recompensas.',
     titre: 'Código de {nom}',
     faux: 'Código incorrecto.',
     format: 'El código tiene 4 cifras.',

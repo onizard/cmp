@@ -254,6 +254,7 @@ export default {
     pourQui: 'הנקודות של מי?',
   },
   codes: {
+    choisirMembre: 'געו בשם שלכם כדי לפתוח את הפרסים שלכם.',
     titre: 'הקוד של {nom}',
     faux: 'קוד שגוי.',
     format: 'הקוד בן 4 ספרות.',

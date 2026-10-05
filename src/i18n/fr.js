@@ -406,6 +406,7 @@ export default {
     pourQui: 'Les points de qui ?',
   },
   codes: {
+    choisirMembre: 'Touche ton prénom pour ouvrir tes récompenses.',
     titre: 'Code de {nom}',
     faux: 'Code faux.',
     format: 'Le code fait 4 chiffres.',
