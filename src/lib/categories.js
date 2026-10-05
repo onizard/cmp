@@ -106,8 +106,8 @@ export const nomConnu = (stats, nom) => {
 
 /**
  * « #urgent » : toutes les tâches à faire qui ont une échéance, de la plus
- * proche à la plus lointaine. C'est une vue, pas un rangement : chacune reste
- * aussi à sa place, dans sa propre catégorie.
+ * proche à la plus lointaine. C'est une vue, pas un rangement : la tâche
+ * garde sa catégorie (rappelée sur sa ligne), mais ne s'affiche qu'ici.
  */
 export const urgentes = (aFaire = []) =>
   aFaire
