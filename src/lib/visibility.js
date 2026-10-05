@@ -60,20 +60,31 @@ export const tasksVisibleIn = (tasks, m, currentMonth) =>
   tasks.filter((t) => visibleIn(t, m, currentMonth));
 
 /**
- * Tri d'affichage dans un mois, sans réglage ni manipulation :
+ * Tri d'affichage dans un mois :
  *   1. les cochées descendent en bas ;
- *   2. ce qui a une échéance passe devant, de la plus proche à la plus lointaine ;
- *   3. puis l'ordre chronologique d'ajout ;
- *   4. l'alphabétique départage, pour que l'ordre ne bouge jamais tout seul.
+ *   2. les tâches déplacées à la main (appui long, puis glisser) gardent
+ *      l'ordre choisi, devant les autres ;
+ *   3. pour les autres, ce qui a une échéance passe devant, de la plus proche
+ *      à la plus lointaine ;
+ *   4. puis l'ordre chronologique d'ajout ;
+ *   5. l'alphabétique départage, pour que l'ordre ne bouge jamais tout seul.
  */
 const quand = (v) => {
   const t = new Date(v || '').getTime();
   return Number.isNaN(t) ? null : t;
 };
 
+const rangDe = (t) => (typeof t.rang === 'number' && Number.isFinite(t.rang) ? t.rang : null);
+
 export const sortForMonth = (tasks) =>
   [...tasks].sort((a, b) => {
     if (a.done !== b.done) return a.done ? 1 : -1;
+
+    const ra = rangDe(a);
+    const rb = rangDe(b);
+    if (ra !== null && rb !== null && ra !== rb) return ra - rb;
+    if (ra !== null && rb === null) return -1;
+    if (ra === null && rb !== null) return 1;
 
     const da = a.done ? null : quand(a.dueAt);
     const db = b.done ? null : quand(b.dueAt);

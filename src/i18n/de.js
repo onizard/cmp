@@ -84,6 +84,7 @@ export default {
     titre: 'Mein Konto löschen',
     bouton: 'Mein Konto endgültig löschen',
     avertissement: 'Dein Konto, deine Punkte, deine Gutscheine und Einstellungen verschwinden. Bist du allein im Haushalt, gehen seine Aufgaben mit. Seid ihr zu zweit, bleiben sie der anderen Person. Sofort und endgültig.',
+    avertissementEntreprise: 'Das Firmenkonto, das ganze Team und alle seine Aufgaben verschwinden, auf allen verbundenen Handys. Das geschieht sofort und lässt sich nicht rückgängig machen. Gib zur Bestätigung den Verantwortlichen-Code ein.',
     oui: 'Ja, alles löschen',
     non: 'Ich habe mich vertan',
     erreur: 'Das Löschen ist fehlgeschlagen.',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui} kümmert sich bis {h} darum.',
     bloqueeEquipe: '{qui} kümmert sich bis {h} darum: Bis dahin kann nur diese Person sie abhaken.',
     pasToi: 'Nur wer sie reserviert hat, kann sie freigeben.',
+  },
+  categories: {
+    ajouter: 'Kategorie hinzufügen',
+    nom: 'Name der Kategorie',
+    vide: 'Noch nichts hier: Halte eine Aufgabe gedrückt und zieh sie hierher, oder schreib „#{nom}“ ans Ende einer Aufgabe.',
+    retirer: 'Kategorie {nom} entfernen',
+    suggestions: 'Bereits verwendete Kategorien',
   },
   comptes: {
     titre: 'Meine Konten',

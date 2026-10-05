@@ -84,6 +84,7 @@ export default {
     titre: '계정 삭제',
     bouton: '계정을 영구 삭제',
     avertissement: '계정, 점수, 쿠폰, 설정이 사라져요. 가구에 혼자라면 할 일도 사라지고, 둘 이상이라면 다른 사람에게 남아요. 즉시 처리되며 되돌릴 수 없어요.',
+    avertissementEntreprise: '회사 계정과 팀 전체, 모든 할 일이 연결된 모든 휴대폰에서 사라집니다. 즉시 처리되며 되돌릴 수 없어요. 확인하려면 책임자 코드를 입력하세요.',
     oui: '네, 모두 삭제할게요',
     non: '잘못 눌렀어요',
     erreur: '삭제하지 못했어요.',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui}님이 {h}까지 맡고 있어요.',
     bloqueeEquipe: '{qui}님이 {h}까지 맡고 있어요. 그때까지는 그분만 완료할 수 있어요.',
     pasToi: '예약한 사람만 풀 수 있어요.',
+  },
+  categories: {
+    ajouter: '카테고리 추가',
+    nom: '카테고리 이름',
+    vide: '아직 비어 있어요. 할 일을 길게 눌러 여기로 끌어오거나, 할 일 끝에 “#{nom}”을 붙이세요.',
+    retirer: '{nom} 카테고리 삭제',
+    suggestions: '이미 쓴 카테고리',
   },
   comptes: {
     titre: '내 계정들',

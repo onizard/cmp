@@ -84,6 +84,7 @@ export default {
     titre: 'Eliminare il mio account',
     bouton: 'Eliminare definitivamente il mio account',
     avertissement: 'Il tuo account, i tuoi punti, i tuoi buoni e le tue impostazioni spariscono. Se sei solo nella tua casa, se ne vanno anche i compiti. Se siete in due, restano all’altro. È immediato e senza ritorno.',
+    avertissementEntreprise: 'L’account dell’azienda, tutta la squadra e tutte le sue attività spariscono, su tutti i telefoni collegati. È immediato e senza ritorno. Inserisci il codice responsabile per confermare.',
     oui: 'Sì, cancellare tutto',
     non: 'Mi sono sbagliato',
     erreur: 'L’eliminazione non è andata a buon fine.',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui} se ne occupa fino alle {h}.',
     bloqueeEquipe: '{qui} se ne occupa fino alle {h}: fino ad allora solo questa persona può spuntarla.',
     pasToi: 'Solo chi l’ha prenotata può liberarla.',
+  },
+  categories: {
+    ajouter: 'Aggiungi una categoria',
+    nom: 'Nome della categoria',
+    vide: 'Ancora niente qui: tieni premuta un’attività e trascinala qui, oppure aggiungi «#{nom}» alla fine di un’attività.',
+    retirer: 'Rimuovi la categoria {nom}',
+    suggestions: 'Categorie già usate',
   },
   comptes: {
     titre: 'I miei account',

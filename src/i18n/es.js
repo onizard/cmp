@@ -84,6 +84,7 @@ export default {
     titre: 'Eliminar mi cuenta',
     bouton: 'Eliminar definitivamente mi cuenta',
     avertissement: 'Tu cuenta, tus puntos, tus vales y tus ajustes desaparecen. Si estás solo en tu hogar, sus tareas se van también. Si sois dos, se quedan con la otra persona. Es inmediato y sin vuelta atrás.',
+    avertissementEntreprise: 'La cuenta de la empresa, todo el equipo y todas sus tareas desaparecen, en todos los teléfonos vinculados. Es inmediato y no tiene vuelta atrás. Escribe el código de responsable para confirmar.',
     oui: 'Sí, borrarlo todo',
     non: 'Me he equivocado',
     erreur: 'La eliminación no se ha completado.',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui} se encarga hasta las {h}.',
     bloqueeEquipe: '{qui} se encarga hasta las {h}: solo esa persona puede marcarla hasta entonces.',
     pasToi: 'Solo quien la reservó puede liberarla.',
+  },
+  categories: {
+    ajouter: 'Añadir una categoría',
+    nom: 'Nombre de la categoría',
+    vide: 'Aún no hay nada: mantén pulsada una tarea y arrástrala aquí, o añade «#{nom}» al final de una tarea.',
+    retirer: 'Quitar la categoría {nom}',
+    suggestions: 'Categorías ya usadas',
   },
   comptes: {
     titre: 'Mis cuentas',

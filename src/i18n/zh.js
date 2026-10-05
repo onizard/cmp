@@ -84,6 +84,7 @@ export default {
     titre: '删除我的账户',
     bouton: '永久删除我的账户',
     avertissement: '你的账户、积分、券和设置都会消失。如果家庭里只有你一个人，任务也会一起删除；如果有两个人，任务会留给对方。立即生效，无法撤销。',
+    avertissementEntreprise: '企业账户、整个团队及其所有任务都会消失，所有关联的手机上都是如此。立即生效，无法恢复。请输入负责人代码确认。',
     oui: '是的，全部删除',
     non: '我点错了',
     erreur: '删除没有成功。',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui} 负责到 {h}。',
     bloqueeEquipe: '{qui} 负责到 {h}：在此之前只有 TA 能勾选。',
     pasToi: '只有预留的人才能释放。',
+  },
+  categories: {
+    ajouter: '添加分类',
+    nom: '分类名称',
+    vide: '这里还没有内容：长按一项任务并拖到这里，或在任务末尾加上“#{nom}”。',
+    retirer: '移除分类 {nom}',
+    suggestions: '已用过的分类',
   },
   comptes: {
     titre: '我的账户',

@@ -84,6 +84,7 @@ export default {
     titre: 'Delete my account',
     bouton: 'Permanently delete my account',
     avertissement: 'Your account, points, vouchers and settings disappear. If you are alone in your household, its tasks go too. If there are two of you, they stay with the other. Immediate and final.',
+    avertissementEntreprise: 'The company account, the whole team and all its tasks disappear, on every linked phone. It’s immediate and can’t be undone. Enter the manager code to confirm.',
     oui: 'Yes, delete everything',
     non: 'I clicked by mistake',
     erreur: 'The deletion did not go through.',
@@ -224,6 +225,13 @@ export default {
     jusquaEquipe: '{qui} is on it until {h}.',
     bloqueeEquipe: '{qui} is on it until {h}: only they can tick it off until then.',
     pasToi: 'Only the person who reserved it can release it.',
+  },
+  categories: {
+    ajouter: 'Add a category',
+    nom: 'Category name',
+    vide: 'Nothing here yet: press and hold a task and drag it here, or add “#{nom}” at the end of a task.',
+    retirer: 'Remove the {nom} category',
+    suggestions: 'Categories already used',
   },
   comptes: {
     titre: 'My accounts',
