@@ -31,27 +31,23 @@ export const motErreur = (t, r) =>
     faux: t('codes.faux'),
     format: t('codes.format'),
     parentSansCode: t('codes.parentSansCode'),
-    deja: t('couple.deja'),
-    admin: t('couple.pasAdmin'),
   })[r] || r;
 
 /**
- * Mon compte, mode famille : mon code pour mes bons, et le code couple (le
- * premier parent qui le choisit en devient l'administrateur ; lui seul le
- * change, avec l'ancien).
+ * Mon compte, mode famille : mon code. Il protège mes bons et ouvre les
+ * récompenses de couple. Le changer demande l'ancien.
  */
 export default function CodesFamille({ rewards, userId }) {
   const t = useT();
   const aMonCode = (rewards.avecCode || []).includes(userId);
-  const couple = rewards.couple || { code: false, admin: false };
-  const [ouvert, setOuvert] = useState(null); // 'moi' | 'couple'
+  const [ouvert, setOuvert] = useState(false);
   const [ancien, setAncien] = useState('');
   const [nouveau, setNouveau] = useState('');
   const [message, setMessage] = useState(null);
   const [occupe, setOccupe] = useState(false);
 
   const fermer = () => {
-    setOuvert(null);
+    setOuvert(false);
     setAncien('');
     setNouveau('');
   };
@@ -60,10 +56,7 @@ export default function CodesFamille({ rewards, userId }) {
     e.preventDefault();
     setOccupe(true);
     setMessage(null);
-    let r;
-    if (ouvert === 'moi') r = await rewards.poserCode(userId, nouveau, aMonCode ? ancien : null);
-    else if (couple.code) r = await rewards.changerCodeCouple(ancien, nouveau);
-    else r = await rewards.poserCodeCouple(nouveau);
+    const r = await rewards.poserCode(userId, nouveau, aMonCode ? ancien : null);
     setOccupe(false);
     if (r) {
       setMessage({ erreur: true, texte: motErreur(t, r) });
@@ -95,27 +88,14 @@ export default function CodesFamille({ rewards, userId }) {
   return (
     <div className="codes-famille">
       <p className="field-label">{t('codes.monTitre')}</p>
-      <p className="setnote">{aMonCode ? t('codes.monActif') : t('codes.monAide')}</p>
-      {ouvert === 'moi' ? (
+      <p className="setnote">{t('codes.monAide')}</p>
+      {ouvert ? (
         formulaire(aMonCode)
       ) : (
-        <button className="btn btn-block" type="button" onClick={() => setOuvert('moi')}>
+        <button className="btn btn-block" type="button" onClick={() => setOuvert(true)}>
           {aMonCode ? t('codes.changer') : t('codes.choisir')}
         </button>
       )}
-
-      <p className="field-label codes-couple-titre">🔒 {t('couple.titre')}</p>
-      <p className="setnote">
-        {!couple.code ? t('couple.reglage') : couple.admin ? t('couple.actifAdmin') : t('couple.actifAutre')}
-      </p>
-      {(!couple.code || couple.admin) &&
-        (ouvert === 'couple' ? (
-          formulaire(couple.code)
-        ) : (
-          <button className="btn btn-block" type="button" onClick={() => setOuvert('couple')}>
-            {couple.code ? t('couple.changer') : t('couple.activer')}
-          </button>
-        ))}
 
       {message && <p className={message.erreur ? 'error' : 'setnote codes-ok'}>{message.texte}</p>}
     </div>

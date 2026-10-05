@@ -76,8 +76,6 @@ export function useRewards(householdId, userId) {
   const [proches, setProches] = useState(() =>
     householdId ? readLS(key(householdId, 'proches'), []) : [],
   );
-  // Le code couple : y en a-t-il un, et est-ce moi qui l'ai posé ?
-  const [couple, setCouple] = useState({ code: false, admin: false });
   // Les membres (comptes ou sans compte) qui ont un code pour leurs bons.
   const [avecCode, setAvecCode] = useState([]);
   const rRef = useRef(rewards);
@@ -116,11 +114,7 @@ export function useRewards(householdId, userId) {
       supabase.from('proches').select('id, nom, actif, created_at').eq('household_id', householdId),
     ]);
     // Base pas encore à jour : les fonctions manquent, on reste sans code.
-    const [{ data: ce }, { data: co }] = await Promise.all([
-      supabase.rpc('cmp_couple_etat', { hid: householdId }),
-      supabase.rpc('cmp_codes_etat', { hid: householdId }),
-    ]);
-    if (ce) setCouple({ code: Boolean(ce.code), admin: Boolean(ce.admin) });
+    const { data: co } = await supabase.rpc('cmp_codes_etat', { hid: householdId });
     if (Array.isArray(co)) setAvecCode(co);
     if (pr) {
       const liste = pr
@@ -354,36 +348,6 @@ export function useRewards(householdId, userId) {
     [householdId, refresh],
   );
 
-  /** Le code couple : le poser (premier), le vérifier, le changer (admin). */
-  const poserCodeCouple = useCallback(
-    async (code) => {
-      if (!supabase) return 'horsLigne';
-      const { data, error } = await supabase.rpc('cmp_couple_poser', { hid: householdId, p_code: code });
-      if (error) return error.message;
-      await refresh();
-      return data === 'ok' ? null : data;
-    },
-    [householdId, refresh],
-  );
-  const verifierCodeCouple = useCallback(
-    async (code) => {
-      if (!supabase) return 'horsLigne';
-      const { data, error } = await supabase.rpc('cmp_couple_verifier', { hid: householdId, p_code: code });
-      if (error) return error.message;
-      return data ? null : 'faux';
-    },
-    [householdId],
-  );
-  const changerCodeCouple = useCallback(
-    async (ancien, nouveau) => {
-      if (!supabase) return 'horsLigne';
-      const { data, error } = await supabase.rpc('cmp_couple_changer', { hid: householdId, p_ancien: ancien, p_nouveau: nouveau });
-      if (error) return error.message;
-      return data === 'ok' ? null : data;
-    },
-    [householdId],
-  );
-
   /** Un membre sans compte de plus (un prénom suffit). */
   const ajouterProche = useCallback(
     async (nom) => {
@@ -415,13 +379,9 @@ export function useRewards(householdId, userId) {
     proches,
     ajouterProche,
     retirerProche,
-    couple,
     avecCode,
     ouvrirCode,
     poserCode,
-    poserCodeCouple,
-    verifierCodeCouple,
-    changerCodeCouple,
     otherUser,
     members,
     familleActivee,

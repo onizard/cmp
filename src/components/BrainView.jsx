@@ -55,11 +55,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const detail = pointsBreakdown(tachesC, qui);
 
   // Famille : chacun peut avoir un code pour ses bons (codes.sql). Tapé une
-  // fois, il vaut jusqu'à ce qu'on quitte l'onglet. Les récompenses de couple
-  // (couple.sql) restent derrière le code couple, et jamais pour un enfant.
+  // fois, il vaut jusqu'à ce qu'on quitte l'onglet. Le code d'un parent ouvre
+  // aussi les récompenses de couple (couple.sql) ; jamais pour un enfant.
   const avecCode = new Set(store.avecCode || []);
   const [ouverts, setOuverts] = useState(() => new Set());
-  const [coupleOuvert, setCoupleOuvert] = useState(false);
   const [demande, setDemande] = useState(null);
   const garde = (membre, faire) => {
     if (!avecCode.has(membre) || ouverts.has(membre)) {
@@ -77,16 +76,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       },
     });
   };
-  const ouvrirCouple = () =>
-    setDemande({
-      titre: t('couple.titre'),
-      valider: async (code) => {
-        const r = await store.verifierCodeCouple(code);
-        if (r) return r === 'faux' ? t('codes.faux') : r;
-        setCoupleOuvert(true);
-        return null;
-      },
-    });
+  // Ouvertes par le code de ce parent : sans code choisi, elles restent closes.
+  const coupleOuvert = avecCode.has(userId) && ouverts.has(userId);
+  const ouvrirCouple = () => garde(userId, () => {});
 
   const familleTot = estFamille(membres, store.familleActivee);
   const sansCouple = store.rewards.filter((r) => !(familleTot && r.couple));
@@ -328,7 +320,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </Defilant>
         )}
 
-        {store.couple && store.couple.code && familleTot && !pourProche && (
+        {recompensesCouple.length > 0 && (
           <section className="couple-bloc">
             <h3 className="couple-titre">
               <span aria-hidden="true">{coupleOuvert ? '🔓' : '🔒'}</span> {t('couple.titre')}
@@ -350,10 +342,12 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               </ul>
             ) : (
               <>
-                <p className="setnote">{t('couple.aide')}</p>
-                <button className="btn btn-block" type="button" onClick={ouvrirCouple}>
-                  {t('couple.ouvrir')}
-                </button>
+                <p className="setnote">{avecCode.has(userId) ? t('couple.aide') : t('couple.sansCode')}</p>
+                {avecCode.has(userId) && (
+                  <button className="btn btn-block" type="button" onClick={ouvrirCouple}>
+                    {t('couple.ouvrir')}
+                  </button>
+                )}
               </>
             )}
           </section>
