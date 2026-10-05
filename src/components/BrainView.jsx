@@ -3,6 +3,7 @@ import { useT, langue } from '../i18n/index.js';
 import Brain from './Brain.jsx';
 import Bon from './Bon.jsx';
 import Defilant from './Defilant.jsx';
+import CodeOperateur from './CodeOperateur.jsx';
 import { libelleRecompense, libelleBon } from '../lib/libelle.js';
 import { estFamille, classement, creditees, bonsCredites, tousLesMembres, tousLesNoms } from '../lib/famille.js';
 import {
@@ -53,8 +54,37 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const otherPts = other ? pointsAvailable(tachesC, bonsC, other) : 0;
   const detail = pointsBreakdown(tachesC, qui);
 
-  const catalogue = sortRewards(store.rewards);
-  const next = nextReward(store.rewards, myPts);
+  // Famille : chacun peut avoir un code pour ses bons (codes.sql). Tapé une
+  // fois, il vaut jusqu'à ce qu'on quitte l'onglet. Le code d'un parent ouvre
+  // aussi les récompenses de couple (couple.sql) ; jamais pour un enfant.
+  const avecCode = new Set(store.avecCode || []);
+  const [ouverts, setOuverts] = useState(() => new Set());
+  const [demande, setDemande] = useState(null);
+  const garde = (membre, faire) => {
+    if (!avecCode.has(membre) || ouverts.has(membre)) {
+      faire();
+      return;
+    }
+    setDemande({
+      titre: t('codes.titre', { nom: noms[membre] || t('cerveau.toi') }),
+      valider: async (code) => {
+        const r = await store.ouvrirCode(membre, code);
+        if (r) return r === 'faux' ? t('codes.faux') : r;
+        setOuverts((s) => new Set([...s, membre]));
+        faire();
+        return null;
+      },
+    });
+  };
+  // Ouvertes par le code de ce parent : sans code choisi, elles restent closes.
+  const coupleOuvert = avecCode.has(userId) && ouverts.has(userId);
+  const ouvrirCouple = () => garde(userId, () => {});
+
+  const familleTot = estFamille(membres, store.familleActivee);
+  const sansCouple = store.rewards.filter((r) => !(familleTot && r.couple));
+  const recompensesCouple = familleTot && !pourProche ? sortRewards(store.rewards.filter((r) => r.couple)) : [];
+  const catalogue = sortRewards(sansCouple);
+  const next = nextReward(sansCouple, myPts);
 
   // Le dessin se lit sur 100 points, puis repart du bas dans une autre teinte.
   // Le compteur, lui, n'a toujours aucune limite.
@@ -78,7 +108,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // n'a pas à en disposer. Ils restent lus depuis la base, en revanche, car
   // c'est ce qui permet de calculer ses points à elle ou à lui.
   const mesClaims = bonsC
-    .filter((c) => !c.deleted && c.userId === qui)
+    .filter((c) => !c.deleted && c.userId === qui && !(familleTot && c.couple && !coupleOuvert))
     .slice()
     .sort((a, b) => {
       // D'abord ce qui attend mon « c'est fait », puis les bons neufs, puis
@@ -110,12 +140,16 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     );
   };
 
-  const prendre = async (r) => {
-    montrerBon(await store.claimReward(r, pourProche));
-  };
+  const prendre = (r) =>
+    garde(qui, async () => {
+      montrerBon(await store.claimReward(r, pourProche));
+    });
 
-  const submitWish = async (e) => {
+  const submitWish = (e) => {
     e.preventDefault();
+    garde(qui, () => envoyerWish());
+  };
+  const envoyerWish = async () => {
     const err = await store.claimCustom(wish, pourProche);
     if (err) {
       setWishError(err);
@@ -146,6 +180,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </div>
       )}
 
+      {/* Sur ordinateur : deux colonnes, le classement à gauche, les
+          récompenses à droite. Sur téléphone, l'une sous l'autre. */}
+      <div className="brain-cols">
+      <div className="brain-col">
       {famille ? (
         <section className="classement" aria-label={t('famille.classement')}>
           <h2 className="setlabel">{t('famille.classement')}</h2>
@@ -250,6 +288,8 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </section>
       )}
 
+      </div>
+      <div className="brain-col">
       <section className="gage-section">
         <h2 className="gage-title">{t('recompenses.titre')}</h2>
         {catalogue.length === 0 ? (
@@ -278,6 +318,39 @@ export default function BrainView({ tasks, userId, rewards: store }) {
             })}
           </ul>
           </Defilant>
+        )}
+
+        {recompensesCouple.length > 0 && (
+          <section className="couple-bloc">
+            <h3 className="couple-titre">
+              <span aria-hidden="true">{coupleOuvert ? '🔓' : '🔒'}</span> {t('couple.titre')}
+            </h3>
+            {coupleOuvert ? (
+              <ul className="gage-list">
+                {recompensesCouple.map((r) => {
+                  const ok = myPts >= r.cost;
+                  return (
+                    <li key={r.id} className={`reward ${ok ? 'ok' : ''}`}>
+                      <span className="reward-cost">{formatPoints(r.cost)}</span>
+                      <span className="reward-label">{libelleRecompense(r)}</span>
+                      <button className="btn btn-small btn-accent" type="button" disabled={!ok} onClick={() => prendre(r)}>
+                        {t('recompenses.prendre')}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <>
+                <p className="setnote">{avecCode.has(userId) ? t('couple.aide') : t('couple.sansCode')}</p>
+                {avecCode.has(userId) && (
+                  <button className="btn btn-block" type="button" onClick={ouvrirCouple}>
+                    {t('couple.ouvrir')}
+                  </button>
+                )}
+              </>
+            )}
+          </section>
         )}
 
         <section className={`wish ${canClaimCustom(myPts) ? 'wish-open' : ''}`}>
@@ -345,6 +418,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
       </section>
 
+      </div>
+      </div>
+
       <section className="setgroup">
         <h2 className="setlabel">{t('inventaire.titre')}</h2>
         {mesClaims.length === 0 ? (
@@ -360,15 +436,26 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 lang={langue()}
                 autre={c.pour ? nomDe(c.pour) : otherName}
                 choix={autresMembres}
-                onUtiliser={(pour) => store.useClaim(c.id, pour || null, idsProches.has(pour))}
-                onAnnuler={() => store.annulerAchat(c.id)}
-                onValider={() => store.validerBon(c.id)}
+                onUtiliser={(pour) => garde(qui, () => store.useClaim(c.id, pour || null, idsProches.has(pour)))}
+                onAnnuler={() => garde(qui, () => store.annulerAchat(c.id))}
+                onValider={() => garde(qui, () => store.validerBon(c.id))}
               />
             ))}
           </div>
         )}
       </section>
 
+      {demande && (
+        <CodeOperateur
+          titre={demande.titre}
+          onValider={async (code) => {
+            const r = await demande.valider(code);
+            if (!r) setDemande(null);
+            return r;
+          }}
+          onFermer={() => setDemande(null)}
+        />
+      )}
     </main>
   );
 }

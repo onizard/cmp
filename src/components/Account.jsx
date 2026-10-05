@@ -21,6 +21,7 @@ import EquipeReglages from './EquipeReglages.jsx';
 import Comptes from './Comptes.jsx';
 import PostePartage from './PostePartage.jsx';
 import Proches from './Proches.jsx';
+import CodesFamille from './CodesFamille.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -440,7 +441,12 @@ export default function Account({ account, rewards = null, equipe = null, acces 
                 reste, pour pouvoir les retirer). */}
             {(rewards.familleActivee ||
               familleDOffice(tousLesMembres(rewards.members, rewards.proches)) ||
-              (rewards.proches || []).some((p) => p.actif)) && <Proches rewards={rewards} />}
+              (rewards.proches || []).some((p) => p.actif)) && (
+              <>
+                <Proches rewards={rewards} userId={account.session.user.id} />
+                <CodesFamille rewards={rewards} userId={account.session.user.id} />
+              </>
+            )}
           </div>
         </section>
       )}
