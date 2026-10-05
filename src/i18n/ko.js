@@ -227,6 +227,7 @@ export default {
     pasToi: '예약한 사람만 풀 수 있어요.',
   },
   categories: {
+    urgent: '긴급',
     ajouter: '카테고리 추가',
     nom: '카테고리 이름',
     vide: '아직 비어 있어요. 할 일을 길게 눌러 여기로 끌어오거나, 할 일 끝에 “#{nom}”을 붙이세요.',

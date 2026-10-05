@@ -3690,3 +3690,34 @@ body,
   background: var(--grad);
   color: #fff;
 }
+
+/* « #urgent » : les tâches à échéance, en tête du mois. */
+.categorie-urgent {
+  margin: 0 -6px 14px;
+  padding: 2px 8px 4px;
+  border-top: 0;
+  border-radius: 16px;
+  background: #fdf3f6;
+  box-shadow: inset 0 0 0 1px #f6dbe4;
+}
+
+.categorie-urgent .task {
+  border-top-color: #f3dde5;
+}
+
+.categorie-urgent .categorie-nom {
+  color: var(--due-urgent);
+}
+
+.categorie-urgent .categorie-compte {
+  background: var(--due-wash);
+}
+
+.tag-categorie {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #faf5fd;
+  color: var(--violet);
+  font-size: 0.78rem;
+  font-weight: 700;
+}

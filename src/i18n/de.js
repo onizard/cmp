@@ -227,6 +227,7 @@ export default {
     pasToi: 'Nur wer sie reserviert hat, kann sie freigeben.',
   },
   categories: {
+    urgent: 'dringend',
     ajouter: 'Kategorie hinzufügen',
     nom: 'Name der Kategorie',
     vide: 'Noch nichts hier: Halte eine Aufgabe gedrückt und zieh sie hierher, oder schreib „#{nom}“ ans Ende einer Aufgabe.',

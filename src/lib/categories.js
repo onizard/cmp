@@ -105,6 +105,17 @@ export const nomConnu = (stats, nom) => {
 };
 
 /**
+ * « #urgent » : toutes les tâches à faire qui ont une échéance, de la plus
+ * proche à la plus lointaine. C'est une vue, pas un rangement : chacune reste
+ * aussi à sa place, dans sa propre catégorie.
+ */
+export const urgentes = (aFaire = []) =>
+  aFaire
+    .filter((t) => t.dueAt && !Number.isNaN(Date.parse(t.dueAt)))
+    .slice()
+    .sort((a, b) => Date.parse(a.dueAt) - Date.parse(b.dueAt));
+
+/**
  * Les sections du mois : les catégories des tâches à faire, plus celles
  * créées au bouton pour ce mois (même vides), par ordre alphabétique.
  * Chacune : { cle, nom, taches, ligne } — `ligne` si elle vient du bouton.

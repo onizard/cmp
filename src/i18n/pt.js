@@ -227,6 +227,7 @@ export default {
     pasToi: 'Só quem a reservou a pode libertar.',
   },
   categories: {
+    urgent: 'urgente',
     ajouter: 'Adicionar uma categoria',
     nom: 'Nome da categoria',
     vide: 'Ainda não há nada: mantém premida uma tarefa e arrasta-a para aqui, ou acrescenta «#{nom}» no fim de uma tarefa.',

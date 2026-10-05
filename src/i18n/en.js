@@ -227,6 +227,7 @@ export default {
     pasToi: 'Only the person who reserved it can release it.',
   },
   categories: {
+    urgent: 'urgent',
     ajouter: 'Add a category',
     nom: 'Category name',
     vide: 'Nothing here yet: press and hold a task and drag it here, or add “#{nom}” at the end of a task.',

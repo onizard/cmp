@@ -227,6 +227,7 @@ export default {
     pasToi: 'Solo quien la reservó puede liberarla.',
   },
   categories: {
+    urgent: 'urgente',
     ajouter: 'Añadir una categoría',
     nom: 'Nombre de la categoría',
     vide: 'Aún no hay nada: mantén pulsada una tarea y arrástrala aquí, o añade «#{nom}» al final de una tarea.',

@@ -89,3 +89,13 @@ describe('sections du mois', () => {
     ]);
   });
 });
+
+describe('#urgent', () => {
+  it('reprend les tâches à échéance, de la plus proche à la plus lointaine', async () => {
+    const { urgentes } = await import('./categories.js');
+    const a = { id: 'a', dueAt: '2026-10-20T10:00:00Z' };
+    const b = { id: 'b' };
+    const c = { id: 'c', dueAt: '2026-10-08T10:00:00Z', categorie: 'dépense' };
+    expect(urgentes([a, b, c]).map((x) => x.id)).toEqual(['c', 'a']);
+  });
+});
