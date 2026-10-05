@@ -53,7 +53,6 @@ export default function Proches({ rewards, userId }) {
   return (
     <div className="proches">
       <p className="field-label">{t('proches.titre')}</p>
-      <p className="setnote">{t('proches.aide')}</p>
       {actifs.length > 0 && (
         <ul className="equipe-liste">
           {actifs.map((p) => (
