@@ -254,6 +254,7 @@ export default {
     pourQui: 'کس کے پوائنٹس؟',
   },
   codes: {
+    choisirMembre: 'اپنے انعامات کھولنے کے لیے اپنے نام کو چھوئیں۔',
     titre: '{nom} کا کوڈ',
     faux: 'غلط کوڈ۔',
     format: 'کوڈ 4 ہندسوں کا ہے۔',

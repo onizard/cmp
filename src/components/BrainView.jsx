@@ -36,8 +36,17 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // prennent leurs bons depuis ce téléphone. `qui` : la personne affichée.
   const proches = (store.proches || []).filter((p) => p.actif);
   const idsProches = new Set(proches.map((p) => p.id));
-  const [quiChoisi, setQui] = useState(userId);
-  const qui = quiChoisi === userId || idsProches.has(quiChoisi) ? quiChoisi : userId;
+  // Avec des membres sans compte, le téléphone est partagé : on n'entre chez
+  // quelqu'un qu'en touchant son prénom, puis en tapant son code s'il en a
+  // un. Avant, seul le classement se voit.
+  const selecteur = proches.length > 0;
+  const [quiChoisi, setQui] = useState(selecteur ? null : userId);
+  const qui = !selecteur
+    ? userId
+    : quiChoisi === userId || idsProches.has(quiChoisi)
+      ? quiChoisi
+      : null;
+  const verrouille = qui === null;
   const pourProche = idsProches.has(qui) ? qui : null;
 
   // Les points vont à qui a fait (famille.js).
@@ -47,12 +56,12 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const membres = tousLesMembres(store.members, store.proches);
 
   const other = store.otherUser;
-  const myName = noms[qui] || t('cerveau.toi');
+  const myName = noms[qui || userId] || t('cerveau.toi');
   const otherName = (other && store.names[other]) || t('cerveau.binome');
 
-  const myPts = pointsAvailable(tachesC, bonsC, qui);
+  const myPts = pointsAvailable(tachesC, bonsC, qui || userId);
   const otherPts = other ? pointsAvailable(tachesC, bonsC, other) : 0;
-  const detail = pointsBreakdown(tachesC, qui);
+  const detail = pointsBreakdown(tachesC, qui || userId);
 
   // Famille : chacun peut avoir un code pour ses bons (codes.sql). Tapé une
   // fois, il vaut jusqu'à ce qu'on quitte l'onglet. Le code d'un parent ouvre
@@ -77,8 +86,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     });
   };
   // Ouvertes par le code de ce parent : sans code choisi, elles restent closes.
-  const coupleOuvert = avecCode.has(userId) && ouverts.has(userId);
+  const coupleOuvert = qui === userId && avecCode.has(userId) && ouverts.has(userId);
   const ouvrirCouple = () => garde(userId, () => {});
+  // Toucher un prénom : son code d'abord (s'il en a un), puis tout s'ouvre.
+  const entrer = (id) => garde(id, () => setQui(id));
 
   const familleTot = estFamille(membres, store.familleActivee);
   const sansCouple = store.rewards.filter((r) => !(familleTot && r.couple));
@@ -172,7 +183,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
               type="button"
               className="qui-choix"
               aria-pressed={id === qui}
-              onClick={() => setQui(id)}
+              onClick={() => entrer(id)}
             >
               {id === userId ? store.names[userId] || t('proches.moi') : noms[id]}
             </button>
@@ -232,6 +243,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       </div>
       )}
 
+      {verrouille ? (
+        <p className="setnote qui-invite">{t('codes.choisirMembre')}</p>
+      ) : (
+      <>
       <p className="detail-line">
         {t(famille ? 'cerveau.detailFamille' : 'cerveau.detail', {
           ajoutees: detail.added,
@@ -288,7 +303,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </section>
       )}
 
+      </>
+      )}
       </div>
+      {!verrouille && (
       <div className="brain-col">
       <section className="gage-section">
         <h2 className="gage-title">{t('recompenses.titre')}</h2>
@@ -419,8 +437,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       </section>
 
       </div>
+      )}
       </div>
 
+      {!verrouille && (
       <section className="setgroup">
         <h2 className="setlabel">{t('inventaire.titre')}</h2>
         {mesClaims.length === 0 ? (
@@ -444,6 +464,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </div>
         )}
       </section>
+      )}
 
       {demande && (
         <CodeOperateur

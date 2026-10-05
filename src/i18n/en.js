@@ -254,6 +254,7 @@ export default {
     pourQui: 'Whose points?',
   },
   codes: {
+    choisirMembre: 'Tap your name to open your rewards.',
     titre: '{nom}’s code',
     faux: 'Wrong code.',
     format: 'The code has 4 digits.',

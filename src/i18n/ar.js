@@ -254,6 +254,7 @@ export default {
     pourQui: 'نقاط من؟',
   },
   codes: {
+    choisirMembre: 'المس اسمك لفتح مكافآتك.',
     titre: 'رمز {nom}',
     faux: 'رمز خاطئ.',
     format: 'الرمز من 4 أرقام.',

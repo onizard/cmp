@@ -3913,3 +3913,10 @@ body,
     width: 248px;
   }
 }
+
+/* Cerveau partagé : avant d'entrer chez quelqu'un. */
+.qui-invite {
+  margin: 14px 4px 0;
+  text-align: center;
+  font-weight: 700;
+}

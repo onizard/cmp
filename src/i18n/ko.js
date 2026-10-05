@@ -254,6 +254,7 @@ export default {
     pourQui: '누구의 포인트?',
   },
   codes: {
+    choisirMembre: '내 이름을 눌러 보상을 열어요.',
     titre: '{nom}의 코드',
     faux: '코드가 틀렸어요.',
     format: '코드는 4자리예요.',

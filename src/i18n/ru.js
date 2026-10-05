@@ -254,6 +254,7 @@ export default {
     pourQui: 'Чьи баллы?',
   },
   codes: {
+    choisirMembre: 'Нажмите на своё имя, чтобы открыть свои награды.',
     titre: 'Код: {nom}',
     faux: 'Неверный код.',
     format: 'В коде 4 цифры.',

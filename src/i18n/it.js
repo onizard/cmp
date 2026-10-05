@@ -254,6 +254,7 @@ export default {
     pourQui: 'I punti di chi?',
   },
   codes: {
+    choisirMembre: 'Tocca il tuo nome per aprire le tue ricompense.',
     titre: 'Codice di {nom}',
     faux: 'Codice errato.',
     format: 'Il codice ha 4 cifre.',

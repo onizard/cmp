@@ -254,6 +254,7 @@ export default {
     pourQui: 'Wessen Punkte?',
   },
   codes: {
+    choisirMembre: 'Tippe auf deinen Namen, um deine Belohnungen zu öffnen.',
     titre: 'Code von {nom}',
     faux: 'Falscher Code.',
     format: 'Der Code hat 4 Ziffern.',

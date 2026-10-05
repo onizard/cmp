@@ -256,6 +256,7 @@ export default {
     pourQui: 'امتیازهای چه کسی؟',
   },
   codes: {
+    choisirMembre: 'روی نامت بزن تا جایزه‌هایت باز شوند.',
     titre: 'کد {nom}',
     faux: 'کد اشتباه است.',
     format: 'کد ۴ رقمی است.',

@@ -254,6 +254,7 @@ export default {
     pourQui: '看谁的积分？',
   },
   codes: {
+    choisirMembre: '点一下你的名字，打开你的奖励。',
     titre: '{nom}的代码',
     faux: '代码错误。',
     format: '代码为 4 位数字。',
