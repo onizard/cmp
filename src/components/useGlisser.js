@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // Appui long, puis on glisse la tâche : au-dessus ou au-dessous de ses
 // voisines, ou dans une autre catégorie.
 //
-// Deux secondes d'appui sans bouger (la ligne se remplit doucement pour dire
+// Une seconde d'appui sans bouger (la ligne se remplit doucement pour dire
 // « continue ») : la tâche se soulève et suit le doigt. Bouger avant, c'est
 // faire défiler la page ; lâcher avant, c'est un toucher ordinaire. Près du
 // haut ou du bas de l'écran, la page défile toute seule. Échap annule.
@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // data-tache. La cible est { section, index }, l'index comptant les tâches
 // de la section SANS celle qu'on déplace.
 
-export const APPUI_MS = 2000;
+export const APPUI_MS = 1000;
 const TOLERANCE = 10; // px : au-delà, c'est un défilement, pas un appui
 const BORD = 90; // px : zone de défilement automatique, en haut et en bas
 const VITESSE = 14; // px par image
