@@ -4,7 +4,7 @@ import Brain from './Brain.jsx';
 import Bon from './Bon.jsx';
 import Defilant from './Defilant.jsx';
 import { libelleRecompense, libelleBon } from '../lib/libelle.js';
-import { estFamille, classement } from '../lib/famille.js';
+import { estFamille, classement, creditees, bonsCredites, tousLesMembres, tousLesNoms } from '../lib/famille.js';
 import {
   pointsAvailable,
   pointsBreakdown,
@@ -31,13 +31,27 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const [wishError, setWishError] = useState(null);
   const [showBareme, setShowBareme] = useState(false);
 
+  // Famille : les membres sans compte (un enfant) regardent leurs points et
+  // prennent leurs bons depuis ce téléphone. `qui` : la personne affichée.
+  const proches = (store.proches || []).filter((p) => p.actif);
+  const idsProches = new Set(proches.map((p) => p.id));
+  const [quiChoisi, setQui] = useState(userId);
+  const qui = quiChoisi === userId || idsProches.has(quiChoisi) ? quiChoisi : userId;
+  const pourProche = idsProches.has(qui) ? qui : null;
+
+  // Les points vont à qui a fait (famille.js).
+  const tachesC = creditees(tasks);
+  const bonsC = bonsCredites(store.claims);
+  const noms = tousLesNoms(store.names, store.proches);
+  const membres = tousLesMembres(store.members, store.proches);
+
   const other = store.otherUser;
-  const myName = store.names[userId] || t('cerveau.toi');
+  const myName = noms[qui] || t('cerveau.toi');
   const otherName = (other && store.names[other]) || t('cerveau.binome');
 
-  const myPts = pointsAvailable(tasks, store.claims, userId);
-  const otherPts = other ? pointsAvailable(tasks, store.claims, other) : 0;
-  const detail = pointsBreakdown(tasks, userId);
+  const myPts = pointsAvailable(tachesC, bonsC, qui);
+  const otherPts = other ? pointsAvailable(tachesC, bonsC, other) : 0;
+  const detail = pointsBreakdown(tachesC, qui);
 
   const catalogue = sortRewards(store.rewards);
   const next = nextReward(store.rewards, myPts);
@@ -48,12 +62,12 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
   // En famille (3 membres ou plus) : un classement au lieu du face-à-face, et
   // chaque bon désigne qui l'honorera.
-  const famille = estFamille(store.members, store.familleActivee);
+  const famille = estFamille(membres, store.familleActivee);
   const nomDe = (id) =>
-    store.names[id] || (id === userId ? t('cerveau.toi') : t('famille.sansPrenom'));
-  const rangs = famille ? classement(store.members, tasks, store.claims, store.names) : [];
+    noms[id] || (id === userId ? t('cerveau.toi') : t('famille.sansPrenom'));
+  const rangs = famille ? classement(membres, tachesC, bonsC, noms) : [];
   const autresMembres = famille
-    ? store.members.filter((id) => id !== userId).map((id) => ({ id, nom: nomDe(id) }))
+    ? membres.filter((id) => id !== qui).map((id) => ({ id, nom: nomDe(id) }))
     : null;
   const MEDAILLES = ['🥇', '🥈', '🥉'];
 
@@ -63,8 +77,8 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   // Ceux de l'autre n'y figurent pas : ils ont été payés avec ses points, on
   // n'a pas à en disposer. Ils restent lus depuis la base, en revanche, car
   // c'est ce qui permet de calculer ses points à elle ou à lui.
-  const mesClaims = store.claims
-    .filter((c) => !c.deleted && c.userId === userId)
+  const mesClaims = bonsC
+    .filter((c) => !c.deleted && c.userId === qui)
     .slice()
     .sort((a, b) => {
       // D'abord ce qui attend mon « c'est fait », puis les bons neufs, puis
@@ -97,12 +111,12 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   };
 
   const prendre = async (r) => {
-    montrerBon(await store.claimReward(r));
+    montrerBon(await store.claimReward(r, pourProche));
   };
 
   const submitWish = async (e) => {
     e.preventDefault();
-    const err = await store.claimCustom(wish);
+    const err = await store.claimCustom(wish, pourProche);
     if (err) {
       setWishError(err);
       return;
@@ -116,12 +130,28 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     <main className="brain-view">
       <p className="brain-lede">{t('cerveau.lede')}</p>
 
+      {proches.length > 0 && (
+        <div className="qui-vue" role="group" aria-label={t('proches.pourQui')}>
+          {[userId, ...proches.map((p) => p.id)].map((id) => (
+            <button
+              key={id}
+              type="button"
+              className="qui-choix"
+              aria-pressed={id === qui}
+              onClick={() => setQui(id)}
+            >
+              {id === userId ? store.names[userId] || t('proches.moi') : noms[id]}
+            </button>
+          ))}
+        </div>
+      )}
+
       {famille ? (
         <section className="classement" aria-label={t('famille.classement')}>
           <h2 className="setlabel">{t('famille.classement')}</h2>
           <ol>
             {rangs.map((l) => (
-              <li key={l.id} className={l.id === userId ? 'moi' : ''}>
+              <li key={l.id} className={l.id === qui ? 'moi' : ''}>
                 <span className="classement-rang" aria-label={`#${l.rang}`}>
                   {MEDAILLES[l.rang - 1] || l.rang}
                 </span>
@@ -130,7 +160,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 </span>
                 <span className="classement-nom">
                   {nomDe(l.id)}
-                  {l.id === userId && store.names[userId] ? (
+                  {l.id === qui && noms[qui] ? (
                     <span className="classement-toi"> · {t('cerveau.toi')}</span>
                   ) : null}
                 </span>
@@ -330,7 +360,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
                 lang={langue()}
                 autre={c.pour ? nomDe(c.pour) : otherName}
                 choix={autresMembres}
-                onUtiliser={(pour) => store.useClaim(c.id, pour || null)}
+                onUtiliser={(pour) => store.useClaim(c.id, pour || null, idsProches.has(pour))}
                 onAnnuler={() => store.annulerAchat(c.id)}
                 onValider={() => store.validerBon(c.id)}
               />

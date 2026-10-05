@@ -11,6 +11,8 @@ export default function TaskItem({
   // Glisser-déposer (TaskList) : les écouteurs de l'appui long, le décalage
   // de celle qu'on glisse, le trait où elle tomberait.
   poignee = null, glissee = null, depot = null,
+  // Famille : les membres sans compte ; à la coche, on dit qui l'a faite.
+  proches = [],
 }) {
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -18,6 +20,7 @@ export default function TaskItem({
   const [draft, setDraft] = useState(task.text);
   const [dueOpen, setDueOpen] = useState(false);
   const [refus, setRefus] = useState(false);
+  const [quiOuvert, setQuiOuvert] = useState(false);
   const start = splitDue(task.dueAt, task.dueHasTime);
   const [date, setDate] = useState(start.date);
   const [time, setTime] = useState(start.time);
@@ -97,7 +100,17 @@ export default function TaskItem({
       );
       return;
     }
-    const combo = store.toggleDone(task, currentMonth);
+    // Famille avec des membres sans compte : on demande d'abord qui l'a faite.
+    if (!task.done && proches.length > 0) {
+      setQuiOuvert((v) => !v);
+      return;
+    }
+    cocherPour(null);
+  };
+
+  const cocherPour = (proche) => {
+    setQuiOuvert(false);
+    const combo = store.toggleDone(task, currentMonth, proche);
     if (combo === false || combo === 'reservee') {
       // On explique au lieu de rester inerte : un bouton mort passe
       // pour une panne.
@@ -115,7 +128,9 @@ export default function TaskItem({
       : task.createdOp && noms[task.createdOp]
         ? t('entreprise.par', { nom: noms[task.createdOp] })
         : null
-    : null;
+    : task.done && task.doneProche && names[task.doneProche]
+      ? t('entreprise.faitPar', { nom: names[task.doneProche] })
+      : null;
 
   return (
     <li
@@ -178,6 +193,22 @@ export default function TaskItem({
         )}
       </div>
 
+      {quiOuvert && (
+        <div className="qui-a-fait" role="group" aria-label={t('proches.quiAFait')}>
+          <span className="qui-a-fait-titre">{t('proches.quiAFait')}</span>
+          <button type="button" className="qui-choix" onClick={() => cocherPour(null)}>
+            {names[store.userId] || t('proches.moi')}
+          </button>
+          {proches.map((p) => (
+            <button key={p.id} type="button" className="qui-choix" onClick={() => cocherPour(p.id)}>
+              {p.nom}
+            </button>
+          ))}
+          <button type="button" className="link qui-annuler" onClick={() => setQuiOuvert(false)}>
+            {t('app.annuler')}
+          </button>
+        </div>
+      )}
       {refus === 'decoche' && <p className="refus">{t('taches.decocheInterdite')}</p>}
       {refus === 'reservee' && (
         <p className="refus">

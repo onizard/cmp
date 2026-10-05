@@ -243,6 +243,15 @@ export default {
     desactiver: 'Ausschalten',
     refuse: 'Dieser Computer ist dem Firmenkonto {email} vorbehalten.',
   },
+  proches: {
+    titre: 'Mitglieder ohne Konto',
+    aide: 'Für alle ohne E-Mail-Adresse, zum Beispiel Kinder: Ein Vorname genügt. Sie haken ihre Aufgaben auf deinem Handy ab, indem sie ihren Namen wählen, und sammeln Punkte und Gutscheine wie alle anderen.',
+    retirer: 'Entfernen',
+    retirerOui: 'Ja, entfernen',
+    quiAFait: 'Wer hat sie erledigt?',
+    moi: 'Ich',
+    pourQui: 'Wessen Punkte?',
+  },
   comptes: {
     titre: 'Meine Konten',
     perso: 'Privat',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ Gutschein von {qui}', autre: '🎟️ {n} Gutscheine von {qui}' },
     texte: 'Du bist dran. {qui} bestätigt, wenn es erledigt ist.',
+    pourProche: '{nom} ist dran. {qui} bestätigt, sobald es erledigt ist.',
     ok: 'Ich mach’s',
   },
 

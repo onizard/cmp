@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useT, langue } from '../i18n/index.js';
-import { bonsAHonorer } from '../lib/gamify.js';
+import { bonsAHonorer, etatBon } from '../lib/gamify.js';
 import { libelleBon } from '../lib/libelle.js';
 import Bon from './Bon.jsx';
 
@@ -16,9 +16,16 @@ const RAPPEL_ECRAN_MS = 5 * 60 * 1000;
  * — « J'y vais » — mais pas le faire disparaître : seul le détenteur du bon,
  * en validant que c'est fait, y met fin.
  */
-export default function BonsAHonorer({ claims, rewards, names, userId }) {
+export default function BonsAHonorer({ claims, rewards, names, userId, proches = [] }) {
   const t = useT();
-  const enAttente = bonsAHonorer(claims, userId);
+  // Les miens, puis ceux d'un membre sans compte (un enfant) : il n'a pas de
+  // téléphone, son bon s'affiche donc sur ceux du foyer — sauf chez qui l'a
+  // utilisé. `claims` : les bons crédités (famille.js).
+  const actifs = new Set(proches.filter((p) => p.actif).map((p) => p.id));
+  const pourUnProche = (claims || []).filter(
+    (c) => !c.deleted && actifs.has(c.pour) && c.userId !== userId && etatBon(c) === 'enAttente',
+  );
+  const enAttente = [...bonsAHonorer(claims, userId), ...pourUnProche];
   // Quand on l'a écarté, et quels bons étaient alors affichés.
   const [ecarte, setEcarte] = useState(null);
   const [, setTic] = useState(0);
@@ -70,7 +77,11 @@ export default function BonsAHonorer({ claims, rewards, names, userId }) {
             />
           ))}
         </div>
-        <p className="honorer-texte">{t('honorer.texte', { qui })}</p>
+        <p className="honorer-texte">
+          {actifs.has(enAttente[0].pour)
+            ? t('honorer.pourProche', { qui, nom: names[enAttente[0].pour] || '' })
+            : t('honorer.texte', { qui })}
+        </p>
         <button
           className="btn btn-accent btn-block"
           type="button"

@@ -84,12 +84,12 @@ export function statsCategories(tasks = [], lignes = []) {
 }
 
 /**
- * Les catégories qui commencent par `saisie`, la plus fréquente en tête et,
- * à égalité, la plus récente. `exclure` : les clés à ne pas proposer.
+ * Les catégories qui commencent par `saisie` (toutes si elle est vide : « # »
+ * seul les propose toutes), la plus fréquente en tête et, à égalité, la plus
+ * récente. `exclure` : les clés à ne pas proposer.
  */
-export function suggerer(stats, saisie, { exclure = [], max = 4 } = {}) {
+export function suggerer(stats, saisie, { exclure = [], max = 12 } = {}) {
   const debut = cleCategorie(saisie);
-  if (!debut) return [];
   const sauf = new Set(exclure.map(cleCategorie));
   return [...stats.entries()]
     .filter(([cle]) => cle.startsWith(debut) && !sauf.has(cle))

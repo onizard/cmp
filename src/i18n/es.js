@@ -243,6 +243,15 @@ export default {
     desactiver: 'Desactivar',
     refuse: 'Este ordenador está reservado a la cuenta profesional {email}.',
   },
+  proches: {
+    titre: 'Miembros sin cuenta',
+    aide: 'Para quienes no tienen correo electrónico, los niños por ejemplo: basta un nombre. Marcan sus tareas en tu teléfono eligiendo su nombre y ganan puntos y vales como los demás.',
+    retirer: 'Quitar',
+    retirerOui: 'Sí, quitar',
+    quiAFait: '¿Quién la hizo?',
+    moi: 'Yo',
+    pourQui: '¿Los puntos de quién?',
+  },
   comptes: {
     titre: 'Mis cuentas',
     perso: 'Personal',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ Vale de {qui}', autre: '🎟️ {n} vales de {qui}' },
     texte: 'Te toca. {qui} lo confirmará cuando esté hecho.',
+    pourProche: 'Le toca a {nom}. {qui} lo confirmará cuando esté hecho.',
     ok: 'Voy',
   },
 

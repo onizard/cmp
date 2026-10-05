@@ -40,7 +40,7 @@ function localNow(d = new Date()) {
   return { hour: Number(get('hour')), day: `${get('year')}-${get('month')}-${get('day')}` };
 }
 
-const VERSION = 'v4.18';
+const VERSION = 'v4.19';
 
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
@@ -131,6 +131,14 @@ async function actorName(householdId, userId) {
   return nom && nom.trim() ? nom.trim() : null;
 }
 
+/** Prénom d'un membre sans compte (proches.sql), un enfant par exemple. */
+async function procheName(id) {
+  if (!id) return null;
+  const { rows } = await client.query('select nom from proches where id = $1', [id]);
+  const nom = rows[0] && rows[0].nom;
+  return nom && nom.trim() ? nom.trim() : null;
+}
+
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   // Rejoindre un compte pro (acces.sql) : le mail a l'administrateur, la
@@ -140,7 +148,9 @@ async function handleEvent(ev) {
   if (kind === 'acces_reponse') return annoncerReponse(ev.id);
   if (!household) return;
   if (kind === 'bon') return handleBon(ev);
-  const nom = await actorName(household, actor);
+  // Coché par un membre sans compte sur le téléphone d'un parent : c'est son
+  // prénom qu'on annonce.
+  const nom = (ev.proche && (await procheName(ev.proche))) || (await actorName(household, actor));
   // Réservation : « Untel s'en occupe », ou « Untel a libéré… » s'il annule
   // avant l'heure. Même étiquette : la libération remplace l'annonce.
   if (kind === 'reserve' || kind === 'libere') {
@@ -345,7 +355,7 @@ function depuis(lang, minutes) {
 }
 
 const BON_SQL = `
-  select c.id, c.household_id, c.user_id, c.label, c.pour,
+  select c.id, c.household_id, c.user_id, c.label, c.pour, c.proche, c.pour_proche,
          r.cle,
          extract(epoch from (now() - c.used_at)) / 60 as minutes
     from claims c
@@ -355,8 +365,10 @@ const BON_SQL = `
 // En famille, le bon désigne qui l'honore : lui seul est prévenu et relancé.
 // Sans destinataire (un couple, ou une appli pas encore à jour), tout le foyer
 // sauf le détenteur, comme avant.
+// Un membre sans compte n'a pas de téléphone : son bon (ou celui qu'il doit
+// honorer) prévient tout le foyer, sauf le téléphone qui l'a utilisé.
 async function envoyerBon(b, relance) {
-  const nom = await actorName(b.household_id, b.user_id);
+  const nom = (b.proche && (await procheName(b.proche))) || (await actorName(b.household_id, b.user_id));
   const envoyer = (composer) =>
     b.pour
       ? sendToUser(b.household_id, b.pour, composer)

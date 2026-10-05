@@ -243,6 +243,15 @@ export default {
     desactiver: 'オフにする',
     refuse: 'このパソコンは会社アカウント {email} 専用です。',
   },
+  proches: {
+    titre: 'アカウントのないメンバー',
+    aide: 'メールアドレスのない人（子どもなど）向け：名前だけで大丈夫。あなたのスマホで自分の名前を選んでタスクを完了にし、みんなと同じようにポイントや券をもらえます。',
+    retirer: '削除',
+    retirerOui: '削除する',
+    quiAFait: '誰がやりましたか？',
+    moi: '自分',
+    pourQui: '誰のポイント？',
+  },
   comptes: {
     titre: 'わたしのアカウント',
     perso: '個人',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ {qui}がチケットを使いました', autre: '🎟️ {qui}がチケットを{n}枚使いました' },
     texte: 'あなたの番です。終わったら{qui}が確認します。',
+    pourProche: '{nom}の番です。終わったら{qui}が確認します。',
     ok: 'やります',
   },
 

@@ -12,6 +12,41 @@ export const familleDOffice = (members) => (members || []).length >= SEUIL_FAMIL
 export const estFamille = (members, activee = false) =>
   Boolean(activee) || familleDOffice(members);
 
+// --- Les membres sans compte (proches.sql) -------------------------------
+//
+// Un enfant, par exemple : un prénom, sans e-mail ni code. Il agit sur le
+// téléphone d'un parent ; la tâche qu'il coche porte son identifiant
+// (doneProche) en plus du compte connecté (doneBy). Ses bons portent son
+// identifiant (proche), celui qu'on désigne pour honorer un bon aussi
+// (pourProche).
+
+/**
+ * Les tâches telles qu'elles comptent pour les points : une tâche cochée par
+ * un membre sans compte lui revient, pas au téléphone qui a servi.
+ */
+export const creditees = (tasks) =>
+  (tasks || []).map((t) => (t.doneProche ? { ...t, doneBy: t.doneProche } : t));
+
+/** Les bons tels qu'ils comptent : celui d'un membre sans compte est à lui. */
+export const bonsCredites = (claims) =>
+  (claims || []).map((c) =>
+    c.proche || c.pourProche
+      ? { ...c, userId: c.proche || c.userId, pour: c.pourProche || c.pour }
+      : c,
+  );
+
+/** Tout le monde au classement : les comptes, puis les membres sans compte actifs. */
+export const tousLesMembres = (members, proches) => [
+  ...(members || []),
+  ...(proches || []).filter((p) => p.actif).map((p) => p.id),
+];
+
+/** Les prénoms de tous : comptes et membres sans compte. */
+export const tousLesNoms = (names, proches) => ({
+  ...(names || {}),
+  ...Object.fromEntries((proches || []).map((p) => [p.id, p.nom])),
+});
+
 /**
  * Le classement des points disponibles, du plus riche au moins riche. Les
  * ex aequo partagent le même rang ; à égalité, l'ordre suit les prénoms pour

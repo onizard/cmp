@@ -3625,3 +3625,68 @@ body,
   color: var(--danger);
   font-weight: 700;
 }
+
+/* --- Famille : les membres sans compte ---------------------------------- */
+
+.proches {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.proches-ajout {
+  margin-top: 8px;
+}
+
+.equipe-confirmer {
+  display: inline-flex;
+  gap: 14px;
+}
+
+/* À la coche : qui l'a faite ? */
+.qui-a-fait {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px calc(var(--tap) + 6px);
+}
+
+.qui-a-fait-titre {
+  flex-basis: 100%;
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.qui-choix {
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1.5px solid #e3d0ef;
+  border-radius: 999px;
+  background: #faf5fd;
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.qui-annuler {
+  min-height: 0;
+  padding: 4px 6px;
+}
+
+/* Cerveau : pour qui regarde-t-on ? */
+.qui-vue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.qui-vue .qui-choix[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--grad);
+  color: #fff;
+}

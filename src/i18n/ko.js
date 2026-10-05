@@ -243,6 +243,15 @@ export default {
     desactiver: '끄기',
     refuse: '이 컴퓨터는 회사 계정 {email} 전용입니다.',
   },
+  proches: {
+    titre: '계정 없는 구성원',
+    aide: '이메일이 없는 사람(예: 아이들)을 위한 기능이에요. 이름만 있으면 돼요. 당신의 휴대폰에서 자기 이름을 골라 할 일을 완료하고, 다른 사람처럼 포인트와 쿠폰을 받아요.',
+    retirer: '삭제',
+    retirerOui: '네, 삭제',
+    quiAFait: '누가 했나요?',
+    moi: '나',
+    pourQui: '누구의 포인트?',
+  },
   comptes: {
     titre: '내 계정들',
     perso: '개인',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ {qui}이(가) 쿠폰을 사용했어요', autre: '🎟️ {qui}이(가) 쿠폰 {n}장을 사용했어요' },
     texte: '이제 내 차례예요. 끝나면 {qui}이(가) 확인해요.',
+    pourProche: '{nom}의 차례예요. 끝나면 {qui}님이 확인해요.',
     ok: '할게요',
   },
 

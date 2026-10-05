@@ -4,6 +4,7 @@ import { sortForMonth, tasksVisibleIn } from './visibility.js';
 import { comboProchain } from './combo.js';
 import { etatReservation, RESERVATION_MS } from './reservation.js';
 import { tachesParOperateur } from './equipe.js';
+import { creditees } from './famille.js';
 
 // --- Correspondance base <-> modèle client ---
 
@@ -23,6 +24,8 @@ const fromRow = (r) => ({
   // Mode entreprise : l'opérateur qui a créé, celui qui a coché.
   createdOp: r.created_op ?? null,
   doneOp: r.done_op ?? null,
+  // Mode famille : le membre sans compte qui a fait la tâche (proches.sql).
+  doneProche: r.done_proche ?? null,
   reservePar: r.reserve_par ?? null,
   reserveDebut: r.reserve_debut ?? null,
   reserveFin: r.reserve_fin ?? null,
@@ -65,6 +68,7 @@ const patchToRow = (patch) => {
   if ('doneMonth' in patch) row.done_month = patch.doneMonth;
   if ('doneBy' in patch) row.done_by = patch.doneBy;
   if ('doneAt' in patch) row.done_at = patch.doneAt;
+  if ('doneProche' in patch) row.done_proche = patch.doneProche;
   if ('dueAt' in patch) row.due_at = patch.dueAt;
   if ('dueHasTime' in patch) row.due_has_time = patch.dueHasTime;
   // Changer l'échéance remet les rappels à zéro : les paliers déjà franchis
@@ -498,24 +502,30 @@ export function useTasks(householdId, userId) {
    * combo), pour que l'écran puisse l'annoncer.
    */
   const toggleDone = useCallback(
-    (task, currentMonth) => {
+    // `proche` : le membre sans compte qui l'a faite, en famille (sinon soi).
+    (task, currentMonth, proche = null) => {
       if (task.done && !peutDecocher(task)) return false;
       // Réservée par l'autre : elle est à lui tant que l'heure court.
       if (!task.done && etatReservation(task, tasksRef.current, userId) === 'autre') {
         return 'reservee';
       }
       if (task.done) {
-        updateTask(task.id, { done: false, doneMonth: null, doneBy: null, doneAt: null });
+        updateTask(task.id, {
+          done: false, doneMonth: null, doneBy: null, doneAt: null,
+          ...(task.doneProche ? { doneProche: null } : {}),
+        });
         return 1;
       }
       // Le rang se lit avant d'écrire : la tâche qu'on coche n'est pas encore
       // dans le compte de la journée, et c'est elle qui prend le rang suivant.
-      const combo = comboProchain(tasksRef.current, userId);
+      // Un membre sans compte a son propre combo.
+      const combo = comboProchain(creditees(tasksRef.current), proche || userId);
       updateTask(task.id, {
         done: true,
         doneMonth: currentMonth,
         doneBy: userId ?? null,
         doneAt: nowIso(),
+        ...(proche ? { doneProche: proche } : {}),
       });
       return combo;
     },

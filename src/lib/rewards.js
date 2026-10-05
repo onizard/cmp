@@ -25,6 +25,9 @@ const claimFrom = (r) => ({
   realiseAt: r.realise_at || null,
   // En famille : la personne désignée pour honorer le bon.
   pour: r.pour || null,
+  // Membres sans compte (proches.sql) : le bon est à lui, ou il l'honore.
+  proche: r.proche || null,
+  pourProche: r.pour_proche || null,
   label: r.label,
   cost: Number(r.cost),
   deleted: r.deleted,
@@ -65,6 +68,10 @@ export function useRewards(householdId, userId) {
   const [members, setMembers] = useState([]);
   // Le foyer a-t-il choisi le mode famille (même à deux) ?
   const [familleActivee, setFamilleActivee] = useState(false);
+  // Les membres sans compte (les enfants, par exemple) : { id, nom, actif }.
+  const [proches, setProches] = useState(() =>
+    householdId ? readLS(key(householdId, 'proches'), []) : [],
+  );
   const rRef = useRef(rewards);
   const cRef = useRef(claims);
 
@@ -88,7 +95,7 @@ export function useRewards(householdId, userId) {
 
   const refresh = useCallback(async () => {
     if (!supabase || !householdId) return;
-    const [{ data: rw }, { data: cl }, { data: mem }, { data: foyer }] = await Promise.all([
+    const [{ data: rw }, { data: cl }, { data: mem }, { data: foyer }, { data: pr }] = await Promise.all([
       supabase.from('rewards').select('*').eq('household_id', householdId),
       supabase.from('claims').select('*').eq('household_id', householdId),
       supabase
@@ -97,7 +104,16 @@ export function useRewards(householdId, userId) {
         .eq('household_id', householdId),
       // Sans la colonne (base pas encore à jour), l'erreur laisse `foyer` vide.
       supabase.from('households').select('famille').eq('id', householdId).maybeSingle(),
+      // Sans la table (base pas encore à jour), `pr` reste vide.
+      supabase.from('proches').select('id, nom, actif, created_at').eq('household_id', householdId),
     ]);
+    if (pr) {
+      const liste = pr
+        .map((p) => ({ id: p.id, nom: p.nom, actif: p.actif !== false, createdAt: p.created_at }))
+        .sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
+      setProches(liste);
+      writeLS(key(householdId, 'proches'), liste);
+    }
     if (foyer) setFamilleActivee(Boolean(foyer.famille));
     if (rw) saveRewards(rw.map(rewardFrom));
     if (cl) saveClaims(cl.map(claimFrom));
@@ -147,8 +163,10 @@ export function useRewards(householdId, userId) {
   );
 
   /** Dépense ses points pour une récompense (on fige son nom et son coût). */
+  // `proche` : un membre sans compte prend le bon avec SES points, depuis le
+  // téléphone d'un parent.
   const claimReward = useCallback(
-    async (reward) => {
+    async (reward, proche = null) => {
       const row = {
         id: uuid(),
         household_id: householdId,
@@ -157,6 +175,7 @@ export function useRewards(householdId, userId) {
         label: reward.label,
         cost: reward.cost,
         deleted: false,
+        ...(proche ? { proche } : {}),
       };
       // Le visuel n'est pas copié sur le bon : on le retrouve par reward_id au
       // moment de l'affichage, pour qu'un nouveau dessin s'applique aussi aux
@@ -177,10 +196,12 @@ export function useRewards(householdId, userId) {
    * qui seule fait autorité : un téléphone en retard d'une mise à jour ne
    * connaît pas encore celle-ci.
    */
+  // Le bon d'un membre sans compte se gère depuis n'importe quel téléphone du
+  // foyer : il n'en a pas à lui.
   const estAMoi = useCallback(
     (id) => {
       const bon = cRef.current.find((c) => c.id === id);
-      return Boolean(bon) && bon.userId === userId;
+      return Boolean(bon) && (bon.proche ? true : bon.userId === userId);
     },
     [userId],
   );
@@ -189,15 +210,21 @@ export function useRewards(householdId, userId) {
    * Utilise un bon. En famille, `pour` désigne la personne qui l'honorera :
    * elle seule est prévenue. À deux, pas besoin — c'est l'autre.
    */
+  // `pourProche` : la personne désignée est un membre sans compte.
   const useClaim = useCallback(
-    async (id, pour = null) => {
+    async (id, pour = null, pourProche = false) => {
       if (!estAMoi(id)) return;
       const quand = new Date().toISOString();
+      const qui = pourProche ? { pourProche: pour } : { pour };
       saveClaims(
-        cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand, pour } : c)),
+        cRef.current.map((c) => (c.id === id ? { ...c, usedAt: quand, ...qui } : c)),
       );
       if (!supabase) return;
-      const maj = pour ? { used_at: quand, pour } : { used_at: quand };
+      const maj = !pour
+        ? { used_at: quand }
+        : pourProche
+          ? { used_at: quand, pour_proche: pour }
+          : { used_at: quand, pour };
       const { error } = await supabase.from('claims').update(maj).eq('id', id);
       if (error) refresh();
     },
@@ -257,7 +284,7 @@ export function useRewards(householdId, userId) {
    * Elle n'entre pas au catalogue — c'est un souhait unique, à prix fixe.
    */
   const claimCustom = useCallback(
-    async (label) => {
+    async (label, proche = null) => {
       const text = label.trim();
       if (!text) return 'Dis ce que tu demandes.';
       const row = {
@@ -268,6 +295,7 @@ export function useRewards(householdId, userId) {
         label: text,
         cost: REWARD_CUSTOM,
         deleted: false,
+        ...(proche ? { proche } : {}),
       };
       saveClaims([...cRef.current, { ...claimFrom(row), createdAt: new Date().toISOString() }]);
       if (supabase) await supabase.from('claims').insert(row);
@@ -276,10 +304,37 @@ export function useRewards(householdId, userId) {
     [householdId, userId, saveClaims],
   );
 
+  /** Un membre sans compte de plus (un prénom suffit). */
+  const ajouterProche = useCallback(
+    async (nom) => {
+      const propre = String(nom || '').trim().slice(0, 40);
+      if (!propre || !supabase || !householdId) return false;
+      const { error } = await supabase.from('proches').insert({ household_id: householdId, nom: propre });
+      await refresh();
+      return !error;
+    },
+    [householdId, refresh],
+  );
+
+  /** Retire un membre sans compte : il quitte la liste, son historique reste. */
+  const retirerProche = useCallback(
+    async (id) => {
+      if (!supabase) return false;
+      setProches((l) => l.map((p) => (p.id === id ? { ...p, actif: false } : p)));
+      const { error } = await supabase.from('proches').update({ actif: false }).eq('id', id);
+      await refresh();
+      return !error;
+    },
+    [refresh],
+  );
+
   return {
     rewards,
     claims,
     names,
+    proches,
+    ajouterProche,
+    retirerProche,
     otherUser,
     members,
     familleActivee,
