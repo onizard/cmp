@@ -25290,7 +25290,7 @@ function localNow(d = /* @__PURE__ */ new Date()) {
   const get = (t) => parts.find((p) => p.type === t).value;
   return { hour: Number(get("hour")), day: `${get("year")}-${get("month")}-${get("day")}` };
 }
-var VERSION = "v4.18";
+var VERSION = "v4.19";
 var log = (...a) => console.log((/* @__PURE__ */ new Date()).toISOString(), ...a);
 if (!process.env.VAPID_PUBLIC || !process.env.VAPID_PRIVATE) {
   console.error("VAPID_PUBLIC et VAPID_PRIVATE sont requis.");
@@ -25361,6 +25361,12 @@ async function actorName(householdId, userId) {
   const nom = rows[0] && rows[0].display_name;
   return nom && nom.trim() ? nom.trim() : null;
 }
+async function procheName(id) {
+  if (!id) return null;
+  const { rows } = await client.query("select nom from proches where id = $1", [id]);
+  const nom = rows[0] && rows[0].nom;
+  return nom && nom.trim() ? nom.trim() : null;
+}
 async function handleEvent(ev) {
   const { kind, household, actor, text } = ev;
   if (kind === "acces") return envoyerMailAcces(ev.id);
@@ -25368,7 +25374,7 @@ async function handleEvent(ev) {
   if (kind === "acces_reponse") return annoncerReponse(ev.id);
   if (!household) return;
   if (kind === "bon") return handleBon(ev);
-  const nom = await actorName(household, actor);
+  const nom = ev.proche && await procheName(ev.proche) || await actorName(household, actor);
   if (kind === "reserve" || kind === "libere") {
     await sendToHousehold(household, actor, (lang) => ({
       title: tr(lang, kind, { qui: nom || tr(lang, "binome") }),
@@ -25522,14 +25528,14 @@ function depuis(lang, minutes) {
   return tr(lang, "dureeJ", { n: Math.floor(minutes / 1440) });
 }
 var BON_SQL = `
-  select c.id, c.household_id, c.user_id, c.label, c.pour,
+  select c.id, c.household_id, c.user_id, c.label, c.pour, c.proche, c.pour_proche,
          r.cle,
          extract(epoch from (now() - c.used_at)) / 60 as minutes
     from claims c
     left join rewards r on r.id = c.reward_id
    where c.used_at is not null and c.realise_at is null and not c.deleted`;
 async function envoyerBon(b, relance) {
-  const nom = await actorName(b.household_id, b.user_id);
+  const nom = b.proche && await procheName(b.proche) || await actorName(b.household_id, b.user_id);
   const envoyer = (composer) => b.pour ? sendToUser(b.household_id, b.pour, composer) : sendToHousehold(b.household_id, b.user_id, composer);
   await envoyer((lang) => {
     const qui = nom || tr(lang, "binome");

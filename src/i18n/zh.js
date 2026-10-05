@@ -243,6 +243,15 @@ export default {
     desactiver: '关闭',
     refuse: '这台电脑仅供企业账户 {email} 使用。',
   },
+  proches: {
+    titre: '没有账户的成员',
+    aide: '适合没有邮箱的人，比如孩子：有名字就够了。他们在你的手机上选择自己的名字来勾选任务，也能像其他人一样获得积分和兑换券。',
+    retirer: '移除',
+    retirerOui: '确定移除',
+    quiAFait: '是谁完成的？',
+    moi: '我',
+    pourQui: '看谁的积分？',
+  },
   comptes: {
     titre: '我的账户',
     perso: '个人',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ {qui} 使用了奖励券', autre: '🎟️ {qui} 使用了 {n} 张奖励券' },
     texte: '轮到你了。完成后由 {qui} 确认。',
+    pourProche: '轮到{nom}了。完成后由{qui}确认。',
     ok: '这就去',
   },
 

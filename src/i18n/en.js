@@ -243,6 +243,15 @@ export default {
     desactiver: 'Turn off',
     refuse: 'This computer is reserved for the business account {email}.',
   },
+  proches: {
+    titre: 'Members without an account',
+    aide: 'For those without an email address, children for example: a first name is enough. They tick their tasks on your phone by choosing their name, and earn points and vouchers like everyone else.',
+    retirer: 'Remove',
+    retirerOui: 'Yes, remove',
+    quiAFait: 'Who did it?',
+    moi: 'Me',
+    pourQui: 'Whose points?',
+  },
   comptes: {
     titre: 'My accounts',
     perso: 'Personal',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ {qui} is using a voucher', autre: '🎟️ {qui} is using {n} vouchers' },
     texte: 'Your move. {qui} will confirm once it’s done.',
+    pourProche: 'It’s {nom}’s turn. {qui} will confirm once it’s done.',
     ok: 'On it',
   },
 

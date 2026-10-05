@@ -243,6 +243,15 @@ export default {
     desactiver: 'Disattiva',
     refuse: 'Questo computer è riservato all’account aziendale {email}.',
   },
+  proches: {
+    titre: 'Membri senza account',
+    aide: 'Per chi non ha un indirizzo e-mail, i bambini per esempio: basta un nome. Spuntano le loro attività sul tuo telefono scegliendo il proprio nome e guadagnano punti e buoni come gli altri.',
+    retirer: 'Rimuovi',
+    retirerOui: 'Sì, rimuovi',
+    quiAFait: 'Chi l’ha fatta?',
+    moi: 'Io',
+    pourQui: 'I punti di chi?',
+  },
   comptes: {
     titre: 'I miei account',
     perso: 'Personale',
@@ -361,6 +370,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ Buono di {qui}', autre: '🎟️ {n} buoni di {qui}' },
     texte: 'Tocca a te. {qui} confermerà quando sarà fatto.',
+    pourProche: 'Tocca a {nom}. {qui} confermerà quando sarà fatto.',
     ok: 'Vado',
   },
 

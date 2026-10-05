@@ -59,7 +59,8 @@ export default function Nouvelles({ tasks, names, userId }) {
 
   if (!tache) return null;
 
-  const qui = names[tache.doneBy] || t('cerveau.binome');
+  // Cochée par un membre sans compte (un enfant) : c'est son prénom.
+  const qui = names[tache.doneProche] || names[tache.doneBy] || t('cerveau.binome');
 
   return (
     <div className="nouvelle-voile" role="dialog" aria-modal="true" aria-labelledby="nouvelle-titre">

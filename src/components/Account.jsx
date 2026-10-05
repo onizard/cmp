@@ -16,10 +16,11 @@ import InstallHint from './InstallHint.jsx';
 import ShareInvite, { PartagerAppli } from './ShareInvite.jsx';
 import LangPicker from './LangPicker.jsx';
 import { useT } from '../i18n/index.js';
-import { familleDOffice } from '../lib/famille.js';
+import { familleDOffice, tousLesMembres } from '../lib/famille.js';
 import EquipeReglages from './EquipeReglages.jsx';
 import Comptes from './Comptes.jsx';
 import PostePartage from './PostePartage.jsx';
+import Proches from './Proches.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -412,7 +413,8 @@ export default function Account({ account, rewards = null, equipe = null, acces 
         </section>
       )}
 
-      {/* Le mode famille : d'office à partir de 3 membres, au choix avant. */}
+      {/* Le mode famille : d'office à partir de 3 membres (membres sans compte
+          compris), au choix avant. */}
       {rewards && !equipe && (
         <section className="setgroup">
           <h2 className="setlabel">{t('famille.titre')}</h2>
@@ -423,17 +425,18 @@ export default function Account({ account, rewards = null, equipe = null, acces 
                 type="button"
                 className="switch"
                 role="switch"
-                aria-checked={rewards.familleActivee || familleDOffice(rewards.members)}
+                aria-checked={rewards.familleActivee || familleDOffice(tousLesMembres(rewards.members, rewards.proches))}
                 aria-label={t('famille.titre')}
-                disabled={familleDOffice(rewards.members)}
+                disabled={familleDOffice(tousLesMembres(rewards.members, rewards.proches))}
                 onClick={() => rewards.activerFamille(!rewards.familleActivee)}
               />
             </div>
             <p className="setnote">
-              {familleDOffice(rewards.members)
-                ? t('famille.dOffice', { n: rewards.members.length })
+              {familleDOffice(tousLesMembres(rewards.members, rewards.proches))
+                ? t('famille.dOffice', { n: tousLesMembres(rewards.members, rewards.proches).length })
                 : t('famille.aide')}
             </p>
+            <Proches rewards={rewards} />
           </div>
         </section>
       )}

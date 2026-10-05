@@ -49,3 +49,21 @@ describe('bons à honorer en famille', () => {
     expect(bonsAHonorer(claims, 'a')).toEqual([]);
   });
 });
+
+describe('membres sans compte', () => {
+  it('une tâche cochée par Lina lui rapporte, pas au téléphone de papa', async () => {
+    const { creditees, bonsCredites, tousLesMembres, tousLesNoms, classement } = await import('./famille.js');
+    const tasks = [
+      { id: '1', createdBy: 'papa', done: true, doneBy: 'papa', doneProche: 'lina', doneAt: '2026-10-01T10:00:00Z' },
+      { id: '2', createdBy: 'papa', done: true, doneBy: 'papa', doneAt: '2026-10-01T11:00:00Z' },
+    ];
+    const claims = [{ id: 'c', userId: 'papa', proche: 'lina', cost: 1 }];
+    const proches = [{ id: 'lina', nom: 'Lina', actif: true }, { id: 'tom', nom: 'Tom', actif: false }];
+    const membres = tousLesMembres(['papa', 'maman'], proches);
+    expect(membres).toEqual(['papa', 'maman', 'lina']);
+    const r = classement(membres, creditees(tasks), bonsCredites(claims), tousLesNoms({ papa: 'Papa', maman: 'Maman' }, proches));
+    const pts = Object.fromEntries(r.map((l) => [l.nom, l.points]));
+    // Papa : 2 ajouts + sa propre coche ; Lina : la tâche de papa (1,5) moins son bon (1).
+    expect(pts).toEqual({ Papa: 3, Lina: 0.5, Maman: 0 });
+  });
+});

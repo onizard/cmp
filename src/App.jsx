@@ -6,6 +6,7 @@ import { useAdmin } from './lib/admin.js';
 import { t, appliquerAuDocument } from './i18n/index.js';
 import { monthKey, tasksVisibleIn, headline } from './lib/visibility.js';
 import { pointsAvailable, affordable } from './lib/gamify.js';
+import { creditees, bonsCredites, tousLesNoms } from './lib/famille.js';
 import Header from './components/Header.jsx';
 import Auth from './components/Auth.jsx';
 import Onboarding from './components/Onboarding.jsx';
@@ -178,8 +179,14 @@ function Home({ account, currentMonth, onChangerCompte }) {
     [store.tasks, currentMonth],
   );
 
+  // Les points vont à qui a fait : un enfant sans compte qui coche sur ce
+  // téléphone, c'est à lui (famille.js).
+  const tachesC = useMemo(() => creditees(store.tasks), [store.tasks]);
+  const bonsC = useMemo(() => bonsCredites(rewards.claims), [rewards.claims]);
+  const nomsC = useMemo(() => tousLesNoms(rewards.names, rewards.proches), [rewards.names, rewards.proches]);
+
   // Pastille sur l'onglet Cerveau : combien de récompenses sont à portée.
-  const myPoints = pointsAvailable(store.tasks, rewards.claims, userId);
+  const myPoints = pointsAvailable(tachesC, bonsC, userId);
   const readyCount = affordable(rewards.rewards, myPoints).length;
 
   return (
@@ -199,8 +206,9 @@ function Home({ account, currentMonth, onChangerCompte }) {
             store={store}
             currentMonth={currentMonth}
             onCombo={annoncerCombo}
-            names={rewards.names}
+            names={nomsC}
             equipe={entreprise ? equipe : null}
+            proches={entreprise ? [] : rewards.proches}
           />
         ))}
       {tab === 'cerveau' &&
@@ -210,7 +218,7 @@ function Home({ account, currentMonth, onChangerCompte }) {
           <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
         ))}
       {tab === 'bilan' && (
-        <BilanView tasks={store.tasks} claims={rewards.claims} userId={userId} />
+        <BilanView tasks={tachesC} claims={bonsC} userId={userId} />
       )}
       {tab === 'compte' && (
         <Account
@@ -237,16 +245,17 @@ function Home({ account, currentMonth, onChangerCompte }) {
       {/* Ce que l'autre a coché depuis la dernière fois, une tâche à la fois.
           Pas pendant le chargement : la liste vide ne dirait rien. */}
       {!store.loading && (
-        <Nouvelles tasks={store.tasks} names={rewards.names} userId={userId} />
+        <Nouvelles tasks={store.tasks} names={nomsC} userId={userId} />
       )}
 
       {/* Quel que soit l'onglet ouvert : un bon utilisé par l'autre passe
           devant tout le reste. */}
       <BonsAHonorer
-        claims={rewards.claims}
+        claims={bonsC}
         rewards={rewards.rewards}
-        names={rewards.names}
+        names={nomsC}
         userId={userId}
+        proches={rewards.proches}
       />
     </div>
   );

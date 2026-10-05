@@ -395,6 +395,15 @@ export default {
     desactiver: 'Désactiver',
     refuse: 'Cet ordinateur est réservé au compte pro {email}.',
   },
+  proches: {
+    titre: 'Membres sans compte',
+    aide: 'Pour ceux qui n’ont pas d’adresse e-mail, les enfants par exemple : un prénom suffit. Ils cochent leurs tâches sur ton téléphone en choisissant leur prénom, et gagnent des points et des bons comme les autres.',
+    retirer: 'Retirer',
+    retirerOui: 'Oui, retirer',
+    quiAFait: 'Qui l’a faite ?',
+    moi: 'Moi',
+    pourQui: 'Les points de qui ?',
+  },
   comptes: {
     titre: 'Mes comptes',
     perso: 'Perso',
@@ -513,6 +522,7 @@ export default {
   honorer: {
     titre: { un: '🎟️ {qui} utilise son bon', autre: '🎟️ {qui} utilise {n} bons' },
     texte: 'À toi de jouer. {qui} validera quand ce sera fait.',
+    pourProche: 'C’est à {nom} de jouer. {qui} validera quand ce sera fait.',
     ok: 'J’y vais',
   },
 

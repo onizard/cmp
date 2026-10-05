@@ -36,7 +36,9 @@ import { rangsAuDepot } from '../lib/ordre.js';
  * catégorie, puis une section par catégorie. Un appui long sur une tâche la
  * soulève : on la glisse entre ses voisines ou dans une autre section.
  */
-export default function TaskList({ store, currentMonth, onCombo, names = {}, equipe = null }) {
+export default function TaskList({ store, currentMonth, onCombo, names = {}, equipe = null, proches = [] }) {
+  // Famille : les membres sans compte, à qui on attribue une coche.
+  const prochesActifs = proches.filter((p) => p.actif);
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
@@ -170,6 +172,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
       names={names}
       signer={signer}
       noms={equipe ? equipe.noms : {}}
+      proches={prochesActifs}
       poignee={glisser.surTache(task.id)}
       glissee={glisser.glisse && glisser.glisse.id === task.id ? glisser.glisse.dy : null}
       depot={marque[task.id] || null}
@@ -204,6 +207,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
                   names={names}
                   signer={signer}
                   noms={equipe ? equipe.noms : {}}
+                  proches={prochesActifs}
                 />
               ))}
             </ul>
