@@ -12,9 +12,10 @@ export default function AddTask({ onAdd, suggerer = () => [] }) {
 
   useEffect(() => () => clearTimeout(minuteur.current), []);
 
-  // « acheter du pain #d » : on propose les catégories qui commencent par d.
+  // « acheter du pain # » : on propose toutes les catégories déjà employées ;
+  // « #d », celles qui commencent par d.
   const enCours = hashtagEnCours(text);
-  const proposees = enCours ? suggerer(enCours) : [];
+  const proposees = enCours !== null ? suggerer(enCours) : [];
 
   const submit = (e) => {
     e.preventDefault();

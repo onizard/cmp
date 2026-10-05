@@ -60,7 +60,8 @@ describe('suggestions', () => {
     expect(suggerer(stats, 'DEP')).toEqual(['Dépense']);
     expect(suggerer(stats, 'do')).toEqual(['Dons', 'docs']);
     expect(suggerer(stats, 'x')).toEqual([]);
-    expect(suggerer(stats, '')).toEqual([]);
+    // « # » seul : toutes, la plus fréquente en tête.
+    expect(suggerer(stats, '')).toEqual(['Dons', 'Dépense', 'docs', 'maison']);
   });
   it('ne propose pas ce qu’on exclut', () => {
     expect(suggerer(stats, 'd', { exclure: ['dons'] })).toEqual(['Dépense', 'docs']);
