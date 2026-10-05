@@ -57,6 +57,12 @@ export default function TabBar({ tab, onChange, honourCount = 0, admin = false, 
   }
   return (
     <nav className="tabbar" role="tablist" aria-label="Sections">
+      {/* Sur ordinateur, la barre devient une colonne à gauche, avec le nom
+          de l'appli en tête (caché sur téléphone). */}
+      <div className="tabbar-marque" aria-hidden="true">
+        <img src={`${import.meta.env.BASE_URL}icon-192.png`} alt="" width="36" height="36" />
+        <span>{t('app.titre')}</span>
+      </div>
       {tabs.map(({ id, label, Icon }) => (
         <button
           key={id}

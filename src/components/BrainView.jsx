@@ -188,6 +188,10 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </div>
       )}
 
+      {/* Sur ordinateur : deux colonnes, le classement à gauche, les
+          récompenses à droite. Sur téléphone, l'une sous l'autre. */}
+      <div className="brain-cols">
+      <div className="brain-col">
       {famille ? (
         <section className="classement" aria-label={t('famille.classement')}>
           <h2 className="setlabel">{t('famille.classement')}</h2>
@@ -292,6 +296,8 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </section>
       )}
 
+      </div>
+      <div className="brain-col">
       <section className="gage-section">
         <h2 className="gage-title">{t('recompenses.titre')}</h2>
         {catalogue.length === 0 ? (
@@ -417,6 +423,9 @@ export default function BrainView({ tasks, userId, rewards: store }) {
         </section>
 
       </section>
+
+      </div>
+      </div>
 
       <section className="setgroup">
         <h2 className="setlabel">{t('inventaire.titre')}</h2>
