@@ -233,6 +233,16 @@ export default {
     retirer: 'Remove the {nom} category',
     suggestions: 'Categories already used',
   },
+  poste: {
+    titre: 'This device',
+    libelle: 'Shared computer',
+    aide: 'Turn this on for office computers: only this business account will open here. Personal accounts are removed, along with their data.',
+    actif: 'Only this business account opens on this device. Turning it off requires the manager code.',
+    confirmer: 'The other accounts stored on this device (a personal one, for example) will be removed, along with their data. Only this business account will open here.',
+    activer: 'Turn on',
+    desactiver: 'Turn off',
+    refuse: 'This computer is reserved for the business account {email}.',
+  },
   comptes: {
     titre: 'My accounts',
     perso: 'Personal',

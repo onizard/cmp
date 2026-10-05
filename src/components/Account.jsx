@@ -19,6 +19,7 @@ import { useT } from '../i18n/index.js';
 import { familleDOffice } from '../lib/famille.js';
 import EquipeReglages from './EquipeReglages.jsx';
 import Comptes from './Comptes.jsx';
+import PostePartage from './PostePartage.jsx';
 
 // Adresse de contact, fournie au moment de la compilation. Vide = bloc masqué.
 const CONTACT = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -159,6 +160,9 @@ export default function Account({ account, rewards = null, equipe = null, acces 
   // Compte entreprise : supprimer efface toute l'équipe, il faut le code
   // responsable (vérifié par la base).
   const [codeSuppr, setCodeSuppr] = useState('');
+  // L'interrupteur « Ordinateur partagé » change la liste des comptes : on la
+  // relit.
+  const [versionComptes, setVersionComptes] = useState(0);
   const supprimer = async () => {
     setSuppressionErreur(null);
     setSuppression(true);
@@ -375,9 +379,28 @@ export default function Account({ account, rewards = null, equipe = null, acces 
       <section className="setgroup">
         <h2 className="setlabel">{t('comptes.titre')}</h2>
         <div className="setcard">
-          <Comptes courant={account.session.user.id} acces={acces} onDeconnecter={account.signOut} />
+          <Comptes
+            key={versionComptes}
+            courant={account.session.user.id}
+            acces={acces}
+            onDeconnecter={account.signOut}
+          />
         </div>
       </section>
+
+      {/* Compte pro : réserver un poste du bureau à ce seul compte. */}
+      {equipe && (
+        <section className="setgroup">
+          <h2 className="setlabel">{t('poste.titre')}</h2>
+          <div className="setcard">
+            <PostePartage
+              account={account}
+              equipe={equipe}
+              onChange={() => setVersionComptes((v) => v + 1)}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Mode entreprise : l'équipe et ses codes, derrière le code responsable. */}
       {equipe && (

@@ -233,6 +233,16 @@ export default {
     retirer: 'Retirar a categoria {nom}',
     suggestions: 'Categorias já usadas',
   },
+  poste: {
+    titre: 'Este dispositivo',
+    libelle: 'Computador partilhado',
+    aide: 'Ativa nos computadores do escritório: só esta conta profissional poderá abrir-se neles. As contas pessoais são retiradas, com os seus dados.',
+    actif: 'Só esta conta profissional se abre neste dispositivo. Para desativar é preciso o código de responsável.',
+    confirmer: 'As outras contas guardadas neste dispositivo (uma pessoal, por exemplo) vão ser retiradas, com os seus dados. Só esta conta profissional poderá abrir-se aqui.',
+    activer: 'Ativar',
+    desactiver: 'Desativar',
+    refuse: 'Este computador está reservado à conta profissional {email}.',
+  },
   comptes: {
     titre: 'As minhas contas',
     perso: 'Pessoal',

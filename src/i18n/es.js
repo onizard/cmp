@@ -233,6 +233,16 @@ export default {
     retirer: 'Quitar la categoría {nom}',
     suggestions: 'Categorías ya usadas',
   },
+  poste: {
+    titre: 'Este dispositivo',
+    libelle: 'Ordenador compartido',
+    aide: 'Actívalo en los ordenadores de la oficina: solo esta cuenta profesional podrá abrirse en ellos. Las cuentas personales se eliminan, con sus datos.',
+    actif: 'Solo esta cuenta profesional se abre en este dispositivo. Para desactivarlo hace falta el código de responsable.',
+    confirmer: 'Las demás cuentas guardadas en este dispositivo (una personal, por ejemplo) se eliminarán, con sus datos. Solo esta cuenta profesional podrá abrirse aquí.',
+    activer: 'Activar',
+    desactiver: 'Desactivar',
+    refuse: 'Este ordenador está reservado a la cuenta profesional {email}.',
+  },
   comptes: {
     titre: 'Mis cuentas',
     perso: 'Personal',

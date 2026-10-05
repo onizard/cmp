@@ -3,7 +3,7 @@ import { useT } from '../i18n/index.js';
 import Header from './Header.jsx';
 import InstallHint from './InstallHint.jsx';
 import Comptes from './Comptes.jsx';
-import { lireComptes } from '../lib/comptes.js';
+import { lireComptes, postePartage } from '../lib/comptes.js';
 import { dejaVenu } from '../lib/account.js';
 
 // Trois écrans, un seul à la fois : se connecter, créer un compte, ou se
@@ -16,8 +16,11 @@ import { dejaVenu } from '../lib/account.js';
 // autre compte.
 export default function Auth({ account }) {
   const t = useT();
-  const [mode, setMode] = useState(() => (dejaVenu() ? 'connexion' : 'creation'));
-  const [email, setEmail] = useState('');
+  // Ordinateur partagé : seul le compte pro réservé entre ici. Pas de
+  // création de compte, et son adresse est déjà remplie.
+  const poste = postePartage();
+  const [mode, setMode] = useState(() => (poste || dejaVenu() ? 'connexion' : 'creation'));
+  const [email, setEmail] = useState(() => (poste ? poste.email : ''));
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
@@ -70,12 +73,18 @@ export default function Auth({ account }) {
     <div className="screen">
       <Header />
       <InstallHint />
+      {/* Ordinateur partagé : un autre compte vient d'être refusé. */}
+      {account.posteRefuse && (
+        <p className="notice poste-refus" role="alert">
+          {t('poste.refuse', { email: typeof account.posteRefuse === 'string' ? account.posteRefuse : '' })}
+        </p>
+      )}
       {/* Les comptes déjà rangés sur cet appareil : on y entre d'un toucher. */}
       {mode !== 'oubli' && comptes.length > 0 && (
         <div className="panel">
           <p className="lede">{t('comptes.titre')}</p>
           <Comptes ajout={false} onChange={setComptes} />
-          {!formulaire && (
+          {!formulaire && !poste && (
             <p className="authlinks">
               <button
                 type="button"
@@ -151,10 +160,14 @@ export default function Auth({ account }) {
                 <button type="button" onClick={() => go('oubli')}>
                   {t('auth.oublieLien')}
                 </button>
-                <span aria-hidden="true"> · </span>
-                <button type="button" onClick={() => go('creation')}>
-                  {t('auth.creerLien')}
-                </button>
+                {!poste && (
+                  <>
+                    <span aria-hidden="true"> · </span>
+                    <button type="button" onClick={() => go('creation')}>
+                      {t('auth.creerLien')}
+                    </button>
+                  </>
+                )}
               </>
             ) : (
               <button type="button" onClick={() => go('connexion')}>

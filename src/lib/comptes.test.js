@@ -53,3 +53,57 @@ describe('comptes rangés', () => {
     expect(lireComptes()).toEqual([]);
   });
 });
+
+// Un localStorage dont on peut lister les clés, comme celui du navigateur.
+const stockage = () => {
+  const m = new Map();
+  const ls = {
+    getItem: (k) => (m.has(k) ? m.get(k) : null),
+    setItem: (k, v) => m.set(k, String(v)),
+    removeItem: (k) => m.delete(k),
+  };
+  return new Proxy(ls, { ownKeys: () => [...m.keys()], getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }) });
+};
+
+const PERSO = '11111111-1111-1111-1111-111111111111';
+const PRO = '22222222-2222-2222-2222-222222222222';
+const MAISON = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+const ATELIER = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+
+describe('données effacées de l’appareil', () => {
+  beforeEach(() => {
+    globalThis.localStorage = stockage();
+    memoriser({ session: session(PERSO, 'r1'), type: 'perso', hid: MAISON });
+    memoriser({ session: session(PRO, 'r2'), type: 'pro', hid: ATELIER });
+    for (const k of [`cmp:tasks:${MAISON}`, `cmp:queue:${MAISON}`, `cmp:categories:${MAISON}`, `cmp:rewards:${MAISON}`, `cmp:tasks:${ATELIER}`]) {
+      localStorage.setItem(k, '[]');
+    }
+    localStorage.setItem('cmp.household', MAISON);
+    localStorage.setItem('cmp.langue', 'fr');
+  });
+
+  it('retirer un compte efface aussi ses tâches et le reste', () => {
+    oublier(PERSO);
+    const cles = Object.keys(localStorage);
+    expect(cles.filter((k) => k.includes(MAISON))).toEqual([]);
+    expect(cles).not.toContain('cmp.household');
+    expect(cles).toContain(`cmp:tasks:${ATELIER}`);
+    expect(cles).toContain('cmp.langue');
+  });
+
+  it('ordinateur partagé : seul le pro reste, avec ses données', async () => {
+    const { activerPostePartage, desactiverPostePartage, postePartage } = await import('./comptes.js');
+    activerPostePartage({ userId: PRO, email: 'pro@ex.fr', hid: ATELIER });
+    expect(postePartage()).toEqual({ userId: PRO, email: 'pro@ex.fr' });
+    expect(lireComptes().map((c) => c.userId)).toEqual([PRO]);
+    const cles = Object.keys(localStorage);
+    expect(cles.filter((k) => k.includes(MAISON))).toEqual([]);
+    expect(cles).toContain(`cmp:tasks:${ATELIER}`);
+    // Un autre compte ne s'y range plus.
+    memoriser({ session: session(PERSO, 'r9'), type: 'perso', hid: MAISON });
+    expect(lireComptes().map((c) => c.userId)).toEqual([PRO]);
+    expect(plusieursComptes()).toBe(false);
+    desactiverPostePartage();
+    expect(postePartage()).toBe(null);
+  });
+});

@@ -233,6 +233,16 @@ export default {
     retirer: '移除分类 {nom}',
     suggestions: '已用过的分类',
   },
+  poste: {
+    titre: '此设备',
+    libelle: '共用电脑',
+    aide: '在办公室电脑上开启：只有这个企业账户能在上面打开。个人账户及其数据会被移除。',
+    actif: '此设备上只能打开这个企业账户。关闭需要负责人代码。',
+    confirmer: '此设备上保存的其他账户（例如个人账户）及其数据将被移除。这里只能打开这个企业账户。',
+    activer: '开启',
+    desactiver: '关闭',
+    refuse: '这台电脑仅供企业账户 {email} 使用。',
+  },
   comptes: {
     titre: '我的账户',
     perso: '个人',
