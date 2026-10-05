@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
@@ -28,6 +28,15 @@ import AccesDecision from './components/AccesDecision.jsx';
 import AccesAnnonce from './components/AccesAnnonce.jsx';
 import { useAcces, lireDecision } from './lib/acces.js';
 import { lireComptes, plusieursComptes } from './lib/comptes.js';
+import ChoixSession from './components/ChoixSession.jsx';
+import {
+  avecSessions,
+  estTacheEnfants,
+  useInactivite,
+  DELAI_FAMILLE,
+  DELAI_PRO,
+  PROLONGER_MS,
+} from './lib/session.js';
 
 function NotConfigured() {
   return (
@@ -134,14 +143,56 @@ export default function App() {
 
 function Home({ account, currentMonth, onChangerCompte }) {
   const userId = account.session.user.id;
-  const store = useTasks(account.household.id, userId);
-  const rewards = useRewards(account.household.id, userId);
-  const admin = useAdmin();
-  const [tab, setTab] = useState('liste');
   const householdId = account.household.id;
   // Mode entreprise : une équipe sur ce compte, chacun avec son code.
   const entreprise = Boolean(account.household.entreprise);
+  // La session ouverte sur ce téléphone partagé (session.js) : en famille
+  // { id, nom, compte, proche, enfant }, en entreprise { op, code, nom }.
+  const [acteur, setActeur] = useState(null);
+  const famille = acteur && !entreprise ? acteur : null;
+  const store = useTasks(householdId, userId, famille);
+  const rewards = useRewards(householdId, userId, famille);
+  const admin = useAdmin();
+  const [tab, setTab] = useState('liste');
   const equipe = useEquipe(householdId, entreprise);
+
+  // Plusieurs personnes sur ce téléphone : chacun ouvre sa session. Seul, on
+  // va droit à ses tâches.
+  const sessions = avecSessions({ entreprise, proches: rewards.proches });
+  const fermer = useCallback(() => {
+    setActeur(null);
+    setTab('liste');
+  }, []);
+  useEffect(() => {
+    if (!sessions && acteur) fermer();
+  }, [sessions, acteur, fermer]);
+  // Le code tapé ouvre un ticket d'un quart d'heure (codes.sql) : tant que la
+  // session vit, on le prolonge. Expiré, on referme.
+  const prolonge = useRef(0);
+  const avecCode = rewards.avecCode || [];
+  useInactivite(
+    sessions && Boolean(acteur),
+    entreprise ? DELAI_PRO : DELAI_FAMILLE,
+    fermer,
+    () => {
+      if (!famille || !avecCode.includes(famille.id)) return;
+      if (Date.now() - prolonge.current < PROLONGER_MS) return;
+      prolonge.current = Date.now();
+      rewards.prolongerCode(famille.id).then((ok) => {
+        if (!ok) fermer();
+      });
+    },
+  );
+  const ouvrir = useCallback((a) => {
+    prolonge.current = Date.now();
+    setTab('liste');
+    setActeur(a);
+  }, []);
+  // Qui agit, tel que les points le comptent.
+  const moi = famille ? famille.id : userId;
+  // Mon compte reste au compte du téléphone : un enfant, ou un autre adulte
+  // venu ouvrir sa session ici, n'y touche pas.
+  const avecCompte = !famille || (famille.compte === userId && !famille.proche);
   // Rejoindre un compte pro : la demande se suit d'ici, quel que soit
   // l'onglet, pour annoncer la réponse dès qu'elle arrive.
   const acces = useAcces(userId);
@@ -173,10 +224,12 @@ function Home({ account, currentMonth, onChangerCompte }) {
 
   const todoThisMonth = useMemo(
     () =>
-      tasksVisibleIn(store.tasks, currentMonth, currentMonth).filter(
-        (t) => !t.done,
-      ).length,
-    [store.tasks, currentMonth],
+      tasksVisibleIn(
+        famille && famille.enfant ? store.tasks.filter(estTacheEnfants) : store.tasks,
+        currentMonth,
+        currentMonth,
+      ).filter((t) => !t.done).length,
+    [store.tasks, currentMonth, famille],
   );
 
   // Les points vont à qui a fait : un enfant sans compte qui coche sur ce
@@ -186,17 +239,36 @@ function Home({ account, currentMonth, onChangerCompte }) {
   const nomsC = useMemo(() => tousLesNoms(rewards.names, rewards.proches), [rewards.names, rewards.proches]);
 
   // Pastille sur l'onglet Cerveau : combien de récompenses sont à portée.
-  const myPoints = pointsAvailable(tachesC, bonsC, userId);
+  const myPoints = pointsAvailable(tachesC, bonsC, moi);
   const readyCount = affordable(rewards.rewards, myPoints).length;
+
+  if (sessions && !acteur) {
+    return (
+      <ChoixSession
+        userId={userId}
+        rewards={rewards}
+        equipe={entreprise ? equipe : null}
+        onOuvrir={ouvrir}
+        onRetour={plusieursComptes() ? onChangerCompte : undefined}
+      />
+    );
+  }
 
   return (
     <div className={`screen has-tabbar ${entreprise ? 'screen-entreprise' : ''}`}>
       <Header
         accroche={tab === 'liste' ? headline(todoThisMonth) : null}
-        onRetour={tab === 'liste' && plusieursComptes() ? onChangerCompte : undefined}
+        onRetour={
+          sessions ? fermer : tab === 'liste' && plusieursComptes() ? onChangerCompte : undefined
+        }
+        session={sessions ? acteur.nom || '' : null}
         online={store.online}
         pending={store.pending}
       />
+
+      {/* Une session neuve repart de zéro : rien de la précédente ne reste
+          ouvert à l'écran. */}
+      <Fragment key={acteur ? acteur.id || acteur.op : 'seul'}>
 
       {tab === 'liste' &&
         (store.loading && store.tasks.length === 0 ? (
@@ -208,19 +280,21 @@ function Home({ account, currentMonth, onChangerCompte }) {
             onCombo={annoncerCombo}
             names={nomsC}
             equipe={entreprise ? equipe : null}
-            proches={entreprise ? [] : rewards.proches}
+            enfant={Boolean(famille && famille.enfant)}
+            codeSession={entreprise && acteur ? acteur.code : null}
+            onCodePerime={fermer}
           />
         ))}
       {tab === 'cerveau' &&
         (entreprise ? (
           <EquipeView tasks={store.tasks} equipe={equipe} />
         ) : (
-          <BrainView tasks={store.tasks} userId={userId} rewards={rewards} />
+          <BrainView tasks={store.tasks} userId={userId} rewards={rewards} acteur={famille} />
         ))}
       {tab === 'bilan' && (
-        <BilanView tasks={tachesC} claims={bonsC} userId={userId} />
+        <BilanView tasks={tachesC} claims={bonsC} userId={moi} />
       )}
-      {tab === 'compte' && (
+      {tab === 'compte' && avecCompte && (
         <Account
           account={account}
           rewards={rewards}
@@ -228,14 +302,16 @@ function Home({ account, currentMonth, onChangerCompte }) {
           acces={acces}
         />
       )}
-      {tab === 'admin' && admin.isAdmin && <AdminView admin={admin} />}
+      {tab === 'admin' && admin.isAdmin && avecCompte && <AdminView admin={admin} />}
+      </Fragment>
 
       <TabBar
         tab={tab}
         onChange={setTab}
         honourCount={entreprise ? 0 : readyCount}
-        admin={admin.isAdmin}
+        admin={admin.isAdmin && avecCompte}
         entreprise={entreprise}
+        compte={avecCompte}
       />
 
       {combo && <Combo n={combo.n} cle={combo.cle} onFini={finCombo} />}
@@ -245,17 +321,23 @@ function Home({ account, currentMonth, onChangerCompte }) {
       {/* Ce que l'autre a coché depuis la dernière fois, une tâche à la fois.
           Pas pendant le chargement : la liste vide ne dirait rien. */}
       {!store.loading && (
-        <Nouvelles tasks={store.tasks} names={nomsC} userId={userId} />
+        <Nouvelles
+          key={moi}
+          tasks={!sessions ? store.tasks : famille && famille.enfant ? tachesC.filter(estTacheEnfants) : tachesC}
+          names={nomsC}
+          userId={moi}
+        />
       )}
 
       {/* Quel que soit l'onglet ouvert : un bon utilisé par l'autre passe
           devant tout le reste. */}
       <BonsAHonorer
+        key={`bons-${moi}`}
         claims={bonsC}
         rewards={rewards.rewards}
         names={nomsC}
-        userId={userId}
-        proches={rewards.proches}
+        userId={moi}
+        proches={sessions ? [] : rewards.proches}
       />
     </div>
   );

@@ -398,15 +398,10 @@ export default {
   },
   proches: {
     titre: 'Membres sans compte',
-    aide: 'Pour ceux qui n’ont pas d’adresse e-mail, les enfants par exemple : un prénom suffit. Ils cochent leurs tâches sur ton téléphone en choisissant leur prénom, et gagnent des points et des bons comme les autres.',
     retirer: 'Retirer',
     retirerOui: 'Oui, retirer',
-    quiAFait: 'Qui l’a faite ?',
-    moi: 'Moi',
-    pourQui: 'Les points de qui ?',
   },
   codes: {
-    choisirMembre: 'Touche ton prénom pour ouvrir tes récompenses.',
     titre: 'Code de {nom}',
     faux: 'Code faux.',
     format: 'Le code fait 4 chiffres.',
@@ -424,10 +419,14 @@ export default {
     tonCode: 'Ton code',
   },
   couple: {
-    titre: 'Récompenses de couple',
-    aide: 'Tape ton code pour les voir.',
-    sansCode: 'Choisis ton code dans Mon compte pour les ouvrir.',
-    ouvrir: 'Ouvrir',
+    sansCode: 'Choisis ton code dans Mon compte pour voir aussi les récompenses de couple.',
+  },
+  session: {
+    qui: 'Qui es-tu ?',
+    proInvite: 'Tape ton code pour ouvrir ta session.',
+    sansCode: '{nom} doit d’abord choisir son code dans Mon compte, sur son téléphone.',
+    fermer: 'Fermer la session',
+    categorieEnfants: 'enfants',
   },
   comptes: {
     titre: 'Mes comptes',

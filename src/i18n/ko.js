@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: '계정 없는 구성원',
-    aide: '이메일이 없는 사람(예: 아이들)을 위한 기능이에요. 이름만 있으면 돼요. 당신의 휴대폰에서 자기 이름을 골라 할 일을 완료하고, 다른 사람처럼 포인트와 쿠폰을 받아요.',
     retirer: '삭제',
     retirerOui: '네, 삭제',
-    quiAFait: '누가 했나요?',
-    moi: '나',
-    pourQui: '누구의 포인트?',
   },
   codes: {
-    choisirMembre: '내 이름을 눌러 보상을 열어요.',
     titre: '{nom}의 코드',
     faux: '코드가 틀렸어요.',
     format: '코드는 4자리예요.',
@@ -272,10 +267,14 @@ export default {
     tonCode: '내 코드',
   },
   couple: {
-    titre: '커플 보상',
-    aide: '코드를 입력하면 보여요.',
-    sansCode: '열려면 내 계정에서 코드를 정하세요.',
-    ouvrir: '열기',
+    sansCode: '내 계정에서 코드를 정하면 커플 보상도 보여요.',
+  },
+  session: {
+    qui: '누구세요?',
+    proInvite: '코드를 입력해 내 세션을 여세요.',
+    sansCode: '{nom}님은 먼저 자기 휴대폰의 내 계정에서 코드를 정해야 해요.',
+    fermer: '세션 닫기',
+    categorieEnfants: '아이들',
   },
   comptes: {
     titre: '내 계정들',

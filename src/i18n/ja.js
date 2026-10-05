@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: 'アカウントのないメンバー',
-    aide: 'メールアドレスのない人（子どもなど）向け：名前だけで大丈夫。あなたのスマホで自分の名前を選んでタスクを完了にし、みんなと同じようにポイントや券をもらえます。',
     retirer: '削除',
     retirerOui: '削除する',
-    quiAFait: '誰がやりましたか？',
-    moi: '自分',
-    pourQui: '誰のポイント？',
   },
   codes: {
-    choisirMembre: '自分の名前をタップして、ごほうびを開きましょう。',
     titre: '{nom}のコード',
     faux: 'コードが違います。',
     format: 'コードは4桁です。',
@@ -272,10 +267,14 @@ export default {
     tonCode: 'あなたのコード',
   },
   couple: {
-    titre: 'ふたりのごほうび',
-    aide: 'コードを入力すると表示されます。',
-    sansCode: '開くには「マイアカウント」でコードを決めてください。',
-    ouvrir: '開く',
+    sansCode: '「マイアカウント」でコードを決めると、ふたりのごほうびも表示されます。',
+  },
+  session: {
+    qui: 'どなたですか？',
+    proInvite: 'コードを入力して、自分のセッションを開きます。',
+    sansCode: '{nom}さんは、まず自分のスマホの「アカウント」でコードを決めてください。',
+    fermer: 'セッションを閉じる',
+    categorieEnfants: '子ども',
   },
   comptes: {
     titre: 'わたしのアカウント',

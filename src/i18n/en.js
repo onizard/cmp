@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: 'Members without an account',
-    aide: 'For those without an email address, children for example: a first name is enough. They tick their tasks on your phone by choosing their name, and earn points and vouchers like everyone else.',
     retirer: 'Remove',
     retirerOui: 'Yes, remove',
-    quiAFait: 'Who did it?',
-    moi: 'Me',
-    pourQui: 'Whose points?',
   },
   codes: {
-    choisirMembre: 'Tap your name to open your rewards.',
     titre: '{nom}’s code',
     faux: 'Wrong code.',
     format: 'The code has 4 digits.',
@@ -272,10 +267,14 @@ export default {
     tonCode: 'Your code',
   },
   couple: {
-    titre: 'Couple rewards',
-    aide: 'Enter your code to see them.',
-    sansCode: 'Choose your code in My account to open them.',
-    ouvrir: 'Open',
+    sansCode: 'Choose your code in My account to also see the couple rewards.',
+  },
+  session: {
+    qui: 'Who are you?',
+    proInvite: 'Enter your code to open your session.',
+    sansCode: '{nom} must first choose a code in Account, on their own phone.',
+    fermer: 'Close session',
+    categorieEnfants: 'kids',
   },
   comptes: {
     titre: 'My accounts',

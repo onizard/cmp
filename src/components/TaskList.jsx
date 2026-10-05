@@ -23,6 +23,7 @@ import {
   urgentes as lesUrgentes,
 } from '../lib/categories.js';
 import { rangsAuDepot } from '../lib/ordre.js';
+import { estTacheEnfants, nomEnfants } from '../lib/session.js';
 
 /**
  * La liste, c'est le mois en cours : rien avant, rien après.
@@ -37,9 +38,15 @@ import { rangsAuDepot } from '../lib/ordre.js';
  * catégorie, puis une section par catégorie. Un appui long sur une tâche la
  * soulève : on la glisse entre ses voisines ou dans une autre section.
  */
-export default function TaskList({ store, currentMonth, onCombo, names = {}, equipe = null, proches = [] }) {
-  // Famille : les membres sans compte, à qui on attribue une coche.
-  const prochesActifs = proches.filter((p) => p.actif);
+export default function TaskList({
+  store, currentMonth, onCombo, names = {}, equipe = null,
+  // Session d'un enfant : seulement les tâches « enfants », et ce qu'il
+  // ajoute y va tout seul (session.js).
+  enfant = false,
+  // Session pro : le code tapé à l'ouverture signe chaque action, sans pavé.
+  // Refusé (changé entre-temps), la session se referme.
+  codeSession = null, onCodePerime = () => {},
+}) {
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
@@ -63,16 +70,29 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
   // fenêtre ouverte : son titre, le texte de la tâche, et ce qu'il faut faire
   // une fois le code saisi.
   const [demande, setDemande] = useState(null);
-  const signer = equipe
-    ? (titre, detail, faire) => setDemande({ titre, detail, faire })
-    : null;
+  const [alerte, setAlerte] = useState(null);
+  useEffect(() => {
+    if (!alerte) return undefined;
+    const fin = setTimeout(() => setAlerte(null), 3200);
+    return () => clearTimeout(fin);
+  }, [alerte]);
+  const message = (r) => {
+    if (r.erreur === 'code') return t('entreprise.codeInconnu');
+    if (r.erreur === 'horsLigne') return t('entreprise.horsLigne');
+    return r.erreur;
+  };
+  const signer = !equipe
+    ? null
+    : codeSession
+      ? async (titre, detail, faire) => {
+          const r = await faire(codeSession);
+          if (r && r.erreur === 'code') onCodePerime();
+          else if (r && r.erreur) setAlerte(message(r));
+        }
+      : (titre, detail, faire) => setDemande({ titre, detail, faire });
   const valider = async (code) => {
     const r = await demande.faire(code);
-    if (r && r.erreur) {
-      if (r.erreur === 'code') return t('entreprise.codeInconnu');
-      if (r.erreur === 'horsLigne') return t('entreprise.horsLigne');
-      return r.erreur;
-    }
+    if (r && r.erreur) return message(r);
     setDemande(null);
     return null;
   };
@@ -94,7 +114,9 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
     // « acheter du pain #dépense » : la tâche va dans « dépense », créée au
     // besoin. « #dons » tout seul crée juste la catégorie.
     const { texte: text, categorie: brute } = extraireCategorie(saisie);
-    const categorie = brute ? nomConnu(stats, brute) : null;
+    const categorie = enfant
+      ? nomEnfants(stats, t('session.categorieEnfants'))
+      : brute ? nomConnu(stats, brute) : null;
     if (!text) {
       if (categorie) ajouterCategorie(mois, categorie, sections);
       return {};
@@ -119,24 +141,34 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
     return r;
   };
 
+  // Un enfant ne voit que les tâches « enfants ».
+  const visibles = useMemo(
+    () => (enfant ? store.tasks.filter(estTacheEnfants) : store.tasks),
+    [store.tasks, enfant],
+  );
+
   const faites = useMemo(
-    () => faitesDuMois(store.tasks, currentMonth),
-    [store.tasks, currentMonth],
+    () => faitesDuMois(visibles, currentMonth),
+    [visibles, currentMonth],
   );
 
   // Les tâches à faire du mois — reportées comprises. Le résumé, lui, se
   // calcule sur TOUT ce que le mois contient : sans les cochées, un mois
   // entièrement bouclé afficherait « rien » au lieu de « terminé ».
   const { aFaire, resume } = useMemo(() => {
-    const tout = sortForMonth(tasksVisibleIn(store.tasks, currentMonth, currentMonth));
+    const tout = sortForMonth(tasksVisibleIn(visibles, currentMonth, currentMonth));
     return { aFaire: tout.filter((x) => !x.done), resume: monthSummary(tout) };
-  }, [store.tasks, currentMonth]);
+  }, [visibles, currentMonth]);
 
   // « #urgent » en tête : les tâches à échéance, en double de leur place.
   const urgentes = useMemo(() => lesUrgentes(aFaire), [aFaire]);
+  // Chez un enfant, une seule liste : elles sont toutes « enfants ».
   const { sans, sections } = useMemo(
-    () => sectionsDuMois(aFaire, store.categories || [], currentMonth),
-    [aFaire, store.categories, currentMonth],
+    () =>
+      enfant
+        ? { sans: aFaire, sections: [] }
+        : sectionsDuMois(aFaire, store.categories || [], currentMonth),
+    [aFaire, store.categories, currentMonth, enfant],
   );
 
   // La tâche glissée est posée : dans sa section, à sa place.
@@ -149,7 +181,8 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
     const avant = (section ? section.taches : sans).findIndex((x) => x.id === id);
     if (avant === index) return; // reposée où elle était
     const rangs = rangsAuDepot(liste, index, task);
-    store.placer(task, section ? section.nom : null, rangs, Boolean(equipe));
+    // Chez un enfant, elle reste « enfants » : seule sa place change.
+    store.placer(task, enfant ? task.categorie : section ? section.nom : null, rangs, Boolean(equipe));
   };
   const glisser = useGlisser({ onDeposer: deposer });
 
@@ -175,7 +208,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
       names={names}
       signer={signer}
       noms={equipe ? equipe.noms : {}}
-      proches={prochesActifs}
+      sansReservation={enfant}
       poignee={glisser.surTache(task.id)}
       glissee={glisser.glisse && glisser.glisse.id === task.id ? glisser.glisse.dy : null}
       depot={marque[task.id] || null}
@@ -210,7 +243,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
                   names={names}
                   signer={signer}
                   noms={equipe ? equipe.noms : {}}
-                  proches={prochesActifs}
+                  sansReservation={enfant}
                 />
               ))}
             </ul>
@@ -237,7 +270,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
               se meriter au bas d'une liste. */}
           <AddTask
             onAdd={(text) => ajouter(m, text, sections)}
-            suggerer={(debut) => suggerer(stats, debut)}
+            suggerer={(debut) => (enfant ? [] : suggerer(stats, debut))}
           />
           {/* Ni déplaçable ni cible : la section se remplit toute seule. */}
           {urgentes.length > 0 && (
@@ -259,7 +292,7 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
                     names={names}
                     signer={signer}
                     noms={equipe ? equipe.noms : {}}
-                    proches={prochesActifs}
+                    sansReservation={enfant}
                     montrerCategorie
                   />
                 ))}
@@ -301,14 +334,21 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
             );
           })}
           {tiroir}
-          <AjoutCategorie
-            onAjouter={(nom) => ajouterCategorie(m, nom, sections)}
-            suggerer={(debut) =>
-              suggerer(stats, debut, { exclure: sections.map((x) => x.cle) })
-            }
-          />
+          {!enfant && (
+            <AjoutCategorie
+              onAjouter={(nom) => ajouterCategorie(m, nom, sections)}
+              suggerer={(debut) =>
+                suggerer(stats, debut, { exclure: sections.map((x) => x.cle) })
+              }
+            />
+          )}
         </div>
       </section>
+      {alerte && (
+        <p className="alerte-flottante" role="alert">
+          {alerte}
+        </p>
+      )}
       {demande && (
         <CodeOperateur
           titre={demande.titre}

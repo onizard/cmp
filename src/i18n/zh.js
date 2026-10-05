@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: '没有账户的成员',
-    aide: '适合没有邮箱的人，比如孩子：有名字就够了。他们在你的手机上选择自己的名字来勾选任务，也能像其他人一样获得积分和兑换券。',
     retirer: '移除',
     retirerOui: '确定移除',
-    quiAFait: '是谁完成的？',
-    moi: '我',
-    pourQui: '看谁的积分？',
   },
   codes: {
-    choisirMembre: '点一下你的名字，打开你的奖励。',
     titre: '{nom}的代码',
     faux: '代码错误。',
     format: '代码为 4 位数字。',
@@ -272,10 +267,14 @@ export default {
     tonCode: '你的代码',
   },
   couple: {
-    titre: '情侣奖励',
-    aide: '输入你的代码即可查看。',
-    sansCode: '请先在“我的账户”中设置代码，才能打开。',
-    ouvrir: '打开',
+    sansCode: '在“我的账户”中设置代码，也能看到情侣奖励。',
+  },
+  session: {
+    qui: '你是谁？',
+    proInvite: '输入你的代码，打开你的会话。',
+    sansCode: '{nom} 需要先在自己手机的“我的账户”里设置代码。',
+    fermer: '关闭会话',
+    categorieEnfants: '孩子',
   },
   comptes: {
     titre: '我的账户',

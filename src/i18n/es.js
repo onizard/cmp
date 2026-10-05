@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: 'Miembros sin cuenta',
-    aide: 'Para quienes no tienen correo electrónico, los niños por ejemplo: basta un nombre. Marcan sus tareas en tu teléfono eligiendo su nombre y ganan puntos y vales como los demás.',
     retirer: 'Quitar',
     retirerOui: 'Sí, quitar',
-    quiAFait: '¿Quién la hizo?',
-    moi: 'Yo',
-    pourQui: '¿Los puntos de quién?',
   },
   codes: {
-    choisirMembre: 'Toca tu nombre para abrir tus recompensas.',
     titre: 'Código de {nom}',
     faux: 'Código incorrecto.',
     format: 'El código tiene 4 cifras.',
@@ -272,10 +267,14 @@ export default {
     tonCode: 'Tu código',
   },
   couple: {
-    titre: 'Recompensas de pareja',
-    aide: 'Escribe tu código para verlas.',
-    sansCode: 'Elige tu código en Mi cuenta para abrirlas.',
-    ouvrir: 'Abrir',
+    sansCode: 'Elige tu código en Mi cuenta para ver también las recompensas de pareja.',
+  },
+  session: {
+    qui: '¿Quién eres?',
+    proInvite: 'Escribe tu código para abrir tu sesión.',
+    sansCode: '{nom} debe elegir primero su código en Mi cuenta, en su teléfono.',
+    fermer: 'Cerrar sesión',
+    categorieEnfants: 'niños',
   },
   comptes: {
     titre: 'Mis cuentas',

@@ -3643,54 +3643,6 @@ body,
   gap: 14px;
 }
 
-/* À la coche : qui l'a faite ? */
-.qui-a-fait {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 10px calc(var(--tap) + 6px);
-}
-
-.qui-a-fait-titre {
-  flex-basis: 100%;
-  color: var(--ink-2);
-  font-size: 0.88rem;
-  font-weight: 700;
-}
-
-.qui-choix {
-  min-height: 40px;
-  padding: 6px 16px;
-  border: 1.5px solid #e3d0ef;
-  border-radius: 999px;
-  background: #faf5fd;
-  color: var(--ink);
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-
-.qui-annuler {
-  min-height: 0;
-  padding: 4px 6px;
-}
-
-/* Cerveau : pour qui regarde-t-on ? */
-.qui-vue {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 16px;
-}
-
-.qui-vue .qui-choix[aria-pressed='true'] {
-  border-color: transparent;
-  background: var(--grad);
-  color: #fff;
-}
-
 /* « #urgent » : les tâches à échéance, en tête du mois. */
 .categorie-urgent {
   margin: 0 -6px 14px;
@@ -3753,21 +3705,6 @@ body,
 
 .proche-verrou {
   font-size: 0.85em;
-}
-
-.couple-bloc {
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: #fdf3f6;
-  box-shadow: inset 0 0 0 1px #f6dbe4;
-}
-
-.couple-titre {
-  margin: 0 0 8px;
-  font-family: var(--display);
-  font-size: 1.05rem;
-  color: var(--due-urgent);
 }
 
 /* --- Sur ordinateur : la barre d'onglets à gauche, la page sur la largeur -- */
@@ -3914,9 +3851,92 @@ body,
   }
 }
 
-/* Cerveau partagé : avant d'entrer chez quelqu'un. */
-.qui-invite {
-  margin: 14px 4px 0;
+
+/* Sessions : « Qui es-tu ? » sur un téléphone partagé. */
+.session-choix {
   text-align: center;
+}
+
+.session-noms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.session-nom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 16px 8px 14px;
+  border: 1.5px solid #e3d0ef;
+  border-radius: 20px;
+  background: #faf5fd;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.session-nom:active {
+  transform: scale(0.97);
+}
+
+.session-initiale {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--grad);
+  color: #fff;
+  font-family: var(--display);
   font-weight: 700;
+  font-size: 24px;
+}
+
+.session-enfant .session-initiale {
+  background: var(--grad-soft);
+  color: var(--ink);
+}
+
+.session-prenom {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.02rem;
+  overflow-wrap: anywhere;
+}
+
+.session-note {
+  margin: 16px 4px 0;
+}
+
+/* Le prénom de la session ouverte, sous le titre. */
+.session-qui {
+  display: inline-block;
+  margin: 10px 0 0;
+  padding: 3px 14px;
+  border-radius: 999px;
+  background: var(--grad);
+  color: #fff;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Session pro : un refus, sans pavé ouvert pour l'afficher. */
+.alerte-flottante {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow);
 }

@@ -11,10 +11,10 @@ export default function TaskItem({
   // Glisser-déposer (TaskList) : les écouteurs de l'appui long, le décalage
   // de celle qu'on glisse, le trait où elle tomberait.
   poignee = null, glissee = null, depot = null,
-  // Famille : les membres sans compte ; à la coche, on dit qui l'a faite.
-  proches = [],
   // Dans « #urgent » : on rappelle la catégorie d'origine de la tâche.
   montrerCategorie = false,
+  // Session d'un enfant : il ne réserve pas (la réservation est à un compte).
+  sansReservation = false,
 }) {
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -22,7 +22,6 @@ export default function TaskItem({
   const [draft, setDraft] = useState(task.text);
   const [dueOpen, setDueOpen] = useState(false);
   const [refus, setRefus] = useState(false);
-  const [quiOuvert, setQuiOuvert] = useState(false);
   const start = splitDue(task.dueAt, task.dueHasTime);
   const [date, setDate] = useState(start.date);
   const [time, setTime] = useState(start.time);
@@ -102,17 +101,8 @@ export default function TaskItem({
       );
       return;
     }
-    // Famille avec des membres sans compte : on demande d'abord qui l'a faite.
-    if (!task.done && proches.length > 0) {
-      setQuiOuvert((v) => !v);
-      return;
-    }
-    cocherPour(null);
-  };
-
-  const cocherPour = (proche) => {
-    setQuiOuvert(false);
-    const combo = store.toggleDone(task, currentMonth, proche);
+    // Famille : c'est la session ouverte qui coche (session.js).
+    const combo = store.toggleDone(task, currentMonth);
     if (combo === false || combo === 'reservee') {
       // On explique au lieu de rester inerte : un bouton mort passe
       // pour une panne.
@@ -130,9 +120,11 @@ export default function TaskItem({
       : task.createdOp && noms[task.createdOp]
         ? t('entreprise.par', { nom: noms[task.createdOp] })
         : null
-    : task.done && task.doneProche && names[task.doneProche]
+    : task.done && task.doneProche && task.doneProche !== store.userId && names[task.doneProche]
       ? t('entreprise.faitPar', { nom: names[task.doneProche] })
-      : null;
+      : !task.done && task.createdProche && task.createdProche !== store.userId && names[task.createdProche]
+        ? t('entreprise.par', { nom: names[task.createdProche] })
+        : null;
 
   return (
     <li
@@ -198,22 +190,6 @@ export default function TaskItem({
         )}
       </div>
 
-      {quiOuvert && (
-        <div className="qui-a-fait" role="group" aria-label={t('proches.quiAFait')}>
-          <span className="qui-a-fait-titre">{t('proches.quiAFait')}</span>
-          <button type="button" className="qui-choix" onClick={() => cocherPour(null)}>
-            {names[store.userId] || t('proches.moi')}
-          </button>
-          {proches.map((p) => (
-            <button key={p.id} type="button" className="qui-choix" onClick={() => cocherPour(p.id)}>
-              {p.nom}
-            </button>
-          ))}
-          <button type="button" className="link qui-annuler" onClick={() => setQuiOuvert(false)}>
-            {t('app.annuler')}
-          </button>
-        </div>
-      )}
       {refus === 'decoche' && <p className="refus">{t('taches.decocheInterdite')}</p>}
       {refus === 'reservee' && (
         <p className="refus">
@@ -276,7 +252,7 @@ export default function TaskItem({
           pourquoi plutôt que d'ouvrir un menu vide. */}
       {open && !peutModifier && (
         <div className="actions actions-autre">
-          {!entreprise && (
+          {!entreprise && !sansReservation && (
             <ReserveActions
               task={task}
               store={store}
@@ -317,7 +293,7 @@ export default function TaskItem({
               signer={signer}
               onFait={() => setOpen(false)}
             />
-          ) : (
+          ) : sansReservation ? null : (
             <ReserveActions
               task={task}
               store={store}

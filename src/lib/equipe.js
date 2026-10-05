@@ -119,6 +119,22 @@ export function useEquipe(householdId, actif) {
     return data === 'ok' ? null : data;
   }, []);
 
+  /**
+   * Qui porte ce code ? Pour ouvrir une session : { op } (nul si le code est
+   * faux, l'essai compte), ou { erreur }.
+   */
+  const qui = useCallback(
+    async (code) => {
+      if (!supabase || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+        return { erreur: 'horsLigne' };
+      }
+      const { data, error } = await supabase.rpc('cmp_operateur_qui', { hid: householdId, p_code: code });
+      if (error) return { erreur: error.message };
+      return { op: data || null };
+    },
+    [householdId],
+  );
+
   const noms = Object.fromEntries(membres.map((m) => [m.id, m.nom]));
-  return { membres, noms, refresh, verifierResponsable, enregistrer, relies, retirer, changerCodeResponsable };
+  return { membres, noms, refresh, qui, verifierResponsable, enregistrer, relies, retirer, changerCodeResponsable };
 }
