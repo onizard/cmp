@@ -160,20 +160,25 @@ export default function TaskList({
     return { aFaire: tout.filter((x) => !x.done), resume: monthSummary(tout) };
   }, [visibles, currentMonth]);
 
-  // « #urgent » en tête : les tâches à échéance, en double de leur place.
+  // « #urgent » en tête : les tâches à échéance. Elles n'y figurent qu'une
+  // fois : on les retire de leur section, où leur catégorie se rappelle.
   const urgentes = useMemo(() => lesUrgentes(aFaire), [aFaire]);
+  const restantes = useMemo(() => {
+    const ids = new Set(urgentes.map((x) => x.id));
+    return aFaire.filter((x) => !ids.has(x.id));
+  }, [aFaire, urgentes]);
   // Chez un enfant, une seule liste : elles sont toutes « enfants ».
   const { sans, sections } = useMemo(
     () =>
       enfant
-        ? { sans: aFaire, sections: [] }
-        : sectionsDuMois(aFaire, store.categories || [], currentMonth),
-    [aFaire, store.categories, currentMonth, enfant],
+        ? { sans: restantes, sections: [] }
+        : sectionsDuMois(restantes, store.categories || [], currentMonth),
+    [restantes, store.categories, currentMonth, enfant],
   );
 
   // La tâche glissée est posée : dans sa section, à sa place.
   const deposer = (id, cle, index) => {
-    const task = aFaire.find((x) => x.id === id);
+    const task = restantes.find((x) => x.id === id);
     if (!task) return;
     const section = cle ? sections.find((x) => x.cle === cle) : null;
     if (cle && !section) return;
