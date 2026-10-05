@@ -436,7 +436,11 @@ export default function Account({ account, rewards = null, equipe = null, acces 
                 ? t('famille.dOffice', { n: tousLesMembres(rewards.members, rewards.proches).length })
                 : t('famille.aide')}
             </p>
-            <Proches rewards={rewards} />
+            {/* Les membres sans compte : seulement en mode famille (ou s'il en
+                reste, pour pouvoir les retirer). */}
+            {(rewards.familleActivee ||
+              familleDOffice(tousLesMembres(rewards.members, rewards.proches)) ||
+              (rewards.proches || []).some((p) => p.actif)) && <Proches rewards={rewards} />}
           </div>
         </section>
       )}
