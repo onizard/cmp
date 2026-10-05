@@ -58,8 +58,13 @@ const uuid = () =>
   globalThis.crypto?.randomUUID?.() ??
   `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-/** Catalogue de récompenses du foyer, dépenses, et prénoms des membres. */
-export function useRewards(householdId, userId) {
+/**
+ * Catalogue de récompenses du foyer, dépenses, et prénoms des membres.
+ * `acteur` : la session ouverte (session.js) — les bons sont alors à elle.
+ */
+export function useRewards(householdId, userId, acteur = null) {
+  const compte = (acteur && acteur.compte) || userId;
+  const procheActeur = (acteur && acteur.proche) || null;
   const [rewards, setRewards] = useState(() =>
     householdId ? readLS(key(householdId, 'rewards'), []) : [],
   );
@@ -175,12 +180,13 @@ export function useRewards(householdId, userId) {
   // `proche` : un membre sans compte prend le bon avec SES points, depuis le
   // téléphone d'un parent.
   const claimReward = useCallback(
-    async (reward, proche = null) => {
+    async (reward, pourProche = null) => {
+      const proche = pourProche || procheActeur;
       const row = {
         id: uuid(),
         household_id: householdId,
         reward_id: reward.id,
-        user_id: userId,
+        user_id: compte,
         label: reward.label,
         cost: reward.cost,
         deleted: false,
@@ -198,7 +204,7 @@ export function useRewards(householdId, userId) {
       if (supabase) supabase.from('claims').insert(row).then(({ error }) => error && refresh());
       return row.id;
     },
-    [householdId, userId, saveClaims],
+    [householdId, compte, procheActeur, saveClaims],
   );
 
   /**
@@ -209,12 +215,15 @@ export function useRewards(householdId, userId) {
    */
   // Le bon d'un membre sans compte se gère depuis n'importe quel téléphone du
   // foyer : il n'en a pas à lui.
+  // En session, seulement ceux de qui l'a ouverte.
   const estAMoi = useCallback(
     (id) => {
       const bon = cRef.current.find((c) => c.id === id);
-      return Boolean(bon) && (bon.proche ? true : bon.userId === userId);
+      if (!bon) return false;
+      if (procheActeur) return bon.proche === procheActeur;
+      return bon.proche ? !acteur : bon.userId === compte;
     },
-    [userId],
+    [compte, procheActeur, acteur],
   );
 
   /**
@@ -295,14 +304,15 @@ export function useRewards(householdId, userId) {
    * Elle n'entre pas au catalogue — c'est un souhait unique, à prix fixe.
    */
   const claimCustom = useCallback(
-    async (label, proche = null) => {
+    async (label, pourProche = null) => {
+      const proche = pourProche || procheActeur;
       const text = label.trim();
       if (!text) return 'Dis ce que tu demandes.';
       const row = {
         id: uuid(),
         household_id: householdId,
         reward_id: null,
-        user_id: userId,
+        user_id: compte,
         label: text,
         cost: REWARD_CUSTOM,
         deleted: false,
@@ -315,7 +325,7 @@ export function useRewards(householdId, userId) {
       }
       return null;
     },
-    [householdId, userId, saveClaims],
+    [householdId, compte, procheActeur, saveClaims],
   );
 
   // --- Les codes (codes.sql, couple.sql) ----------------------------------
@@ -327,6 +337,18 @@ export function useRewards(householdId, userId) {
       const { data, error } = await supabase.rpc('cmp_code_ouvrir', { hid: householdId, p_membre: membre, p_code: code });
       if (error) return error.message;
       return data ? null : 'faux';
+    },
+    [householdId],
+  );
+
+  /** La session vit : son ticket aussi. false s'il a expiré (retaper le code). */
+  const prolongerCode = useCallback(
+    async (membre) => {
+      if (!supabase) return true;
+      const { data, error } = await supabase.rpc('cmp_ticket_prolonger', { hid: householdId, p_membre: membre });
+      // Base pas encore à jour, ou réseau : on ne ferme pas pour si peu.
+      if (error) return true;
+      return data !== false;
     },
     [householdId],
   );
@@ -381,6 +403,7 @@ export function useRewards(householdId, userId) {
     retirerProche,
     avecCode,
     ouvrirCode,
+    prolongerCode,
     poserCode,
     otherUser,
     members,

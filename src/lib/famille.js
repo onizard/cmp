@@ -21,11 +21,19 @@ export const estFamille = (members, activee = false) =>
 // (pourProche).
 
 /**
- * Les tâches telles qu'elles comptent pour les points : une tâche cochée par
- * un membre sans compte lui revient, pas au téléphone qui a servi.
+ * Les tâches telles qu'elles comptent pour les points : une tâche ajoutée ou
+ * cochée par un membre sans compte lui revient, pas au téléphone qui a servi.
  */
 export const creditees = (tasks) =>
-  (tasks || []).map((t) => (t.doneProche ? { ...t, doneBy: t.doneProche } : t));
+  (tasks || []).map((t) =>
+    t.doneProche || t.createdProche
+      ? {
+          ...t,
+          ...(t.doneProche ? { doneBy: t.doneProche } : {}),
+          ...(t.createdProche ? { createdBy: t.createdProche } : {}),
+        }
+      : t,
+  );
 
 /** Les bons tels qu'ils comptent : celui d'un membre sans compte est à lui. */
 export const bonsCredites = (claims) =>

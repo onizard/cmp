@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: 'Mitglieder ohne Konto',
-    aide: 'Für alle ohne E-Mail-Adresse, zum Beispiel Kinder: Ein Vorname genügt. Sie haken ihre Aufgaben auf deinem Handy ab, indem sie ihren Namen wählen, und sammeln Punkte und Gutscheine wie alle anderen.',
     retirer: 'Entfernen',
     retirerOui: 'Ja, entfernen',
-    quiAFait: 'Wer hat sie erledigt?',
-    moi: 'Ich',
-    pourQui: 'Wessen Punkte?',
   },
   codes: {
-    choisirMembre: 'Tippe auf deinen Namen, um deine Belohnungen zu öffnen.',
     titre: 'Code von {nom}',
     faux: 'Falscher Code.',
     format: 'Der Code hat 4 Ziffern.',
@@ -273,6 +268,13 @@ export default {
   },
   couple: {
     sansCode: 'Wähle deinen Code unter Mein Konto, um auch die Paar-Belohnungen zu sehen.',
+  },
+  session: {
+    qui: 'Wer bist du?',
+    proInvite: 'Gib deinen Code ein, um deine Sitzung zu öffnen.',
+    sansCode: '{nom} muss zuerst unter Konto auf dem eigenen Handy einen Code wählen.',
+    fermer: 'Sitzung schließen',
+    categorieEnfants: 'Kinder',
   },
   comptes: {
     titre: 'Meine Konten',

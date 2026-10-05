@@ -246,15 +246,10 @@ export default {
   },
   proches: {
     titre: 'Membri senza account',
-    aide: 'Per chi non ha un indirizzo e-mail, i bambini per esempio: basta un nome. Spuntano le loro attività sul tuo telefono scegliendo il proprio nome e guadagnano punti e buoni come gli altri.',
     retirer: 'Rimuovi',
     retirerOui: 'Sì, rimuovi',
-    quiAFait: 'Chi l’ha fatta?',
-    moi: 'Io',
-    pourQui: 'I punti di chi?',
   },
   codes: {
-    choisirMembre: 'Tocca il tuo nome per aprire le tue ricompense.',
     titre: 'Codice di {nom}',
     faux: 'Codice errato.',
     format: 'Il codice ha 4 cifre.',
@@ -273,6 +268,13 @@ export default {
   },
   couple: {
     sansCode: 'Scegli il tuo codice in Il mio account per vedere anche le ricompense di coppia.',
+  },
+  session: {
+    qui: 'Chi sei?',
+    proInvite: 'Digita il tuo codice per aprire la tua sessione.',
+    sansCode: '{nom} deve prima scegliere un codice in Account, sul proprio telefono.',
+    fermer: 'Chiudi la sessione',
+    categorieEnfants: 'bambini',
   },
   comptes: {
     titre: 'I miei account',

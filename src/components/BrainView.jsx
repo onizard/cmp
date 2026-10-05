@@ -25,29 +25,19 @@ import {
 
 const RANG_BON = { enAttente: 0, neuf: 1, honore: 2 };
 
-export default function BrainView({ tasks, userId, rewards: store }) {
+// `acteur` : la session ouverte sur un téléphone partagé (session.js). Tout
+// ce qu'on voit et prend est alors à elle.
+export default function BrainView({ tasks, userId, rewards: store, acteur = null }) {
   const t = useT();
   const [openWish, setOpenWish] = useState(false);
   const [wish, setWish] = useState('');
   const [wishError, setWishError] = useState(null);
   const [showBareme, setShowBareme] = useState(false);
 
-  // Famille : les membres sans compte (un enfant) regardent leurs points et
-  // prennent leurs bons depuis ce téléphone. `qui` : la personne affichée.
-  const proches = (store.proches || []).filter((p) => p.actif);
-  const idsProches = new Set(proches.map((p) => p.id));
-  // Avec des membres sans compte, le téléphone est partagé : on n'entre chez
-  // quelqu'un qu'en touchant son prénom, puis en tapant son code s'il en a
-  // un. Avant, seul le classement se voit.
-  const selecteur = proches.length > 0;
-  const [quiChoisi, setQui] = useState(selecteur ? null : userId);
-  const qui = !selecteur
-    ? userId
-    : quiChoisi === userId || idsProches.has(quiChoisi)
-      ? quiChoisi
-      : null;
-  const verrouille = qui === null;
-  const pourProche = idsProches.has(qui) ? qui : null;
+  // `qui` : la personne affichée — celle de la session, sinon soi.
+  const qui = acteur ? acteur.id : userId;
+  const idsProches = new Set((store.proches || []).map((p) => p.id));
+  const enfant = idsProches.has(qui);
 
   // Les points vont à qui a fait (famille.js).
   const tachesC = creditees(tasks);
@@ -56,18 +46,19 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   const membres = tousLesMembres(store.members, store.proches);
 
   const other = store.otherUser;
-  const myName = noms[qui || userId] || t('cerveau.toi');
+  const myName = noms[qui] || t('cerveau.toi');
   const otherName = (other && store.names[other]) || t('cerveau.binome');
 
-  const myPts = pointsAvailable(tachesC, bonsC, qui || userId);
+  const myPts = pointsAvailable(tachesC, bonsC, qui);
   const otherPts = other ? pointsAvailable(tachesC, bonsC, other) : 0;
-  const detail = pointsBreakdown(tachesC, qui || userId);
+  const detail = pointsBreakdown(tachesC, qui);
 
   // Famille : chacun peut avoir un code pour ses bons (codes.sql). Tapé une
-  // fois, il vaut jusqu'à ce qu'on quitte l'onglet. Le code d'un parent ouvre
-  // aussi les récompenses de couple (couple.sql) ; jamais pour un enfant.
+  // fois, il vaut jusqu'à ce qu'on quitte l'onglet ; en session, il a été
+  // tapé pour l'ouvrir. Le code d'un parent ouvre aussi les récompenses de
+  // couple (couple.sql) ; jamais pour un enfant.
   const avecCode = new Set(store.avecCode || []);
-  const [ouverts, setOuverts] = useState(() => new Set());
+  const [ouverts, setOuverts] = useState(() => new Set(acteur ? [acteur.id] : []));
   const [demande, setDemande] = useState(null);
   const garde = (membre, faire) => {
     if (!avecCode.has(membre) || ouverts.has(membre)) {
@@ -86,16 +77,13 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     });
   };
   // Les récompenses de couple : pour un parent, mêlées aux autres. Sur un
-  // téléphone partagé avec des enfants, seulement s'il est entré avec son
-  // code (sans code choisi, elles restent cachées).
-  const coupleOuvert =
-    qui === userId && (!selecteur || (avecCode.has(userId) && ouverts.has(userId)));
-  // Toucher un prénom : son code d'abord (s'il en a un), puis tout s'ouvre.
-  const entrer = (id) => garde(id, () => setQui(id));
+  // téléphone partagé avec des enfants, seulement s'il a ouvert sa session
+  // avec son code (sans code choisi, elles restent cachées).
+  const coupleOuvert = !enfant && (!acteur || avecCode.has(qui));
 
   const familleTot = estFamille(membres, store.familleActivee);
   const visibles = store.rewards.filter((r) => !(familleTot && r.couple && !coupleOuvert));
-  const coupleCache = familleTot && qui === userId && !coupleOuvert && store.rewards.some((r) => r.couple && !r.deleted);
+  const coupleCache = familleTot && !enfant && !coupleOuvert && store.rewards.some((r) => r.couple && !r.deleted);
   const catalogue = sortRewards(visibles);
   const next = nextReward(visibles, myPts);
 
@@ -155,7 +143,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
 
   const prendre = (r) =>
     garde(qui, async () => {
-      montrerBon(await store.claimReward(r, pourProche));
+      montrerBon(await store.claimReward(r));
     });
 
   const submitWish = (e) => {
@@ -163,7 +151,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
     garde(qui, () => envoyerWish());
   };
   const envoyerWish = async () => {
-    const err = await store.claimCustom(wish, pourProche);
+    const err = await store.claimCustom(wish);
     if (err) {
       setWishError(err);
       return;
@@ -176,22 +164,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
   return (
     <main className="brain-view">
       <p className="brain-lede">{t('cerveau.lede')}</p>
-
-      {proches.length > 0 && (
-        <div className="qui-vue" role="group" aria-label={t('proches.pourQui')}>
-          {[userId, ...proches.map((p) => p.id)].map((id) => (
-            <button
-              key={id}
-              type="button"
-              className="qui-choix"
-              aria-pressed={id === qui}
-              onClick={() => entrer(id)}
-            >
-              {id === userId ? store.names[userId] || t('proches.moi') : noms[id]}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Sur ordinateur : deux colonnes, le classement à gauche, les
           récompenses à droite. Sur téléphone, l'une sous l'autre. */}
@@ -245,10 +217,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       </div>
       )}
 
-      {verrouille ? (
-        <p className="setnote qui-invite">{t('codes.choisirMembre')}</p>
-      ) : (
-      <>
       <p className="detail-line">
         {t(famille ? 'cerveau.detailFamille' : 'cerveau.detail', {
           ajoutees: detail.added,
@@ -304,11 +272,7 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </p>
         </section>
       )}
-
-      </>
-      )}
       </div>
-      {!verrouille && (
       <div className="brain-col">
       <section className="gage-section">
         <h2 className="gage-title">{t('recompenses.titre')}</h2>
@@ -408,10 +372,8 @@ export default function BrainView({ tasks, userId, rewards: store }) {
       </section>
 
       </div>
-      )}
       </div>
 
-      {!verrouille && (
       <section className="setgroup">
         <h2 className="setlabel">{t('inventaire.titre')}</h2>
         {mesClaims.length === 0 ? (
@@ -435,7 +397,6 @@ export default function BrainView({ tasks, userId, rewards: store }) {
           </div>
         )}
       </section>
-      )}
 
       {demande && (
         <CodeOperateur
