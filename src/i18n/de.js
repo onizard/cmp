@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} kümmert sich bis {h} darum: Bis dahin kann nur diese Person sie abhaken.',
     pasToi: 'Nur wer sie reserviert hat, kann sie freigeben.',
   },
+  categories: {
+    ajouter: 'Kategorie hinzufügen',
+    nom: 'Name der Kategorie',
+    vide: 'Noch nichts hier: Halte eine Aufgabe gedrückt und zieh sie hierher, oder schreib „#{nom}“ ans Ende einer Aufgabe.',
+    retirer: 'Kategorie {nom} entfernen',
+    suggestions: 'Bereits verwendete Kategorien',
+  },
   comptes: {
     titre: 'Meine Konten',
     perso: 'Privat',

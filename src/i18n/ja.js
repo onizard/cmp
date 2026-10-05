@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui}が{h}まで対応中です。それまではその人だけが完了にできます。',
     pasToi: '予約した人だけが解放できます。',
   },
+  categories: {
+    ajouter: 'カテゴリを追加',
+    nom: 'カテゴリ名',
+    vide: 'まだ何もありません。タスクを長押ししてここへドラッグするか、タスクの最後に「#{nom}」を付けてください。',
+    retirer: 'カテゴリ「{nom}」を削除',
+    suggestions: '使ったことのあるカテゴリ',
+  },
   comptes: {
     titre: 'わたしのアカウント',
     perso: '個人',

@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui}님이 {h}까지 맡고 있어요. 그때까지는 그분만 완료할 수 있어요.',
     pasToi: '예약한 사람만 풀 수 있어요.',
   },
+  categories: {
+    ajouter: '카테고리 추가',
+    nom: '카테고리 이름',
+    vide: '아직 비어 있어요. 할 일을 길게 눌러 여기로 끌어오거나, 할 일 끝에 “#{nom}”을 붙이세요.',
+    retirer: '{nom} 카테고리 삭제',
+    suggestions: '이미 쓴 카테고리',
+  },
   comptes: {
     titre: '내 계정들',
     perso: '개인',

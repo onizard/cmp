@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} se encarga hasta las {h}: solo esa persona puede marcarla hasta entonces.',
     pasToi: 'Solo quien la reservó puede liberarla.',
   },
+  categories: {
+    ajouter: 'Añadir una categoría',
+    nom: 'Nombre de la categoría',
+    vide: 'Aún no hay nada: mantén pulsada una tarea y arrástrala aquí, o añade «#{nom}» al final de una tarea.',
+    retirer: 'Quitar la categoría {nom}',
+    suggestions: 'Categorías ya usadas',
+  },
   comptes: {
     titre: 'Mis cuentas',
     perso: 'Personal',

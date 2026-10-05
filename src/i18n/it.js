@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} se ne occupa fino alle {h}: fino ad allora solo questa persona può spuntarla.',
     pasToi: 'Solo chi l’ha prenotata può liberarla.',
   },
+  categories: {
+    ajouter: 'Aggiungi una categoria',
+    nom: 'Nome della categoria',
+    vide: 'Ancora niente qui: tieni premuta un’attività e trascinala qui, oppure aggiungi «#{nom}» alla fine di un’attività.',
+    retirer: 'Rimuovi la categoria {nom}',
+    suggestions: 'Categorie già usate',
+  },
   comptes: {
     titre: 'I miei account',
     perso: 'Personale',

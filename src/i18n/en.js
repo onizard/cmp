@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} is on it until {h}: only they can tick it off until then.',
     pasToi: 'Only the person who reserved it can release it.',
   },
+  categories: {
+    ajouter: 'Add a category',
+    nom: 'Category name',
+    vide: 'Nothing here yet: press and hold a task and drag it here, or add “#{nom}” at the end of a task.',
+    retirer: 'Remove the {nom} category',
+    suggestions: 'Categories already used',
+  },
   comptes: {
     titre: 'My accounts',
     perso: 'Personal',

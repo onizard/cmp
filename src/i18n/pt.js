@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} trata disto até às {h}: só essa pessoa a pode marcar até lá.',
     pasToi: 'Só quem a reservou a pode libertar.',
   },
+  categories: {
+    ajouter: 'Adicionar uma categoria',
+    nom: 'Nome da categoria',
+    vide: 'Ainda não há nada: mantém premida uma tarefa e arrasta-a para aqui, ou acrescenta «#{nom}» no fim de uma tarefa.',
+    retirer: 'Retirar a categoria {nom}',
+    suggestions: 'Categorias já usadas',
+  },
   comptes: {
     titre: 'As minhas contas',
     perso: 'Pessoal',

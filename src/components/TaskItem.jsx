@@ -6,7 +6,12 @@ import DueBadge, { Chrono } from './DueBadge.jsx';
 import { ReserveBadge, ReserveActions, ReserveActionsOp, useMaintenant } from './Reservation.jsx';
 import { reservationActive } from '../lib/reservation.js';
 
-export default function TaskItem({ task, month, currentMonth, store, onCombo, names = {}, eclat = false, signer = null, noms = {} }) {
+export default function TaskItem({
+  task, month, currentMonth, store, onCombo, names = {}, eclat = false, signer = null, noms = {},
+  // Glisser-déposer (TaskList) : les écouteurs de l'appui long, la ligne qui
+  // se charge, le décalage de celle qu'on glisse, le trait où elle tomberait.
+  poignee = null, enAppui = false, glissee = null, depot = null,
+}) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -115,7 +120,9 @@ export default function TaskItem({ task, month, currentMonth, store, onCombo, na
   return (
     <li
       data-tache={task.id}
-      className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''} ${eclat ? 'task-eclat' : ''} ${bloquee ? 'task-bloquee' : ''}`}
+      className={`task ${task.done ? 'done' : ''} ${level ? `has-due due-lvl-${level}` : ''} ${eclat ? 'task-eclat' : ''} ${bloquee ? 'task-bloquee' : ''} ${enAppui ? 'task-appui' : ''} ${glissee !== null ? 'task-glissee' : ''} ${depot ? `depot-${depot}` : ''}`}
+      style={glissee !== null ? { transform: `translateY(${glissee}px)` } : undefined}
+      {...(poignee || {})}
     >
       <div className="task-row">
         <button

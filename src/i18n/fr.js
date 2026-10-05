@@ -378,6 +378,13 @@ export default {
     bloqueeEquipe: '{qui} s’en occupe jusqu’à {h} : seule cette personne peut la cocher d’ici là.',
     pasToi: 'Seule la personne qui l’a réservée peut la libérer.',
   },
+  categories: {
+    ajouter: 'Ajouter une catégorie',
+    nom: 'Nom de la catégorie',
+    vide: 'Rien ici pour l’instant : reste appuyé sur une tâche et glisse-la ici, ou ajoute « #{nom} » à la fin d’une tâche.',
+    retirer: 'Retirer la catégorie {nom}',
+    suggestions: 'Catégories déjà utilisées',
+  },
   comptes: {
     titre: 'Mes comptes',
     perso: 'Perso',

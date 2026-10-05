@@ -226,6 +226,13 @@ export default {
     bloqueeEquipe: '{qui} 负责到 {h}：在此之前只有 TA 能勾选。',
     pasToi: '只有预留的人才能释放。',
   },
+  categories: {
+    ajouter: '添加分类',
+    nom: '分类名称',
+    vide: '这里还没有内容：长按一项任务并拖到这里，或在任务末尾加上“#{nom}”。',
+    retirer: '移除分类 {nom}',
+    suggestions: '已用过的分类',
+  },
   comptes: {
     titre: '我的账户',
     perso: '个人',

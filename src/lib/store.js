@@ -28,6 +28,10 @@ const fromRow = (r) => ({
   reserveFin: r.reserve_fin ?? null,
   // Mode entreprise : le membre de l'équipe qui a réservé.
   reserveOp: r.reserve_op ?? null,
+  // Le rangement : un nom de catégorie, ou rien.
+  categorie: r.categorie ?? null,
+  // L'ordre choisi à la main ; nul tant qu'on n'a rien déplacé.
+  rang: r.rang ?? null,
   deleted: r.deleted,
   createdAt: r.created_at,
   updatedAt: r.updated_at,
@@ -46,6 +50,9 @@ const toInsertRow = (t) => ({
   created_by: t.createdBy ?? null,
   due_at: t.dueAt ?? null,
   due_has_time: t.dueHasTime !== false,
+  // Absente tant qu'il n'y en a pas : une base pas encore mise à jour
+  // (sans la colonne) accepte toujours les tâches sans catégorie.
+  ...(t.categorie ? { categorie: t.categorie } : {}),
   deleted: t.deleted,
 });
 
@@ -66,6 +73,8 @@ const patchToRow = (patch) => {
   if ('reservePar' in patch) row.reserve_par = patch.reservePar;
   if ('reserveDebut' in patch) row.reserve_debut = patch.reserveDebut;
   if ('reserveFin' in patch) row.reserve_fin = patch.reserveFin;
+  if ('categorie' in patch) row.categorie = patch.categorie;
+  if ('rang' in patch) row.rang = patch.rang;
   if ('deleted' in patch) row.deleted = patch.deleted;
   return row;
 };
@@ -147,6 +156,7 @@ const CHAMPS_DE_L_AUTEUR = ['text', 'deleted', 'dueAt', 'dueHasTime', 'month'];
 // --- Stockage local (cache lecture hors ligne + file d'attente d'écritures) ---
 
 const cacheKey = (hid) => `cmp:tasks:${hid}`;
+const categoriesKey = (hid) => `cmp:categories:${hid}`;
 const queueKey = (hid) => `cmp:queue:${hid}`;
 
 const readLS = (key, fallback) => {
@@ -195,6 +205,19 @@ export function useTasks(householdId, userId) {
   const [pending, setPending] = useState(() =>
     householdId ? readLS(queueKey(householdId), []).length : 0,
   );
+  // Les catégories créées au bouton, mois par mois (même vides).
+  const [categories, setCategories] = useState(() =>
+    householdId ? readLS(categoriesKey(householdId), []) : [],
+  );
+  const categoriesRef = useRef(categories);
+  const garderCategories = useCallback(
+    (next) => {
+      categoriesRef.current = next;
+      setCategories(next);
+      if (householdId) writeLS(categoriesKey(householdId), next);
+    },
+    [householdId],
+  );
 
   const tasksRef = useRef(tasks);
   const flushing = useRef(false);
@@ -233,7 +256,15 @@ export function useTasks(householdId, userId) {
       .select('*')
       .eq('household_id', householdId);
     if (!error && data) persist(data.map(fromRow));
-  }, [householdId, persist]);
+    // Base pas encore mise à jour (pas de table) : on garde ce qu'on a.
+    const c = await supabase
+      .from('categories')
+      .select('id, mois, nom, created_at')
+      .eq('household_id', householdId);
+    if (!c.error && c.data) {
+      garderCategories(c.data.map((r) => ({ id: r.id, mois: r.mois, nom: r.nom, createdAt: r.created_at })));
+    }
+  }, [householdId, persist, garderCategories]);
 
   // Applique une opération au serveur. Renvoie true si envoyée.
   const sendOp = useCallback(async (op) => {
@@ -337,6 +368,26 @@ export function useTasks(householdId, userId) {
             persist([...others, mapped]);
           },
         )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'categories',
+            filter: `household_id=eq.${householdId}`,
+          },
+          (payload) => {
+            const autres = categoriesRef.current.filter(
+              (c) => c.id !== (payload.new?.id || payload.old?.id),
+            );
+            if (payload.eventType === 'DELETE' || !payload.new?.id) {
+              garderCategories(autres);
+              return;
+            }
+            const r = payload.new;
+            garderCategories([...autres, { id: r.id, mois: r.mois, nom: r.nom, createdAt: r.created_at }]);
+          },
+        )
         .subscribe();
     }
 
@@ -389,7 +440,7 @@ export function useTasks(householdId, userId) {
    * créer une seconde.
    */
   const addTask = useCallback(
-    (month, text) => {
+    (month, text, categorie = null) => {
       const trimmed = text.trim();
       if (!trimmed) return null;
       const existante = doublonAFaire(tasksRef.current, month, trimmed);
@@ -412,6 +463,7 @@ export function useTasks(householdId, userId) {
         createdBy: userId ?? null,
         dueAt: null,
         dueHasTime: true,
+        categorie: categorie || null,
         deleted: false,
         createdAt: nowIso(),
         updatedAt: nowIso(),
@@ -516,7 +568,7 @@ export function useTasks(householdId, userId) {
 
   /** Crée une tâche au nom de l'opérateur qui a donné son code. */
   const creerOp = useCallback(
-    async (month, text, code) => {
+    async (month, text, code, categorie = null) => {
       const trimmed = String(text || '').trim();
       if (!trimmed) return { erreur: 'vide' };
       const existante = doublonAFaire(tasksRef.current, month, trimmed);
@@ -530,13 +582,19 @@ export function useTasks(householdId, userId) {
         hid: householdId, p_code: code, p_id: id, p_mois: month, p_texte: trimmed, p_position: position,
       });
       if (r.erreur) return r;
+      // Le rangement suit, sans code : ce n'est pas « qui a fait quoi ».
+      let rangee = null;
+      if (categorie) {
+        const c = await supabase.rpc('cmp_taches_ranger', { p_changes: [{ id, categorie }] });
+        if (!c.error) rangee = categorie;
+      }
       persist([
         ...tasksRef.current,
         {
           id, householdId, text: trimmed, month, position,
           done: false, doneMonth: null, doneBy: null, doneAt: null,
           createdBy: userId ?? null, createdOp: r.op, doneOp: null,
-          dueAt: null, dueHasTime: true, deleted: false,
+          dueAt: null, dueHasTime: true, categorie: rangee, deleted: false,
           createdAt: nowIso(), updatedAt: nowIso(),
         },
       ]);
@@ -635,6 +693,64 @@ export function useTasks(householdId, userId) {
     [updateTask, userId],
   );
 
+  /**
+   * Pose une tâche glissée : dans sa section (`categorie`, null = sans
+   * catégorie) et à sa place (`rangs` : [{ id, rang }], cf. ordre.js).
+   * Chacun range et déplace ce qu'il veut. En entreprise, où l'écriture
+   * directe est fermée, la base le fait par une fonction, sans code.
+   */
+  const placer = useCallback(
+    async (task, categorie, rangs = [], entreprise = false) => {
+      const c = categorie || null;
+      const patchs = new Map(rangs.map(({ id, rang }) => [id, { rang }]));
+      patchs.set(task.id, { ...(patchs.get(task.id) || {}), categorie: c });
+      if (!entreprise) {
+        for (const [id, patch] of patchs) updateTask(id, patch);
+        return true;
+      }
+      if (!supabase) return false;
+      for (const [id, patch] of patchs) applyLocal(id, patch);
+      const { error } = await supabase.rpc('cmp_taches_ranger', {
+        p_changes: [...patchs].map(([id, patch]) => ({ id, ...patch })),
+      });
+      if (error) {
+        await resync();
+        return false;
+      }
+      return true;
+    },
+    [updateTask, applyLocal, resync],
+  );
+
+  /** Une catégorie pour ce mois, même vide, créée au bouton. */
+  const ajouterCategorie = useCallback(
+    async (mois, nom) => {
+      const propre = String(nom || '').trim();
+      if (!propre || !householdId) return false;
+      const ligne = { id: uuid(), mois, nom: propre, createdAt: nowIso() };
+      garderCategories([...categoriesRef.current, ligne]);
+      if (!supabase) return true;
+      const { error } = await supabase
+        .from('categories')
+        .insert({ id: ligne.id, household_id: householdId, mois, nom: propre });
+      // Déjà là (même nom, ce mois-ci) ou refus : on relit la base.
+      if (error) await resync();
+      return !error;
+    },
+    [householdId, garderCategories, resync],
+  );
+
+  /** Retire une catégorie vide créée au bouton. */
+  const retirerCategorie = useCallback(
+    async (id) => {
+      garderCategories(categoriesRef.current.filter((c) => c.id !== id));
+      if (!supabase) return;
+      const { error } = await supabase.from('categories').delete().eq('id', id);
+      if (error) await resync();
+    },
+    [garderCategories, resync],
+  );
+
   const removeTask = useCallback(
     (id) => updateTask(id, { deleted: true }),
     [updateTask],
@@ -661,5 +777,9 @@ export function useTasks(householdId, userId) {
     modifierOp,
     reserverOp,
     libererOp,
+    categories,
+    placer,
+    ajouterCategorie,
+    retirerCategorie,
   };
 }
