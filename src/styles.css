@@ -3565,21 +3565,6 @@ body,
   -webkit-touch-callout: none;
 }
 
-/* Pendant l'appui, la ligne se remplit : « continue, ça vient ». */
-.task-appui {
-  background: linear-gradient(90deg, rgba(180, 134, 204, 0.16) 50%, transparent 50%) no-repeat;
-  background-size: 200% 100%;
-  background-position: 100% 0;
-  animation: task-appui 1s linear forwards;
-  border-radius: 14px;
-}
-
-@keyframes task-appui {
-  to {
-    background-position: 0 0;
-  }
-}
-
 .task-glissee {
   position: relative;
   z-index: 30;
@@ -3615,11 +3600,4 @@ body,
 
 .categorie-sans.depot-dans {
   min-height: 48px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .task-appui {
-    animation: none;
-    background: rgba(180, 134, 204, 0.16);
-  }
 }
