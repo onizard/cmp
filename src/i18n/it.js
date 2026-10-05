@@ -227,6 +227,7 @@ export default {
     pasToi: 'Solo chi l’ha prenotata può liberarla.',
   },
   categories: {
+    urgent: 'urgente',
     ajouter: 'Aggiungi una categoria',
     nom: 'Nome della categoria',
     vide: 'Ancora niente qui: tieni premuta un’attività e trascinala qui, oppure aggiungi «#{nom}» alla fine di un’attività.',

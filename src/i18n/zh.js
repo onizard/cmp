@@ -227,6 +227,7 @@ export default {
     pasToi: '只有预留的人才能释放。',
   },
   categories: {
+    urgent: '紧急',
     ajouter: '添加分类',
     nom: '分类名称',
     vide: '这里还没有内容：长按一项任务并拖到这里，或在任务末尾加上“#{nom}”。',

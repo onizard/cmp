@@ -20,6 +20,7 @@ import {
   nomConnu,
   sectionsDuMois,
   cleCategorie,
+  urgentes as lesUrgentes,
 } from '../lib/categories.js';
 import { rangsAuDepot } from '../lib/ordre.js';
 
@@ -131,6 +132,8 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
     return { aFaire: tout.filter((x) => !x.done), resume: monthSummary(tout) };
   }, [store.tasks, currentMonth]);
 
+  // « #urgent » en tête : les tâches à échéance, en double de leur place.
+  const urgentes = useMemo(() => lesUrgentes(aFaire), [aFaire]);
   const { sans, sections } = useMemo(
     () => sectionsDuMois(aFaire, store.categories || [], currentMonth),
     [aFaire, store.categories, currentMonth],
@@ -236,6 +239,33 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
             onAdd={(text) => ajouter(m, text, sections)}
             suggerer={(debut) => suggerer(stats, debut)}
           />
+          {/* Ni déplaçable ni cible : la section se remplit toute seule. */}
+          {urgentes.length > 0 && (
+            <section className="categorie categorie-urgent" aria-label={t('categories.urgent')}>
+              <div className="categorie-tete">
+                <span className="categorie-nom">#{t('categories.urgent')}</span>
+                <span className="categorie-compte">{urgentes.length}</span>
+              </div>
+              <ul className="tasks">
+                {urgentes.map((task) => (
+                  <TaskItem
+                    key={`urgent-${task.id}`}
+                    task={task}
+                    eclat={eclat && eclat.id === task.id && eclat.mois === m}
+                    month={m}
+                    currentMonth={currentMonth}
+                    store={store}
+                    onCombo={onCombo}
+                    names={names}
+                    signer={signer}
+                    noms={equipe ? equipe.noms : {}}
+                    proches={prochesActifs}
+                    montrerCategorie
+                  />
+                ))}
+              </ul>
+            </section>
+          )}
           <div className={`categorie-sans ${marqueSans.section ? 'depot-dans' : ''}`} data-section="">
             <ul className="tasks">{sans.map((task) => ligne(task, marqueSans))}</ul>
           </div>

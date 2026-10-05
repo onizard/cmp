@@ -379,6 +379,7 @@ export default {
     pasToi: 'Seule la personne qui l’a réservée peut la libérer.',
   },
   categories: {
+    urgent: 'urgent',
     ajouter: 'Ajouter une catégorie',
     nom: 'Nom de la catégorie',
     vide: 'Rien ici pour l’instant : reste appuyé sur une tâche et glisse-la ici, ou ajoute « #{nom} » à la fin d’une tâche.',

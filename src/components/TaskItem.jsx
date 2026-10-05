@@ -13,6 +13,8 @@ export default function TaskItem({
   poignee = null, glissee = null, depot = null,
   // Famille : les membres sans compte ; à la coche, on dit qui l'a faite.
   proches = [],
+  // Dans « #urgent » : on rappelle la catégorie d'origine de la tâche.
+  montrerCategorie = false,
 }) {
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -185,6 +187,9 @@ export default function TaskItem({
             <span className="task-label">{task.text}</span>
             {carried && <span className="carried">{carried}</span>}
             <span className="task-badges">
+              {montrerCategorie && task.categorie && (
+                <span className="tag-categorie">#{task.categorie}</span>
+              )}
               {signature && <span className="op-signature">{signature}</span>}
               <ReserveBadge task={task} userId={store.userId} names={names} noms={entreprise ? noms : null} />
               <DueBadge dueAt={task.dueAt} done={task.done} />
