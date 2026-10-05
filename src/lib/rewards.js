@@ -10,6 +10,8 @@ const rewardFrom = (r) => ({
   label: r.label,
   cost: Number(r.cost),
   visuel: r.visuel || null,
+  // En famille : une récompense de couple, cachée derrière le code couple.
+  couple: r.couple === true,
   deleted: r.deleted,
   createdAt: r.created_at,
 });
@@ -28,6 +30,8 @@ const claimFrom = (r) => ({
   // Membres sans compte (proches.sql) : le bon est à lui, ou il l'honore.
   proche: r.proche || null,
   pourProche: r.pour_proche || null,
+  // Un bon pris sur une récompense de couple (caché comme elle).
+  couple: r.couple === true,
   label: r.label,
   cost: Number(r.cost),
   deleted: r.deleted,
@@ -72,6 +76,10 @@ export function useRewards(householdId, userId) {
   const [proches, setProches] = useState(() =>
     householdId ? readLS(key(householdId, 'proches'), []) : [],
   );
+  // Le code couple : y en a-t-il un, et est-ce moi qui l'ai posé ?
+  const [couple, setCouple] = useState({ code: false, admin: false });
+  // Les membres (comptes ou sans compte) qui ont un code pour leurs bons.
+  const [avecCode, setAvecCode] = useState([]);
   const rRef = useRef(rewards);
   const cRef = useRef(claims);
 
@@ -107,6 +115,13 @@ export function useRewards(householdId, userId) {
       // Sans la table (base pas encore à jour), `pr` reste vide.
       supabase.from('proches').select('id, nom, actif, created_at').eq('household_id', householdId),
     ]);
+    // Base pas encore à jour : les fonctions manquent, on reste sans code.
+    const [{ data: ce }, { data: co }] = await Promise.all([
+      supabase.rpc('cmp_couple_etat', { hid: householdId }),
+      supabase.rpc('cmp_codes_etat', { hid: householdId }),
+    ]);
+    if (ce) setCouple({ code: Boolean(ce.code), admin: Boolean(ce.admin) });
+    if (Array.isArray(co)) setAvecCode(co);
     if (pr) {
       const liste = pr
         .map((p) => ({ id: p.id, nom: p.nom, actif: p.actif !== false, createdAt: p.created_at }))
@@ -176,6 +191,7 @@ export function useRewards(householdId, userId) {
         cost: reward.cost,
         deleted: false,
         ...(proche ? { proche } : {}),
+        ...(reward.couple ? { couple: true } : {}),
       };
       // Le visuel n'est pas copié sur le bon : on le retrouve par reward_id au
       // moment de l'affichage, pour qu'un nouveau dessin s'applique aussi aux
@@ -184,7 +200,8 @@ export function useRewards(householdId, userId) {
       // L'envoi part sans qu'on l'attende : le bon existe déjà à l'écran, et
       // l'appelant doit pouvoir le montrer tout de suite, même sur un réseau
       // lent. (Le constructeur de requête ne part qu'à l'appel de .then.)
-      if (supabase) supabase.from('claims').insert(row).then(() => {});
+      // Refusé (le code du membre n'a pas été tapé) : on relit la base.
+      if (supabase) supabase.from('claims').insert(row).then(({ error }) => error && refresh());
       return row.id;
     },
     [householdId, userId, saveClaims],
@@ -298,10 +315,73 @@ export function useRewards(householdId, userId) {
         ...(proche ? { proche } : {}),
       };
       saveClaims([...cRef.current, { ...claimFrom(row), createdAt: new Date().toISOString() }]);
-      if (supabase) await supabase.from('claims').insert(row);
+      if (supabase) {
+        const { error } = await supabase.from('claims').insert(row);
+        if (error) refresh();
+      }
       return null;
     },
     [householdId, userId, saveClaims],
+  );
+
+  // --- Les codes (codes.sql, couple.sql) ----------------------------------
+
+  /** Taper le code d'un membre : ses bons s'ouvrent un quart d'heure. */
+  const ouvrirCode = useCallback(
+    async (membre, code) => {
+      if (!supabase) return 'horsLigne';
+      const { data, error } = await supabase.rpc('cmp_code_ouvrir', { hid: householdId, p_membre: membre, p_code: code });
+      if (error) return error.message;
+      return data ? null : 'faux';
+    },
+    [householdId],
+  );
+
+  /**
+   * Choisir ou changer un code : le sien (`preuve` = l'ancien), ou celui d'un
+   * membre sans compte (`preuve` = son propre code). Renvoie null ou la raison.
+   */
+  const poserCode = useCallback(
+    async (membre, nouveau, preuve = null) => {
+      if (!supabase) return 'horsLigne';
+      const { data, error } = await supabase.rpc('cmp_code_poser', {
+        hid: householdId, p_membre: membre, p_nouveau: nouveau, p_preuve: preuve,
+      });
+      if (error) return error.message;
+      if (data === 'ok') await refresh();
+      return data === 'ok' ? null : data;
+    },
+    [householdId, refresh],
+  );
+
+  /** Le code couple : le poser (premier), le vérifier, le changer (admin). */
+  const poserCodeCouple = useCallback(
+    async (code) => {
+      if (!supabase) return 'horsLigne';
+      const { data, error } = await supabase.rpc('cmp_couple_poser', { hid: householdId, p_code: code });
+      if (error) return error.message;
+      await refresh();
+      return data === 'ok' ? null : data;
+    },
+    [householdId, refresh],
+  );
+  const verifierCodeCouple = useCallback(
+    async (code) => {
+      if (!supabase) return 'horsLigne';
+      const { data, error } = await supabase.rpc('cmp_couple_verifier', { hid: householdId, p_code: code });
+      if (error) return error.message;
+      return data ? null : 'faux';
+    },
+    [householdId],
+  );
+  const changerCodeCouple = useCallback(
+    async (ancien, nouveau) => {
+      if (!supabase) return 'horsLigne';
+      const { data, error } = await supabase.rpc('cmp_couple_changer', { hid: householdId, p_ancien: ancien, p_nouveau: nouveau });
+      if (error) return error.message;
+      return data === 'ok' ? null : data;
+    },
+    [householdId],
   );
 
   /** Un membre sans compte de plus (un prénom suffit). */
@@ -335,6 +415,13 @@ export function useRewards(householdId, userId) {
     proches,
     ajouterProche,
     retirerProche,
+    couple,
+    avecCode,
+    ouvrirCode,
+    poserCode,
+    poserCodeCouple,
+    verifierCodeCouple,
+    changerCodeCouple,
     otherUser,
     members,
     familleActivee,

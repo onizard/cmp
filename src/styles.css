@@ -3721,3 +3721,55 @@ body,
   font-size: 0.78rem;
   font-weight: 700;
 }
+
+/* --- Famille : codes des membres et récompenses de couple --------------- */
+
+.codes-famille {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.codes-form {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 4px;
+  flex-basis: 100%;
+}
+
+.codes-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.codes-actions .btn {
+  flex: 1;
+}
+
+.codes-couple-titre {
+  margin-top: 18px;
+}
+
+.codes-ok {
+  color: #197f71;
+  font-weight: 700;
+}
+
+.proche-verrou {
+  font-size: 0.85em;
+}
+
+.couple-bloc {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #fdf3f6;
+  box-shadow: inset 0 0 0 1px #f6dbe4;
+}
+
+.couple-titre {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--due-urgent);
+}
