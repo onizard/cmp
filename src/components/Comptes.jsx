@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useT, langue } from '../i18n/index.js';
-import { lireComptes, basculer, ajouter, creer, oublier } from '../lib/comptes.js';
+import { lireComptes, basculer, ajouter, creer, oublier, postePartage } from '../lib/comptes.js';
 
 // Les deux petits logos : une maison pour le perso, une mallette pour le pro.
 export const Maison = () => (
@@ -54,7 +54,9 @@ export default function Comptes({
   const [aRetirer, setARetirer] = useState(null);
   const aUnPro = comptes.some((c) => c.type === 'pro');
   const aUnPerso = comptes.some((c) => c.type !== 'pro');
-  const manque = !ajout ? null : aUnPro && !aUnPerso ? 'perso' : aUnPerso && !aUnPro ? 'pro' : null;
+  // Ordinateur partagé : on n'y ajoute aucun autre compte.
+  const manque =
+    !ajout || postePartage() ? null : aUnPro && !aUnPerso ? 'perso' : aUnPerso && !aUnPro ? 'pro' : null;
   const pourPerso = formulaire === 'perso' || formulaire === 'persoCreer';
 
   const retirer = (c) => {

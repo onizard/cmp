@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // Appui long, puis on glisse la tâche : au-dessus ou au-dessous de ses
 // voisines, ou dans une autre catégorie.
 //
-// Une seconde d'appui sans bouger (la ligne se remplit doucement pour dire
-// « continue ») : la tâche se soulève et suit le doigt. Bouger avant, c'est
+// Une demi-seconde d'appui sans bouger, comme l'appui long du téléphone : la
+// tâche se soulève (petite vibration) et suit le doigt. Bouger avant, c'est
 // faire défiler la page ; lâcher avant, c'est un toucher ordinaire. Près du
 // haut ou du bas de l'écran, la page défile toute seule. Échap annule.
 //
@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 // data-tache. La cible est { section, index }, l'index comptant les tâches
 // de la section SANS celle qu'on déplace.
 
-export const APPUI_MS = 1000;
+export const APPUI_MS = 500;
 const TOLERANCE = 10; // px : au-delà, c'est un défilement, pas un appui
 const BORD = 90; // px : zone de défilement automatique, en haut et en bas
 const VITESSE = 14; // px par image
@@ -40,7 +40,6 @@ export function cibleAuPoint(x, y, sauf) {
 }
 
 export default function useGlisser({ onDeposer, actif = true }) {
-  const [appui, setAppui] = useState(null); // id de la tâche qui se charge
   const [glisse, setGlisse] = useState(null); // { id, dy }
   const [cible, setCible] = useState(null);
   const etat = useRef(null);
@@ -59,7 +58,6 @@ export default function useGlisser({ onDeposer, actif = true }) {
     }
     etat.current = null;
     document.body.classList.remove('glisse-en-cours');
-    setAppui(null);
     setGlisse(null);
     setCible(null);
   }, []);
@@ -127,7 +125,6 @@ export default function useGlisser({ onDeposer, actif = true }) {
       };
       e0.minuteur = setTimeout(() => {
         e0.parti = true;
-        setAppui(null);
         document.body.classList.add('glisse-en-cours');
         navigator.vibrate?.(25);
         placer();
@@ -147,7 +144,6 @@ export default function useGlisser({ onDeposer, actif = true }) {
         e0.defile = requestAnimationFrame(pas);
       }, APPUI_MS);
       etat.current = e0;
-      setAppui(id);
       window.addEventListener('pointermove', e0.bouger);
       window.addEventListener('pointerup', e0.lacher);
       window.addEventListener('pointercancel', e0.annuler);
@@ -172,5 +168,5 @@ export default function useGlisser({ onDeposer, actif = true }) {
     },
   });
 
-  return { zone, appui, glisse, cible, surTache };
+  return { zone, glisse, cible, surTache };
 }

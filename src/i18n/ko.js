@@ -233,6 +233,16 @@ export default {
     retirer: '{nom} 카테고리 삭제',
     suggestions: '이미 쓴 카테고리',
   },
+  poste: {
+    titre: '이 기기',
+    libelle: '공용 컴퓨터',
+    aide: '사무실 컴퓨터에서 켜세요. 이 회사 계정만 열 수 있게 됩니다. 개인 계정은 데이터와 함께 삭제됩니다.',
+    actif: '이 기기에서는 이 회사 계정만 열려요. 끄려면 책임자 코드가 필요해요.',
+    confirmer: '이 기기에 저장된 다른 계정(예: 개인 계정)은 데이터와 함께 삭제됩니다. 여기서는 이 회사 계정만 열 수 있어요.',
+    activer: '켜기',
+    desactiver: '끄기',
+    refuse: '이 컴퓨터는 회사 계정 {email} 전용입니다.',
+  },
   comptes: {
     titre: '내 계정들',
     perso: '개인',

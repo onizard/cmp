@@ -1,6 +1,6 @@
 import { origineWeb } from './natif.js';
 import { useCallback, useEffect, useState } from 'react';
-import { memoriser, oublier } from './comptes.js';
+import { memoriser, oublier, postePartage } from './comptes.js';
 import { supabase, isConfigured } from '../supabaseClient.js';
 import { t } from '../i18n/index.js';
 import {
@@ -86,6 +86,9 @@ export function useAccount() {
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(null);
+  // Ordinateur partagé : l'e-mail du compte pro réservé, quand un autre
+  // compte vient d'être refusé.
+  const [posteRefuse, setPosteRefuse] = useState(null);
   // Vrai quand on n'a PAS PU savoir si la personne a un foyer, ce qui n'est
   // pas la même chose que « elle n'en a pas ».
   const [lectureRatee, setLectureRatee] = useState(false);
@@ -98,7 +101,21 @@ export function useAccount() {
       setLoading(false);
       return undefined;
     }
+    // Ordinateur partagé : un autre compte que le pro réservé est refermé
+    // aussitôt, avant de rien afficher.
+    const horsPoste = (s) => {
+      const poste = postePartage();
+      if (!s || !poste || s.user.id === poste.userId) return false;
+      setPosteRefuse(poste.email || true);
+      supabase.auth.signOut({ scope: 'local' });
+      return true;
+    };
     supabase.auth.getSession().then(({ data }) => {
+      if (horsPoste(data.session)) {
+        setLoading(false);
+        setReady(true);
+        return;
+      }
       setSession(data.session);
       if (!data.session) {
         setLoading(false);
@@ -106,6 +123,8 @@ export function useAccount() {
       }
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (horsPoste(s)) return;
+      if (s) setPosteRefuse(null);
       setSession(s);
       // Les jetons tournent : on tient à jour ceux du compte rangé, pour que
       // le retour sur ce compte, plus tard, reparte du bon.
@@ -207,6 +226,7 @@ export function useAccount() {
         session,
         nom: household.name || '',
         type: household.entreprise ? 'pro' : 'perso',
+        hid: household.id,
       });
     }
   }, [session, household]);
@@ -502,6 +522,7 @@ export function useAccount() {
     loading,
     ready,
     error,
+    posteRefuse,
     signIn,
     signUp,
     sendMagicLink,

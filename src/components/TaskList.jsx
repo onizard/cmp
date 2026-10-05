@@ -171,7 +171,6 @@ export default function TaskList({ store, currentMonth, onCombo, names = {}, equ
       signer={signer}
       noms={equipe ? equipe.noms : {}}
       poignee={glisser.surTache(task.id)}
-      enAppui={glisser.appui === task.id}
       glissee={glisser.glisse && glisser.glisse.id === task.id ? glisser.glisse.dy : null}
       depot={marque[task.id] || null}
     />

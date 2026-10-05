@@ -233,6 +233,16 @@ export default {
     retirer: 'Kategorie {nom} entfernen',
     suggestions: 'Bereits verwendete Kategorien',
   },
+  poste: {
+    titre: 'Dieses Gerät',
+    libelle: 'Gemeinsamer Computer',
+    aide: 'Für die Büro-Computer einschalten: Nur dieses Firmenkonto öffnet sich dort. Private Konten werden samt ihren Daten entfernt.',
+    actif: 'Nur dieses Firmenkonto öffnet sich auf diesem Gerät. Zum Ausschalten braucht es den Verantwortlichen-Code.',
+    confirmer: 'Die anderen auf diesem Gerät gespeicherten Konten (z. B. ein privates) werden samt ihren Daten entfernt. Nur dieses Firmenkonto öffnet sich dann hier.',
+    activer: 'Einschalten',
+    desactiver: 'Ausschalten',
+    refuse: 'Dieser Computer ist dem Firmenkonto {email} vorbehalten.',
+  },
   comptes: {
     titre: 'Meine Konten',
     perso: 'Privat',

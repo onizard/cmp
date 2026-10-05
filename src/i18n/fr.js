@@ -385,6 +385,16 @@ export default {
     retirer: 'Retirer la catégorie {nom}',
     suggestions: 'Catégories déjà utilisées',
   },
+  poste: {
+    titre: 'Cet appareil',
+    libelle: 'Ordinateur partagé',
+    aide: 'À activer sur les ordinateurs du bureau : seul ce compte pro pourra s’y ouvrir. Les comptes perso en sont retirés, avec leurs données.',
+    actif: 'Seul ce compte pro s’ouvre sur cet appareil. Le désactiver demande le code responsable.',
+    confirmer: 'Les autres comptes rangés sur cet appareil (un compte perso, par exemple) vont en être retirés, avec leurs données. Seul ce compte pro pourra s’y ouvrir.',
+    activer: 'Activer',
+    desactiver: 'Désactiver',
+    refuse: 'Cet ordinateur est réservé au compte pro {email}.',
+  },
   comptes: {
     titre: 'Mes comptes',
     perso: 'Perso',

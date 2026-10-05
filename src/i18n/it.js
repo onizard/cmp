@@ -233,6 +233,16 @@ export default {
     retirer: 'Rimuovi la categoria {nom}',
     suggestions: 'Categorie già usate',
   },
+  poste: {
+    titre: 'Questo dispositivo',
+    libelle: 'Computer condiviso',
+    aide: 'Da attivare sui computer dell’ufficio: solo questo account aziendale potrà aprirsi. Gli account personali vengono rimossi, con i loro dati.',
+    actif: 'Solo questo account aziendale si apre su questo dispositivo. Per disattivarlo serve il codice responsabile.',
+    confirmer: 'Gli altri account salvati su questo dispositivo (uno personale, per esempio) verranno rimossi, con i loro dati. Solo questo account aziendale potrà aprirsi qui.',
+    activer: 'Attiva',
+    desactiver: 'Disattiva',
+    refuse: 'Questo computer è riservato all’account aziendale {email}.',
+  },
   comptes: {
     titre: 'I miei account',
     perso: 'Personale',
