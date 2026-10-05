@@ -56,8 +56,18 @@ export function entree(personne, userId, avecCode = []) {
 // Un enfant ne voit que les tâches rangées dans « enfants » (dans n'importe
 // laquelle des langues de l'appli), et ce qu'il ajoute y va tout seul.
 
+// Singulier ou pluriel, et les mots qu'on tape le plus souvent : « #enfant »
+// vaut « #enfants », quel que soit qui a ajouté la tâche.
+const VARIANTES = [
+  'enfant', 'enfants', 'enfance', 'kid', 'kids', 'child', 'children',
+  'niño', 'niños', 'niña', 'niñas', 'hijos', 'criança', 'crianças', 'filhos',
+  'Kind', 'Kinder', 'bambino', 'bambini', 'bimbi', 'figli',
+  'ребенок', 'ребёнок', 'дети', '孩子', '儿童', '子ども', '子供', 'こども',
+  '아이', '아이들', '어린이', 'طفل', 'أطفال', 'الأطفال', 'بچه', 'بچه‌ها', 'کودکان',
+  'ילד', 'ילדים', 'بچہ', 'بچے',
+];
 const NOMS_ENFANTS = new Set(
-  LANGUES.map((l) => l.dict.session && l.dict.session.categorieEnfants)
+  [...LANGUES.map((l) => l.dict.session && l.dict.session.categorieEnfants), ...VARIANTES]
     .filter(Boolean)
     .map(cleCategorie),
 );

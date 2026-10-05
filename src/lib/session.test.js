@@ -33,6 +33,9 @@ describe('sessions', () => {
 
   it('reconnaissent les tâches des enfants, dans toutes les langues', () => {
     expect(estTacheEnfants({ categorie: 'Enfants' })).toBe(true);
+    expect(estTacheEnfants({ categorie: 'enfant' })).toBe(true);
+    expect(estTacheEnfants({ categorie: 'Enfant', createdBy: 'maman' })).toBe(true);
+    expect(estTacheEnfants({ categorie: 'children' })).toBe(true);
     expect(estTacheEnfants({ categorie: 'kids' })).toBe(true);
     expect(estTacheEnfants({ categorie: 'niños' })).toBe(true);
     expect(estTacheEnfants({ categorie: 'courses' })).toBe(false);
