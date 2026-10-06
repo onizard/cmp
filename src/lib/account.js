@@ -82,6 +82,10 @@ export function useAccount() {
   const [invitation, setInvitation] = useState(() => capturerInvitation());
   const [session, setSession] = useState(null);
   const [household, setHousehold] = useState(null);
+  // Le compte pour lequel `household` a été lu. Juste après un changement
+  // de compte, la session est déjà la nouvelle mais le foyer encore l'ancien :
+  // on n'en montre rien tant qu'ils ne vont pas ensemble.
+  const [foyerDe, setFoyerDe] = useState(null);
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
@@ -140,6 +144,15 @@ export function useAccount() {
 
   const loadHousehold = useCallback(async () => {
     if (!supabase || !session) return;
+    try {
+      await lireFoyer();
+    } finally {
+      setFoyerDe(session.user.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
+  const lireFoyer = async () => {
     setLoading(true);
     // Filtrer sur SON user_id est indispensable : la politique de sécurité
     // laisse voir tous les membres du foyer (c'est ainsi qu'on affiche le
@@ -209,7 +222,7 @@ export function useAccount() {
     setHousehold(null);
     setLoading(false);
     setReady(true);
-  }, [session]);
+  };
 
   useEffect(() => {
     if (session) {
@@ -220,8 +233,10 @@ export function useAccount() {
 
   // Le compte rangé sur cet appareil connaît son espace : son nom, et s'il
   // est perso ou pro — c'est ce que montre le sélecteur de comptes.
+  const aJour = Boolean(session) && foyerDe === session.user.id;
+
   useEffect(() => {
-    if (session && household) {
+    if (session && household && aJour) {
       memoriser({
         session,
         nom: household.name || '',
@@ -229,7 +244,7 @@ export function useAccount() {
         hid: household.id,
       });
     }
-  }, [session, household]);
+  }, [session, household, aJour]);
 
   // Combien sont-ils dans ce foyer ? La politique de sécurité laisse compter
   // les membres du sien, pas ceux des autres.
@@ -518,6 +533,8 @@ export function useAccount() {
     reessayer: loadHousehold,
     session,
     household,
+    // Le foyer lu est bien celui de la session en cours.
+    aJour,
     displayName,
     loading,
     ready,
