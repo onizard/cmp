@@ -53,6 +53,20 @@ export default function App() {
   // Perso et pro sur le même appareil : on s'ouvre sur le choix du compte.
   // Un seul compte : droit sur ses tâches.
   const [choix, setChoix] = useState(plusieursComptes);
+  // Le compte qu'on vient de choisir : la connexion bascule un instant après.
+  // D'ici là, l'ancien compte est encore là, on n'en montre rien.
+  const [attendu, setAttendu] = useState(null);
+  const courant = account.session ? account.session.user.id : null;
+  useEffect(() => {
+    if (!attendu) return undefined;
+    if (courant === attendu) {
+      setAttendu(null);
+      return undefined;
+    }
+    // Filet : la bascule n'arrive jamais ? On n'attend pas indéfiniment.
+    const filet = setTimeout(() => setAttendu(null), 8000);
+    return () => clearTimeout(filet);
+  }, [attendu, courant]);
   // Passé par l'écran de connexion, on a déjà choisi.
   const deconnecte = account.ready && !account.session;
   useEffect(() => {
@@ -90,6 +104,17 @@ export default function App() {
 
   if (!account.session) return <Auth account={account} />;
 
+  // Juste après un changement de compte : le foyer lu est encore celui de
+  // l'autre compte. On patiente plutôt que de mélanger les deux.
+  if (!account.aJour || (attendu && courant !== attendu)) {
+    return (
+      <div className="screen">
+        <Header />
+        <p className="notice">{t('app.instant')}</p>
+      </div>
+    );
+  }
+
   // On ne propose « créer un foyer » que si on a VRAIMENT pu vérifier qu'il
   // n'y en a pas. Sinon on invite des gens a se fabriquer un doublon.
   if (account.lectureRatee && !account.household) {
@@ -112,7 +137,15 @@ export default function App() {
   }
 
   if (choix) {
-    return <ChoixCompte courant={account.session.user.id} onFini={() => setChoix(false)} />;
+    return (
+      <ChoixCompte
+        courant={account.session.user.id}
+        onFini={(id) => {
+          setAttendu(id && id !== account.session.user.id ? id : null);
+          setChoix(false);
+        }}
+      />
+    );
   }
 
   // Un compte créé par « Ajouter un compte pro » va droit à l'entreprise.

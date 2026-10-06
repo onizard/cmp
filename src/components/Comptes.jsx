@@ -73,7 +73,7 @@ export default function Comptes({
 
   const choisir = async (c) => {
     if (c.userId === courant) {
-      onChoisi?.();
+      onChoisi?.(c.userId);
       return;
     }
     setOccupe(c.userId);
@@ -83,7 +83,7 @@ export default function Comptes({
     if (r) {
       setErreur(t('comptes.expire', { email: c.email }));
       setComptes(lireComptes());
-    } else onChoisi?.();
+    } else onChoisi?.(c.userId);
   };
 
   const fermer = () => {
