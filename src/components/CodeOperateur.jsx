@@ -15,7 +15,7 @@ const TOUCHES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
  * caractère). Retour arrière ou Suppr efface, Échap ferme. La fenêtre prend
  * le focus en s'ouvrant : rien ne s'écrit dans le champ resté derrière.
  */
-export default function CodeOperateur({ titre, detail, onValider, onFermer, fermerLibelle = null }) {
+export default function CodeOperateur({ titre, detail, onValider, onFermer }) {
   const t = useT();
   const [code, setCode] = useState('');
   const [erreur, setErreur] = useState(null);
@@ -104,11 +104,9 @@ export default function CodeOperateur({ titre, detail, onValider, onFermer, ferm
             ),
           )}
         </div>
-        {/* Sans `onFermer` (l'ouverture d'une session pro), pas d'annulation :
-            il n'y a rien derrière. */}
         {onFermer && (
           <button className="btn btn-block code-annuler" type="button" onClick={onFermer}>
-            {fermerLibelle || t('app.annuler')}
+            {t('app.annuler')}
           </button>
         )}
       </div>

@@ -3882,6 +3882,11 @@ body,
   transform: scale(0.97);
 }
 
+.session-nom:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 .session-initiale {
   display: grid;
   place-items: center;

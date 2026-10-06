@@ -21,8 +21,19 @@ export const tachesParOperateur = (tasks) =>
   (tasks || []).map((t) => ({ ...t, createdBy: t.createdOp || null, doneBy: t.doneOp || null }));
 
 /** Les membres de l'équipe : { id, nom, actif }, actifs d'abord, puis par nom. */
+// L'équipe est gardée sur le téléphone : l'écran « Qui es-tu ? » s'affiche
+// du premier coup.
+const cleEquipe = (hid) => `cmp:equipe:${hid}`;
+const lireEquipe = (hid) => {
+  try {
+    return JSON.parse(localStorage.getItem(cleEquipe(hid)) || '[]');
+  } catch {
+    return [];
+  }
+};
+
 export function useEquipe(householdId, actif) {
-  const [membres, setMembres] = useState([]);
+  const [membres, setMembres] = useState(() => (actif && householdId ? lireEquipe(householdId) : []));
 
   const refresh = useCallback(async () => {
     if (!actif || !supabase || !householdId) return;
@@ -31,15 +42,19 @@ export function useEquipe(householdId, actif) {
       .select('id, nom, actif')
       .eq('household_id', householdId);
     if (data) {
-      setMembres(
-        data
-          .slice()
-          .sort(
-            (a, b) =>
-              Number(b.actif) - Number(a.actif) ||
-              a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }),
-          ),
-      );
+      const liste = data
+        .slice()
+        .sort(
+          (a, b) =>
+            Number(b.actif) - Number(a.actif) ||
+            a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }),
+        );
+      setMembres(liste);
+      try {
+        localStorage.setItem(cleEquipe(householdId), JSON.stringify(liste));
+      } catch {
+        /* stockage indisponible */
+      }
     }
   }, [householdId, actif]);
 

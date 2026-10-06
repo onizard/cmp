@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: 'Who are you?',
-    proInvite: 'Enter your code to open your session.',
     sansCode: '{nom} must first choose a code in Account, on their own phone.',
     fermer: 'Close session',
     categorieEnfants: 'kids',

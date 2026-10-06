@@ -158,7 +158,7 @@ function Home({ account, currentMonth, onChangerCompte }) {
 
   // Plusieurs personnes sur ce téléphone : chacun ouvre sa session. Seul, on
   // va droit à ses tâches.
-  const sessions = avecSessions({ entreprise, proches: rewards.proches });
+  const sessions = avecSessions({ entreprise, equipe: equipe.membres, proches: rewards.proches });
   const fermer = useCallback(() => {
     setActeur(null);
     setTab('liste');

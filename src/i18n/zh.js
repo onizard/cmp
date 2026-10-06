@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: '你是谁？',
-    proInvite: '输入你的代码，打开你的会话。',
     sansCode: '{nom} 需要先在自己手机的“我的账户”里设置代码。',
     fermer: '关闭会话',
     categorieEnfants: '孩子',
