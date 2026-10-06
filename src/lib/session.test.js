@@ -11,7 +11,8 @@ describe('sessions', () => {
     expect(avecSessions({ proches: [] })).toBe(false);
     expect(avecSessions({ proches: [{ id: 'x', actif: false }] })).toBe(false);
     expect(avecSessions({ proches })).toBe(true);
-    expect(avecSessions({ entreprise: true })).toBe(true);
+    expect(avecSessions({ entreprise: true })).toBe(false);
+    expect(avecSessions({ entreprise: true, equipe: [{ id: 'j', actif: true }] })).toBe(true);
   });
 
   it('listent le téléphone, les autres adultes, puis les enfants actifs', () => {

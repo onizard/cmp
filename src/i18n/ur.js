@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: 'آپ کون ہیں؟',
-    proInvite: 'اپنا سیشن کھولنے کے لیے اپنا کوڈ لکھیں۔',
     sansCode: '{nom} کو پہلے اپنے فون پر «میرا اکاؤنٹ» میں کوڈ چننا ہوگا۔',
     fermer: 'سیشن بند کریں',
     categorieEnfants: 'بچے',

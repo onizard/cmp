@@ -423,7 +423,6 @@ export default {
   },
   session: {
     qui: 'Qui es-tu ?',
-    proInvite: 'Tape ton code pour ouvrir ta session.',
     sansCode: '{nom} doit d’abord choisir son code dans Mon compte, sur son téléphone.',
     fermer: 'Fermer la session',
     categorieEnfants: 'enfants',

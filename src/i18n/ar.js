@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: 'من أنت؟',
-    proInvite: 'أدخل رمزك لفتح جلستك.',
     sansCode: 'على {nom} أولًا اختيار رمز في «حسابي» على هاتفه.',
     fermer: 'إغلاق الجلسة',
     categorieEnfants: 'الأطفال',

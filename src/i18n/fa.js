@@ -273,7 +273,6 @@ export default {
   },
   session: {
     qui: 'تو کی هستی؟',
-    proInvite: 'کدت را وارد کن تا جلسه‌ات باز شود.',
     sansCode: '{nom} باید اول در «حساب من» روی گوشی خودش یک کد انتخاب کند.',
     fermer: 'بستن جلسه',
     categorieEnfants: 'بچه‌ها',

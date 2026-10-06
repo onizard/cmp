@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: 'מי את/ה?',
-    proInvite: 'הקלידו את הקוד כדי לפתוח את הסשן שלכם.',
     sansCode: '{nom} צריך קודם לבחור קוד ב״החשבון שלי״, בטלפון שלו.',
     fermer: 'סגירת הסשן',
     categorieEnfants: 'ילדים',

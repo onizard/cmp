@@ -271,7 +271,6 @@ export default {
   },
   session: {
     qui: '누구세요?',
-    proInvite: '코드를 입력해 내 세션을 여세요.',
     sansCode: '{nom}님은 먼저 자기 휴대폰의 내 계정에서 코드를 정해야 해요.',
     fermer: '세션 닫기',
     categorieEnfants: '아이들',

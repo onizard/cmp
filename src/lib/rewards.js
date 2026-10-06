@@ -71,10 +71,23 @@ export function useRewards(householdId, userId, acteur = null) {
   const [claims, setClaims] = useState(() =>
     householdId ? readLS(key(householdId, 'claims'), []) : [],
   );
-  const [names, setNames] = useState({});
+  // Prénoms et membres gardés sur le téléphone : l'écran « Qui es-tu ? »
+  // s'affiche juste du premier coup, sans attendre le réseau.
+  const [names, setNames] = useState(() =>
+    householdId ? readLS(key(householdId, 'noms'), {}) : {},
+  );
   const [otherUser, setOtherUser] = useState(null);
   // Tous les membres du foyer, moi compris, dans l'ordre d'arrivée.
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState(() =>
+    householdId ? readLS(key(householdId, 'membres'), []) : [],
+  );
+  // La première lecture de la base est-elle faite ? Avant, qui a un code
+  // n'est pas sûr : on n'ouvre aucune session.
+  const [charge, setCharge] = useState(false);
+  // … sauf si on le sait déjà de la dernière fois (hors ligne, par exemple).
+  const [codesConnus] = useState(() =>
+    Boolean(householdId) && readLS(key(householdId, 'avecCode'), null) !== null,
+  );
   // Le foyer a-t-il choisi le mode famille (même à deux) ?
   const [familleActivee, setFamilleActivee] = useState(false);
   // Les membres sans compte (les enfants, par exemple) : { id, nom, actif }.
@@ -82,7 +95,9 @@ export function useRewards(householdId, userId, acteur = null) {
     householdId ? readLS(key(householdId, 'proches'), []) : [],
   );
   // Les membres (comptes ou sans compte) qui ont un code pour leurs bons.
-  const [avecCode, setAvecCode] = useState([]);
+  const [avecCode, setAvecCode] = useState(() =>
+    householdId ? readLS(key(householdId, 'avecCode'), []) : [],
+  );
   const rRef = useRef(rewards);
   const cRef = useRef(claims);
 
@@ -120,7 +135,10 @@ export function useRewards(householdId, userId, acteur = null) {
     ]);
     // Base pas encore à jour : les fonctions manquent, on reste sans code.
     const { data: co } = await supabase.rpc('cmp_codes_etat', { hid: householdId });
-    if (Array.isArray(co)) setAvecCode(co);
+    if (Array.isArray(co)) {
+      setAvecCode(co);
+      writeLS(key(householdId, 'avecCode'), co);
+    }
     if (pr) {
       const liste = pr
         .map((p) => ({ id: p.id, nom: p.nom, actif: p.actif !== false, createdAt: p.created_at }))
@@ -138,8 +156,11 @@ export function useRewards(householdId, userId, acteur = null) {
       });
       setNames(map);
       setMembers(mem.map((m) => m.user_id));
+      writeLS(key(householdId, 'noms'), map);
+      writeLS(key(householdId, 'membres'), mem.map((m) => m.user_id));
       setOtherUser(mem.map((m) => m.user_id).find((id) => id !== userId) ?? null);
     }
+    if (mem && co !== undefined) setCharge(true);
   }, [householdId, userId, saveRewards, saveClaims]);
 
   useEffect(() => {
@@ -402,6 +423,7 @@ export function useRewards(householdId, userId, acteur = null) {
     ajouterProche,
     retirerProche,
     avecCode,
+    pret: charge || codesConnus,
     ouvrirCode,
     prolongerCode,
     poserCode,

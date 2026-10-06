@@ -17,9 +17,15 @@ export const DELAI_PRO = 60 * 1000;
 // Le ticket dure un quart d'heure : on le prolonge bien avant.
 export const PROLONGER_MS = 4 * 60 * 1000;
 
-/** Le téléphone sert-il à plusieurs ? Seul, on va droit à ses tâches. */
-export const avecSessions = ({ entreprise = false, proches = [] } = {}) =>
-  Boolean(entreprise) || (proches || []).some((p) => p.actif);
+/**
+ * Le téléphone sert-il à plusieurs ? Seul, on va droit à ses tâches. En
+ * entreprise, il faut une équipe : sans membre, on va droit à Mon compte
+ * pour en ajouter.
+ */
+export const avecSessions = ({ entreprise = false, equipe = [], proches = [] } = {}) =>
+  entreprise
+    ? (equipe || []).some((m) => m.actif)
+    : (proches || []).some((p) => p.actif);
 
 /**
  * Qui peut ouvrir une session, dans l'ordre de l'écran : le compte du
