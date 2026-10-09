@@ -50,6 +50,22 @@ export default function TaskList({
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
+  // Les options d'une seule tâche à la fois. Toucher ailleurs (une autre
+  // tâche, l'ajout d'une tâche…) les referme.
+  const [ouverte, setOuverte] = useState(null);
+  useEffect(() => {
+    if (!ouverte) return undefined;
+    const ailleurs = (e) => {
+      const li = e.target.closest && e.target.closest('[data-tache]');
+      if (!li || li.getAttribute('data-tache') !== ouverte) setOuverte(null);
+    };
+    document.addEventListener('pointerdown', ailleurs, true);
+    return () => document.removeEventListener('pointerdown', ailleurs, true);
+  }, [ouverte]);
+  const ouverture = (task) => ({
+    ouvert: ouverte === task.id,
+    onOuvert: (v) => setOuverte(v ? task.id : null),
+  });
   // La tâche qu'on vient d'ajouter, ou celle qui existait déjà : on descend
   // jusqu'à elle et elle brille un instant. Sans ça, une tâche ajoutée en tête
   // de mois atterrit plus bas, hors de vue, et on la ressaisit.
@@ -205,6 +221,7 @@ export default function TaskList({
     <TaskItem
       key={task.id}
       task={task}
+      {...ouverture(task)}
       eclat={eclat && eclat.id === task.id && eclat.mois === m}
       month={m}
       currentMonth={currentMonth}
@@ -241,6 +258,7 @@ export default function TaskList({
                 <TaskItem
                   key={task.id}
                   task={task}
+                  {...ouverture(task)}
                   month={task.doneMonth || task.month}
                   currentMonth={currentMonth}
                   store={store}
@@ -289,6 +307,7 @@ export default function TaskList({
                   <TaskItem
                     key={`urgent-${task.id}`}
                     task={task}
+                    {...ouverture(task)}
                     eclat={eclat && eclat.id === task.id && eclat.mois === m}
                     month={m}
                     currentMonth={currentMonth}

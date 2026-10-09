@@ -15,9 +15,17 @@ export default function TaskItem({
   montrerCategorie = false,
   // Session d'un enfant : il ne réserve pas (la réservation est à un compte).
   sansReservation = false,
+  // Une seule tâche ouverte à la fois : c'est la liste qui tient laquelle.
+  ouvert = null, onOuvert = null,
 }) {
   const t = useT();
-  const [open, setOpen] = useState(false);
+  const [openLocal, setOpenLocal] = useState(false);
+  const open = ouvert ?? openLocal;
+  const setOpen = (v) => {
+    const suivant = typeof v === 'function' ? v(open) : v;
+    if (onOuvert) onOuvert(suivant);
+    else setOpenLocal(suivant);
+  };
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(task.text);
   const [dueOpen, setDueOpen] = useState(false);
