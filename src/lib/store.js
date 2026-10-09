@@ -210,10 +210,25 @@ const GRACE_ECHO = 3000;
  * compte), ou un membre sans compte (le compte du téléphone, plus lui).
  */
 export function useTasks(householdId, compteConnecte, acteur = null) {
-  const compte = (acteur && acteur.compte) || compteConnecte;
-  const proche = (acteur && acteur.proche) || null;
-  // Qui agit, tel que les points le comptent.
-  const userId = proche || compte;
+  // Qui agit, lu au moment d'agir : une action lancée avant de dire qui l'on
+  // est part au nom choisi juste après (agirPour), sans attendre l'écran.
+  const acteurRef = useRef(acteur);
+  const acteurVu = useRef(acteur);
+  if (acteurVu.current !== acteur) {
+    acteurVu.current = acteur;
+    acteurRef.current = acteur;
+  }
+  const qui = useCallback(() => {
+    const a = acteurRef.current;
+    const compte = (a && a.compte) || compteConnecte;
+    const proche = (a && a.proche) || null;
+    return { compte, proche, id: proche || compte };
+  }, [compteConnecte]);
+  const agirPour = useCallback((a) => {
+    acteurRef.current = a;
+  }, []);
+  // Qui agit, tel que les points le comptent (pour l'affichage).
+  const userId = (acteur && (acteur.proche || acteur.compte)) || compteConnecte;
   const [tasks, setTasks] = useState(() =>
     householdId ? readLS(cacheKey(householdId), []) : [],
   );
@@ -479,8 +494,8 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
         doneMonth: null,
         doneBy: null,
         doneAt: null,
-        createdBy: compte ?? null,
-        createdProche: proche,
+        createdBy: qui().compte ?? null,
+        createdProche: qui().proche,
         dueAt: null,
         dueHasTime: true,
         categorie: categorie || null,
@@ -492,24 +507,24 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
       enqueue({ type: 'insert', row: toInsertRow(task) });
       return { id: task.id };
     },
-    [householdId, compte, proche, persist, enqueue],
+    [householdId, qui, persist, enqueue],
   );
 
   const updateTask = useCallback(
     (id, patch) => {
       if (CHAMPS_DE_L_AUTEUR.some((c) => c in patch)) {
         const task = tasksRef.current.find((t) => t.id === id);
-        if (!modifiable(vue(task), userId)) return false;
+        if (!modifiable(vue(task), qui().id)) return false;
       }
       applyLocal(id, patch);
       enqueue({ type: 'update', id, row: patchToRow(patch) });
       return true;
     },
-    [applyLocal, enqueue, userId],
+    [applyLocal, enqueue, qui],
   );
 
-  const peutDecocher = useCallback((task) => decochable(vue(task), userId), [userId]);
-  const peutModifier = useCallback((task) => modifiable(vue(task), userId), [userId]);
+  const peutDecocher = useCallback((task) => decochable(vue(task), qui().id), [qui]);
+  const peutModifier = useCallback((task) => modifiable(vue(task), qui().id), [qui]);
 
   /**
    * Coche ou décoche. Renvoie false si la décoche est refusée, 'reservee' si
@@ -520,10 +535,10 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
   const toggleDone = useCallback(
     // Un membre sans compte en session : c'est lui qui l'a faite.
     (task, currentMonth) => {
-      const fait = proche;
+      const { compte, proche: fait, id } = qui();
       if (task.done && !peutDecocher(task)) return false;
       // Réservée par l'autre : elle est à lui tant que l'heure court.
-      if (!task.done && etatReservation(task, tasksRef.current, userId) === 'autre') {
+      if (!task.done && etatReservation(task, tasksRef.current, id) === 'autre') {
         return 'reservee';
       }
       if (task.done) {
@@ -546,7 +561,7 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
       });
       return combo;
     },
-    [updateTask, userId, compte, proche, peutDecocher],
+    [updateTask, qui, peutDecocher],
   );
 
   /** Pose ou retire l'échéance d'une tâche. */
@@ -567,8 +582,9 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
   const reserver = useCallback(
     (task) => {
       // Un membre sans compte ne réserve pas : la réservation est à un compte.
+      const { compte, proche, id } = qui();
       if (proche) return false;
-      if (etatReservation(task, tasksRef.current, userId) !== 'libre') return false;
+      if (etatReservation(task, tasksRef.current, id) !== 'libre') return false;
       const debut = Date.now();
       return updateTask(task.id, {
         reservePar: compte,
@@ -576,7 +592,7 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
         reserveFin: new Date(debut + RESERVATION_MS).toISOString(),
       });
     },
-    [updateTask, userId, compte, proche],
+    [updateTask, qui],
   );
 
   // --- Mode entreprise : chaque action est signée d'un code opérateur ----
@@ -622,14 +638,14 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
         {
           id, householdId, text: trimmed, month, position,
           done: false, doneMonth: null, doneBy: null, doneAt: null,
-          createdBy: compte ?? null, createdOp: r.op, doneOp: null,
+          createdBy: compteConnecte ?? null, createdOp: r.op, doneOp: null,
           dueAt: null, dueHasTime: true, categorie: rangee, deleted: false,
           createdAt: nowIso(), updatedAt: nowIso(),
         },
       ]);
       return { id, op: r.op };
     },
-    [householdId, compte, persist, appelOp],
+    [householdId, compteConnecte, persist, appelOp],
   );
 
   /**
@@ -647,12 +663,12 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
       applyLocal(
         task.id,
         fait
-          ? { done: true, doneMonth: currentMonth, doneBy: compte ?? null, doneAt: nowIso(), doneOp: r.op }
+          ? { done: true, doneMonth: currentMonth, doneBy: compteConnecte ?? null, doneAt: nowIso(), doneOp: r.op }
           : { done: false, doneMonth: null, doneBy: null, doneAt: null, doneOp: null },
       );
       return { op: r.op, combo };
     },
-    [appelOp, applyLocal, compte],
+    [appelOp, applyLocal, compteConnecte],
   );
 
   /** Modifie ou supprime : texte, échéance, suppression. */
@@ -687,14 +703,14 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
       if (data.refus) return { op: data.op, refus: data.refus, qui: data.qui, fin: data.fin, tache: data.tache };
       const debut = Date.now();
       applyLocal(task.id, {
-        reservePar: compte ?? null,
+        reservePar: compteConnecte ?? null,
         reserveOp: data.op,
         reserveDebut: new Date(debut).toISOString(),
         reserveFin: new Date(debut + RESERVATION_MS).toISOString(),
       });
       return { op: data.op };
     },
-    [applyLocal, compte],
+    [applyLocal, compteConnecte],
   );
 
   /** Mode entreprise : libère avant l'heure, seulement par qui a réservé. */
@@ -716,10 +732,10 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
   /** Annule sa propre réservation : la tâche redevient libre pour l'autre. */
   const annulerReservation = useCallback(
     (task) => {
-      if (etatReservation(task, tasksRef.current, userId) !== 'moi') return false;
+      if (etatReservation(task, tasksRef.current, qui().id) !== 'moi') return false;
       return updateTask(task.id, { reserveFin: nowIso() });
     },
-    [updateTask, userId],
+    [updateTask, qui],
   );
 
   /**
@@ -787,6 +803,7 @@ export function useTasks(householdId, compteConnecte, acteur = null) {
 
   return {
     userId,
+    agirPour,
     tasks,
     loading,
     online,

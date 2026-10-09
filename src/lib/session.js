@@ -1,10 +1,12 @@
 // Les sessions : sur un téléphone partagé, chacun ouvre la sienne.
 //
 // En famille, dès qu'il y a un membre sans compte (un enfant), le téléphone
-// sert à plusieurs : on touche son prénom, on tape son code s'il en a un, et
-// tout ce qu'on fait ensuite est à son nom — tâches, points, bons, bilan. La
-// flèche referme ; cinq minutes sans toucher l'écran aussi. En entreprise,
-// le code seul ouvre la session, et une minute suffit à la refermer.
+// sert à plusieurs. Les tâches se voient dès l'ouverture ; au moment d'agir à
+// son nom (cocher, ajouter, prendre un bon…), on touche son prénom et on tape
+// son code s'il en a un. Tout ce qu'on fait ensuite est à son nom — tâches,
+// points, bons, bilan — jusqu'à refermer (son prénom, en haut) ou cinq
+// minutes sans toucher l'écran. En entreprise, pareil avec l'équipe, et une
+// minute suffit à refermer.
 //
 // La base vérifie (nas/db/sessions.sql) : on n'agit pour un autre compte
 // qu'avec le ticket que son code a ouvert ici.

@@ -57,7 +57,7 @@ export function ReserveBadge({ task, userId, names, noms = null }) {
  * Le haut du menu d'une tâche en attente : réserver, annuler, ou dire
  * pourquoi on ne peut pas.
  */
-export function ReserveActions({ task, store, userId, names, onFait }) {
+export function ReserveActions({ task, store, userId, names, onFait, exiger = (faire) => faire(null) }) {
   const t = useT();
   const etat = etatReservation(task, store.tasks, userId);
   if (!etat) return null;
@@ -81,7 +81,7 @@ export function ReserveActions({ task, store, userId, names, onFait }) {
           className="action action-reserve-annuler"
           type="button"
           onClick={() => {
-            store.annulerReservation(task);
+            exiger(() => store.annulerReservation(task));
             onFait();
           }}
         >
@@ -101,7 +101,7 @@ export function ReserveActions({ task, store, userId, names, onFait }) {
         type="button"
         disabled={bloque}
         onClick={() => {
-          store.reserver(task);
+          exiger(() => store.reserver(task));
           onFait();
         }}
       >

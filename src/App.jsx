@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from './lib/account.js';
 import { useTasks } from './lib/store.js';
 import { useRewards } from './lib/rewards.js';
@@ -28,7 +28,7 @@ import AccesDecision from './components/AccesDecision.jsx';
 import AccesAnnonce from './components/AccesAnnonce.jsx';
 import { useAcces, lireDecision } from './lib/acces.js';
 import { lireComptes, plusieursComptes } from './lib/comptes.js';
-import ChoixSession from './components/ChoixSession.jsx';
+import QuiEsTu from './components/QuiEsTu.jsx';
 import {
   avecSessions,
   estTacheEnfants,
@@ -189,13 +189,12 @@ function Home({ account, currentMonth, onChangerCompte }) {
   const [tab, setTab] = useState('liste');
   const equipe = useEquipe(householdId, entreprise);
 
-  // Plusieurs personnes sur ce téléphone : chacun ouvre sa session. Seul, on
-  // va droit à ses tâches.
+  // Plusieurs personnes sur ce téléphone : les tâches se voient dès
+  // l'ouverture, et l'on dit qui l'on est au moment d'agir à son nom. La
+  // session reste ouverte ensuite, jusqu'à la refermer ou ne plus toucher
+  // l'écran. Seul sur son téléphone, rien ne change.
   const sessions = avecSessions({ entreprise, equipe: equipe.membres, proches: rewards.proches });
-  const fermer = useCallback(() => {
-    setActeur(null);
-    setTab('liste');
-  }, []);
+  const fermer = useCallback(() => setActeur(null), []);
   useEffect(() => {
     if (!sessions && acteur) fermer();
   }, [sessions, acteur, fermer]);
@@ -216,16 +215,44 @@ function Home({ account, currentMonth, onChangerCompte }) {
       });
     },
   );
-  const ouvrir = useCallback((a) => {
-    prolonge.current = Date.now();
-    setTab('liste');
-    setActeur(a);
-  }, []);
+  const ouvrir = useCallback(
+    (a) => {
+      prolonge.current = Date.now();
+      // Tout de suite, sans attendre l'écran : l'action en attente part déjà
+      // à son nom.
+      if (!entreprise) {
+        store.agirPour(a);
+        rewards.agirPour(a);
+      }
+      setActeur(a);
+    },
+    [entreprise, store, rewards],
+  );
+  // Agir à son nom : si personne n'a encore dit qui il est, on le demande,
+  // puis l'action part. `faire(acteur)` reçoit la session (en entreprise,
+  // son code signe l'action).
+  const [enAttente, setEnAttente] = useState(null);
+  const exiger = useCallback(
+    (faire) => {
+      if (!sessions || acteur) {
+        faire(acteur);
+        return;
+      }
+      setEnAttente({ faire });
+    },
+    [sessions, acteur],
+  );
+  // Sans session sur un téléphone partagé : Cerveau, Bilan et Mon compte
+  // demandent d'abord qui l'on est.
+  const anonyme = sessions && !acteur;
   // Qui agit, tel que les points le comptent.
   const moi = famille ? famille.id : userId;
   // Mon compte reste au compte du téléphone : un enfant, ou un autre adulte
   // venu ouvrir sa session ici, n'y touche pas.
   const avecCompte = !famille || (famille.compte === userId && !famille.proche);
+  // Sans session, Mon compte demande le code du titulaire, s'il en a un.
+  const compteVerrouille =
+    anonyme && !entreprise && (rewards.avecCode || []).includes(userId);
   // Rejoindre un compte pro : la demande se suit d'ici, quel que soit
   // l'onglet, pour annoncer la réponse dès qu'elle arrive.
   const acces = useAcces(userId);
@@ -275,33 +302,28 @@ function Home({ account, currentMonth, onChangerCompte }) {
   const myPoints = pointsAvailable(tachesC, bonsC, moi);
   const readyCount = affordable(rewards.rewards, myPoints).length;
 
-  if (sessions && !acteur) {
-    return (
-      <ChoixSession
-        userId={userId}
-        rewards={rewards}
-        equipe={entreprise ? equipe : null}
-        onOuvrir={ouvrir}
-        onRetour={plusieursComptes() ? onChangerCompte : undefined}
-      />
-    );
-  }
+  const quiEsTu = (props = {}) => (
+    <QuiEsTu
+      userId={userId}
+      rewards={rewards}
+      equipe={entreprise ? equipe : null}
+      onOuvrir={ouvrir}
+      {...props}
+    />
+  );
 
   return (
     <div className={`screen has-tabbar ${entreprise ? 'screen-entreprise' : ''}`}>
       <Header
         accroche={tab === 'liste' ? headline(todoThisMonth) : null}
-        onRetour={
-          sessions ? fermer : tab === 'liste' && plusieursComptes() ? onChangerCompte : undefined
-        }
-        session={sessions ? acteur.nom || '' : null}
+        onRetour={tab === 'liste' && plusieursComptes() ? onChangerCompte : undefined}
+        session={acteur ? acteur.nom || '' : null}
+        onFermerSession={fermer}
         online={store.online}
         pending={store.pending}
       />
 
-      {/* Une session neuve repart de zéro : rien de la précédente ne reste
-          ouvert à l'écran. */}
-      <Fragment key={acteur ? acteur.id || acteur.op : 'seul'}>
+      <>
 
       {tab === 'liste' &&
         (store.loading && store.tasks.length === 0 ? (
@@ -314,7 +336,8 @@ function Home({ account, currentMonth, onChangerCompte }) {
             names={nomsC}
             equipe={entreprise ? equipe : null}
             enfant={Boolean(famille && famille.enfant)}
-            codeSession={entreprise && acteur ? acteur.code : null}
+            exiger={exiger}
+            libre={anonyme}
             onCodePerime={fermer}
           />
         ))}
@@ -322,12 +345,19 @@ function Home({ account, currentMonth, onChangerCompte }) {
         (entreprise ? (
           <EquipeView tasks={store.tasks} equipe={equipe} />
         ) : (
-          <BrainView tasks={store.tasks} userId={userId} rewards={rewards} acteur={famille} />
+          <BrainView
+            key={moi}
+            tasks={store.tasks}
+            userId={userId}
+            rewards={rewards}
+            acteur={famille}
+            serrure={anonyme ? quiEsTu() : null}
+          />
         ))}
-      {tab === 'bilan' && (
-        <BilanView tasks={tachesC} claims={bonsC} userId={moi} />
-      )}
-      {tab === 'compte' && avecCompte && (
+      {tab === 'bilan' &&
+        (anonyme ? quiEsTu() : <BilanView tasks={tachesC} claims={bonsC} userId={moi} />)}
+      {tab === 'compte' && avecCompte && compteVerrouille && quiEsTu({ seuls: [userId] })}
+      {tab === 'compte' && avecCompte && !compteVerrouille && (
         <Account
           account={account}
           rewards={rewards}
@@ -335,8 +365,8 @@ function Home({ account, currentMonth, onChangerCompte }) {
           acces={acces}
         />
       )}
-      {tab === 'admin' && admin.isAdmin && avecCompte && <AdminView admin={admin} />}
-      </Fragment>
+      {tab === 'admin' && admin.isAdmin && avecCompte && !compteVerrouille && <AdminView admin={admin} />}
+      </>
 
       <TabBar
         tab={tab}
@@ -353,10 +383,12 @@ function Home({ account, currentMonth, onChangerCompte }) {
 
       {/* Ce que l'autre a coché depuis la dernière fois, une tâche à la fois.
           Pas pendant le chargement : la liste vide ne dirait rien. */}
-      {!store.loading && (
+      {/* Sur un téléphone partagé, seulement une fois qu'on sait qui regarde :
+          ce sont SES nouvelles. */}
+      {!store.loading && !anonyme && (
         <Nouvelles
           key={moi}
-          tasks={!sessions ? store.tasks : famille && famille.enfant ? tachesC.filter(estTacheEnfants) : tachesC}
+          tasks={!famille ? store.tasks : famille.enfant ? tachesC.filter(estTacheEnfants) : tachesC}
           names={nomsC}
           userId={moi}
         />
@@ -370,8 +402,21 @@ function Home({ account, currentMonth, onChangerCompte }) {
         rewards={rewards.rewards}
         names={nomsC}
         userId={moi}
-        proches={sessions ? [] : rewards.proches}
+        proches={famille ? [] : rewards.proches}
       />
+
+      {/* Une action à son nom, sans session ouverte : qui es-tu ? */}
+      {enAttente &&
+        quiEsTu({
+          fenetre: true,
+          onFermer: () => setEnAttente(null),
+          onOuvrir: (a) => {
+            const { faire } = enAttente;
+            setEnAttente(null);
+            ouvrir(a);
+            faire(a);
+          },
+        })}
     </div>
   );
 }

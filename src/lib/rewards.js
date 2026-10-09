@@ -63,8 +63,20 @@ const uuid = () =>
  * `acteur` : la session ouverte (session.js) — les bons sont alors à elle.
  */
 export function useRewards(householdId, userId, acteur = null) {
-  const compte = (acteur && acteur.compte) || userId;
-  const procheActeur = (acteur && acteur.proche) || null;
+  // Qui agit, lu au moment d'agir (cf. store.js, agirPour).
+  const acteurRef = useRef(acteur);
+  const acteurVu = useRef(acteur);
+  if (acteurVu.current !== acteur) {
+    acteurVu.current = acteur;
+    acteurRef.current = acteur;
+  }
+  const qui = useCallback(() => {
+    const a = acteurRef.current;
+    return { a, compte: (a && a.compte) || userId, proche: (a && a.proche) || null };
+  }, [userId]);
+  const agirPour = useCallback((a) => {
+    acteurRef.current = a;
+  }, []);
   const [rewards, setRewards] = useState(() =>
     householdId ? readLS(key(householdId, 'rewards'), []) : [],
   );
@@ -202,6 +214,7 @@ export function useRewards(householdId, userId, acteur = null) {
   // téléphone d'un parent.
   const claimReward = useCallback(
     async (reward, pourProche = null) => {
+      const { compte, proche: procheActeur } = qui();
       const proche = pourProche || procheActeur;
       const row = {
         id: uuid(),
@@ -225,7 +238,7 @@ export function useRewards(householdId, userId, acteur = null) {
       if (supabase) supabase.from('claims').insert(row).then(({ error }) => error && refresh());
       return row.id;
     },
-    [householdId, compte, procheActeur, saveClaims],
+    [householdId, qui, saveClaims],
   );
 
   /**
@@ -241,10 +254,11 @@ export function useRewards(householdId, userId, acteur = null) {
     (id) => {
       const bon = cRef.current.find((c) => c.id === id);
       if (!bon) return false;
-      if (procheActeur) return bon.proche === procheActeur;
-      return bon.proche ? !acteur : bon.userId === compte;
+      const { a, compte, proche } = qui();
+      if (proche) return bon.proche === proche;
+      return bon.proche ? !a : bon.userId === compte;
     },
-    [compte, procheActeur, acteur],
+    [qui],
   );
 
   /**
@@ -326,6 +340,7 @@ export function useRewards(householdId, userId, acteur = null) {
    */
   const claimCustom = useCallback(
     async (label, pourProche = null) => {
+      const { compte, proche: procheActeur } = qui();
       const proche = pourProche || procheActeur;
       const text = label.trim();
       if (!text) return 'Dis ce que tu demandes.';
@@ -346,7 +361,7 @@ export function useRewards(householdId, userId, acteur = null) {
       }
       return null;
     },
-    [householdId, compte, procheActeur, saveClaims],
+    [householdId, qui, saveClaims],
   );
 
   // --- Les codes (codes.sql, couple.sql) ----------------------------------
@@ -425,6 +440,7 @@ export function useRewards(householdId, userId, acteur = null) {
     avecCode,
     pret: charge || codesConnus,
     ouvrirCode,
+    agirPour,
     prolongerCode,
     poserCode,
     otherUser,

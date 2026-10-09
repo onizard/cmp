@@ -17,6 +17,10 @@ export default function TaskItem({
   sansReservation = false,
   // Une seule tâche ouverte à la fois : c'est la liste qui tient laquelle.
   ouvert = null, onOuvert = null,
+  // Téléphone partagé : qui l'on est se demande au moment d'agir (TaskList).
+  // `libre` : personne ne l'a encore dit ; le menu s'ouvre en entier, et la
+  // règle (seul l'auteur modifie) s'applique une fois la personne connue.
+  exiger = (faire) => faire(null), libre = false,
 }) {
   const t = useT();
   const [openLocal, setOpenLocal] = useState(false);
@@ -42,7 +46,7 @@ export default function TaskItem({
   // Mode entreprise : chaque action est signée d'un code opérateur, et c'est
   // la base qui juge (auteur, qui a coché). Le menu s'ouvre donc toujours.
   const entreprise = Boolean(signer);
-  const peutModifier = entreprise || store.peutModifier(task);
+  const peutModifier = entreprise || libre || store.peutModifier(task);
   const carried = carriedFromLabel(task, month);
   const level = task.done ? null : dueLevel(task.dueAt);
 
@@ -50,13 +54,23 @@ export default function TaskItem({
   const modifier = (titre, patch) =>
     signer(titre, task.text, (code) => store.modifierOp(task, code, patch));
 
+  // Hors entreprise : à son nom, puis on dit pourquoi si ce n'est pas permis.
+  const refuser = (raison) => {
+    setRefus(raison);
+    setTimeout(() => setRefus(false), 3200);
+  };
+  const modifierSiPermis = (faire) =>
+    exiger(() => {
+      if (faire() === false) refuser('modif');
+    });
+
   const saveDue = (e) => {
     e.preventDefault();
     const due = buildDue(date, time);
     if (entreprise) {
       modifier(t('entreprise.quiModifie'), { dueAt: due ? due.iso : null, dueHasTime: due ? due.hasTime : true });
     } else {
-      store.setDue(task.id, due);
+      modifierSiPermis(() => store.setDue(task.id, due));
     }
     setDueOpen(false);
     setOpen(false);
@@ -64,7 +78,7 @@ export default function TaskItem({
 
   const clearDue = () => {
     if (entreprise) modifier(t('entreprise.quiModifie'), { dueAt: null, dueHasTime: true });
-    else store.setDue(task.id, null);
+    else modifierSiPermis(() => store.setDue(task.id, null));
     setDate('');
     setTime('');
     setDueOpen(false);
@@ -76,14 +90,14 @@ export default function TaskItem({
     const text = draft.trim();
     if (text && text !== task.text) {
       if (entreprise) modifier(t('entreprise.quiModifie'), { text });
-      else store.updateTask(task.id, { text });
+      else modifierSiPermis(() => store.updateTask(task.id, { text }));
     }
     setEditing(false);
   };
 
   const remove = () => {
     if (entreprise) modifier(t('entreprise.quiSupprime'), { deleted: true });
-    else store.removeTask(task.id);
+    else modifierSiPermis(() => store.removeTask(task.id));
     setOpen(false);
   };
 
@@ -110,15 +124,16 @@ export default function TaskItem({
       return;
     }
     // Famille : c'est la session ouverte qui coche (session.js).
-    const combo = store.toggleDone(task, currentMonth);
-    if (combo === false || combo === 'reservee') {
-      // On explique au lieu de rester inerte : un bouton mort passe
-      // pour une panne.
-      setRefus(combo === false ? 'decoche' : 'reservee');
-      setTimeout(() => setRefus(false), 3200);
-      return;
-    }
-    if (combo > 1) onCombo(combo);
+    exiger(() => {
+      const combo = store.toggleDone(task, currentMonth);
+      if (combo === false || combo === 'reservee') {
+        // On explique au lieu de rester inerte : un bouton mort passe
+        // pour une panne.
+        refuser(combo === false ? 'decoche' : 'reservee');
+        return;
+      }
+      if (combo > 1) onCombo(combo);
+    });
   };
 
   // Qui a créé, qui a fait : en entreprise, c'est tout l'intérêt.
@@ -199,6 +214,7 @@ export default function TaskItem({
       </div>
 
       {refus === 'decoche' && <p className="refus">{t('taches.decocheInterdite')}</p>}
+      {refus === 'modif' && <p className="refus">{t('taches.modifInterdite')}</p>}
       {refus === 'reservee' && (
         <p className="refus">
           {t('reserver.bloquee', {
@@ -263,6 +279,7 @@ export default function TaskItem({
           {!entreprise && !sansReservation && (
             <ReserveActions
               task={task}
+              exiger={exiger}
               store={store}
               userId={store.userId}
               names={names}
@@ -304,6 +321,7 @@ export default function TaskItem({
           ) : sansReservation ? null : (
             <ReserveActions
               task={task}
+              exiger={exiger}
               store={store}
               userId={store.userId}
               names={names}
