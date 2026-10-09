@@ -270,6 +270,8 @@ export default {
     sansCode: 'Choose your code in My account to also see the couple rewards.',
   },
   session: {
+    pasDeCode: 'No code? Pick your name',
+    memeCode: 'This code is shared: pick your name.',
     qui: 'Who are you?',
     sansCode: '{nom} must first choose a code in Account, on their own phone.',
     fermer: 'Close session',

@@ -377,6 +377,21 @@ export function useRewards(householdId, userId, acteur = null) {
     [householdId],
   );
 
+  /**
+   * Qui porte ce code ? { membre } (son ticket est ouvert), { membre: null }
+   * si le code est faux, { ambigu: true } si deux membres l'ont choisi,
+   * { erreur } sinon.
+   */
+  const quiCode = useCallback(
+    async (code) => {
+      if (!supabase) return { erreur: 'horsLigne' };
+      const { data, error } = await supabase.rpc('cmp_code_qui', { hid: householdId, p_code: code });
+      if (error) return { erreur: error.message };
+      return data || { membre: null };
+    },
+    [householdId],
+  );
+
   /** La session vit : son ticket aussi. false s'il a expiré (retaper le code). */
   const prolongerCode = useCallback(
     async (membre) => {
@@ -440,6 +455,7 @@ export function useRewards(householdId, userId, acteur = null) {
     avecCode,
     pret: charge || codesConnus,
     ouvrirCode,
+    quiCode,
     agirPour,
     prolongerCode,
     poserCode,

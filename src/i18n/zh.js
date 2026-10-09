@@ -270,6 +270,8 @@ export default {
     sansCode: '在“我的账户”中设置代码，也能看到情侣奖励。',
   },
   session: {
+    pasDeCode: '没有代码？选择你的名字',
+    memeCode: '这个代码有人共用：请选择你的名字。',
     qui: '你是谁？',
     sansCode: '{nom} 需要先在自己手机的“我的账户”里设置代码。',
     fermer: '关闭会话',

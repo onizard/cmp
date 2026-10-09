@@ -270,6 +270,8 @@ export default {
     sansCode: 'Escolhe o teu código em A minha conta para ver também as recompensas de casal.',
   },
   session: {
+    pasDeCode: 'Sem código? Escolha seu nome',
+    memeCode: 'Este código é compartilhado: escolha seu nome.',
     qui: 'Quem é você?',
     sansCode: '{nom} precisa primeiro escolher um código em Conta, no próprio celular.',
     fermer: 'Fechar sessão',

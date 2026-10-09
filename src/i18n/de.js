@@ -270,6 +270,8 @@ export default {
     sansCode: 'Wähle deinen Code unter Mein Konto, um auch die Paar-Belohnungen zu sehen.',
   },
   session: {
+    pasDeCode: 'Kein Code? Wähle deinen Namen',
+    memeCode: 'Dieser Code wird geteilt: Wähle deinen Namen.',
     qui: 'Wer bist du?',
     sansCode: '{nom} muss zuerst unter Konto auf dem eigenen Handy einen Code wählen.',
     fermer: 'Sitzung schließen',

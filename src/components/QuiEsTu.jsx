@@ -18,11 +18,12 @@ import { personnes, entree } from '../lib/session.js';
  * ces membres (Mon compte : le titulaire du téléphone).
  */
 export default function QuiEsTu({
-  userId, rewards, equipe = null, onOuvrir, onFermer, fenetre = false, seuls = null,
+  userId, rewards, equipe = null, onOuvrir, onFermer, fenetre = false, seuls = null, message = null,
 }) {
   const t = useT();
   const [demande, setDemande] = useState(null);
-  const [note, setNote] = useState(null);
+  // `message` : pourquoi on demande le prénom (un code partagé, par exemple).
+  const [note, setNote] = useState(message);
 
   // En entreprise : les membres actifs de l'équipe, chacun avec son code.
   const liste = (

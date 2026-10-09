@@ -270,6 +270,8 @@ export default {
     sansCode: 'Scegli il tuo codice in Il mio account per vedere anche le ricompense di coppia.',
   },
   session: {
+    pasDeCode: 'Niente codice? Scegli il tuo nome',
+    memeCode: 'Questo codice è condiviso: scegli il tuo nome.',
     qui: 'Chi sei?',
     sansCode: '{nom} deve prima scegliere un codice in Account, sul proprio telefono.',
     fermer: 'Chiudi la sessione',

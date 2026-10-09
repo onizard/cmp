@@ -29,6 +29,7 @@ import AccesAnnonce from './components/AccesAnnonce.jsx';
 import { useAcces, lireDecision } from './lib/acces.js';
 import { lireComptes, plusieursComptes } from './lib/comptes.js';
 import QuiEsTu from './components/QuiEsTu.jsx';
+import ParCode from './components/ParCode.jsx';
 import {
   avecSessions,
   estTacheEnfants,
@@ -228,9 +229,10 @@ function Home({ account, currentMonth, onChangerCompte }) {
     },
     [entreprise, store, rewards],
   );
-  // Agir à son nom : si personne n'a encore dit qui il est, on le demande,
-  // puis l'action part. `faire(acteur)` reçoit la session (en entreprise,
-  // son code signe l'action).
+  // Agir à son nom depuis les tâches : si personne n'a encore dit qui il est,
+  // on demande son code (il suffit à le reconnaître), puis l'action part.
+  // Sans code, ou s'il est partagé, on passe aux prénoms. `faire(acteur)`
+  // reçoit la session (en entreprise, son code signe l'action).
   const [enAttente, setEnAttente] = useState(null);
   const exiger = useCallback(
     (faire) => {
@@ -238,10 +240,18 @@ function Home({ account, currentMonth, onChangerCompte }) {
         faire(acteur);
         return;
       }
-      setEnAttente({ faire });
+      // Personne n'a de code dans le foyer : le prénom suffit, sans pavé.
+      const codes = entreprise || (rewards.avecCode || []).length > 0;
+      setEnAttente({ faire, mode: codes ? 'code' : 'prenoms', message: null });
     },
-    [sessions, acteur],
+    [sessions, acteur, entreprise, rewards.avecCode],
   );
+  const agirEnAttente = (a) => {
+    const { faire } = enAttente;
+    setEnAttente(null);
+    ouvrir(a);
+    faire(a);
+  };
   // Sans session sur un téléphone partagé : Cerveau, Bilan et Mon compte
   // demandent d'abord qui l'on est.
   const anonyme = sessions && !acteur;
@@ -302,8 +312,9 @@ function Home({ account, currentMonth, onChangerCompte }) {
   const myPoints = pointsAvailable(tachesC, bonsC, moi);
   const readyCount = affordable(rewards.rewards, myPoints).length;
 
-  const quiEsTu = (props = {}) => (
+  const quiEsTu = ({ key, ...props } = {}) => (
     <QuiEsTu
+      key={key}
       userId={userId}
       rewards={rewards}
       equipe={entreprise ? equipe : null}
@@ -405,17 +416,31 @@ function Home({ account, currentMonth, onChangerCompte }) {
         proches={famille ? [] : rewards.proches}
       />
 
-      {/* Une action à son nom, sans session ouverte : qui es-tu ? */}
+      {/* Une action à son nom, sans session ouverte : son code, ou son prénom. */}
+      {enAttente && enAttente.mode === 'code' && (
+        <ParCode
+          userId={userId}
+          rewards={rewards}
+          equipe={entreprise ? equipe : null}
+          onOuvrir={agirEnAttente}
+          onFermer={() => setEnAttente(null)}
+          onPrenoms={(raison) =>
+            setEnAttente((e) => ({
+              ...e,
+              mode: 'prenoms',
+              message: raison === 'ambigu' ? t('session.memeCode') : null,
+            }))
+          }
+        />
+      )}
       {enAttente &&
+        enAttente.mode === 'prenoms' &&
         quiEsTu({
+          key: `prenoms-${enAttente.message || ''}`,
           fenetre: true,
+          message: enAttente.message,
           onFermer: () => setEnAttente(null),
-          onOuvrir: (a) => {
-            const { faire } = enAttente;
-            setEnAttente(null);
-            ouvrir(a);
-            faire(a);
-          },
+          onOuvrir: agirEnAttente,
         })}
     </div>
   );

@@ -270,6 +270,8 @@ export default {
     sansCode: '내 계정에서 코드를 정하면 커플 보상도 보여요.',
   },
   session: {
+    pasDeCode: '코드가 없나요? 이름을 고르세요',
+    memeCode: '이 코드는 함께 쓰여요: 이름을 고르세요.',
     qui: '누구세요?',
     sansCode: '{nom}님은 먼저 자기 휴대폰의 내 계정에서 코드를 정해야 해요.',
     fermer: '세션 닫기',
