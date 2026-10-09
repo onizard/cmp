@@ -43,9 +43,11 @@ export default function TaskList({
   // Session d'un enfant : seulement les tâches « enfants », et ce qu'il
   // ajoute y va tout seul (session.js).
   enfant = false,
-  // Session pro : le code tapé à l'ouverture signe chaque action, sans pavé.
-  // Refusé (changé entre-temps), la session se referme.
-  codeSession = null, onCodePerime = () => {},
+  // Téléphone partagé : `exiger(faire)` demande qui l'on est avant une
+  // action à son nom (session.js), puis la lance ; `libre` : personne ne l'a
+  // encore dit. En entreprise, le code de la session signe chaque action,
+  // sans pavé ; refusé (changé entre-temps), la session se referme.
+  exiger = (faire) => faire(null), libre = false, onCodePerime = () => {},
 }) {
   const t = useT();
   const currentYear = currentMonth.slice(0, 4);
@@ -99,13 +101,17 @@ export default function TaskList({
   };
   const signer = !equipe
     ? null
-    : codeSession
-      ? async (titre, detail, faire) => {
-          const r = await faire(codeSession);
+    : (titre, detail, faire) =>
+        exiger(async (a) => {
+          // Sans équipe encore (aucune session possible) : le pavé, comme avant.
+          if (!a || !a.code) {
+            setDemande({ titre, detail, faire });
+            return;
+          }
+          const r = await faire(a.code);
           if (r && r.erreur === 'code') onCodePerime();
           else if (r && r.erreur) setAlerte(message(r));
-        }
-      : (titre, detail, faire) => setDemande({ titre, detail, faire });
+        });
   const valider = async (code) => {
     const r = await demande.faire(code);
     if (r && r.erreur) return message(r);
@@ -130,9 +136,10 @@ export default function TaskList({
     // « acheter du pain #dépense » : la tâche va dans « dépense », créée au
     // besoin. « #dons » tout seul crée juste la catégorie.
     const { texte: text, categorie: brute } = extraireCategorie(saisie);
-    const categorie = enfant
-      ? nomEnfants(stats, t('session.categorieEnfants'))
-      : brute ? nomConnu(stats, brute) : null;
+    // Un enfant : ce qu'il ajoute va dans « enfants » (décidé une fois qu'on
+    // sait qui ajoute, cf. plus bas).
+    const pourEnfant = () => nomEnfants(stats, t('session.categorieEnfants'));
+    const categorie = enfant ? pourEnfant() : brute ? nomConnu(stats, brute) : null;
     if (!text) {
       if (categorie) ajouterCategorie(mois, categorie, sections);
       return {};
@@ -151,10 +158,18 @@ export default function TaskList({
       });
       return { id: null };
     }
-    const r = store.addTask(mois, text, categorie);
-    const id = r && (r.id || r.doublon);
-    if (id) setEclat({ mois, id, cle: Date.now() });
-    return r;
+    // Le doublon se dit tout de suite, sans demander qui l'on est pour rien.
+    const deja = doublonAFaire(store.tasks, mois, text);
+    if (deja) {
+      setEclat({ mois, id: deja.id, cle: Date.now() });
+      return { doublon: deja.id };
+    }
+    exiger((a) => {
+      const r = store.addTask(mois, text, a && a.enfant ? pourEnfant() : categorie);
+      const id = r && (r.id || r.doublon);
+      if (id) setEclat({ mois, id, cle: Date.now() });
+    });
+    return {};
   };
 
   // Un enfant ne voit que les tâches « enfants ».
@@ -231,6 +246,8 @@ export default function TaskList({
       signer={signer}
       noms={equipe ? equipe.noms : {}}
       sansReservation={enfant}
+      exiger={exiger}
+      libre={libre}
       poignee={glisser.surTache(task.id)}
       glissee={glisser.glisse && glisser.glisse.id === task.id ? glisser.glisse.dy : null}
       depot={marque[task.id] || null}
@@ -267,6 +284,8 @@ export default function TaskList({
                   signer={signer}
                   noms={equipe ? equipe.noms : {}}
                   sansReservation={enfant}
+                  exiger={exiger}
+                  libre={libre}
                 />
               ))}
             </ul>
@@ -317,6 +336,8 @@ export default function TaskList({
                     signer={signer}
                     noms={equipe ? equipe.noms : {}}
                     sansReservation={enfant}
+                    exiger={exiger}
+                    libre={libre}
                     montrerCategorie
                   />
                 ))}

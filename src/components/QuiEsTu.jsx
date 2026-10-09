@@ -1,35 +1,43 @@
 import { useState } from 'react';
 import { useT } from '../i18n/index.js';
-import Header from './Header.jsx';
 import CodeOperateur from './CodeOperateur.jsx';
 import { personnes, entree } from '../lib/session.js';
 
 /**
- * « Qui es-tu ? » : sur un téléphone partagé, chacun ouvre sa session.
+ * « Qui es-tu ? » : sur un téléphone partagé, on le demande au moment d'agir
+ * à son nom (cocher, ajouter, prendre un bon…), pas avant : les tâches se
+ * voient dès l'ouverture.
  *
  * On touche son prénom, puis on tape son code s'il en a un. Un autre adulte
  * sans code ne peut pas être choisi : sans code, n'importe qui agirait pour
  * lui. En entreprise, chacun a le sien.
  *
  * `onOuvrir(acteur)` : { id, nom, compte, proche, enfant } en famille,
- * { op, code, nom } en entreprise.
+ * { id, op, code, nom } en entreprise. `fenetre` : par-dessus l'écran, avec
+ * « Annuler » (`onFermer`) ; sinon dans la page. `seuls` : ne proposer que
+ * ces membres (Mon compte : le titulaire du téléphone).
  */
-export default function ChoixSession({ userId, rewards, equipe = null, onOuvrir, onRetour }) {
+export default function QuiEsTu({
+  userId, rewards, equipe = null, onOuvrir, onFermer, fenetre = false, seuls = null, message = null,
+}) {
   const t = useT();
   const [demande, setDemande] = useState(null);
-  const [note, setNote] = useState(null);
+  // `message` : pourquoi on demande le prénom (un code partagé, par exemple).
+  const [note, setNote] = useState(message);
 
   // En entreprise : les membres actifs de l'équipe, chacun avec son code.
-  const liste = equipe
-    ? equipe.membres
-        .filter((m) => m.actif)
-        .map((m) => ({ id: m.id, nom: m.nom, op: m.id, enfant: false }))
-    : personnes({
-        userId,
-        members: rewards.members,
-        names: rewards.names,
-        proches: rewards.proches,
-      });
+  const liste = (
+    equipe
+      ? equipe.membres
+          .filter((m) => m.actif)
+          .map((m) => ({ id: m.id, nom: m.nom, op: m.id, enfant: false }))
+      : personnes({
+          userId,
+          members: rewards.members,
+          names: rewards.names,
+          proches: rewards.proches,
+        })
+  ).filter((p) => !seuls || seuls.includes(p.id));
   // Tant que les membres ne sont pas connus, aucun prénom : on n'affiche pas
   // un « sans prénom » qui se corrige l'instant d'après.
   const affiches = !equipe && (rewards.members || []).length === 0 ? [] : liste;
@@ -67,29 +75,43 @@ export default function ChoixSession({ userId, rewards, equipe = null, onOuvrir,
     setDemande(p);
   };
 
-  return (
-    <div className="screen">
-      <Header onRetour={onRetour} />
-      <div className="panel session-choix">
-        <p className="lede">{t('session.qui')}</p>
-        <div className="session-noms">
-          {affiches.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              className={`session-nom ${p.enfant ? 'session-enfant' : ''}`}
-              disabled={!pret}
-              onClick={() => choisir(p)}
-            >
-              <span className="session-initiale" aria-hidden="true">
-                {(p.nom || '?').trim().charAt(0).toUpperCase()}
-              </span>
-              <span className="session-prenom">{p.nom || t('famille.sansPrenom')}</span>
-            </button>
-          ))}
-        </div>
-        {note && <p className="setnote session-note" role="status">{note}</p>}
+  const contenu = (
+    <>
+      <p className="lede">{t('session.qui')}</p>
+      <div className="session-noms">
+        {affiches.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`session-nom ${p.enfant ? 'session-enfant' : ''}`}
+            disabled={!pret}
+            onClick={() => choisir(p)}
+          >
+            <span className="session-initiale" aria-hidden="true">
+              {(p.nom || '?').trim().charAt(0).toUpperCase()}
+            </span>
+            <span className="session-prenom">{p.nom || t('famille.sansPrenom')}</span>
+          </button>
+        ))}
       </div>
+      {note && <p className="setnote session-note" role="status">{note}</p>}
+    </>
+  );
+
+  return (
+    <>
+      {fenetre ? (
+        <div className="qui-voile" role="dialog" aria-modal="true" aria-label={t('session.qui')}>
+          <div className="qui-carte session-choix">
+            {contenu}
+            <button className="btn btn-block qui-annuler" type="button" onClick={onFermer}>
+              {t('app.annuler')}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="panel session-choix">{contenu}</div>
+      )}
       {demande && (
         <CodeOperateur
           titre={t('codes.titre', { nom: demande.nom || t('famille.sansPrenom') })}
@@ -100,12 +122,12 @@ export default function ChoixSession({ userId, rewards, equipe = null, onOuvrir,
             setDemande(null);
             // En entreprise, le code reste en mémoire le temps de la session :
             // il signe chaque action (TaskList).
-            onOuvrir(equipe ? { op: p.id, code, nom: p.nom } : p);
+            onOuvrir(equipe ? { id: p.id, op: p.id, code, nom: p.nom } : p);
             return null;
           }}
           onFermer={() => setDemande(null)}
         />
       )}
-    </div>
+    </>
   );
 }

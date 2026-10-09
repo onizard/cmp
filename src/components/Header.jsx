@@ -1,11 +1,11 @@
 import { useT } from '../i18n/index.js';
 
-// `onRetour` : la petite flèche en haut à gauche, pour changer de compte —
-// ou, sur un téléphone partagé, pour fermer sa session (`session` : le prénom
-// de qui l'a ouverte).
-export default function Header({ accroche, online = true, pending = 0, onRetour, session = null }) {
+// `onRetour` : la petite flèche en haut à gauche, pour changer de compte.
+// `session` : sur un téléphone partagé, le prénom de qui agit ; le toucher
+// referme sa session (`onFermerSession`).
+export default function Header({ accroche, online = true, pending = 0, onRetour, session = null, onFermerSession }) {
   const t = useT();
-  const libelle = session !== null ? t('session.fermer') : t('comptes.changer');
+  const libelle = t('comptes.changer');
   return (
     <header className="header">
       {onRetour && (
@@ -23,7 +23,18 @@ export default function Header({ accroche, online = true, pending = 0, onRetour,
       )}
       <h1 className="brand-title">{t('app.titre')}</h1>
       <div className="tag">{t('app.tagline')}</div>
-      {session && <p className="session-qui">{session}</p>}
+      {session !== null && (
+        <button
+          type="button"
+          className="session-qui"
+          onClick={onFermerSession}
+          aria-label={t('session.fermer')}
+          title={t('session.fermer')}
+        >
+          {session || '…'}
+          <span className="session-qui-fermer" aria-hidden="true">✕</span>
+        </button>
+      )}
       {accroche && <p className="accroche">{accroche}</p>}
       {(!online || pending > 0) && (
         <p className="sync" role="status">

@@ -422,6 +422,8 @@ export default {
     sansCode: 'Choisis ton code dans Mon compte pour voir aussi les récompenses de couple.',
   },
   session: {
+    pasDeCode: 'Pas de code ? Choisis ton prénom',
+    memeCode: 'Ce code est partagé : choisis ton prénom.',
     qui: 'Qui es-tu ?',
     sansCode: '{nom} doit d’abord choisir son code dans Mon compte, sur son téléphone.',
     fermer: 'Fermer la session',

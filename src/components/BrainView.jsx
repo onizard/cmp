@@ -27,7 +27,9 @@ const RANG_BON = { enAttente: 0, neuf: 1, honore: 2 };
 
 // `acteur` : la session ouverte sur un téléphone partagé (session.js). Tout
 // ce qu'on voit et prend est alors à elle.
-export default function BrainView({ tasks, userId, rewards: store, acteur = null }) {
+// `serrure` : sur un téléphone partagé, tant que personne n'a dit qui il est,
+// seul le classement se voit, avec « Qui es-tu ? » dessous.
+export default function BrainView({ tasks, userId, rewards: store, acteur = null, serrure = null }) {
   const t = useT();
   const [openWish, setOpenWish] = useState(false);
   const [wish, setWish] = useState('');
@@ -35,7 +37,7 @@ export default function BrainView({ tasks, userId, rewards: store, acteur = null
   const [showBareme, setShowBareme] = useState(false);
 
   // `qui` : la personne affichée — celle de la session, sinon soi.
-  const qui = acteur ? acteur.id : userId;
+  const qui = acteur ? acteur.id : serrure ? null : userId;
   const idsProches = new Set((store.proches || []).map((p) => p.id));
   const enfant = idsProches.has(qui);
 
@@ -161,6 +163,43 @@ export default function BrainView({ tasks, userId, rewards: store, acteur = null
     setOpenWish(false);
   };
 
+  const classementBloc = (
+    <section className="classement" aria-label={t('famille.classement')}>
+      <h2 className="setlabel">{t('famille.classement')}</h2>
+      <ol>
+        {rangs.map((l) => (
+          <li key={l.id} className={l.id === qui ? 'moi' : ''}>
+            <span className="classement-rang" aria-label={`#${l.rang}`}>
+              {MEDAILLES[l.rang - 1] || l.rang}
+            </span>
+            <span className="classement-vase">
+              <Brain {...jaugeDe(l.points)} />
+            </span>
+            <span className="classement-nom">
+              {nomDe(l.id)}
+              {l.id === qui && noms[qui] ? (
+                <span className="classement-toi"> · {t('cerveau.toi')}</span>
+              ) : null}
+            </span>
+            <span className="pts">
+              <b>{formatPoints(l.points)}</b> {t('cerveau.pts')}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+
+  if (serrure) {
+    return (
+      <main className="brain-view">
+        <p className="brain-lede">{t('cerveau.lede')}</p>
+        {famille && classementBloc}
+        {serrure}
+      </main>
+    );
+  }
+
   return (
     <main className="brain-view">
       <p className="brain-lede">{t('cerveau.lede')}</p>
@@ -170,30 +209,7 @@ export default function BrainView({ tasks, userId, rewards: store, acteur = null
       <div className="brain-cols">
       <div className="brain-col">
       {famille ? (
-        <section className="classement" aria-label={t('famille.classement')}>
-          <h2 className="setlabel">{t('famille.classement')}</h2>
-          <ol>
-            {rangs.map((l) => (
-              <li key={l.id} className={l.id === qui ? 'moi' : ''}>
-                <span className="classement-rang" aria-label={`#${l.rang}`}>
-                  {MEDAILLES[l.rang - 1] || l.rang}
-                </span>
-                <span className="classement-vase">
-                  <Brain {...jaugeDe(l.points)} />
-                </span>
-                <span className="classement-nom">
-                  {nomDe(l.id)}
-                  {l.id === qui && noms[qui] ? (
-                    <span className="classement-toi"> · {t('cerveau.toi')}</span>
-                  ) : null}
-                </span>
-                <span className="pts">
-                  <b>{formatPoints(l.points)}</b> {t('cerveau.pts')}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
+        classementBloc
       ) : (
       <div className="brains">
         <div className="person">
