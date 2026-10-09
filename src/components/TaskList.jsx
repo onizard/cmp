@@ -54,6 +54,9 @@ export default function TaskList({
   const [tiroirOuvert, setTiroirOuvert] = useState(false);
   // Les options d'une seule tâche à la fois. Toucher ailleurs (une autre
   // tâche, l'ajout d'une tâche…) les referme.
+  //
+  // Au clic, pas dès que le doigt se pose : refermer plus tôt ferait remonter
+  // la liste sous le doigt, et le clic tomberait sur la tâche d'en dessous.
   const [ouverte, setOuverte] = useState(null);
   useEffect(() => {
     if (!ouverte) return undefined;
@@ -61,8 +64,8 @@ export default function TaskList({
       const li = e.target.closest && e.target.closest('[data-tache]');
       if (!li || li.getAttribute('data-tache') !== ouverte) setOuverte(null);
     };
-    document.addEventListener('pointerdown', ailleurs, true);
-    return () => document.removeEventListener('pointerdown', ailleurs, true);
+    document.addEventListener('click', ailleurs, true);
+    return () => document.removeEventListener('click', ailleurs, true);
   }, [ouverte]);
   const ouverture = (task) => ({
     ouvert: ouverte === task.id,
