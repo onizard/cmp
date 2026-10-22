@@ -40,14 +40,16 @@ export const REWARD_MIN = 10;
 export const REWARD_CUSTOM = 100;
 
 // La jauge se lit sur 100 points : 50 points, moitié pleine ; 100 points,
-// pleine. Au-delà elle repart du bas dans une autre teinte, et le cycle des
-// teintes se referme au bout de dix tours.
+// pleine. Au-delà, une autre teinte remonte du bas par-dessus la précédente,
+// qui reste pleine (Brain.jsx) ; le cycle des teintes se referme au bout de
+// dix tours.
 export const JAUGE_CYCLE = 100;
 export const JAUGE_TEINTES = 10;
 
 /**
  * Remplissage du dessin et numéro de teinte, pour un total de points donné.
- * 0 → vide ; 50 → moitié ; 100 → plein ; 101 → presque vide, teinte suivante.
+ * 0 → vide ; 50 → moitié ; 100 → plein ; 101 → la teinte suivante commence
+ * à monter, par-dessus la précédente restée pleine.
  */
 export const jauge = (points) => {
   const pts = Math.max(0, Number(points) || 0);
