@@ -34,6 +34,34 @@ if [ ! -f "$TMP/index.html" ]; then
   rm -rf "$TMP"; exit 1
 fi
 
+# Les clés publiques de l'appli : l'archive peut arriver avec des repères à
+# leur place (__CMP_…__) ; on les remplit ici, depuis le .env du serveur.
+# Une clé introuvable : on s'arrête, RIEN n'est modifié.
+ICI="$(cd "$(dirname "$0")" && pwd)"
+lire() { sed -n "s/^$1=//p" "$ICI/.env" 2>/dev/null | tail -1 | tr -d '"'"'"'\r'; }
+if grep -rqs '__CMP_' "$TMP"; then
+  ANON=$(lire ANON_KEY)
+  # Repli : la clé anon de l'appli déjà en place.
+  [ -z "$ANON" ] && ANON=$(grep -rhoE 'eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+' "$ICI/app/assets" 2>/dev/null | head -1)
+  VAPID=$(lire VAPID_PUBLIC)
+  CONTACT=$(lire VITE_CONTACT_EMAIL)
+  [ -z "$CONTACT" ] && CONTACT=contact@break-pharma.fr
+  if [ -z "$ANON" ] || [ -z "$VAPID" ]; then
+    echo "ERREUR : ANON_KEY ou VAPID_PUBLIC introuvable dans $ICI/.env."
+    echo "         RIEN n'a été modifié."
+    rm -rf "$TMP"; exit 1
+  fi
+  grep -rlZ '__CMP_' "$TMP" | xargs -0 sed -i \
+    -e "s|__CMP_ANON_KEY__|$ANON|g" \
+    -e "s|__CMP_VAPID_PUBLIC__|$VAPID|g" \
+    -e "s|__CMP_CONTACT_EMAIL__|$CONTACT|g"
+  if grep -rqs '__CMP_' "$TMP"; then
+    echo "ERREUR : des clés n'ont pas pu être posées. RIEN n'a été modifié."
+    rm -rf "$TMP"; exit 1
+  fi
+  echo "Clés     : posées depuis $ICI/.env"
+fi
+
 ver() { grep -o 'content="v[0-9][0-9.]*"' "$1/index.html" 2>/dev/null | head -1 | cut -d'"' -f2; }
 ATTENDU=$(ver "$TMP")
 echo "Version  : $ATTENDU"
